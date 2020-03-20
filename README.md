@@ -25,6 +25,7 @@ While you might have seen native ads on a react-native application, I have tried
  7. AutoRefresh ad
  8. Multiple Ad Sizes
  9. Support Video Ads & Image Ads!
+ 10. Typescript definations & JsDoc added for easy usage.
 
 </p>
 
@@ -87,6 +88,9 @@ const App = () => {
         flex: 1,
       }}>
       <NativeAdView
+      	 style={{
+            flex:1
+          }}
 	 adUnitID="ca-app-pub-3940256099942544/3986624511"
 	 
 	 />
