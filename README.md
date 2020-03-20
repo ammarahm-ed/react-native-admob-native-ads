@@ -31,7 +31,7 @@ src="https://i.imgur.com/OVmEZzi.png"
 />
  <img
   width="300"
-src="https://i.imgur.com/SiY3JeN.pngg"
+src="https://i.imgur.com/SiY3JeN.png"
 />
 
 
@@ -92,6 +92,11 @@ or if you use yarn:
  3. Click on **`Add files to YOUR_PROJECT_NAME`**
  4. In select file window, go to **`YOUR_PROJECT/node_modules/react-native-admob-native-ads/ios`**
  5. Select **`GADTMediumTemplateView.xib`** and **`GADTSmallTemplateView.xib`** files and add them to your project. **Make sure copy items if needed is checked and add groups is selected!**
+ 
+ <img
+  width="300"
+src="https://i.imgur.com/mhkKEpE.png"
+/>
    
 ### [](https://github.com/sbugert/react-native-admob#android)Android
 
