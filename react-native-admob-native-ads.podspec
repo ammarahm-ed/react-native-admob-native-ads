@@ -6,7 +6,7 @@ version = package['version']
 Pod::Spec.new do |s|
   s.name                   = 'react-native-admob-native-ads'
   s.version                = version
-  s.summary                = 'A react-native component for Google AdMob Native Ads'
+  s.summary                = 'Simple and easy to use AdMob Native Ads for react native Android & iOS with styling support!'
   s.homepage               = 'https://github.com/ammarahm-ed/react-native-admob-native-ads'
   s.license                = package['license']
   s.author                 = 'Ammar Ahmed <ammarahmed6506@gmail.com>'
