@@ -5,6 +5,29 @@
 	<p>
 		Simple and highly customizable <b>AdMob Native Ads</b> for react native!
 	</p>
+<div
+align="center"
+style="width:100%;"
+>
+<a
+href="https://github.com/ammarahm-ed/react-native-admob-native-ads/pulls"
+target="_blank"
+>
+<img  src="https://img.shields.io/badge/PRs-welcome-green"/>
+</a>
+<a
+href="https://www.npmjs.com/package/react-native-admob-native-ads"
+target="_blank"
+>
+<img src="https://img.shields.io/npm/v/react-native-admob-native-ads?color=green"/>
+</a>
+<a
+href="https://www.npmjs.com/package/react-native-admob-native-ads"
+target="_blank"
+>
+<img  src="https://img.shields.io/npm/dt/react-native-admob-native-ads?color=green"/>
+</a> 
+</div>
 </div
 <p>
 While you might have seen native ads on a react-native application, I have tried to take everything to another level so its really really really easy for you guys to get native ads up and running in a few steps with <b>with styling support</b>
@@ -305,6 +328,14 @@ User impression has been recorded
 User has clicked on the ad.
 
 #
+
+## Contributing
+There are multiple ways in which you can contribute to this library. Feel free to open an issue if you have an idea in mind or if you have found a bug.
+
+If the templates do not suit your requirments and you decide to make your own templates, feel free to submit them here and I will add them in the library.
+
+
+ 
 
 ## Find this library useful? ❤️
 
