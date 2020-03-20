@@ -3,7 +3,7 @@
 </div>
 <div align="center">
 	<p>
-		Simple and highly customizable <b>AdMob Native Ads</b> for react native!
+		Simple and easy to use AdMob Native Ads for react native Android & iOS with styling support!
 	</p>
 <div
 align="center"
