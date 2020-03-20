@@ -1,23 +1,21 @@
 import { Component } from "react";
 import { ViewStyle } from "react-native";
 
-type ButtonStyleType = {
-  [name: string]: {
+interface ButtonStyleType {
     backgroundColor: string;
     textColor: string;
     borderColor: string;
     borderWidth: number;
     borderRadius: number;
-  };
-};
+}
 
-type BackgroundStyleType = {
-  [name: string]: {
+interface BackgroundStyleType {
+
     backgroundColor: string;
     borderColor: string;
     borderWidth: number;
     borderRadius: number;
-  };
+
 };
 
 declare module "react-native-admob-native-ads" {
