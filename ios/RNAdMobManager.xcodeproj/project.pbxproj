@@ -1,0 +1,325 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5E2419841FE11E0F00C6B738 /* RNAdMobUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E2419831FE11E0F00C6B738 /* RNAdMobUtils.m */; };
+		6545F3EB24236E9100E32019 /* GADTSmallTemplateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6545F3E924236E9000E32019 /* GADTSmallTemplateView.xib */; };
+		6545F3EC24236E9100E32019 /* GADTMediumTemplateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6545F3EA24236E9100E32019 /* GADTMediumTemplateView.xib */; };
+		F90A723223E90755001A979C /* RNGADNativeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F90A723123E90755001A979C /* RNGADNativeView.m */; };
+		F90A723623E91B31001A979C /* RNGADNativeViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F90A723523E91B31001A979C /* RNGADNativeViewManager.m */; };
+		F9599ADF23EA2C95007601E8 /* GADTSmallTemplateView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9599AD923EA2C95007601E8 /* GADTSmallTemplateView.m */; };
+		F9599AE023EA2C95007601E8 /* GADTMediumTemplateView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9599ADA23EA2C95007601E8 /* GADTMediumTemplateView.m */; };
+		F9599AE123EA2C95007601E8 /* GADTTemplateView.m in Sources */ = {isa = PBXBuildFile; fileRef = F9599ADD23EA2C95007601E8 /* GADTTemplateView.m */; };
+		F9FEA62523E973F700D2A1C7 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FEA62423E973F700D2A1C7 /* GoogleMobileAds.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A96DA7721C146D7200FC639B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		5E2419831FE11E0F00C6B738 /* RNAdMobUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNAdMobUtils.m; sourceTree = SOURCE_ROOT; };
+		5E2419851FE11F1200C6B738 /* RNAdMobUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNAdMobUtils.h; sourceTree = SOURCE_ROOT; };
+		6545F3E924236E9000E32019 /* GADTSmallTemplateView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GADTSmallTemplateView.xib; sourceTree = "<group>"; };
+		6545F3EA24236E9100E32019 /* GADTMediumTemplateView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GADTMediumTemplateView.xib; sourceTree = "<group>"; };
+		A96DA7741C146D7200FC639B /* libRNAdMobManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNAdMobManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F90A723123E90755001A979C /* RNGADNativeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNGADNativeView.m; sourceTree = SOURCE_ROOT; };
+		F90A723323E90762001A979C /* RNGADNativeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNGADNativeView.h; sourceTree = SOURCE_ROOT; };
+		F90A723423E91B19001A979C /* RNGADNativeViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNGADNativeViewManager.h; sourceTree = SOURCE_ROOT; };
+		F90A723523E91B31001A979C /* RNGADNativeViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNGADNativeViewManager.m; sourceTree = SOURCE_ROOT; };
+		F9599AD923EA2C95007601E8 /* GADTSmallTemplateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GADTSmallTemplateView.m; sourceTree = SOURCE_ROOT; };
+		F9599ADA23EA2C95007601E8 /* GADTMediumTemplateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GADTMediumTemplateView.m; sourceTree = SOURCE_ROOT; };
+		F9599ADB23EA2C95007601E8 /* GADTTemplateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADTTemplateView.h; sourceTree = SOURCE_ROOT; };
+		F9599ADC23EA2C95007601E8 /* GADTMediumTemplateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADTMediumTemplateView.h; sourceTree = SOURCE_ROOT; };
+		F9599ADD23EA2C95007601E8 /* GADTTemplateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GADTTemplateView.m; sourceTree = SOURCE_ROOT; };
+		F9599ADE23EA2C95007601E8 /* GADTSmallTemplateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADTSmallTemplateView.h; sourceTree = SOURCE_ROOT; };
+		F9FEA62423E973F700D2A1C7 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = "../../../../Downloads/GoogleMobileAdsSdkiOS-7.54.0/GoogleMobileAds.framework"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A96DA7711C146D7200FC639B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F9FEA62523E973F700D2A1C7 /* GoogleMobileAds.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A96DA76B1C146D7200FC639B = {
+			isa = PBXGroup;
+			children = (
+				A96DA7761C146D7200FC639B /* RNAdMobManager */,
+				A96DA7751C146D7200FC639B /* Products */,
+				F9FEA62323E973F700D2A1C7 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		A96DA7751C146D7200FC639B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A96DA7741C146D7200FC639B /* libRNAdMobManager.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A96DA7761C146D7200FC639B /* RNAdMobManager */ = {
+			isa = PBXGroup;
+			children = (
+				6545F3EA24236E9100E32019 /* GADTMediumTemplateView.xib */,
+				6545F3E924236E9000E32019 /* GADTSmallTemplateView.xib */,
+				F9599ADC23EA2C95007601E8 /* GADTMediumTemplateView.h */,
+				F9599ADA23EA2C95007601E8 /* GADTMediumTemplateView.m */,
+				F9599ADE23EA2C95007601E8 /* GADTSmallTemplateView.h */,
+				F9599AD923EA2C95007601E8 /* GADTSmallTemplateView.m */,
+				F9599ADB23EA2C95007601E8 /* GADTTemplateView.h */,
+				F9599ADD23EA2C95007601E8 /* GADTTemplateView.m */,
+				5E2419831FE11E0F00C6B738 /* RNAdMobUtils.m */,
+				5E2419851FE11F1200C6B738 /* RNAdMobUtils.h */,
+				F90A723323E90762001A979C /* RNGADNativeView.h */,
+				F90A723123E90755001A979C /* RNGADNativeView.m */,
+				F90A723423E91B19001A979C /* RNGADNativeViewManager.h */,
+				F90A723523E91B31001A979C /* RNGADNativeViewManager.m */,
+			);
+			path = RNAdMobManager;
+			sourceTree = "<group>";
+		};
+		F9FEA62323E973F700D2A1C7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F9FEA62423E973F700D2A1C7 /* GoogleMobileAds.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A96DA7731C146D7200FC639B /* RNAdMobManager */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A96DA77D1C146D7200FC639B /* Build configuration list for PBXNativeTarget "RNAdMobManager" */;
+			buildPhases = (
+				A96DA7701C146D7200FC639B /* Sources */,
+				A96DA7711C146D7200FC639B /* Frameworks */,
+				A96DA7721C146D7200FC639B /* CopyFiles */,
+				F9D5777923E9363800EF2384 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RNAdMobManager;
+			productName = RNAdMobManager;
+			productReference = A96DA7741C146D7200FC639B /* libRNAdMobManager.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A96DA76C1C146D7200FC639B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = accosine;
+				TargetAttributes = {
+					A96DA7731C146D7200FC639B = {
+						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = BMF2ZL32LL;
+					};
+				};
+			};
+			buildConfigurationList = A96DA76F1C146D7200FC639B /* Build configuration list for PBXProject "RNAdMobManager" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				en,
+			);
+			mainGroup = A96DA76B1C146D7200FC639B;
+			productRefGroup = A96DA7751C146D7200FC639B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A96DA7731C146D7200FC639B /* RNAdMobManager */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F9D5777923E9363800EF2384 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6545F3EB24236E9100E32019 /* GADTSmallTemplateView.xib in Resources */,
+				6545F3EC24236E9100E32019 /* GADTMediumTemplateView.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A96DA7701C146D7200FC639B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F90A723223E90755001A979C /* RNGADNativeView.m in Sources */,
+				F9599AE023EA2C95007601E8 /* GADTMediumTemplateView.m in Sources */,
+				F9599ADF23EA2C95007601E8 /* GADTSmallTemplateView.m in Sources */,
+				F9599AE123EA2C95007601E8 /* GADTTemplateView.m in Sources */,
+				F90A723623E91B31001A979C /* RNGADNativeViewManager.m in Sources */,
+				5E2419841FE11E0F00C6B738 /* RNAdMobUtils.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A96DA77B1C146D7200FC639B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		A96DA77C1C146D7200FC639B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A96DA77E1C146D7200FC639B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../../../ios/Pods/**";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../../../node_modules/react-native/React/**",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		A96DA77F1C146D7200FC639B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../../../ios/Pods/**";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../../../node_modules/react-native/React/**",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A96DA76F1C146D7200FC639B /* Build configuration list for PBXProject "RNAdMobManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A96DA77B1C146D7200FC639B /* Debug */,
+				A96DA77C1C146D7200FC639B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A96DA77D1C146D7200FC639B /* Build configuration list for PBXNativeTarget "RNAdMobManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A96DA77E1C146D7200FC639B /* Debug */,
+				A96DA77F1C146D7200FC639B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A96DA76C1C146D7200FC639B /* Project object */;
+}
