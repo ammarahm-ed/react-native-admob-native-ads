@@ -1,3 +1,4 @@
+
 <div align="center">
 <img src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/react-native-admob-native-ads.png" ></img>
 </div>
@@ -110,6 +111,18 @@ Set Ad Unit ID for Native Advanced Ads that you created on your AdMob account.
 
 #
 
+#### `adSize`
+Select which size of ad you want to display.
+
+| Type | Required | Default|Platform|
+| ---- | --------|---- |------|
+| string | no |"small"| All|
+
+**Android adSizes:** "small",  "medium" , "large"
+**iOS adSizes:** "small" and "medium" only.
+
+#
+
 #### `buttonStyle`
 style the callToAction button in Native ad according to your app look and feel. 
 
@@ -127,7 +140,7 @@ The following styles properties are available at the moment.
 | `borderWidth` | number | Yes |
 | `borderRadius` | number | Yes |
 
-**Note:** Currently you will need to set all available properties and give them a valid value. **value cant be null**
+**Note:** Currently you will need to set all available properties and give them a valid value. **value can't be null**
 
 
 #
@@ -148,7 +161,7 @@ The following styles properties are available at the moment.
 | `borderWidth` | number | Yes |
 | `borderRadius` | number | Yes |
 
-**Note:** Currently you will need to set all available properties and give them a valid value. **value cant be null**
+**Note:** Currently you will need to set all available properties and give them a valid value. **value can't be null**
 
 
 #
@@ -211,7 +224,7 @@ User has clicked on the ad.
 #
 
 ## Find this library useful? ❤️
-Support it by joining stargazers for this repository. ⭐️ and follow me for my next creations!
+Support it by joining **stargazers** for this repository. ⭐️ and follow me for my next creations!
 
 ### MIT Licensed
 
