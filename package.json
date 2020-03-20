@@ -9,6 +9,16 @@
     "type": "git",
     "url": "git@github.com:ammarahm-ed/react-native-admob-native-ads.git"
   },
+  "keywords": [
+    "android",
+    "ios",
+    "react-native",
+    "admob",
+    "native-ads",
+    "admob-native-ads",
+    "admob-ads",
+    "react-native-admob"
+  ],
   "dependencies": {
    "prop-types": "15.7.2"
   },
