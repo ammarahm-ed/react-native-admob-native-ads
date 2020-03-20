@@ -12,20 +12,20 @@
 
 @implementation RNGADNativeView
 
-NSString *btnBackgroundColor;
-NSString *btnBorderColor;
-NSString *btnTextColor;
-NSNumber *btnBorderRadius;
-NSNumber *btnBorderWidth;
+NSString *btnBackgroundColor = @"#0077cc";
+NSString *btnBorderColor = @"#0077cc";
+NSString *btnTextColor = @"#ffffff";
+NSNumber *btnBorderRadius = 0;
+NSNumber *btnBorderWidth = 0;
 
-NSString *bgBackgroundColor;
-NSString *bgBorderColor;
-NSNumber *bgBorderRadius;
-NSNumber *bgBorderWidth;
+NSString *bgBackgroundColor = @"#ffffff";
+NSString *bgBorderColor = @"#ffffff";
+NSNumber *bgBorderRadius = 0;
+NSNumber *bgBorderWidth = 0;
 
-NSString *primaryTextColor;
-NSString *secondaryTextColor;
-NSString *tertiaryTextColor;
+NSString *primaryTextColor = @"#000000";
+NSString *secondaryTextColor = @"#a9a9a9";
+NSString *tertiaryTextColor = @"#a9a9a9";
 
 GADTTemplateView *nativeAdView;
 
@@ -105,6 +105,7 @@ GADTTemplateView *nativeAdView;
                           arg4:(NSNumber *)borderWidth
                           arg5:(NSNumber *)borderRadius
 {
+    
     UIColor *bgColor = [self colorWithHexString:backgroundColor];
     nativeAdView.backgroundView.backgroundColor = bgColor;
     nativeAdView.rootView.backgroundColor = bgColor;
@@ -130,20 +131,8 @@ GADTTemplateView *nativeAdView;
                       arg5:(NSNumber *)borderRadius
 {
     nativeAdView.callToActionView.backgroundColor = [self colorWithHexString:backgroundColor];
-    nativeAdView.adBadge.backgroundColor =[self colorWithHexString:backgroundColor];
     
-    for (UIView *view in [nativeAdView.adBadge subviews]) {
-        //Check if the view is of UILabel class
-        if ([view isKindOfClass:[UILabel class]]) {
-            //Cast the view to a UILabel
-            UILabel *label = (UILabel *)view;
-            //Set the color to label
-            label.textColor = [self colorWithHexString:textColor];
-        }
-    }
-    
-    
-    
+
     for (UIView *view in [nativeAdView.callToActionView subviews]) {
         //Check if the view is of UILabel class
         if ([view isKindOfClass:[UILabel class]]) {
@@ -156,12 +145,16 @@ GADTTemplateView *nativeAdView;
     
     nativeAdView.callToActionView.layer.borderColor = [self colorWithHexString:borderColor].CGColor;
     
-    nativeAdView.adBadge.layer.borderColor = [self colorWithHexString:borderColor].CGColor;
+    
     nativeAdView.callToActionView.layer.borderWidth = borderWidth.floatValue;
     nativeAdView.callToActionView.layer.cornerRadius = borderRadius.floatValue;
     
     [nativeAdView.callToActionView.layer setNeedsDisplay];
     
+    
+    nativeAdView.adBadge.backgroundColor =[self colorWithHexString:backgroundColor];
+    nativeAdView.adBadge.layer.borderColor = [self colorWithHexString:borderColor].CGColor;
+    nativeAdView.adBadge.textColor =[self colorWithHexString:textColor];
     nativeAdView.adBadge.layer.borderWidth = borderWidth.floatValue;
     nativeAdView.adBadge.layer.cornerRadius = borderRadius.floatValue;
     
@@ -210,7 +203,7 @@ GADTTemplateView *nativeAdView;
 {
     nativeAd.delegate = self;
     templateView.nativeAd = nativeAd;
-   
+    
     
     nativeAdView = templateView;
     
@@ -221,11 +214,11 @@ GADTTemplateView *nativeAdView;
     double delayInSeconds = 0.10;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-     
-        [self setStylesForBackground:bgBackgroundColor arg3:bgBorderColor arg4:bgBorderWidth arg5:bgBorderRadius];
+        
         [self setColorForHeadlineText:primaryTextColor];
         [self setColorForDescriptionText:secondaryTextColor];
         [self setColorForAdvertiserText:tertiaryTextColor];
+        [self setStylesForBackground:bgBackgroundColor arg3:bgBorderColor arg4:bgBorderWidth arg5:bgBorderRadius];
         [self setStylesForButton:btnBackgroundColor arg2:btnTextColor arg3:btnBorderColor arg4:btnBorderWidth arg5:btnBorderRadius];
         
     });
@@ -283,9 +276,7 @@ GADTTemplateView *nativeAdView;
     }
 }
 
-- (void)failed
 
 
 @end
-
 
