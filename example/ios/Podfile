@@ -33,8 +33,6 @@ target 'example' do
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-  
-  #ADD GOOGLE_MOBILE_ADS_SDK here in your project!
   pod 'Google-Mobile-Ads-SDK'
 
   target 'exampleTests' do
