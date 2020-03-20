@@ -1,0 +1,25 @@
+{
+  "name": "react-native-admob-native-ads",
+  "version": "0.1.0",
+  "description": "A react-native component for Google AdMob Native Ads",
+  "author": "Ammar Ahmed <ammarahmed6506@gmail.com>",
+  "main": "index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ammarahm-ed/react-native-admob-native-ads.git"
+  },
+  "dependencies": {
+    "prop-types": "^15.7.2"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.44.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-react": "^7.14.3",
+    "prettier": "^1.18.2"
+  }
+}
