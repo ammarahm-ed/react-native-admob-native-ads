@@ -1,6 +1,6 @@
 
 <div align="center">
-<img src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/react-native-admob-native-ads.png" ></img>
+<img src="https://i.imgur.com/zDUWhHv.png" ></img>
 </div>
 <div align="center">
 	<p>
@@ -10,6 +10,37 @@
 <p>
 While you might have seen native ads on a react-native application, I have tried to take everything to another level so its really really really easy for you guys to get native ads up and running in a few steps with <b>with styling support</b>
 </p>
+
+
+### iOS 
+ <img
+src="https://i.imgur.com/DOaoU1t.png"
+/>
+ <img
+src="https://i.imgur.com/yX5GKhN.png"
+/>
+
+### Android
+ <img
+ width="300"
+src="https://i.imgur.com/sEKEoma.png"
+/>
+ <img
+  width="300"
+src="https://i.imgur.com/OVmEZzi.png"
+/>
+ <img
+  width="300"
+src="https://i.imgur.com/SiY3JeN.pngg"
+/>
+
+
+
+
+
+
+
+
 
 <div align="center">
 <h2> 💫 Features</h2>
@@ -25,7 +56,6 @@ While you might have seen native ads on a react-native application, I have tried
  7. AutoRefresh ad
  8. Multiple Ad Sizes
  9. Support Video Ads & Image Ads!
- 10. Typescript definations & JsDoc added for easy usage.
 
 </p>
 
@@ -51,8 +81,7 @@ or if you use yarn:
     yarn add react-native-actions-sheet
 
 ### iOS
-	run `pod install` inside ios folder.
-	
+
 **Step 1:** Follow the guide to add  [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk)  to your Xcode project. Also don't forget to update your info.plist file also to add AppID.
 
 **Step 2:** Add .xib files to your main project:
@@ -88,9 +117,6 @@ const App = () => {
         flex: 1,
       }}>
       <NativeAdView
-      	 style={{
-            flex:1
-          }}
 	 adUnitID="ca-app-pub-3940256099942544/3986624511"
 	 
 	 />
