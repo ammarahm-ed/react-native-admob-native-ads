@@ -1,6 +1,6 @@
 
 <div align="center">
-<img src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/react-native-admob-native-ads.png" ></img>
+<img src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/react-native-admob-native-ads.png" ></img>
 </div>
 <div align="center">
 	<p>
