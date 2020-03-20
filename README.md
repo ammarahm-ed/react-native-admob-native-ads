@@ -20,7 +20,7 @@ While you might have seen native ads on a react-native application, I have tried
  3. Identical Working on Android and iOS
  4. Style your ads as you wish!
  5. No need to manage .xml or .xib layout files to match ad style to app theme!
- 6. Adding styles is as simple as adding styles to any other `View`  
+ 6. Adding styles is as simple as adding styles to any other react-native `View`  
  7. AutoRefresh ad
  8. Multiple Ad Sizes
  9. Support Video Ads & Image Ads!
