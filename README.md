@@ -87,6 +87,9 @@ const App = () => {
         flex: 1,
       }}>
       <NativeAdView
+      	 style={{
+            flex:1
+          }}
 	 adUnitID="ca-app-pub-3940256099942544/3986624511"
 	 
 	 />
