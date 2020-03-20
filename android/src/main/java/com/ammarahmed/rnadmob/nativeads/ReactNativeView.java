@@ -74,16 +74,16 @@ class ReactNativeView extends LinearLayout {
     GradientDrawable gradientDrawableB;
     GradientDrawable backroundDrawable;
 
-    private String mTextColor;
-    private String mBackgroundColor;
-    private String mBorderColor;
-    private int mBorderWidth;
-    private int mBorderRadius;
+    private String mTextColor = "#ffffff";
+    private String mBackgroundColor = "#0077cc";
+    private String mBorderColor = "#0077cc";
+    private int mBorderWidth = 0;
+    private int mBorderRadius = 0;
 
-    private String mBgBackground;
-    private String mBgBorderColor;
-    private int mBgBorderRadius;
-    private int mBgBorderWidth;
+    private String mBgBackground = "#ffffff";
+    private String mBgBorderColor = "#ffffff";
+    private int mBgBorderRadius = 0;
+    private int mBgBorderWidth = 0;
 
 
     public ReactNativeView(Context context) {

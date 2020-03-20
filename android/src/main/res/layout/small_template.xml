@@ -156,7 +156,6 @@
                                 android:layout_marginEnd="@dimen/gnt_no_margin"
                                 android:layout_marginBottom="@dimen/gnt_no_margin"
                                 android:lines="2"
-                                android:text="and then we went of to the river to see what would happen to us"
                                 android:textColor="@color/gnt_gray"
                                 android:textSize="11.5sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
