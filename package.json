@@ -29,6 +29,7 @@
   "peerDependencies": {
     "react-native": "0.61.5"
   },
+  "private":false,
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "eslint": "^4.19.1",
