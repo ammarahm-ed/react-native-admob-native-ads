@@ -54,12 +54,15 @@ or if you use yarn:
 **Step 1:** Follow the guide to add  [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk)  to your Xcode project. Also don't forget to update your info.plist file also to add AppID.
 
 **Step 2:** Add .xib files to your main project:
-	1. Open **`.xcworkspace`**  file inside the `ios`  folder in your project in Xcode.
-	2. Select the root folder of your project and right click for the dropdown menu.
-	3. Click on **`Add files to YOUR_PROJECT_NAME`**
-	4. In select file window, go to **`YOUR_PROJECT/node_modules/react-native-admob-native-ads/ios`**
-	5. Select **`GADTMediumTemplateView.xib`** and **`GADTSmallTemplateView.xib`** files and add them to your project. **Make sure copy items if needed is checked and add groups is selected!**
-	6. 
+
+ 1. Open **`.xcworkspace`**  file inside the `ios`  folder in your
+    project in Xcode.
+ 2. Select the root folder of your project and right click for the dropdown menu.
+ 3. Click on **`Add files to YOUR_PROJECT_NAME`**
+ 4. In select file window, go to **`YOUR_PROJECT/node_modules/react-native-admob-native-ads/ios`**
+ 5. Select **`GADTMediumTemplateView.xib`** and **`GADTSmallTemplateView.xib`** files and add them to your project. **Make sure copy items if needed is checked and add groups is selected!**
+	
+
 
 ### [](https://github.com/sbugert/react-native-admob#android)Android
 
