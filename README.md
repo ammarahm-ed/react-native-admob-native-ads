@@ -1,6 +1,6 @@
 
 <div align="center">
-<img src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/react-native-admob-native-ads.png" ></img>
+<img src="https://i.imgur.com/zDUWhHv.png" ></img>
 </div>
 <div align="center">
 	<p>
@@ -14,24 +14,24 @@ While you might have seen native ads on a react-native application, I have tried
 
 ### iOS 
  <img
-src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/ios_large.png"
+src="https://i.imgur.com/DOaoU1t.png"
 />
  <img
-src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/ios_small.png"
+src="https://i.imgur.com/yX5GKhN.png"
 />
 
 ### Android
  <img
  width="300"
-src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/androidlarge.png"
+src="https://i.imgur.com/sEKEoma.png"
 />
  <img
   width="300"
-src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/androidmedium.png"
+src="https://i.imgur.com/OVmEZzi.png"
 />
  <img
   width="300"
-src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/androidsmall.png"
+src="https://i.imgur.com/SiY3JeN.pngg"
 />
 
 
