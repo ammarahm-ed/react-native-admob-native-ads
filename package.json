@@ -10,10 +10,10 @@
     "url": "git@github.com:ammarahm-ed/react-native-admob-native-ads.git"
   },
   "dependencies": {
-    "prop-types": "^15.7.2"
+   "prop-types": "15.7.2"
   },
   "peerDependencies": {
-    "react-native": ">=0.44.0"
+    "react-native": "0.61.5"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
