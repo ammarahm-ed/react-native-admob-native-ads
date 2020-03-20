@@ -61,9 +61,7 @@ or if you use yarn:
  3. Click on **`Add files to YOUR_PROJECT_NAME`**
  4. In select file window, go to **`YOUR_PROJECT/node_modules/react-native-admob-native-ads/ios`**
  5. Select **`GADTMediumTemplateView.xib`** and **`GADTSmallTemplateView.xib`** files and add them to your project. **Make sure copy items if needed is checked and add groups is selected!**
-	
-
-
+   
 ### [](https://github.com/sbugert/react-native-admob#android)Android
 
 Add your AdMob App ID to `AndroidManifest.xml`, as described in the  [Google Mobile Ads SDK documentation](https://developers.google.com/admob/android/quick-start#update_your_androidmanifestxml).
@@ -110,7 +108,7 @@ Set Ad Unit ID for Native Advanced Ads that you created on your AdMob account.
 
 | Type | Required | Platform|
 | ---- | -------- |------|
-| string | Yes |All
+| `string` | Yes |All
 
 #
 
@@ -119,10 +117,20 @@ Select which size of ad you want to display.
 
 | Type | Required | Default|Platform|
 | ---- | --------|---- |------|
-| string | no |"small"| All|
+| `string` | no |"small"| All|
 
 **Android adSizes:** "small",  "medium" , "large"
 **iOS adSizes:** "small" and "medium" only.
+
+#
+
+#### `testDevices`
+Set testDevices during testing ads or during development.
+
+| Type | Required |Platform|
+| ---- | -------- |------|
+| `Array<string>` | no | All|
+
 
 #
 
@@ -131,7 +139,7 @@ style the callToAction button in Native ad according to your app look and feel.
 
 | Type | Required |Platform|
 | ---- | -------- |---|
-| object | no |All|
+| `object` | no |All|
 
 The following styles properties are available at the moment.
 
@@ -153,7 +161,7 @@ Style the background of Native Ad View.
 
 | Type | Required |Platform|
 | ---- | -------- |---|
-| object | no |All|
+| `object` | no |All|
 
 The following styles properties are available at the moment.
 
