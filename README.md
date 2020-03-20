@@ -329,6 +329,14 @@ User has clicked on the ad.
 
 #
 
+## Contributing
+There are multiple ways in which you can contribute to this library. Feel free to open an issue if you have an idea in mind or if you have found a bug.
+
+If the templates do not suit your requirments and you decide to make your own templates, feel free to submit them here and I will add them in the library.
+
+
+ 
+
 ## Find this library useful? ❤️
 
 Support it by joining **stargazers** for this repository. ⭐️ and follow me for my next creations!
