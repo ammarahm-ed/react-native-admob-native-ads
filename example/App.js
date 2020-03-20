@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, View} from 'react-native';
+import {View} from 'react-native';
 import NativeAdView from 'react-native-admob-native-ads';
 
 const App = () => {
@@ -20,21 +20,24 @@ const App = () => {
           paddingHorizontal: 10,
           alignItems: 'center',
         }}>
+
         <NativeAdView
-          adSize="small"
+          adSize="large" // Change to small or medium.
           onAdLoaded={_onAdLoaded}
           onAdFailedToLoad={_onAdFailedToLoad}
           buttonStyle={{
             borderRadius:5,
-            textColor:"#E9514C",
+            textColor:'#008BBA',
             backgroundColor:'#ffffff',
-            borderWidth:1,
+            borderWidth:2,
             borderColor:'#008BBA',
-            
           }}
+          headlineTextColor="#000000"
+          descriptionTextColor="#a9a9a9"
+          advertiserTextColor="#a9a9a9"
           backgroundStyle={{
-            borderWidth:1,
-            borderRadius:5,
+            borderWidth:2,
+            borderRadius:10,
             borderColor:"#008BBA",
             backgroundColor:"#ffffff"
           }}
