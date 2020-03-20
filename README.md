@@ -1,6 +1,5 @@
-
 <div align="center">
-<h1>react-native-admob-native-ads</h1>
+<img src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/react-native-admob-native-ads.png" ></img>
 </div>
 <div align="center">
 	<p>
