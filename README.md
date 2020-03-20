@@ -50,7 +50,8 @@ or if you use yarn:
     yarn add react-native-actions-sheet
 
 ### iOS
-
+	run `pod install` inside ios folder.
+	
 **Step 1:** Follow the guide to add  [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk)  to your Xcode project. Also don't forget to update your info.plist file also to add AppID.
 
 **Step 2:** Add .xib files to your main project:
