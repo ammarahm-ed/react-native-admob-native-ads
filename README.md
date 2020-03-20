@@ -2,9 +2,11 @@
 <div align="center">
 <h1>react-native-admob-native-ads</h1>
 </div>
-
-Simple and highly customizable **AdMob Native Ads** for react native!
-
+<div align="center">
+	<p>
+		Simple and highly customizable <b>AdMob Native Ads</b> for react native!
+	</p>
+</div
 <p>
 While you might have seen native ads on a react-native application, I have tried to take everything to another level so its really really really easy for you guys to get native ads up and running in a few steps with <b>with styling support</b>
 </p>
