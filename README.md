@@ -12,12 +12,31 @@ While you might have seen native ads on a react-native application, I have tried
 </p>
 
 
+### iOS 
+ <img
+src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/ios_large.png"
+/>
+ <img
+src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/ios_small.png"
+/>
 
-|iOS | Android |
-|--|--|
-|![enter image description here](https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/ios_large.png)|![enter image description here](https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/androidlarge.png =240x)
-|![enter image description here](https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/ios_small.png ) |![enter image description here](https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/androidmedium.png =240x)
-| | ![enter image description here](https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/androidsmall.png =240x)|
+### Android
+ <img
+ width="300"
+src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/androidlarge.png"
+/>
+ <img
+  width="300"
+src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/androidmedium.png"
+/>
+ <img
+  width="300"
+src="https://raw.githubusercontent.com/ammarahm-ed/react-native-admob-native-ads/master/assets/androidsmall.png"
+/>
+
+
+
+
 
 
 
@@ -158,100 +177,6 @@ The following styles properties are available at the moment.
 | Name | Type | Required|
 | ---- | -------- |------|
 | `backroundColor` | 6 digit hex color string only | Yes |
-| `textColor` | 6 digit hex color string only | Yes |
-| `borderColor` | 6 digit hex color string only | Yes |
-| `borderWidth` | number | Yes |
-| `borderRadius` | number | Yes |
-
-**Note:** Currently you will need to set all available properties and give them a valid value. **value can't be null**
-
-
-#
-
-#### `backgroundStyle`
-Style the background of Native Ad View.
-
-| Type | Required |Platform|
-| ---- | -------- |---|
-| `object` | no |All|
-
-The following styles properties are available at the moment.
-
-| Name | Type | Required|
-| ---- | -------- |------|
-| `backroundColor` | 6 digit hex color string only | Yes |
-| `borderColor` | 6 digit hex color string only | Yes |
-| `borderWidth` | number | Yes |
-| `borderRadius` | number | Yes |
-
-**Note:** Currently you will need to set all available properties and give them a valid value. **value can't be null**
-
-
-#
-
-#### `headlineTextColor`
-Set color for the heading text of Ad.
-
-| Type | Required | Platform|
-| ---- | -------- |------|
-| 6 digit hex color string only | no |All
-
-#
-
-#### `descriptionTextColor`
-Set color for the description text of Ad.
-
-| Type | Required | Platform|
-| ---- | -------- |------|
-| 6 digit hex color string only | no |All
-
-#
-
-#### `advertiserTextColor`
-Set color for the description text of Ad.
-
-| Type | Required | Platform|
-| ---- | -------- |------|
-| 6 digit hex color string only | no |All
-
-#
-
-#### `ratingBarColor`
-Set color for the description text of Ad.
-
-| Type | Required | Platform|
-| ---- | -------- |------|
-| 6 digit hex color string only | no |Android Only
-
-#
-
-## Events
-
-All events are available through props.The following event are available on both Android and iOS:
-
-#### `onAdFailedToLoad` 
-Called when ad has failed to load and returns reason due to which ad was not loaded.
-#### `onAdLoaded`
-Called when ad has successfully loaded without any errors.
-#### `onAdOpened`
-Called when ad is opened.
-#### `onAdClosed`
-Called when ad is closed.
-#### `onAdLeftApplication`
-Called when ad is loaded but user has left the application
-#### `onAdImpression`
-User impression has been recorded
-#### `onAdClicked`
-User has clicked on the ad.
-
-#
-
-## Find this library useful? ❤️
-Support it by joining **stargazers** for this repository. ⭐️ and follow me for my next creations!
-
-### MIT Licensed
-
- string only | Yes |
 | `textColor` | 6 digit hex color string only | Yes |
 | `borderColor` | 6 digit hex color string only | Yes |
 | `borderWidth` | number | Yes |
