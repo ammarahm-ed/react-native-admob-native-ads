@@ -97,11 +97,11 @@ then run `yarn or npm install` in the example folder and finally to run the exam
 <h2> 😋 Installation Guide </h2>
 </div>
 
-    npm install react-native-actions-sheet --save
+    npm install react-native-admob-native-ads --save
 
 or if you use yarn:
 
-    yarn add react-native-actions-sheet
+    yarn add react-native-admob-native-ads
 
 ### iOS
 
