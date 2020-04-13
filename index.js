@@ -1,6 +1,13 @@
-const NativeAdView = require('./NativeAdView').default;
+import IconView from './src/IconView';
+import NativeAdView from './src';
 
-export default NativeAdView;
+
+
+
+export {
+  IconView,
+  NativeAdView
+}
 
 
 
