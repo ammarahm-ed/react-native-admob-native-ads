@@ -4,6 +4,7 @@ import {
   Text,
   View
 } from "react-native";
+import { NativeAdContext } from "./context";
 
 const AdvertiserView = ( props ) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
