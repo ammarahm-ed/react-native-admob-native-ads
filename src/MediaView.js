@@ -4,15 +4,13 @@ import {
   requireNativeComponent,
 } from "react-native";
 
-
-
 const MediaView = () => {
   return (
-    <AdMobMediaView/>
+    <AdMediaView/>
   );
 }
 
-const AdMobMediaView = requireNativeComponent(
+const AdMediaView = requireNativeComponent(
   "MediaView",
   MediaView
 );
