@@ -1,12 +1,13 @@
 
-import React from "react";
+import React, { useContext } from "react";
 import {
   Text,
   View
 } from "react-native";
+import { NativeAdContext } from "./context";
 
 const HeadlineView = (props) => {
-
+  const {nativeAd,setNativeAd} = useContext(NativeAdContext);
   
   return (<View
     style={props.style}
@@ -15,7 +16,7 @@ const HeadlineView = (props) => {
     <Text
       textStyle={props.textStyle}
     >
-      {props.text}
+      {nativeAd? nativeAd.headline : null}
     </Text>
   </View>);
 }
