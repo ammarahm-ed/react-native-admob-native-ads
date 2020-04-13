@@ -9,16 +9,14 @@ import { NativeAdContext } from "./context";
 const StoreView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
-  return (<View
-    style={props.style}
-    nativeID="adHeadlineView"
-  >
+  return (
     <Text
-      textStyle={props.textStyle}
+      {...props}
+      nativeID="adStoreView"
     >
       {nativeAd ? nativeAd.store : null}
     </Text>
-  </View>);
+ );
 }
 
 export default StoreView;

@@ -8,16 +8,14 @@ import { NativeAdContext } from "./context";
 
 const TaglineView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
-  return (<View
-    style={props.style}
-    nativeID="adBodyView"
-  >
+  return (
     <Text
-      textStyle={props.textStyle}
+      {...props}
+      nativeID="adTaglineView"
     >
       {nativeAd ? nativeAd.body : null}
     </Text>
-  </View>);
+  );
 }
 
 export default TaglineView;

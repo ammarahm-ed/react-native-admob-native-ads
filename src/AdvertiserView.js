@@ -8,16 +8,14 @@ import { NativeAdContext } from "./context";
 
 const AdvertiserView = ( props ) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
-  return (<View
-    style={props.style}
-    nativeID="adAdvertiserText"
-  >
+  return (
     <Text
-      textStyle={props.textStyle}
+      {...props}
+      nativeID="adAdvertiserView"
     >
       {nativeAd ? nativeAd.advertiser : null}
-    </Text>
-  </View>);
+    </Text>)
+
 }
 
 
