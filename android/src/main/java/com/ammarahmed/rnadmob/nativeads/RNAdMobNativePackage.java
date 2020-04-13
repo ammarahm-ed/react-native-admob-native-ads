@@ -12,9 +12,21 @@ import java.util.List;
 
 public class RNAdMobNativePackage implements ReactPackage {
 
+    private RNAdMobNativeViewManager adMobNativeViewManager;
+
+
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        return Arrays.<NativeModule>asList();
+
+        if (adMobNativeViewManager == null) {
+            adMobNativeViewManager = new RNAdMobNativeViewManager();
+        }
+
+        return Arrays.<NativeModule>asList(
+
+                new RNNativeAdManager(reactContext,adMobNativeViewManager)
+
+        );
     }
 
     public List<Class<? extends JavaScriptModule>> createJSModules() {
@@ -23,8 +35,15 @@ public class RNAdMobNativePackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
+
+        if (adMobNativeViewManager == null) {
+            adMobNativeViewManager = new RNAdMobNativeViewManager();
+        }
+
       return Arrays.<ViewManager>asList(
-        new RNAdMobNativeViewManager()
+        adMobNativeViewManager,
+        new RNAdMobMediaViewManager(),
+        new RNAdmobAdChoicesManager()
       );
     }
 }
