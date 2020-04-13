@@ -6,6 +6,8 @@ import {
 } from "react-native";
 
 const HeadlineView = (props) => {
+
+  
   return (<View
     style={props.style}
     nativeID="adHeadlineView"
