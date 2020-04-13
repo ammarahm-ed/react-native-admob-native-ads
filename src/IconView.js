@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import { NativeAdContext } from "./context";
 
-const IconView = ({ props }) => {
+const IconView = ( props ) => {
   const {nativeAd, setNativeAd} = useContext(NativeAdContext);
 
   return (<View
@@ -15,7 +15,7 @@ const IconView = ({ props }) => {
   >
     <Image
       style={[{ width: 128, height: 128 }, props.imageStyle]}
-      source={{uri:nativeAd.icon.uri}}
+      source={{uri:nativeAd? nativeAd.icon.uri : null}}
     />
   </View>);
 }
