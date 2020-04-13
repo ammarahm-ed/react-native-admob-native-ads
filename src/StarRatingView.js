@@ -1,22 +1,25 @@
 
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
 } from "react-native";
 import StarRating from 'react-native-star-rating';
-const StarRatingView = ({ props }) => {
+import { NativeAdContext } from "./context";
+
+const StarRatingView = ( props ) => {
+  const {nativeAd, setNativeAd} = useContext(NativeAdContext);
 
   return (<View
     style={props.style}
     nativeID="adStarRating"
-  >
+  >  
       <StarRating
         maxStars={5}
         emptyStarColor={props.emptyStarColor}
         fullStarColor={props.fullStarColor}
         halfStarColor={props.halfStarColor}
         starSize={props.starSize}
-        rating={props.rating}
+        rating={nativeAd? nativeAd.rating : null}
       />
   </View>);
 }
