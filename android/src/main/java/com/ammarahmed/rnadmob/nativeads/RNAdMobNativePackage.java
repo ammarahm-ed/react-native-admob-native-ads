@@ -13,7 +13,7 @@ import java.util.List;
 public class RNAdMobNativePackage implements ReactPackage {
 
     private RNAdMobNativeViewManager adMobNativeViewManager;
-
+    private RNAdMobMediaViewManager adMobMediaViewManager;
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
@@ -39,10 +39,10 @@ public class RNAdMobNativePackage implements ReactPackage {
         if (adMobNativeViewManager == null) {
             adMobNativeViewManager = new RNAdMobNativeViewManager();
         }
-
       return Arrays.<ViewManager>asList(
         adMobNativeViewManager,
         new RNAdMobMediaViewManager(),
+        new RNAdComponentsWrapperManager(),
         new RNAdmobAdChoicesManager()
       );
     }
