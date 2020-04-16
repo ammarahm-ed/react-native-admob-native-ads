@@ -1,6 +1,7 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +13,13 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.VideoOptions;
+import com.google.android.gms.ads.formats.AdChoicesView;
 import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
@@ -28,17 +29,23 @@ public class RNNativeAdWrapper extends LinearLayout {
     Context mContext;
     UnifiedNativeAdView nativeAdView;
     UnifiedNativeAd unifiedNativeAd;
-    RNAdComponentsWrapper adComponentsWrapper;
-    public String adHeadline = "adHeadlineView";
-    public String adTagline = "adTaglineView";
-    public String adAdvertiser = "adAdvertiserView";
-    public String adStarRating = "adStarRating";
-    public String adImageView = "adImageView";
-    public String adIconView = "adIconView";
-    public String adCallToAction = "adCallToAction";
-    public String adStoreView = "adStoreView";
+    public int adRefreshInterval = 60000;
+    public static final String adPriceViews = "adPriceView";
+    public static final String adHeadline = "adHeadlineView";
+    public static final String adTagline = "adTaglineView";
+    public static final String adAdvertiser = "adAdvertiserView";
+    public static final String adStarRating = "adStarRating";
+    public static final String adImageView = "adImageView";
+    public static final String adIconView = "adIconView";
+    public static final String adCallToAction = "adCallToAction";
+    public static final  String adStoreView = "adStoreView";
+
+
     public int AdChoicesViewId = 733;
     private String admobAdUnitId = "";
+
+    private Handler handler;
+
     private final Runnable measureAndLayout = new Runnable() {
         @Override
         public void run() {
@@ -117,15 +124,22 @@ public class RNNativeAdWrapper extends LinearLayout {
             map.putString("uri", nativeAd.getIcon().getUri().toString());
             map.putInt("height", nativeAd.getIcon().getHeight());
             map.putInt("width", nativeAd.getIcon().getWidth());
-            map.putInt("width", nativeAd.getIcon().getWidth());
             args.putMap("icon", map);
 
+            args.putString("price",nativeAd.getPrice());
 
             sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
 
             attachViews();
 
             nativeAdView.requestLayout();
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadAd();
+                }
+            },adRefreshInterval);
 
 
         } catch (Exception e) {
@@ -169,6 +183,10 @@ public class RNNativeAdWrapper extends LinearLayout {
                 if (callToAction != null)
                     nativeAdView.setCallToActionView(callToAction);
 
+                View adPriceView = ReactFindViewUtil.findView(nativeAdView, adPriceViews);
+                if (adPriceView != null)
+                    nativeAdView.setCallToActionView(adPriceView);
+
                 View starRating = ReactFindViewUtil.findView(nativeAdView, adStarRating);
                 if (starRating != null)
                     nativeAdView.setStarRatingView(starRating);
@@ -189,106 +207,114 @@ public class RNNativeAdWrapper extends LinearLayout {
                 event);
     }
 
+    UnifiedNativeAd.OnUnifiedNativeAdLoadedListener onUnifiedNativeAdLoadedListener = new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+        @Override
+        public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
+            if (nativeAd != null) {
+                unifiedNativeAd = nativeAd;
+                nativeAdView.setNativeAd(unifiedNativeAd);
+            }
+
+            setNativeAdToJS(nativeAd);
+        }
+    };
+
+
+    AdListener adListener = new AdListener() {
+        @Override
+        public void onAdFailedToLoad(int i) {
+            super.onAdFailedToLoad(i);
+
+            String errorMessage = "Unknown error";
+            switch (i) {
+                case AdRequest.ERROR_CODE_INTERNAL_ERROR:
+                    errorMessage = "Internal error, an invalid response was received from the ad server.";
+                    break;
+                case AdRequest.ERROR_CODE_INVALID_REQUEST:
+                    errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
+                    break;
+                case AdRequest.ERROR_CODE_NETWORK_ERROR:
+                    errorMessage = "The ad request was unsuccessful due to network connectivity.";
+                    break;
+                case AdRequest.ERROR_CODE_NO_FILL:
+                    errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
+                    break;
+            }
+            WritableMap event = Arguments.createMap();
+            WritableMap error = Arguments.createMap();
+            error.putString("message", errorMessage);
+            event.putMap("error", error);
+
+            sendEvent(RNAdMobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
+        }
+
+        @Override
+        public void onAdClosed() {
+            super.onAdClosed();
+            sendEvent(RNAdMobNativeViewManager.EVENT_AD_CLOSED, null);
+        }
+
+        @Override
+        public void onAdOpened() {
+            super.onAdOpened();
+            sendEvent(RNAdMobNativeViewManager.EVENT_AD_OPENED, null);
+        }
+
+        @Override
+        public void onAdClicked() {
+            super.onAdClicked();
+            sendEvent(RNAdMobNativeViewManager.EVENT_AD_CLICKED, null);
+
+        }
+
+        @Override
+        public void onAdLoaded() {
+            super.onAdLoaded();
+            sendEvent(RNAdMobNativeViewManager.EVENT_AD_LOADED, null);
+        }
+
+        @Override
+        public void onAdImpression() {
+            super.onAdImpression();
+            sendEvent(RNAdMobNativeViewManager.EVENT_AD_IMPRESSION, null);
+        }
+
+        @Override
+        public void onAdLeftApplication() {
+            super.onAdLeftApplication();
+            sendEvent(RNAdMobNativeViewManager.EVENT_AD_LEFT_APPLICATION, null);
+        }
+    };
+
+
     private void loadAd() {
 
-        Log.d("TAG_AD","LOADING");
-
         AdLoader.Builder builder = new AdLoader.Builder(mContext, admobAdUnitId);
-        builder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
-            @Override
-            public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
-                if (nativeAd != null) {
-                    unifiedNativeAd = nativeAd;
-                    nativeAdView.setNativeAd(unifiedNativeAd);
-                }
-                setNativeAdToJS(nativeAd);
-            }
-        });
-
+        builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
 
         VideoOptions videoOptions = new VideoOptions.Builder()
                 .setStartMuted(true)
                 .build();
+
         NativeAdOptions adOptions = new NativeAdOptions.Builder()
                 .setVideoOptions(videoOptions)
+                .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT)
                 .build();
         builder.withNativeAdOptions(adOptions);
 
-        AdLoader adLoader = builder.withAdListener(new AdListener() {
-            @Override
-            public void onAdFailedToLoad(int i) {
-                super.onAdFailedToLoad(i);
-
-                String errorMessage = "Unknown error";
-                switch (i) {
-                    case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-                        errorMessage = "Internal error, an invalid response was received from the ad server.";
-                        break;
-                    case AdRequest.ERROR_CODE_INVALID_REQUEST:
-                        errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
-                        break;
-                    case AdRequest.ERROR_CODE_NETWORK_ERROR:
-                        errorMessage = "The ad request was unsuccessful due to network connectivity.";
-                        break;
-                    case AdRequest.ERROR_CODE_NO_FILL:
-                        errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
-                        break;
-                }
-                WritableMap event = Arguments.createMap();
-                WritableMap error = Arguments.createMap();
-                error.putString("message", errorMessage);
-                event.putMap("error", error);
-
-                sendEvent(RNAdMobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
-            }
-
-            @Override
-            public void onAdClosed() {
-                super.onAdClosed();
-                sendEvent(RNAdMobNativeViewManager.EVENT_AD_CLOSED, null);
-            }
-
-            @Override
-            public void onAdOpened() {
-                super.onAdOpened();
-                sendEvent(RNAdMobNativeViewManager.EVENT_AD_OPENED, null);
-            }
-
-            @Override
-            public void onAdClicked() {
-                super.onAdClicked();
-                sendEvent(RNAdMobNativeViewManager.EVENT_AD_CLICKED, null);
-
-            }
-
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                sendEvent(RNAdMobNativeViewManager.EVENT_AD_LOADED, null);
-            }
-
-            @Override
-            public void onAdImpression() {
-                super.onAdImpression();
-                sendEvent(RNAdMobNativeViewManager.EVENT_AD_IMPRESSION, null);
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                super.onAdLeftApplication();
-                sendEvent(RNAdMobNativeViewManager.EVENT_AD_LEFT_APPLICATION, null);
-            }
-        })
+        AdLoader adLoader = builder.withAdListener(adListener)
                 .build();
+
         adLoader.loadAd(new AdRequest.Builder().build());
 
     }
 
-
-
-
     public void addNewView(View child, int index) {
         nativeAdView.addView(child,index);
+    }
+
+    public void setAdRefreshInterval(int interval) {
+        adRefreshInterval = interval;
     }
 
     public void setAdUnitId(String id) {
