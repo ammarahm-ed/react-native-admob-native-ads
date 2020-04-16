@@ -4,7 +4,7 @@ import {
   View
 } from "react-native";
 import { NativeAdContext, nativeAdView } from "./context";
-
+import Wrapper from "./Wrapper"
 const NativeAdView = (props) => {
   const [nativeAd, setNativeAd] = useState(null);
   const [forceRefresh, setForceRefresh] = useState(false);
@@ -15,12 +15,14 @@ const NativeAdView = (props) => {
   }
 
   const _onAdFailedToLoad = (event) => {
+
     if (props.onAdFailedToLoad) {
       props.onAdFailedToLoad(event);
     }
   }
 
   const _onAdLoaded = (event) => {
+
     if (props.onAdLoaded)
       props.onAdLoaded(event.nativeEvent);
   }
@@ -81,11 +83,17 @@ const NativeAdView = (props) => {
         onAdImpression={_onAdImpression}
         style={props.style}
         onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
-        adUnitID="ca-app-pub-3940256099942544/1044960115"
+        adUnitID="ca-app-pub-3940256099942544/2247696110"
       >
+         <Wrapper
+            style={{
+              height: '100%',
+              width: '100%',
+            }}
+          > 
         
           {props.children}
-   
+          </Wrapper>
       </UnifiedNativeAdView>
 
     </NativeAdContext.Provider>
