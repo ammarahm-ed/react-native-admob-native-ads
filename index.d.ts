@@ -1,89 +1,56 @@
-import { Component } from "react";
-import { ViewStyle } from "react-native";
+import { ViewStyle,TextProps,ImageProps, ViewProps, TextStyle} from "react-native";
 
-interface ButtonStyleType {
-    backgroundColor: string;
-    textColor: string;
-    borderColor: string;
-    borderWidth: number;
-    borderRadius: number;
-}
+type NativeAdViewProps = {
+  style?: ViewStyle;
 
-interface BackgroundStyleType {
+  /**
+   * Ad Unit ID for Native ads. Remember to use only test-ids during
+   * development mode or add your device to testDevices.
+   */
 
-    backgroundColor: string;
-    borderColor: string;
-    borderWidth: number;
-    borderRadius: number;
+  adUnitID: string;
+
+  /**
+   * Time after which a new ad should be
+   * requested from the server. Default is 1 minute (60000 ms);
+   */
+  refreshInterval?: number;
+
+  /**
+   * Set testdevices for the ad. 
+   */
+  testDevices?: Array<string>;
+  onAdOpened?: Function<void>;
+  onAdClosed?: Function<void>;
+  onAdLeftApplication?: Function<void>;
+  onAdImpression?: Function<void>;
+  onAdClick?: Function<void>;
+  onAdLoaded?: Function<void>;
+  onUnifiedNativeAdLoaded?: Function<object>;
+  onAdFailedToLoad?: Function<void>;
+};
+
+type NativeAdViewProps = {
+  style?: TextStyle;
 
 };
 
+type CallToActionProps = {
+  style?:ViewStyle;
+  textStyle?:TextStyle;
+}
+
 declare module "react-native-admob-native-ads" {
-  export type NativeAdViewProps = {
-    style?: ViewStyle;
 
-    /**
-     * adSize: Size of the ad that you want to display.
-     *
-     * Android: small, medium, large
-     *
-     * iOS: small & medium only
-     *
-     */
-    adSize?: string;
+  export default function NativeAdView(props: NativeAdViewProps): React.FunctionComponent;
+  export function HeadlineView(props: TextProps): React.FunctionComponent;
+  export function TaglineView(props: TextProps): React.FunctionComponent;
+  export function AdvertiserView(props: TextProps): React.FunctionComponent;
+  export function PriceView(props: TextProps): React.FunctionComponent;
+  export function StoreView(props: TextProps): React.FunctionComponent;
+  export function ImageView(props: ImageProps): React.FunctionComponent;
+  export function IconView(props: ImageProps): React.FunctionComponent;
+  export function MediaView(props: ViewProps): React.FunctionComponent;
+  export function CallToActionView(props: CallToActionProps): React.FunctionComponent;
 
-    /**
-     * adUnitID: Set Ad Unit ID for Native Advanced Ads that you created on your AdMob account.
-     */
-
-    adUnitID: string;
-
-    /**
-     * buttonStyle: style the callToAction button in Native ad according to your app look and feel.
-     *
-     */
-
-    buttonStyle?: ButtonStyleType;
-
-    /**
-     * backgroundStyle: Style the background of Native Ad View.
-     */
-
-    backgroundStyle?: BackgroundStyleType;
-
-    /**
-     * Set color for the heading text of Ad.
-     */
-
-    headlineTextColor?: string;
-
-    /**
-     * Set color for the description text of Ad.
-     */
-    descriptionTextColor?: string;
-    /**
-     * Set color for the advertiser text of Ad.
-     */
-    advertiserTextColor?: string;
-    /**
-     * Set color for the rating stars of Ad.
-     * Android Only.
-     */
-    ratingBarColor?: string;
-
-    /**
-     * Set testdevices for the ad. 
-     */
-
-    testDevices?: Array<string>;
-    onAdOpened?: Function<void>;
-    onAdClosed?: Function<void>;
-    onAdLeftApplication?: Function<void>;
-    onAdImpression?: Function<void>;
-    onAdClick?: Function<void>;
-    onAdLoaded?: Function<void>;
-    onAdFailedToLoad?: Function<void>;
-  };
-
-  export default class NativeAdView extends Component<NativeAdViewProps> {}
 }
