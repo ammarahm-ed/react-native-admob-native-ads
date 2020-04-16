@@ -5,22 +5,22 @@ import {
   View
 } from "react-native";
 import { NativeAdContext } from "./context";
-
-const CallToActionView = ( props ) => {
+const CallToActionView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
- 
+
 
 
   return (<View
     style={props.style}
-  
+
   >
     <Text
       nativeID="adCallToAction"
       style={[props.textStyle]}
     >
-      {nativeAd? nativeAd.callToAction : null}
+      {nativeAd ? nativeAd.callToAction : null}
     </Text>
+
   </View>);
 }
 
