@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createRef } from "react";
 
 
 export const nativeAdView = createRef();
