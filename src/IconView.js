@@ -1,23 +1,25 @@
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
-  View,
-  Image
+  Image,
+  TouchableWithoutFeedback
 } from "react-native";
 import { NativeAdContext } from "./context";
 
 const IconView = ( props ) => {
   const {nativeAd, setNativeAd} = useContext(NativeAdContext);
 
-  return (<View
-    style={props.style}
-    nativeID="adIconView"
-  >
+  const [update,setUpdate] = useState(5);
+
+  return (
     <Image
-      style={[{ width: 128, height: 128 }, props.imageStyle]}
+      {...props}
+      resizeMode="cover"
+      nativeID="adIconView"
       source={{uri:nativeAd? nativeAd.icon.uri : null}}
     />
-  </View>);
+    
+    );
 }
 
 export default IconView;
