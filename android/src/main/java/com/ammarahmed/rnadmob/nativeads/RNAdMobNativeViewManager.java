@@ -89,7 +89,6 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
      */
 
-
     @ReactProp(name = "adMediaView")
     public void setMediaView(final RNNativeAdWrapper view, final int mediaViewId) {
 
