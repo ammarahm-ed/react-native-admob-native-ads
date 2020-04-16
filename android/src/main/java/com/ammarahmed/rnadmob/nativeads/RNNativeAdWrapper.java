@@ -1,6 +1,7 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -164,11 +165,7 @@ public class RNNativeAdWrapper extends LinearLayout {
 
                     nativeAdView.setImageView(image);
 
-
-
                 View callToAction = ReactFindViewUtil.findView(nativeAdView, adCallToAction);
-                callToAction.setEnabled(true);
-                callToAction.setClickable(true);
                 if (callToAction != null)
                     nativeAdView.setCallToActionView(callToAction);
 
@@ -187,18 +184,19 @@ public class RNNativeAdWrapper extends LinearLayout {
 
         ReactContext reactContext = (ReactContext) mContext;
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                nativeAdView.getId(),
+                getId(),
                 name,
                 event);
     }
 
     private void loadAd() {
 
+        Log.d("TAG_AD","LOADING");
+
         AdLoader.Builder builder = new AdLoader.Builder(mContext, admobAdUnitId);
         builder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
             @Override
             public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
-
                 if (nativeAd != null) {
                     unifiedNativeAd = nativeAd;
                     nativeAdView.setNativeAd(unifiedNativeAd);
@@ -282,7 +280,6 @@ public class RNNativeAdWrapper extends LinearLayout {
             }
         })
                 .build();
-
         adLoader.loadAd(new AdRequest.Builder().build());
 
     }
@@ -294,7 +291,7 @@ public class RNNativeAdWrapper extends LinearLayout {
         nativeAdView.addView(child,index);
     }
 
-    public  void setAdUnitId(String id) {
+    public void setAdUnitId(String id) {
         admobAdUnitId = id;
         loadAd();
     }
