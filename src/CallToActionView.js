@@ -2,24 +2,26 @@
 import React, { useContext } from "react";
 import {
   Text,
-  TouchableOpacity
+  View
 } from "react-native";
 import { NativeAdContext } from "./context";
 
-const CallToActionView = ({ props }) => {
+const CallToActionView = ( props ) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
+ 
 
 
-  return (<TouchableOpacity
+  return (<View
     style={props.style}
-    nativeID="adCallToAction"
+  
   >
     <Text
-      textStyle={props.textStyle}
+      nativeID="adCallToAction"
+      style={[props.textStyle]}
     >
       {nativeAd? nativeAd.callToAction : null}
     </Text>
-  </TouchableOpacity>);
+  </View>);
 }
 
 export default CallToActionView;
