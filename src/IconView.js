@@ -1,16 +1,12 @@
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import {
   Image,
-  TouchableWithoutFeedback
 } from "react-native";
 import { NativeAdContext } from "./context";
 
 const IconView = ( props ) => {
   const {nativeAd, setNativeAd} = useContext(NativeAdContext);
-
-  const [update,setUpdate] = useState(5);
-
   return (
     <Image
       {...props}

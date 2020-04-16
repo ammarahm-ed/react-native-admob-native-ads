@@ -6,11 +6,7 @@ import { NativeAdContext } from "./context";
 
 const PriceView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
-
-
-
-
-
+  
   return (
     <Text
       {...props}
