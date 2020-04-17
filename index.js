@@ -10,9 +10,11 @@ import StarRatingView from './src/StarRatingView'
 import PriceView from "./src/PriceView";
 
 import NativeAdView from './src';
+
+export default NativeAdView;
+
 export {
   IconView,
-  NativeAdView,
   CallToActionView,
   HeadlineView,
   TaglineView,
