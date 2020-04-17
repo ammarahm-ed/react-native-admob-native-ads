@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   requireNativeComponent,
-  View,
   Platform
 } from "react-native";
 import { NativeAdContext, nativeAdView } from "./context";
