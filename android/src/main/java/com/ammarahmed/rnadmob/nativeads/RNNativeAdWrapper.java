@@ -94,11 +94,11 @@ public class RNNativeAdWrapper extends LinearLayout {
         try {
             WritableMap args = Arguments.createMap();
             args.putString("headline", nativeAd.getHeadline());
-            args.putString("body", nativeAd.getBody());
+            args.putString("tagline", nativeAd.getBody());
             args.putString("advertiser", nativeAd.getAdvertiser());
             args.putString("callToAction", nativeAd.getCallToAction());
             args.putBoolean("video", nativeAd.getMediaContent().hasVideoContent());
-
+            args.putString("price",nativeAd.getPrice());
             if (nativeAd.getStore() != null) {
                 args.putString("store", nativeAd.getStore());
             }
@@ -109,24 +109,11 @@ public class RNNativeAdWrapper extends LinearLayout {
 
             WritableArray images = Arguments.createArray();
 
-            for (int i = 0; i < nativeAd.getImages().size(); i++) {
-                WritableMap map = Arguments.createMap();
-
-                map.putString("uri", nativeAd.getImages().get(i).getUri().toString());
-                map.putInt("height", nativeAd.getImages().get(i).getHeight());
-                map.putInt("width", nativeAd.getImages().get(i).getWidth());
-                map.putInt("width", nativeAd.getImages().get(i).getWidth());
-                images.pushMap(map);
-            }
+            images.pushString(nativeAd.getImages().get(0).getUri().toString());
             args.putArray("images", images);
 
-            WritableMap map = Arguments.createMap();
-            map.putString("uri", nativeAd.getIcon().getUri().toString());
-            map.putInt("height", nativeAd.getIcon().getHeight());
-            map.putInt("width", nativeAd.getIcon().getWidth());
-            args.putMap("icon", map);
+            args.putString("icon",nativeAd.getIcon().getUri().toString() );
 
-            args.putString("price",nativeAd.getPrice());
 
             sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
 
