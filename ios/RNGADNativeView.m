@@ -267,15 +267,21 @@ NSNumber *refreshingInterval;
         [dic setValue:nativeAd.price forKey:@"price"];
         [dic setValue:nativeAd.callToAction forKey:@"callToAction"];
         
-     NSMutableArray *array = [NSMutableArray array];
+        
+        if (nativeAd.mediaContent.hasVideoContent) {
+           [dic setValue:@YES forKey:@"video"];
+        }else {
+           [dic setValue:@NO forKey:@"video"];
+        }
+       
+        
+     NSMutableArray *images = [NSMutableArray array];
         
          GADNativeAdImage *image = [nativeAd.images objectAtIndex:0];
          NSString *url = [image.imageURL absoluteString];
-          [array addObject:url];
+          [images addObject:url];
             
-        [dic setObject:array forKey:@"images"];
-       
-        
+        [dic setObject:images forKey:@"images"];
         [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
         [dic setValue:nativeAd.starRating forKey:@"rating"];
         
