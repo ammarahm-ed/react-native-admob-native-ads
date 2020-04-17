@@ -72,15 +72,14 @@ src="https://i.imgur.com/SiY3JeN.png"
 </div>
 <p align="center">
 
-1.  Native Admob Ads
+1.  [Admob Native Ads](https://developers.google.com/admob/android/native/start)
 2.  Cross Platform (iOS and Android)
-3.  Identical Working on Android and iOS
-4.  Style your ads as you wish!
-5.  No need to manage .xml or .xib layout files to match ad style to app theme!
-6.  Adding styles is as simple as adding styles to any other react-native `View`
-7.  AutoRefresh ad
-8.  Multiple Ad Sizes
-9.  Support Video Ads & Image Ads!
+3.  Identical Working on both platforms
+4.  You can create your ads from ground up as you desire, **no limits.**
+5.  No need to manage any .xml or .xib layout files!
+6.  AutoRefresh ad at specific intervals
+7.  **Customizable Pre-defined templates** also available for easy and quick implementation
+8.  **Support for Video Ads**
 
 </p>
 
