@@ -1,22 +1,30 @@
 #import <React/RCTView.h>
+#import <React/RCTBridge.h>
 
 @import GoogleMobileAds;
 
-@interface RNGADNativeView : RCTView <GADUnifiedNativeAdLoaderDelegate,
+@interface RNGADNativeView : GADUnifiedNativeAdView <GADUnifiedNativeAdLoaderDelegate,
     GADUnifiedNativeAdDelegate>
 
 @property(nonatomic, strong) GADUnifiedNativeAd *nativeAdView;
 @property(nonatomic, strong) GADAdLoader *adLoader;
 
 @property (nonatomic, copy) NSArray *testDevices;
-@property (nonatomic, copy) NSString *adSize;
+@property (nonatomic, copy) NSNumber *refreshInterval;
+@property (nonatomic, copy) NSString *adUnitID;
 
-@property (nonatomic, copy) NSString *headlineTextColor;
-@property (nonatomic, copy) NSString *descriptionTextColor;
-@property (nonatomic, copy) NSString *advertiserTextColor;
-@property (nonatomic, copy) NSDictionary *buttonStyle;
-@property (nonatomic, copy) NSDictionary *backgroundStyle;
+@property (nonatomic, copy) NSNumber *headline;
+@property (nonatomic, copy) NSNumber *tagline;
+@property (nonatomic, copy) NSNumber *advertiser;
+@property (nonatomic, copy) NSNumber *store;
+@property (nonatomic, copy) NSNumber *price;
+@property (nonatomic, copy) NSNumber *image;
+@property (nonatomic, copy) NSNumber *icon;
+@property (nonatomic, copy) NSNumber *mediaview;
+@property (nonatomic, copy) NSNumber *starrating;
+@property (nonatomic, copy) NSNumber *callToAction;
 
+- (instancetype)initWithBridge:(RCTBridge *)bridge;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onAdLoaded;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdFailedToLoad;
@@ -25,7 +33,7 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onAdLeftApplication;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdClicked;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdImpression;
+@property (nonatomic, copy) RCTBubblingEventBlock onUnifiedNativeAdLoaded;
 
-- (void)loadNativeAd:(NSString *)adUnitId;
 
 @end

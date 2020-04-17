@@ -1,194 +1,244 @@
 #import "RNGADNativeView.h"
 #import "RNAdMobUtils.h"
-#import "GADTMediumTemplateView.h"
-#import "GADTSmallTemplateView.h"
-#import <React/RCTBridge.h>
 #import <React/RCTRootView.h>
 #import <React/RCTRootViewDelegate.h>
 #import <React/RCTViewManager.h>
+#import <React/RCTUtils.h>
+#import <React/RCTAssert.h>
+#import <React/RCTBridge.h>
+#import <React/RCTConvert.h>
+#import <React/RCTUIManager.h>
+#import <React/RCTBridgeModule.h>
+#import "RCTUIManagerUtils.h"
 
 @import GoogleMobileAds;
 
+@implementation RNGADNativeView : GADUnifiedNativeAdView
 
-@implementation RNGADNativeView
-
-NSString *btnBackgroundColor = @"#0077cc";
-NSString *btnBorderColor = @"#0077cc";
-NSString *btnTextColor = @"#ffffff";
-NSNumber *btnBorderRadius = 0;
-NSNumber *btnBorderWidth = 0;
-
-NSString *bgBackgroundColor = @"#ffffff";
-NSString *bgBorderColor = @"#ffffff";
-NSNumber *bgBorderRadius = 0;
-NSNumber *bgBorderWidth = 0;
-
-NSString *primaryTextColor = @"#000000";
-NSString *secondaryTextColor = @"#a9a9a9";
-NSString *tertiaryTextColor = @"#a9a9a9";
-
-GADTTemplateView *nativeAdView;
+RCTBridge *bridge;
 
 
-- (void)setAdSize:(NSString *)adSize
+NSString *adUnitId;
+NSNumber *refreshingInterval;
+
+- (instancetype)initWithBridge:(RCTBridge *)_bridge
 {
-    
-    NSLog(@"Setting ad size %@", adSize);
-    _adSize = adSize;
+    refreshingInterval = @60000;
+  if (self = [super init]) {
+    bridge = _bridge;
+  }
+  return self;
 }
+
+
+
+
+
+
+
 
 - (void)setTestDevices:(NSArray *)testDevices
 {
     _testDevices = RNAdMobProcessTestDevices(testDevices, kDFPSimulatorID);
 }
 
-
-- (void)setButtonStyle:(NSDictionary *)buttonStyle
+- (void)setRefreshInterval:(NSNumber *)refreshInterval
 {
-    btnBackgroundColor = [buttonStyle objectForKey:@"backgroundColor"];
-    btnTextColor = [buttonStyle objectForKey:@"textColor"];
-    btnBorderColor = [buttonStyle objectForKey:@"borderColor"];
-    btnBorderWidth =  [buttonStyle objectForKey:@"borderWidth"];
-    btnBorderRadius = [buttonStyle objectForKey:@"borderRadius"];
-    
-    [self setStylesForButton:btnBackgroundColor arg2:btnTextColor arg3:btnBorderColor arg4:btnBorderWidth arg5:btnBorderRadius];
-    
+    refreshingInterval = refreshInterval;
 }
 
-- (void)setBackgroundStyle:(NSDictionary *)backgroundStyle
+- (void)setAdUnitID:(NSString *)adUnitID
 {
-    bgBackgroundColor = [backgroundStyle objectForKey:@"backgroundColor"];
-    bgBorderColor = [backgroundStyle objectForKey:@"borderColor"];
-    bgBorderWidth =  [backgroundStyle objectForKey:@"borderWidth"];
-    bgBorderRadius = [backgroundStyle objectForKey:@"borderRadius"];
-    
-    [self setStylesForBackground:bgBackgroundColor arg3:bgBorderColor arg4:bgBorderWidth arg5:bgBorderRadius];
-    
+    adUnitId = adUnitID;
+    [self loadAd:adUnitId];
 }
 
-- (void)setHeadlineTextColor:(NSString *)headlineTextColor
+- (void)setHeadline:(NSNumber *)headline {
+    
+    dispatch_async(RCTGetUIManagerQueue(),^{
+          
+          [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+
+              UIView *headlineView = viewRegistry[headline];
+                           if (headlineView != nil) {
+                                               [self setHeadlineView:headlineView];
+                                           }
+            }];
+      });
+}
+
+- (void)setIcon:(NSNumber *)icon {
+    
+    dispatch_async(RCTGetUIManagerQueue(),^{
+        
+        [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+
+            UIView *iconView = viewRegistry[icon];
+                         if (iconView != nil) {
+                                             [self setIconView:iconView];
+                                         }
+          }];
+    });
+    
+  
+}
+
+- (void)setImage:(NSNumber *)image {
+    
+    dispatch_async(RCTGetUIManagerQueue(),^{
+                     
+                     [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+
+                         UIView *imageView = viewRegistry[image];
+                                      if (imageView != nil) {
+                                                          [self setImageView:imageView];
+                                                      }
+                       }];
+                 });
+
+}
+
+- (void)setMediaview:(NSNumber *)mediaview
 {
-    primaryTextColor = headlineTextColor;
-    
-    [self setColorForHeadlineText:primaryTextColor];
-    
+    dispatch_async(RCTGetUIManagerQueue(),^{
+        
+        [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+
+            GADMediaView *mediaView = (GADMediaView *) viewRegistry[mediaview];
+                         if (mediaView != nil) {
+                                             [self setMediaView:mediaView];
+                                         }
+          }];
+    });
 }
 
-- (void)setDescriptionTextColor:(NSString *)descriptionTextColor
-{
-    secondaryTextColor =descriptionTextColor;
-    [self setColorForDescriptionText:secondaryTextColor];
-    
-    
-}
-
-- (void)setAdvertiserTextColor:(NSString *)advertiserTextColor
-{
-    tertiaryTextColor = advertiserTextColor;
-    [self setColorForAdvertiserText:tertiaryTextColor];
-}
-
-- (void)setColorForHeadlineText:(NSString *)color {
-    nativeAdView.primaryTextView.textColor = [self colorWithHexString:primaryTextColor];
-}
-
-- (void)setColorForDescriptionText:(NSString *)color {
-    nativeAdView.secondaryTextView.textColor = [self colorWithHexString:secondaryTextColor];
-}
-- (void)setColorForAdvertiserText:(NSString *)color {
-    nativeAdView.tertiaryTextView.textColor = [self colorWithHexString:color];
-}
-
-
--(void) setStylesForBackground:(NSString *)backgroundColor
-                          arg3:(NSString *)borderColor
-                          arg4:(NSNumber *)borderWidth
-                          arg5:(NSNumber *)borderRadius
+- (void)setTagline:(NSNumber *)tagline
 {
     
-    UIColor *bgColor = [self colorWithHexString:backgroundColor];
-    nativeAdView.backgroundView.backgroundColor = bgColor;
-    nativeAdView.rootView.backgroundColor = bgColor;
-    nativeAdView.mediaView.backgroundColor = bgColor;
-    nativeAdView.primaryTextView.superview.backgroundColor = bgColor;
-    
-    nativeAdView.layer.borderColor = [self colorWithHexString:borderColor].CGColor;
-    nativeAdView.layer.borderWidth = borderWidth.floatValue;
-    nativeAdView.layer.cornerRadius = borderRadius.floatValue;
-    
-    nativeAdView.backgroundView.layer.cornerRadius = borderRadius.floatValue;
-    nativeAdView.rootView.layer.cornerRadius = borderRadius.floatValue;
-    
-    [nativeAdView.layer setNeedsDisplay];
-    
+    dispatch_async(RCTGetUIManagerQueue(),^{
+                  
+                  [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+
+                      UIView *taglineView = viewRegistry[tagline];
+                                   if (taglineView != nil) {
+                                                       [self setPriceView:taglineView];
+                                                   }
+                    }];
+              });
+   
 }
 
-
-- (void)setStylesForButton:(NSString *)backgroundColor
-                      arg2:(NSString *)textColor
-                      arg3:(NSString *)borderColor
-                      arg4:(NSNumber *)borderWidth
-                      arg5:(NSNumber *)borderRadius
+- (void)setAdvertiser:(NSNumber *)advertiser
 {
-    nativeAdView.callToActionView.backgroundColor = [self colorWithHexString:backgroundColor];
-    
+    dispatch_async(RCTGetUIManagerQueue(),^{
+                
+                [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
 
-    for (UIView *view in [nativeAdView.callToActionView subviews]) {
-        //Check if the view is of UILabel class
-        if ([view isKindOfClass:[UILabel class]]) {
-            //Cast the view to a UILabel
-            UILabel *label = (UILabel *)view;
-            //Set the color to label
-            label.textColor = [self colorWithHexString:textColor];
-        }
-    }
+                    UIView *advertiserView = viewRegistry[advertiser];
+                                 if (advertiserView != nil) {
+                                                     [self setPriceView:advertiserView];
+                                                 }
+                  }];
+            });
     
-    nativeAdView.callToActionView.layer.borderColor = [self colorWithHexString:borderColor].CGColor;
+}
+- (void)setPrice:(NSNumber *)price
+{
+    
+    dispatch_async(RCTGetUIManagerQueue(),^{
+             
+             [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+
+                 UIView *priceView = viewRegistry[price];
+                              if (priceView != nil) {
+                                                  [self setPriceView:priceView];
+                                              }
+               }];
+         });
     
     
-    nativeAdView.callToActionView.layer.borderWidth = borderWidth.floatValue;
-    nativeAdView.callToActionView.layer.cornerRadius = borderRadius.floatValue;
-    
-    [nativeAdView.callToActionView.layer setNeedsDisplay];
+   
     
     
-    nativeAdView.adBadge.backgroundColor =[self colorWithHexString:backgroundColor];
-    nativeAdView.adBadge.layer.borderColor = [self colorWithHexString:borderColor].CGColor;
-    nativeAdView.adBadge.textColor =[self colorWithHexString:textColor];
-    nativeAdView.adBadge.layer.borderWidth = borderWidth.floatValue;
-    nativeAdView.adBadge.layer.cornerRadius = borderRadius.floatValue;
-    
-    [nativeAdView.adBadge.layer setNeedsDisplay];
 }
 
-- (UIColor *)colorWithHexString:(NSString *)hexString {
-    unsigned rgbValue = 0;
-    NSScanner *scanner = [NSScanner scannerWithString:hexString];
-    [scanner setScanLocation:1]; // bypass '#' character
-    [scanner scanHexInt:&rgbValue];
+- (void)setStore:(NSNumber *)store
+{
     
-    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
+    dispatch_async(RCTGetUIManagerQueue(),^{
+           
+           [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+
+               UIView *storeView = viewRegistry[store];
+                            if (storeView != nil) {
+                                                [self setStoreView:storeView];
+                                            }
+             }];
+       });
+    
+    
+    
+    
+}
+
+- (void)setStarrating:(NSNumber *)starrating
+{
+    
+    dispatch_async(RCTGetUIManagerQueue(),^{
+        
+        [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+
+            UIView *starratingView = viewRegistry[starrating];
+                          if (starratingView != nil) {
+                              [self setStarRatingView:starratingView];
+                          }
+          }];
+    });
+ 
+}
+
+- (void)setCallToAction:(NSNumber *)callToAction
+{
+    
+    dispatch_async(RCTGetUIManagerQueue(),^{
+        
+        [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+            
+             UIView *callToActionView = viewRegistry[callToAction];
+            
+             if (callToActionView != nil){
+                [self setCallToActionView:callToActionView];
+             }
+            
+          }];
+    });
+
 }
 
 
 
-
-
-- (void)loadNativeAd:(NSString *)adUnitId
+- (void)loadAd:(NSString *)adUnitId
 {
     UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
     UIViewController *rootViewController = [keyWindow rootViewController];
+    
+    GADNativeAdViewAdOptions *adViewOptions = [GADNativeAdViewAdOptions new];
+    
+    adViewOptions.preferredAdChoicesPosition = GADAdChoicesPositionTopRightCorner;
+    
+    
     self.adLoader = [[GADAdLoader alloc]
                      initWithAdUnitID:adUnitId
                      rootViewController:rootViewController
                      adTypes:@[ kGADAdLoaderAdTypeUnifiedNative ]
-                     options:nil];
+                     options:@[adViewOptions]];
     
     self.adLoader.delegate = self;
     GADRequest *request = [GADRequest request];
     GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers = _testDevices;
     [self.adLoader loadRequest:request];
 }
+
 
 - (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(GADRequestError *)error {
     if (self.onAdFailedToLoad) {
@@ -198,53 +248,59 @@ GADTTemplateView *nativeAdView;
 }
 
 
-
-- (void)addTemplateView:(GADTTemplateView *)templateView withNativeAd:(GADUnifiedNativeAd *)nativeAd
-{
-    nativeAd.delegate = self;
-    templateView.nativeAd = nativeAd;
-    
-    
-    nativeAdView = templateView;
-    
-    [self addSubview:templateView];
-    [templateView addHorizontalConstraintsToSuperviewWidth];
-    [templateView addVerticalCenterConstraintToSuperview];
-    
-    double delayInSeconds = 0.10;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        
-        [self setColorForHeadlineText:primaryTextColor];
-        [self setColorForDescriptionText:secondaryTextColor];
-        [self setColorForAdvertiserText:tertiaryTextColor];
-        [self setStylesForBackground:bgBackgroundColor arg3:bgBorderColor arg4:bgBorderWidth arg5:bgBorderRadius];
-        [self setStylesForButton:btnBackgroundColor arg2:btnTextColor arg3:btnBorderColor arg4:btnBorderWidth arg5:btnBorderRadius];
-        
-    });
-    
-}
-
 - (void)adLoader:(GADAdLoader *)adLoader didReceiveUnifiedNativeAd:(GADUnifiedNativeAd *)nativeAd {
+    
     if (self.onAdLoaded) {
         self.onAdLoaded(@{});
     }
-    
+
     nativeAd.delegate = self;
+    [self setNativeAd:nativeAd];
     
-    if([_adSize  isEqual: @"medium"]) {
-        GADTMediumTemplateView *templateView = [[GADTMediumTemplateView alloc] init];
-        [self addTemplateView:templateView withNativeAd:nativeAd];
-    } else {
-        GADTSmallTemplateView *templateView = [[GADTSmallTemplateView alloc] init];
-        [self addTemplateView:templateView withNativeAd:nativeAd];
+    if (nativeAd != NULL) {
+        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+        
+        [dic setValue:nativeAd.headline forKey:@"headline"];
+        [dic setValue:nativeAd.body forKey:@"tagline"];
+        [dic setValue:nativeAd.advertiser forKey:@"advertiser"];
+        [dic setValue:nativeAd.store forKey:@"store"];
+        [dic setValue:nativeAd.price forKey:@"price"];
+        [dic setValue:nativeAd.callToAction forKey:@"callToAction"];
+        
+     NSMutableArray *array = [NSMutableArray array];
+        
+         GADNativeAdImage *image = [nativeAd.images objectAtIndex:0];
+         NSString *url = [image.imageURL absoluteString];
+          [array addObject:url];
+            
+        [dic setObject:array forKey:@"images"];
+       
+        
+        [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
+        [dic setValue:nativeAd.starRating forKey:@"rating"];
+        
+        self.onUnifiedNativeAdLoaded(dic);
     }
+    
+
+    double delayInSeconds = refreshingInterval.intValue/1000;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self loadAd:adUnitId];
+    });
+    
+    
+    
+   
+
 }
+
 
 - (void)nativeAdDidRecordImpression:(nonnull GADUnifiedNativeAd *)nativeAd
 {
     if (self.onAdImpression) {
         self.onAdImpression(@{});
+    
     }
 }
 
@@ -279,4 +335,7 @@ GADTTemplateView *nativeAdView;
 
 
 @end
+
+
+
 
