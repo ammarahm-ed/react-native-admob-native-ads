@@ -1,10 +1,26 @@
 import React, { useState, useEffect } from "react";
 import {
   requireNativeComponent,
-  View
+  View,
+  Platform
 } from "react-native";
 import { NativeAdContext, nativeAdView } from "./context";
 import Wrapper from "./Wrapper"
+
+const testNativeAd = {
+  headline:'Test Ad: Lorem ipsum dolor ',
+  tagline:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+  advertiser:'Laboris Nisi',
+  store:Platform.OS === "ios"? "AppStore": "Google Play",
+  video:false,
+  rating:4.5,
+  price:"$ 1",
+  icon:"https://dummyimage.com/300.png/09f/fff",
+  images:[
+    "https://dummyimage.com/qvga"
+  ]
+}
+
 const NativeAdView = (props) => {
   const [nativeAd, setNativeAd] = useState(null);
   const [forceRefresh, setForceRefresh] = useState(false);
@@ -49,7 +65,6 @@ const NativeAdView = (props) => {
   }
 
   const _onUnifiedNativeAdLoaded = event => {
- 
     updateAd(event.nativeEvent)
     setTimeout(() => {
       setForceRefresh(!forceRefresh);
@@ -68,6 +83,14 @@ const NativeAdView = (props) => {
 
   }
 
+  useEffect(() => {
+    if (props.enableTestMode) {
+    updateAd(testNativeAd);
+    } else {
+      updateAd(null);
+    }
+  },[props.enableTestMode])
+
   return (
     <NativeAdContext.Provider
       value={{ nativeAd, setNativeAd }}
@@ -83,7 +106,7 @@ const NativeAdView = (props) => {
         onAdImpression={_onAdImpression}
         style={props.style}
         onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
-        adUnitID="ca-app-pub-3940256099942544/2247696110"
+        adUnitID={props.adUnitID}
       >
          <Wrapper
             style={{
