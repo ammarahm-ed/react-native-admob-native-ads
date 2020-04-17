@@ -8,7 +8,7 @@ import MediaView from './src/MediaView'
 import StoreView from './src/StoreView'
 import StarRatingView from './src/StarRatingView'
 import PriceView from "./src/PriceView";
-
+import HeaderView from "./src/HeaderView";
 import NativeAdView from './src';
 
 export default NativeAdView;
@@ -23,7 +23,8 @@ export {
   MediaView,
   StoreView,
   StarRatingView,
-  PriceView
+  PriceView,
+  HeaderView
 }
 
 
