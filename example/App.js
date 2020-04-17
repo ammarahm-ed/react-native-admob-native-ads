@@ -1,6 +1,15 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
-import NativeAdView, { CallToActionView, IconView,ImageView, HeadlineView, TaglineView, AdvertiserView, HeaderView, MediaView } from 'react-native-admob-native-ads';
+import React, {useState} from 'react';
+import {View} from 'react-native';
+import NativeAdView, {
+  CallToActionView,
+  IconView,
+  ImageView,
+  HeadlineView,
+  TaglineView,
+  AdvertiserView,
+  HeaderView,
+  MediaView,
+} from 'react-native-admob-native-ads';
 
 const App = () => {
   const [adLoaded, setAdLoaded] = useState(false);
@@ -17,7 +26,7 @@ const App = () => {
       style={{
         height: '100%',
         width: '100%',
-        marginTop:10
+        marginTop: 10,
       }}>
       <View>
         <NativeAdView
@@ -31,7 +40,7 @@ const App = () => {
           }}
           style={{
             width: '95%',
-            alignSelf:'center',
+            alignSelf: 'center',
             height: 400,
           }}
           adUnitID="ca-app-pub-3940256099942544/2247696110">
@@ -41,7 +50,7 @@ const App = () => {
               width: '100%',
               backgroundColor: 'white',
             }}>
-              <HeaderView/>
+            <HeaderView />
             <View
               style={{
                 height: 100,
@@ -49,7 +58,7 @@ const App = () => {
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
                 alignItems: 'center',
-                paddingHorizontal:10
+                paddingHorizontal: 10,
               }}>
               <IconView
                 style={{
@@ -57,34 +66,30 @@ const App = () => {
                   height: 70,
                 }}
               />
-                <View
+              <View
                 style={{
-                  width:'75%',
-                  paddingHorizontal:6
-                }}
-                >
+                  width: '75%',
+                  paddingHorizontal: 6,
+                }}>
                 <HeadlineView
-                style={{
-                  fontWeight:"bold",
-                  fontSize:14,
-                }}
-
+                  style={{
+                    fontWeight: 'bold',
+                    fontSize: 14,
+                  }}
                 />
                 <TaglineView
-                numberOfLines={2}
+                  numberOfLines={2}
                   style={{
-                    fontSize:12,
+                    fontSize: 12,
                   }}
                 />
                 <AdvertiserView
                   style={{
-                    fontSize:10,
-                    color:"gray"
+                    fontSize: 10,
+                    color: 'gray',
                   }}
                 />
               </View>
-             
-
             </View>
 
             <View
@@ -96,32 +101,28 @@ const App = () => {
                 style={{
                   width: '90%',
                   height: 200,
-                  alignSelf:'center',
-                  borderRadius:10
+                  alignSelf: 'center',
+                  borderRadius: 10,
                 }}
               />
-            
             </View>
+
 
             <CallToActionView
               style={{
                 height: 45,
-                paddingHorizontal:12,
+                paddingHorizontal: 12,
                 backgroundColor: 'purple',
-                justifyContent:'center',
-                alignItems:'center',
-                borderRadius:5,
-                elevation:10,
-                marginTop:10
-                
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: 5,
+                elevation: 10,
+                marginTop: 10,
               }}
-              textStyle={{color:'white',fontSize:16}}
-            
+              textStyle={{color: 'white', fontSize: 16}}
             />
 
-           
 
-           
           </View>
         </NativeAdView>
       </View>
