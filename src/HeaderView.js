@@ -8,9 +8,11 @@ const HeaderView = (props) => {
         {
           width: "100%",
           height: 18,
+          width:18,
           borderWidth: 1,
           borderRadius: 2.5,
           borderColor: "green",
+         
         },
         props.style,
       ]}
@@ -19,6 +21,7 @@ const HeaderView = (props) => {
         style={[
           {
             color: "green",
+            fontSize:10
           },
           props.textStyle,
         ]}
