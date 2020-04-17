@@ -51,7 +51,7 @@ type NativeAdViewProps = {
    * so you can easily design, because for each type of ad recieved from the server, not all the info is available.
    */
 
-  enableTestMode?:boolean;
+  enableTestMode?: boolean;
 
 
   style?: ViewStyle;
