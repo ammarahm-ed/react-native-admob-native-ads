@@ -90,6 +90,7 @@ To run the example app clone the project
 
     git clone https://github.com/ammarahm-ed/react-native-admob-native-ads.git
 
+
 then run `yarn or npm install` in the example folder and finally to run the example app:
 
     react-native run-android
@@ -104,31 +105,19 @@ or if you use yarn:
 
     yarn add react-native-admob-native-ads
 
-### iOS
+### iOS Setup
 
-**Step 1:** Follow the guide to add [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project. Also don't forget to update your info.plist file also to add AppID.
-
-**Step 2:** Add .xib files to your main project:
-
-1.  Open **`.xcworkspace`** file inside the `ios` folder in your
-    project in Xcode.
- 2. Select the root folder of your project and right click for the dropdown menu.
- 3. Click on **`Add files to YOUR_PROJECT_NAME`**
- 4. In select file window, go to **`YOUR_PROJECT/node_modules/react-native-admob-native-ads/ios`**
- 5. Select **`GADTMediumTemplateView.xib`** and **`GADTSmallTemplateView.xib`** files and add them to your project. **Make sure copy items if needed is checked and add groups is selected!**
+Follow the guide to add [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project. Also don't forget to update your info.plist file to add AppID.
  
  <img
   width="300"
 src="https://i.imgur.com/mhkKEpE.png"
 />
    
-### [](https://github.com/sbugert/react-native-admob#android)Android
+### Android Setup
 
 Add your AdMob App ID to `AndroidManifest.xml`, as described in the  [Google Mobile Ads SDK documentation](https://developers.google.com/admob/android/quick-start#update_your_androidmanifestxml).
 
-### [](https://github.com/sbugert/react-native-admob#android)Android
-
-Add your AdMob App ID to `AndroidManifest.xml`, as described in the [Google Mobile Ads SDK documentation](https://developers.google.com/admob/android/quick-start#update_your_androidmanifestxml).
 
 <div align="center">
 <h2>Usage Example</h2>
