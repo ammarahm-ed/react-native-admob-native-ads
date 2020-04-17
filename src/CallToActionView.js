@@ -7,6 +7,7 @@ import {
   Platform
 } from "react-native";
 import { NativeAdContext, nativeAdView } from "./context";
+import { RawButton } from "react-native-gesture-handler";
 
 const callToActionRef = createRef();
 const CallToActionView = (props) => {
@@ -21,18 +22,21 @@ const _onLayout = () => {
   });
 }
 
-  return (<View
-    style={props.style} >
-    <Text
-      nativeID="adCallToAction"
-      ref={callToActionRef}
-      onLayout={_onLayout}
+  return (
+    <RawButton
+    nativeID="adCallToAction"
+    ref={callToActionRef}
+    onLayout={_onLayout}
+    style={props.style}
+  >
+     <Text
       style={[props.textStyle]}
     >
       {nativeAd ? nativeAd.callToAction : null}
     </Text>
+   
 
-  </View>);
+  </RawButton>);
 }
 
 export default CallToActionView;
