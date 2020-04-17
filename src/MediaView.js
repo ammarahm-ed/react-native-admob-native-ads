@@ -14,7 +14,7 @@ const MediaView = (props) => {
 
     let handle = findNodeHandle(adMediaView.current);
     nativeAdView.current?.setNativeProps({
-      adMediaView:handle
+      mediaview:handle
     });
     
   },[nativeAd])

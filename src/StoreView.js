@@ -1,11 +1,14 @@
 
-import React, { useContext } from "react";
+import React, { useContext, createRef } from "react";
 import {
   Text,
-  View
+  View,
+  findNodeHandle,
+  Platform
 } from "react-native";
-import { NativeAdContext } from "./context";
+import { NativeAdContext, nativeAdView } from "./context";
 
+const storeViewRef = createRef();
 const StoreView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
@@ -13,6 +16,14 @@ const StoreView = (props) => {
     <Text
       {...props}
       nativeID="adStoreView"
+      ref={storeViewRef}
+      onLayout={() => {
+        if (Platform.OS === "android") return;
+        let handle = findNodeHandle(storeViewRef.current);
+        nativeAdView.current?.setNativeProps({
+          store: handle
+        });
+      }}
     >
       {nativeAd ? nativeAd.store : null}
     </Text>
