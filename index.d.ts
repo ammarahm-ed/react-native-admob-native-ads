@@ -1,5 +1,6 @@
 import { ViewStyle, TextProps, ImageProps, TextStyle } from "react-native";
 import { StarRatingProps } from "react-native-star-rating";
+import { RawButtonProperties } from "react-native-gesture-handler";
 
 
 type NativeAd = {
@@ -167,4 +168,6 @@ declare module "react-native-admob-native-ads" {
    * the server.
    */
   export function StarRatingView(props: StarRatingProps): React.FunctionComponent;
+
+  export function CustomButton(props: RawButtonProperties): React.FunctionComponent;
 }

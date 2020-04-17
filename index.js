@@ -10,7 +10,7 @@ import StarRatingView from './src/StarRatingView'
 import PriceView from "./src/PriceView";
 import HeaderView from "./src/HeaderView";
 import NativeAdView from './src';
-
+import CustomButton from "./src/CustomButton";
 export default NativeAdView;
 
 export {
@@ -24,7 +24,8 @@ export {
   StoreView,
   StarRatingView,
   PriceView,
-  HeaderView
+  HeaderView,
+  CustomButton
 }
 
 
