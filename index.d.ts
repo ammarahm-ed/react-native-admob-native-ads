@@ -169,5 +169,11 @@ declare module "react-native-admob-native-ads" {
    */
   export function StarRatingView(props: StarRatingProps): React.FunctionComponent;
 
+
+  /**
+   * You may need to add a custom button, like a close button etc for your ad. In such a case,
+   * the regular buttons and touchables will not work inside the NativeAdView so use this instead.
+   */
+
   export function CustomButton(props: RawButtonProperties): React.FunctionComponent;
 }
