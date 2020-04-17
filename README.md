@@ -30,9 +30,10 @@ target="_blank"
 </div>
 </div
 <p>
-If you are working on a React Native Application, you might have felt limited when it comes to displaying ads that look beautiful and match the app design. Not just displaying ads but making them look as good as your app design (Not the old banner and interstitials). 
+If you are working on a React Native Application, you might have felt limited when it comes to displaying ads that look beautiful and match the app design. Not just displaying ads but making them look as good as your app design (Not the old banner and interstitials).
 
-This library aims to solve that problem by providing complete support for Admob Native Ads which is dead simple and easy to use. Now you can create your own ads from ground up using custom React Native Views. 
+This library aims to solve that problem by providing complete support for Admob Native Ads which is dead simple and easy to use. Now you can create your own ads from ground up using custom React Native Views.
+
 </p>
 
 ### iOS
@@ -78,8 +79,7 @@ src="https://i.imgur.com/SiY3JeN.png"
 4.  You can create your ads from ground up as you desire, **no limits.**
 5.  No need to manage any .xml or .xib layout files!
 6.  AutoRefresh ad at specific intervals
-7.  **Customizable Pre-defined templates** also available for easy and quick implementation
-8.  **Support for Video Ads**
+7.  **Support for Video Ads**
 
 </p>
 
@@ -89,7 +89,6 @@ src="https://i.imgur.com/SiY3JeN.png"
 To run the example app clone the project
 
     git clone https://github.com/ammarahm-ed/react-native-admob-native-ads.git
-
 
 then run `yarn or npm install` in the example folder and finally to run the example app:
 
@@ -108,67 +107,111 @@ or if you use yarn:
 ### iOS Setup
 
 Follow the guide to add [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project. Also don't forget to update your info.plist file to add AppID.
- 
- <img
-  width="300"
-src="https://i.imgur.com/mhkKEpE.png"
-/>
-   
+
 ### Android Setup
 
-Add your AdMob App ID to `AndroidManifest.xml`, as described in the  [Google Mobile Ads SDK documentation](https://developers.google.com/admob/android/quick-start#update_your_androidmanifestxml).
-
+Add your AdMob App ID to `AndroidManifest.xml`, as described in the [Google Mobile Ads SDK documentation](https://developers.google.com/admob/android/quick-start#update_your_androidmanifestxml).
 
 <div align="center">
-<h2>Usage Example</h2>
+<h2>Basic Usage Example</h2>
 </div>
-For complete usage, see the example project.
+This example demonstrates creation of a simple Banner Ad.  For complete usage, see the example project.
 
 ```jsx
-import React from "react";
-import { View } from "react-native";
-import NativeAdView from "react-native-admob-native-ads";
+import NativeAdView, {
+  CallToActionView,
+  IconView,
+  HeadlineView,
+  TaglineView,
+  AdvertiserView,
+  HeaderView,
+} from "react-native-admob-native-ads";
 
-const App = () => {
-  return (
-    <>
-      <View
+return (
+  <>
+    <View
+      style={{
+        flex: 1,
+      }}
+    >
+      <NativeAdView
         style={{
-          justifyContent: "center",
-          flex: 1,
-          paddingHorizontal: 10,
-          alignItems: "center"
+          width: "95%",
+          alignSelf: "center",
+          height: 100,
         }}
+        adUnitID="ca-app-pub-3940256099942544/2247696110" // TEST adUnitID
       >
-        <NativeAdView
-          adSize="large"
-          buttonStyle={{
-            borderRadius: 5,
-            textColor: "#008BBA", // ALL Colors must always be 6 digit Hex
-            backgroundColor: "#ffffff",
-            borderWidth: 2,
-            borderColor: "#008BBA"
-          }}
-          headlineTextColor="#000000"
-          descriptionTextColor="#a9a9a9"
-          advertiserTextColor="#a9a9a9"
-          backgroundStyle={{
-            borderWidth: 2,
-            borderRadius: 10,
-            borderColor: "#008BBA",
-            backgroundColor: "#ffffff"
-          }}
+        <View
           style={{
-            width: "100%"
-          }}
-          adUnitID="YOUR_NATIVE_AD_ID"
-        />
-      </View>
-    </>
-  );
-};
+            height: 100,
+            width: "100%",
 
-export default App;
+            backgroundColor: "white",
+          }}
+        >
+          <HeaderView />
+          <View
+            style={{
+              height: 100,
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              paddingHorizontal: 10,
+            }}
+          >
+            <IconView
+              style={{
+                width: 60,
+                height: 60,
+              }}
+            />
+            <View
+              style={{
+                width: "65%",
+                maxWidth: "65%",
+                paddingHorizontal: 6,
+              }}
+            >
+              <HeadlineView
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 13,
+                }}
+              />
+              <TaglineView
+                numberOfLines={1}
+                style={{
+                  fontSize: 11,
+                }}
+              />
+              <AdvertiserView
+                style={{
+                  fontSize: 10,
+                  color: "gray",
+                }}
+              />
+            </View>
+
+            <CallToActionView
+              style={{
+                height: 45,
+                paddingHorizontal: 12,
+                backgroundColor: "purple",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 5,
+                elevation: 10,
+              }}
+              textStyle={{ color: "white", fontSize: 14 }}
+            />
+          </View>
+        </View>
+      </NativeAdView>
+    </View>
+  </>
+);
 ```
 
 <div align="center">
@@ -328,12 +371,10 @@ User has clicked on the ad.
 #
 
 ## Contributing
+
 There are multiple ways in which you can contribute to this library. Feel free to open an issue if you have an idea in mind or if you have found a bug.
 
 If the templates do not suit your requirments and you decide to make your own templates, feel free to submit them here and I will add them in the library.
-
-
- 
 
 ## Find this library useful? ❤️
 
