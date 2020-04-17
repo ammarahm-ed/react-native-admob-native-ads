@@ -1,40 +1,32 @@
-
 import React from "react";
-import {
-  View,
-  Text,
-} from "react-native";
-
-
+import { View, Text } from "react-native";
 
 const HeaderView = (props) => {
-
-
   return (
     <View
       style={[
         {
-          width: '100%',
+          width: "100%",
           height: 18,
           borderWidth: 1,
           borderRadius: 2.5,
-          borderColor: 'green'
-        }, props.style
+          borderColor: "green",
+        },
+        props.style,
       ]}
     >
       <Text
         style={[
           {
-            color: 'green'
+            color: "green",
           },
-          props.textStyle
+          props.textStyle,
         ]}
       >
         Ad
       </Text>
     </View>
   );
-}
-
+};
 
 export default HeaderView;

@@ -13,21 +13,20 @@ const CallToActionView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
 
-
+const _onLayout = () => {
+  if (Platform.OS === "android") return;
+  let handle = findNodeHandle(callToActionRef.current);
+  nativeAdView.current?.setNativeProps({
+    callToAction: handle
+  });
+}
 
   return (<View
     style={props.style} >
     <Text
       nativeID="adCallToAction"
       ref={callToActionRef}
-      onLayout={() => {
-        if (Platform.OS === "android") return;
-        let handle = findNodeHandle(callToActionRef.current);
-        console.log(handle);
-        nativeAdView.current?.setNativeProps({
-          callToAction: handle
-        });
-      }}
+      onLayout={_onLayout}
       style={[props.textStyle]}
     >
       {nativeAd ? nativeAd.callToAction : null}
