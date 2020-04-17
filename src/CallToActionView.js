@@ -1,21 +1,33 @@
 
-import React, { useContext } from "react";
+import React, { useContext, createRef } from "react";
 import {
   Text,
-  View
+  View,
+  findNodeHandle,
+  Platform
 } from "react-native";
-import { NativeAdContext } from "./context";
+import { NativeAdContext, nativeAdView } from "./context";
+
+const callToActionRef = createRef();
 const CallToActionView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
 
 
-  return (<View
-    style={props.style}
 
-  >
+  return (<View
+    style={props.style} >
     <Text
       nativeID="adCallToAction"
+      ref={callToActionRef}
+      onLayout={() => {
+        if (Platform.OS === "android") return;
+        let handle = findNodeHandle(callToActionRef.current);
+        console.log(handle);
+        nativeAdView.current?.setNativeProps({
+          callToAction: handle
+        });
+      }}
       style={[props.textStyle]}
     >
       {nativeAd ? nativeAd.callToAction : null}
