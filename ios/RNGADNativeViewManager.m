@@ -5,43 +5,50 @@
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTEventDispatcher.h>
+#import <React/RCTViewManager.h>
 #else
 #import "RCTBridge.h"
 #import "RCTUIManager.h"
+#import "RCTViewManager.h"
 #import "RCTEventDispatcher.h"
 #endif
 
-@implementation RNGADNativeViewManager
 
-RCT_EXPORT_MODULE();
+@implementation RNGADNativeViewManager 
+
+RCT_EXPORT_MODULE(RNGADNativeView);
+
+RNGADNativeView *nativeAdView;
 
 -(UIView *)view
 {
-   return [RNGADNativeView new];
-}
-
-RCT_EXPORT_METHOD(loadNativeAd:(nonnull NSNumber *)reactTag:(NSString *)adUnitId)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, RNGADNativeView *> *viewRegistry) {
-        RNGADNativeView *view = viewRegistry[reactTag];
-        if (![view isKindOfClass:[RNGADNativeView class]]) {
-            RCTLogError(@"Invalid view returned from registry, expecting RNGADNativeView, got: %@", view);
-        } else {
-            [view loadNativeAd:adUnitId];
-        }
-    }];
+    
+    nativeAdView = [[RNGADNativeView alloc]initWithBridge:self.bridge];
+    
+    return nativeAdView;
 }
 
 
 RCT_EXPORT_VIEW_PROPERTY(adSize, NSString)
 RCT_EXPORT_VIEW_PROPERTY(testDevices, NSArray)
+RCT_EXPORT_VIEW_PROPERTY(refreshInterval, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(adUnitID, NSString)
 
-RCT_EXPORT_VIEW_PROPERTY(headlineTextColor, NSString)
-RCT_EXPORT_VIEW_PROPERTY(descriptionTextColor, NSString)
-RCT_EXPORT_VIEW_PROPERTY(advertiserTextColor, NSString)
+RCT_EXPORT_VIEW_PROPERTY(headline, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(tagline, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(advertiser, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(store, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(icon, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(image, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(mediaview, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(price, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(starrating, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(callToAction, NSNumber)
+
+
+
+
 //RCT_EXPORT_VIEW_PROPERTY(ratingStarsColor, NSString)
-RCT_EXPORT_VIEW_PROPERTY(buttonStyle, NSDictionary)
-RCT_EXPORT_VIEW_PROPERTY(backgroundStyle, NSDictionary)
 
 RCT_EXPORT_VIEW_PROPERTY(onSizeChange, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAppEvent, RCTBubblingEventBlock)
@@ -52,5 +59,5 @@ RCT_EXPORT_VIEW_PROPERTY(onAdClosed, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdLeftApplication, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdClicked, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdImpression, RCTBubblingEventBlock)
-
+RCT_EXPORT_VIEW_PROPERTY(onUnifiedNativeAdLoaded, RCTBubblingEventBlock)
 @end
