@@ -17,7 +17,7 @@ const ImageView = (props) => {
 
   return nativeAd && nativeAd.images[0] ? (
     <Image
-      style={props.imageStyle}
+      {...props}
       ref={imageViewRef}
       onLayout={_onLayout}
       nativeID="adImageView"
