@@ -1,6 +1,5 @@
 import { ViewStyle, TextProps, ImageProps, TextStyle } from "react-native";
 import { StarRatingProps } from "react-native-star-rating";
-import { RawButtonProperties } from "react-native-gesture-handler";
 
 
 type NativeAd = {

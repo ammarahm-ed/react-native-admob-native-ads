@@ -3,7 +3,6 @@ import {View} from 'react-native';
 import NativeAdView, {
   CallToActionView,
   IconView,
-  ImageView,
   HeadlineView,
   TaglineView,
   AdvertiserView,

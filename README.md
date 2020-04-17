@@ -3,7 +3,7 @@
 </div>
 <div align="center">
 	<p>
-		Simple and easy to use AdMob Native Ads for react native Android & iOS with styling support!
+		A simple and robust library for displaying Admob Native Ads in your React Native App. 
 	</p>
 <div
 align="center"
@@ -30,7 +30,8 @@ target="_blank"
 </div>
 </div
 <p>
-While you might have seen native ads on a react-native application, I have tried to take everything to another level so its really really really easy for you guys to get native ads up and running in a few steps with <b>with styling support</b>
+If you are working on a React Native Application, you might have felt limited when it comes to displaying ads. Not just displaying ads but making them look as good as your app design (Not the old banner and interstitials).
+In that case, you might have heard of native ads. Native Ads let you create your ads as you would like, this library aims to solve that problem for React Native developers. Now we have full support for Admob Native Ads which is dead simple and easy to use.
 </p>
 
 ### iOS
