@@ -1,4 +1,47 @@
 import { ViewStyle,TextProps,ImageProps, ViewProps, TextStyle} from "react-native";
+import {StarRatingProps} from "react-native-star-rating";
+
+
+type NativeAd = {
+
+  /**
+   * Title of the native ad.
+   */
+  headline:string;
+
+  /**
+   * Description of the native ad.
+   */
+  tagline:string;
+  /**
+   * Advertiser of the native ad.
+   */
+  advertiser:string;
+  /**
+   * If the ad is for a paid app or service, price value.
+   */
+  price:string;
+  /**
+   * If ad is for an app, then name of the store.
+   */
+  store:string;
+  /**
+   * Icon / Logo of the adveriser or the product advertised in ad.
+   */
+  icon:string;
+  /**
+   * An array of images along with the ad.
+   */
+  images:Array<string>;
+  /**
+   * callToAction text value for the native ad.
+   */
+  callToAction:string;
+  /**
+   * If ad is for an app, then its rating on the respective store.
+   */
+  rating:number;
+}
 
 type NativeAdViewProps = {
   style?: ViewStyle;
@@ -26,7 +69,7 @@ type NativeAdViewProps = {
   onAdImpression?: Function<void>;
   onAdClick?: Function<void>;
   onAdLoaded?: Function<void>;
-  onUnifiedNativeAdLoaded?: Function<object>;
+  onUnifiedNativeAdLoaded?:(event:NativeAd) => {};
   onAdFailedToLoad?: Function<void>;
 };
 
@@ -40,11 +83,9 @@ type NestedTextProps = {
   textStyle:TextStyle;
 }
 
-
-
 declare module "react-native-admob-native-ads" {
 
-  export default function NativeAdView(props: SimpleViewProps): React.FunctionComponent;
+  export default function NativeAdView(props: NativeAdViewProps): React.FunctionComponent;
   export function HeaderView(props:NestedTextProps): React.FunctionComponent;
   export function HeadlineView(props: TextProps): React.FunctionComponent;
   export function TaglineView(props: TextProps): React.FunctionComponent;
@@ -55,5 +96,5 @@ declare module "react-native-admob-native-ads" {
   export function IconView(props: ImageProps): React.FunctionComponent;
   export function MediaView(props: SimpleViewProps): React.FunctionComponent;
   export function CallToActionView(props: NestedTextProps): React.FunctionComponent;
-
+  export function StarRatingView(props: StarRatingProps): React.FunctionComponent;
 }
