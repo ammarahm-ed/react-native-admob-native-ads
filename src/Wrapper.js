@@ -1,20 +1,23 @@
 
 import React, { createRef } from "react";
 import {
-  requireNativeComponent,
+  requireNativeComponent, Platform, View,
 } from "react-native";
+
+const AdWrapperView = Platform.OS === "android" ? requireNativeComponent(
+  "RNAdComponentWrapper",
+  Wrapper
+) : null
+
 
 const Wrapper = (props) => {
 
-  return (<AdWrapperView
+  return Platform.OS === "android"? <AdWrapperView
     {...props}
-  />
-  );
+  /> : <View {...props} />
+
 }
 
-const AdWrapperView = requireNativeComponent(
-  "RNAdComponentWrapper",
-  Wrapper
-);
+
 
 export default Wrapper;
