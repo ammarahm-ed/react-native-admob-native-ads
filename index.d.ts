@@ -30,19 +30,22 @@ type NativeAdViewProps = {
   onAdFailedToLoad?: Function<void>;
 };
 
-type NativeAdViewProps = {
-  style?: TextStyle;
+type SimpleViewProps = {
+  style?: ViewStyle;
 
 };
 
-type CallToActionProps = {
-  style?:ViewStyle;
-  textStyle?:TextStyle;
+type NestedTextProps = {
+  style:ViewStyle;
+  textStyle:TextStyle;
 }
+
+
 
 declare module "react-native-admob-native-ads" {
 
-  export default function NativeAdView(props: NativeAdViewProps): React.FunctionComponent;
+  export default function NativeAdView(props: SimpleViewProps): React.FunctionComponent;
+  export function HeaderView(props:NestedTextProps): React.FunctionComponent;
   export function HeadlineView(props: TextProps): React.FunctionComponent;
   export function TaglineView(props: TextProps): React.FunctionComponent;
   export function AdvertiserView(props: TextProps): React.FunctionComponent;
@@ -50,7 +53,7 @@ declare module "react-native-admob-native-ads" {
   export function StoreView(props: TextProps): React.FunctionComponent;
   export function ImageView(props: ImageProps): React.FunctionComponent;
   export function IconView(props: ImageProps): React.FunctionComponent;
-  export function MediaView(props: ViewProps): React.FunctionComponent;
-  export function CallToActionView(props: CallToActionProps): React.FunctionComponent;
+  export function MediaView(props: SimpleViewProps): React.FunctionComponent;
+  export function CallToActionView(props: NestedTextProps): React.FunctionComponent;
 
 }
