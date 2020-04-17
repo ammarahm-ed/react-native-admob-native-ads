@@ -61,6 +61,7 @@ public class RNNativeAdWrapper extends LinearLayout {
         super(context);
         mContext = context;
         createView(context);
+        handler = new Handler();
     }
 
     public void createView(Context context) {
@@ -121,17 +122,18 @@ public class RNNativeAdWrapper extends LinearLayout {
 
             nativeAdView.requestLayout();
 
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    loadAd();
-                }
-            },adRefreshInterval);
+
 
 
         } catch (Exception e) {
 
         }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadAd();
+            }
+        },adRefreshInterval);
     }
 
 
@@ -157,9 +159,9 @@ public class RNNativeAdWrapper extends LinearLayout {
                 if (store != null)
                     nativeAdView.setStoreView(store);
 
-                View icon = ReactFindViewUtil.findView(nativeAdView, adIconView);
-                if (icon != null)
-                    nativeAdView.setIconView(icon);
+                View iconv = ReactFindViewUtil.findView(nativeAdView, adIconView);
+                if (iconv != null)
+                    nativeAdView.setIconView(iconv);
 
                 View image = ReactFindViewUtil.findView(nativeAdView, adImageView);
                 if (image != null)
