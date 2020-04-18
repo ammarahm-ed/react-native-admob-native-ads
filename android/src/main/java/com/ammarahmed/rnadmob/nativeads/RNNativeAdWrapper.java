@@ -38,7 +38,7 @@ public class RNNativeAdWrapper extends LinearLayout {
     public static final String adImageView = "adImageView";
     public static final String adIconView = "adIconView";
     public static final String adCallToAction = "adCallToAction";
-    public static final  String adStoreView = "adStoreView";
+    public static final String adStoreView = "adStoreView";
 
 
     public int AdChoicesViewId = 733;
@@ -89,8 +89,6 @@ public class RNNativeAdWrapper extends LinearLayout {
     }
 
 
-
-
     private void setNativeAdToJS(UnifiedNativeAd nativeAd) {
         try {
             WritableMap args = Arguments.createMap();
@@ -99,7 +97,7 @@ public class RNNativeAdWrapper extends LinearLayout {
             args.putString("advertiser", nativeAd.getAdvertiser());
             args.putString("callToAction", nativeAd.getCallToAction());
             args.putBoolean("video", nativeAd.getMediaContent().hasVideoContent());
-            args.putString("price",nativeAd.getPrice());
+            args.putString("price", nativeAd.getPrice());
             if (nativeAd.getStore() != null) {
                 args.putString("store", nativeAd.getStore());
             }
@@ -113,7 +111,7 @@ public class RNNativeAdWrapper extends LinearLayout {
             images.pushString(nativeAd.getImages().get(0).getUri().toString());
             args.putArray("images", images);
 
-            args.putString("icon",nativeAd.getIcon().getUri().toString() );
+            args.putString("icon", nativeAd.getIcon().getUri().toString());
 
 
             sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
@@ -121,8 +119,6 @@ public class RNNativeAdWrapper extends LinearLayout {
             attachViews();
 
             nativeAdView.requestLayout();
-
-
 
 
         } catch (Exception e) {
@@ -133,7 +129,7 @@ public class RNNativeAdWrapper extends LinearLayout {
             public void run() {
                 loadAd();
             }
-        },adRefreshInterval);
+        }, adRefreshInterval);
     }
 
 
@@ -278,6 +274,10 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     private void loadAd() {
 
+        try {
+
+
+
         AdLoader.Builder builder = new AdLoader.Builder(mContext, admobAdUnitId);
         builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
 
@@ -296,10 +296,22 @@ public class RNNativeAdWrapper extends LinearLayout {
 
         adLoader.loadAd(new AdRequest.Builder().build());
 
+        } catch (Exception e) {
+        }
+
+
     }
 
     public void addNewView(View child, int index) {
-        nativeAdView.addView(child,index);
+        try {
+
+
+        nativeAdView.addView(child, index);
+
+        } catch (Exception e) {
+
+        }
+
     }
 
     public void setAdRefreshInterval(int interval) {
