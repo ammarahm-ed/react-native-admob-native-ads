@@ -492,18 +492,23 @@ import { MediaView } from "react-native-admob-native-ads";
 ### props
 
 `style:ViewStyle`
+style your media view.
+
+## Contact & Support
+- Create a GitHub issue for bug reports, feature requests, or questions
+- Follow [@ammarahm-ed](https://github.com/ammarahm-ed) for announcements
+- Add a ⭐️ [star on GitHub](https://github.com/ammarahm-ed/react-native-admob-native-ads) or ❤️ tweet to support the project!
 
 
+## I want to contribute
+That is awesome news! There is alot happening at a very fast pace in this library right now. Every little help is precious. You can contribute in many ways:
 
+- Suggest code improvements on native iOS and Android
+- If you have suggestion or idea you want to discuss, open an issue.
+- [Open an issue](https://github.com/ammarahm-ed/react-native-admob-native-ads/issues/) if you want to make a pull request, and tell me what you want to improve or add so we can discuss
+- I am always open to new ideas
 
-## Contributing
+## License
+This library is licensed under the [MIT license](https://github.com/ammarahm-ed/react-native-admob-native-ads/blob/master/LICENSE).
 
-There are multiple ways in which you can contribute to this library. Feel free to open an issue if you have an idea in mind or if you have found a bug.
-
-If the templates do not suit your requirments and you decide to make your own templates, feel free to submit them here and I will add them in the library.
-
-## Find this library useful? ❤️
-
-Support it by joining **stargazers** for this repository. ⭐️ and follow me for my next creations!
-
-### MIT Licensed
+Copyright © Ammar Ahmed ([@ammarahm-ed](https://github.com/ammarahm-ed))
