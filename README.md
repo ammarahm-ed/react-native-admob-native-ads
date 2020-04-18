@@ -124,7 +124,7 @@ import NativeAdView, {
   HeadlineView,
   TaglineView,
   AdvertiserView,
-  HeaderView,
+  AdBadge,
 } from "react-native-admob-native-ads";
 
 return (
@@ -149,7 +149,7 @@ return (
             backgroundColor: "white",
           }}
         >
-          <HeaderView />
+          <AdBadge />
           <View
             style={{
               height: 100,
