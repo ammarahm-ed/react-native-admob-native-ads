@@ -92,6 +92,10 @@ class ReactNativeView extends LinearLayout {
     }
 
     private void createNativeAd(Context context) {
+        try {
+
+
+
         if (unifiedNativeAdView != null) {
             unifiedNativeAdView.destroy();
             removeAllViews();
@@ -111,9 +115,17 @@ class ReactNativeView extends LinearLayout {
         View viewRoot = layoutInflater.inflate(template, this, true);
         unifiedNativeAdView = (UnifiedNativeAdView) viewRoot.findViewById(R.id.native_ad_view);
 
+        } catch (Exception e) {
+
+        }
+
     }
 
     private void initViews() {
+
+        try {
+
+
         if (unifiedNativeAdView == null || unifiedNativeAd == null) return;
 
         mediaContainer = (LinearLayout) unifiedNativeAdView.findViewById(R.id.ad_media_container);
@@ -166,6 +178,10 @@ class ReactNativeView extends LinearLayout {
             unifiedNativeAdView.setBodyView(tagLineWrapper);
         }
 
+        } catch (Exception e) {
+
+        }
+
 
     }
 
@@ -177,6 +193,9 @@ class ReactNativeView extends LinearLayout {
     }
 
     private void refreshAd() {
+
+        try {
+
 
         AdLoader.Builder builder = new AdLoader.Builder(getContext(), admobAdUnitId);
         builder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
@@ -272,6 +291,11 @@ class ReactNativeView extends LinearLayout {
                 .build();
 
         adLoader.loadAd(new AdRequest.Builder().build());
+
+
+        } catch (Exception e) {
+
+        }
 
     }
 
@@ -455,6 +479,10 @@ class ReactNativeView extends LinearLayout {
     public void setBackgroundStyle(@Nullable String backgroundColor, @Nullable String borderColor, @Nullable int borderWidth, @Nullable int borderRadius) {
         if (unifiedNativeAdView == null) return;
 
+
+        try {
+
+
         backroundDrawable = new GradientDrawable();
 
         if (backgroundColor != null) {
@@ -479,11 +507,18 @@ class ReactNativeView extends LinearLayout {
         }
 
         findViewById(R.id.native_ad_view).setBackground(backroundDrawable);
+
+        } catch (Exception e ){
+
+        }
     }
 
 
     public void setButtonStyle(@Nullable String textColor, @Nullable String backgroundColor, @Nullable String borderColor, @Nullable int borderWidth, @Nullable int borderRadius) {
         if (unifiedNativeAdView == null) return;
+
+        try {
+
 
         gradientDrawableA = new GradientDrawable();
         gradientDrawableB = new GradientDrawable();
@@ -540,6 +575,10 @@ class ReactNativeView extends LinearLayout {
         }
         button.setBackground(gradientDrawableA);
         text.setBackground(gradientDrawableB);
+
+        } catch (Exception e ){
+
+        }
     }
 
     private void sendEvent(String name, @Nullable WritableMap event) {
@@ -585,6 +624,9 @@ class ReactNativeView extends LinearLayout {
 
 
     public void setRatingColor(int color) {
+        try {
+
+
         if (unifiedNativeAdView != null) {
             if (ratingBar != null) {
 
@@ -594,6 +636,9 @@ class ReactNativeView extends LinearLayout {
                 stars.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 
             }
+        }
+        } catch (Exception e) {
+
         }
     }
 
