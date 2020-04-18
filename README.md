@@ -241,13 +241,14 @@ import NativeAdView from "react-native-admob-native-ads";
   >
     // Everything else
   </View>
-</NativeAdView>
+</NativeAdView>;
 ```
 
 ### Props
 
 #### `style:ViewStyle`
-Style your NativeAdView. 
+
+Style your NativeAdView.
 
 #### `adUnitID`
 
@@ -352,9 +353,11 @@ import { AdBadge } from "react-native-admob-native-ads";
 ### props
 
 #### `style:ViewStyle`
+
 Style the outer `View` Component.
 
 #### `textStyle:TextStyle`
+
 Style the inner `Text` Component
 
 ## HeadlineView
@@ -371,7 +374,9 @@ import { HeadlineView } from "react-native-admob-native-ads";
   }}
 />;
 ```
+
 ### props
+
 Inherits all the props from Text Component.
 
 ## TaglineView
@@ -388,7 +393,9 @@ import { TaglineView } from "react-native-admob-native-ads";
   }}
 />;
 ```
+
 ### props
+
 Inherits all the props from Text Component.
 
 ## AdvertiserView
@@ -405,7 +412,9 @@ import { AdvertiserView } from "react-native-admob-native-ads";
   }}
 />;
 ```
+
 ### props
+
 Inherits all the props from Text Component.
 
 ## StoreView
@@ -422,7 +431,9 @@ import { StoreView } from "react-native-admob-native-ads";
   }}
 />;
 ```
+
 ### props
+
 Inherits all the props from Text Component.
 
 ## PriceView
@@ -439,7 +450,9 @@ import { PriceView } from "react-native-admob-native-ads";
   }}
 />;
 ```
+
 ### props
+
 Inherits all the props from Text Component.
 
 ## StarRatingView
@@ -450,10 +463,12 @@ Renders the star rating if the ad is for an app on Google Playstore or AppStore.
 import { StarRatingView } from "react-native-admob-native-ads";
 
 <StarRatingView
-  maxStars={5}// Always keep it to 5
+  maxStars={5} // Always keep it to 5
 />;
 ```
+
 ### props
+
 Inherits all the props from [react-native-star-rating](https://github.com/djchie/react-native-star-rating) library.
 
 **Note:** Do not set the `rating` prop. This is handled automatically.
@@ -467,12 +482,14 @@ import { ImageView } from "react-native-admob-native-ads";
 
 <ImageView
   style={{
-    width:'100%',
-    height:250
+    width: "100%",
+    height: 250,
   }}
 />;
 ```
+
 ### props
+
 Inherits all the props from Image Component.
 
 ## MediaView
@@ -484,23 +501,25 @@ import { MediaView } from "react-native-admob-native-ads";
 
 <MediaView
   style={{
-    width:'100%',
-    height:250
+    width: "100%",
+    height: 250,
   }}
 />;
 ```
+
 ### props
 
 `style:ViewStyle`
 style your media view.
 
 ## Contact & Support
+
 - Create a GitHub issue for bug reports, feature requests, or questions
 - Follow [@ammarahm-ed](https://github.com/ammarahm-ed) for announcements
 - Add a ⭐️ [star on GitHub](https://github.com/ammarahm-ed/react-native-admob-native-ads) or ❤️ tweet to support the project!
 
-
 ## I want to contribute
+
 That is awesome news! There is alot happening at a very fast pace in this library right now. Every little help is precious. You can contribute in many ways:
 
 - Suggest code improvements on native iOS and Android
@@ -509,6 +528,7 @@ That is awesome news! There is alot happening at a very fast pace in this librar
 - I am always open to new ideas
 
 ## License
+
 This library is licensed under the [MIT license](https://github.com/ammarahm-ed/react-native-admob-native-ads/blob/master/LICENSE).
 
 Copyright © Ammar Ahmed ([@ammarahm-ed](https://github.com/ammarahm-ed))

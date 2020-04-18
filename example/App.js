@@ -6,8 +6,6 @@ import NativeAdView, {
   HeadlineView,
   TaglineView,
   AdvertiserView,
-  HeaderView,
-  MediaView,
 } from 'react-native-admob-native-ads';
 
 const App = () => {
@@ -50,7 +48,6 @@ const App = () => {
               
               backgroundColor: 'white',
             }}>
-            <HeaderView />
             <View
               style={{
                 height: 100,
