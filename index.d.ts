@@ -111,12 +111,11 @@ declare module "react-native-admob-native-ads" {
 
 
   /**
-   * Header view basically adds a little padding to the top and shows the {ad} badge on top
-   * and also leaves some space for the Adchoices view so it does not overlap anything.
+   * Ad Badge shows the {ad} badge on top of the ad.
    * 
    */
 
-  export function HeaderView(props: NestedTextProps): React.FunctionComponent;
+  export function AdBadge(props: NestedTextProps): React.FunctionComponent;
 
   /**
    * The title of the native ad recieved from server is renderd here. 

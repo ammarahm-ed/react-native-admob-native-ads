@@ -40,13 +40,14 @@ const App = () => {
           style={{
             width: '95%',
             alignSelf: 'center',
-            height: 400,
+            height: 100,
           }}
           adUnitID="ca-app-pub-3940256099942544/2247696110">
           <View
             style={{
-              height: 400,
+              height: 100,
               width: '100%',
+              
               backgroundColor: 'white',
             }}>
             <HeaderView />
@@ -61,25 +62,26 @@ const App = () => {
               }}>
               <IconView
                 style={{
-                  width: 70,
-                  height: 70,
+                  width: 60,
+                  height: 60,
                 }}
               />
               <View
                 style={{
-                  width: '75%',
+                  width: '65%',
+                  maxWidth:'65%',
                   paddingHorizontal: 6,
                 }}>
                 <HeadlineView
                   style={{
                     fontWeight: 'bold',
-                    fontSize: 14,
+                    fontSize: 13,
                   }}
                 />
                 <TaglineView
-                  numberOfLines={2}
+                  numberOfLines={1}
                   style={{
-                    fontSize: 12,
+                    fontSize: 11,
                   }}
                 />
                 <AdvertiserView
@@ -89,25 +91,8 @@ const App = () => {
                   }}
                 />
               </View>
-            </View>
 
-            <View
-              style={{
-                height: 200,
-                width: '100%',
-              }}>
-              <MediaView
-                style={{
-                  width: '90%',
-                  height: 200,
-                  alignSelf: 'center',
-                  borderRadius: 10,
-                }}
-              />
-            </View>
-
-
-            <CallToActionView
+              <CallToActionView
               style={{
                 height: 45,
                 paddingHorizontal: 12,
@@ -116,10 +101,16 @@ const App = () => {
                 alignItems: 'center',
                 borderRadius: 5,
                 elevation: 10,
-                marginTop: 10,
               }}
-              textStyle={{color: 'white', fontSize: 16}}
+              textStyle={{color: 'white', fontSize: 14}}
             />
+
+            </View>
+
+            
+
+
+           
 
 
           </View>
