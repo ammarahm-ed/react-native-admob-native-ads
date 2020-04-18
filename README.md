@@ -268,8 +268,8 @@ Set testDevices during testing ads or during development.
 
 Setting this to true will load a placeholder ad incase you have no internet etc so you can design your ad as you want to with ease. Remember to set `adUnitID` to null when using this so the placeholder ad is not replaced by a real ad.
 
-| Type            | Required | Platform |
-| --------------- | -------- | -------- |
+| Type      | Required | Platform |
+| --------- | -------- | -------- |
 | `boolean` | no       | All      |
 
 #
@@ -283,6 +283,175 @@ Time in ms after which a new ad should be requested from the server.
 | `number` | no       | 60000 ms | All      |
 
 #
+
+## AdBadge
+
+Renders a small {Ad} badge on top-left corner of your ad.
+
+```jsx
+import { AdBadge } from "react-native-admob-native-ads";
+
+<AdBadge
+  style={{
+    width: 15,
+    height: 15,
+    borderWidth: 1,
+    borderRadius: 2,
+    borderColor: "green",
+  }}
+  textStyle={{
+    fontSize: 9,
+    color: "green",
+  }}
+/>;
+```
+
+### `props`
+
+Style the outer `View` Component.
+
+#### `style:ViewStyle`
+
+Style the inner `Text` Component
+
+#### `textStyle:TextStyle`
+
+## HeadlineView
+
+Renders the headline or title for the ad recieved from server.
+
+```jsx
+import { HeadlineView } from "react-native-admob-native-ads";
+
+<HeadlineView
+  style={{
+    fontWeight: "bold",
+    fontSize: 13,
+  }}
+/>;
+```
+### props
+Inherits all the props from Text Component.
+
+## TaglineView
+
+Renders the description for the ad recieved from server.
+
+```jsx
+import { TaglineView } from "react-native-admob-native-ads";
+
+<TaglineView
+  style={{
+    fontWeight: "bold",
+    fontSize: 12,
+  }}
+/>;
+```
+### props
+Inherits all the props from Text Component.
+
+## AdvertiserView
+
+Renders the advertiser name for the ad recieved from server.
+
+```jsx
+import { AdvertiserView } from "react-native-admob-native-ads";
+
+<AdvertiserView
+  style={{
+    fontWeight: "bold",
+    fontSize: 10,
+  }}
+/>;
+```
+### props
+Inherits all the props from Text Component.
+
+## StoreView
+
+Renders the name of the store (Google Playstore / AppStore) if the ad is for an app.
+
+```jsx
+import { StoreView } from "react-native-admob-native-ads";
+
+<StoreView
+  style={{
+    fontWeight: "bold",
+    fontSize: 10,
+  }}
+/>;
+```
+### props
+Inherits all the props from Text Component.
+
+## PriceView
+
+Renders the price if the ad is from a paid service/app.
+
+```jsx
+import { PriceView } from "react-native-admob-native-ads";
+
+<PriceView
+  style={{
+    fontWeight: "bold",
+    fontSize: 10,
+  }}
+/>;
+```
+### props
+Inherits all the props from Text Component.
+
+## StarRatingView
+
+Renders the star rating if the ad is for an app on Google Playstore or AppStore.
+
+```jsx
+import { StarRatingView } from "react-native-admob-native-ads";
+
+<StarRatingView
+  maxStars={5}// Always keep it to 5
+/>;
+```
+### props
+Inherits all the props from [react-native-star-rating](https://github.com/djchie/react-native-star-rating) library.
+
+**Note:** Do not set the `rating` prop. This is handled automatically.
+
+## ImageView
+
+Renders an Image for the ad recieved from server.
+
+```jsx
+import { ImageView } from "react-native-admob-native-ads";
+
+<ImageView
+  style={{
+    width:'100%',
+    height:250
+  }}
+/>;
+```
+### props
+Inherits all the props from Image Component.
+
+## MediaView
+
+Renders the MediaView used for displaying video & image both.
+
+```jsx
+import { MediaView } from "react-native-admob-native-ads";
+
+<MediaView
+  style={{
+    width:'100%',
+    height:250
+  }}
+/>;
+```
+### props
+
+`style:ViewStyle`
+
 
 ## Events
 
