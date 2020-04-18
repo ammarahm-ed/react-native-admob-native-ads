@@ -17,16 +17,7 @@ public class RNAdMobNativePackage implements ReactPackage {
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-
-        if (adMobNativeViewManager == null) {
-            adMobNativeViewManager = new RNAdMobNativeViewManager();
-        }
-
-        return Arrays.<NativeModule>asList(
-
-                new RNNativeAdManager(reactContext,adMobNativeViewManager)
-
-        );
+        return Arrays.<NativeModule>asList();
     }
 
     public List<Class<? extends JavaScriptModule>> createJSModules() {
@@ -36,14 +27,11 @@ public class RNAdMobNativePackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
 
-        if (adMobNativeViewManager == null) {
-            adMobNativeViewManager = new RNAdMobNativeViewManager();
-        }
-      return Arrays.<ViewManager>asList(
-        adMobNativeViewManager,
-        new RNAdMobMediaViewManager(),
-        new RNAdComponentsWrapperManager(),
-        new RNAdmobAdChoicesManager()
-      );
+        return Arrays.<ViewManager>asList(
+                new RNAdMobNativeViewManager(),
+                new RNAdMobMediaViewManager(),
+                new RNAdComponentsWrapperManager(),
+                new RNAdmobAdChoicesManager()
+        );
     }
 }
