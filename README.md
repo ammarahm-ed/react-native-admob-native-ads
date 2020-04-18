@@ -270,7 +270,7 @@ Setting this to true will load a placeholder ad incase you have no internet etc 
 
 | Type            | Required | Platform |
 | --------------- | -------- | -------- |
-| `Array<string>` | no       | All      |
+| `boolean` | no       | All      |
 
 #
 
