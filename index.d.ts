@@ -41,6 +41,12 @@ type NativeAd = {
    * If ad is for an app, then its rating on the respective store.
    */
   rating: number;
+
+
+  /**
+   * IF ad has video content or not.
+   */
+  video: boolean;
 }
 
 type NativeAdViewProps = {
