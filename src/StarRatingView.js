@@ -15,7 +15,7 @@ const StarRatingView = (props) => {
     });
   };
 
-  return nativeAd && nativeAd.rating && nativeAd.rating != 0 ? (
+  return nativeAd && nativeAd.rating && nativeAd.rating > 0.5 ? (
     <StarRating
       {...props}
       ref={starRatingRef}
