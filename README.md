@@ -218,7 +218,10 @@ return (
 <h1>📃 Reference</h1>
 </div>
 
-## Props
+
+## NativeAdView
+NativeAdView will wrap all your views related to the ad and provides a context through which all the Views get their respective information and load it automatically. It has the following properties to it.
+### Props
 
 #### `adUnitID`
 
@@ -227,19 +230,6 @@ Set Ad Unit ID for Native Advanced Ads that you created on your AdMob account.
 | Type     | Required | Platform |
 | -------- | -------- | -------- |
 | `string` | Yes      | All      |
-
-#
-
-#### `adSize`
-
-Select which size of ad you want to display.
-
-| Type     | Required | Default | Platform |
-| -------- | -------- | ------- | -------- |
-| `string` | no       | "small" | All      |
-
-**Android adSizes:** "small", "medium" , "large"
-**iOS adSizes:** "small" and "medium" only.
 
 #
 
@@ -253,92 +243,32 @@ Set testDevices during testing ads or during development.
 
 #
 
-#### `buttonStyle`
+#### `enableTestMode`
 
-style the callToAction button in Native ad according to your app look and feel.
+Setting this to true will load a placeholder ad incase you have no internet etc so you can design your ad as you want to with ease. Remember to set `adUnitID` to null when using this so the placeholder ad is not replaced by a real ad.
 
-| Type     | Required | Platform |
-| -------- | -------- | -------- |
-| `object` | no       | All      |
-
-The following styles properties are available at the moment.
-
-| Name             | Type                          | Required |
-| ---------------- | ----------------------------- | -------- |
-| `backroundColor` | 6 digit hex color string only | Yes      |
-| `textColor`      | 6 digit hex color string only | Yes      |
-| `borderColor`    | 6 digit hex color string only | Yes      |
-| `borderWidth`    | number                        | Yes      |
-| `borderRadius`   | number                        | Yes      |
-
-**Note:** Currently you will need to set all available properties and give them a valid value. **value can't be null**
+| Type            | Required | Platform |
+| --------------- | -------- | -------- |
+| `Array<string>` | no       | All      |
 
 #
 
-#### `backgroundStyle`
+#### `refreshInterval`
 
-Style the background of Native Ad View.
+Time in ms after which a new ad should be requested from the server.
 
-| Type     | Required | Platform |
-| -------- | -------- | -------- |
-| `object` | no       | All      |
-
-The following styles properties are available at the moment.
-
-| Name             | Type                          | Required |
-| ---------------- | ----------------------------- | -------- |
-| `backroundColor` | 6 digit hex color string only | Yes      |
-| `borderColor`    | 6 digit hex color string only | Yes      |
-| `borderWidth`    | number                        | Yes      |
-| `borderRadius`   | number                        | Yes      |
-
-**Note:** Currently you will need to set all available properties and give them a valid value. **value can't be null**
-
-#
-
-#### `headlineTextColor`
-
-Set color for the heading text of Ad.
-
-| Type                          | Required | Platform |
-| ----------------------------- | -------- | -------- |
-| 6 digit hex color string only | no       | All      |
-
-#
-
-#### `descriptionTextColor`
-
-Set color for the description text of Ad.
-
-| Type                          | Required | Platform |
-| ----------------------------- | -------- | -------- |
-| 6 digit hex color string only | no       | All      |
-
-#
-
-#### `advertiserTextColor`
-
-Set color for the description text of Ad.
-
-| Type                          | Required | Platform |
-| ----------------------------- | -------- | -------- |
-| 6 digit hex color string only | no       | All      |
-
-#
-
-#### `ratingBarColor`
-
-Set color for the description text of Ad.
-
-| Type                          | Required | Platform     |
-| ----------------------------- | -------- | ------------ |
-| 6 digit hex color string only | no       | Android Only |
+| Type     | Required | Default | Platform |
+| -------- | -------- | ------- | -------- |
+| `number` | no       | 60000 ms | All      |
 
 #
 
 ## Events
 
 All events are available through props.The following event are available on both Android and iOS:
+
+#### `onUnifiedNativeAdLoaded`
+This event return a data object which contains all the images and text etc. related to the ad incase you need it. Usually you wont need this because everything is loaded automatically.
 
 #### `onAdFailedToLoad`
 
