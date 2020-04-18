@@ -12,9 +12,6 @@ import java.util.List;
 
 public class RNAdMobNativePackage implements ReactPackage {
 
-    private RNAdMobNativeViewManager adMobNativeViewManager;
-    private RNAdMobMediaViewManager adMobMediaViewManager;
-
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Arrays.<NativeModule>asList();
