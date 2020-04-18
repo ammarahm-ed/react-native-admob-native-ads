@@ -222,6 +222,8 @@ return (
 NativeAdView will wrap all your views related to the ad and provides a context through which all the Views get their respective information and load it automatically. It has the following properties to it.
 
 ```jsx
+import NativeAdView from "react-native-admob-native-ads";
+
 <NativeAdView
   style={{
     width: "95%",
@@ -243,6 +245,9 @@ NativeAdView will wrap all your views related to the ad and provides a context t
 ```
 
 ### Props
+
+#### `style:ViewStyle`
+Style your NativeAdView. 
 
 #### `adUnitID`
 
@@ -284,6 +289,44 @@ Time in ms after which a new ad should be requested from the server.
 
 #
 
+### Events
+
+All events are available through props.The following event are available on both Android and iOS:
+
+#### `onUnifiedNativeAdLoaded`
+
+This event return a data object which contains all the images and text etc. related to the ad incase you need it. Usually you wont need this because everything is loaded automatically.
+
+#### `onAdFailedToLoad`
+
+Called when ad has failed to load and returns reason due to which ad was not loaded.
+
+#### `onAdLoaded`
+
+Called when ad has successfully loaded without any errors.
+
+#### `onAdOpened`
+
+Called when ad is opened.
+
+#### `onAdClosed`
+
+Called when ad is closed.
+
+#### `onAdLeftApplication`
+
+Called when ad is loaded but user has left the application
+
+#### `onAdImpression`
+
+User impression has been recorded
+
+#### `onAdClicked`
+
+User has clicked on the ad.
+
+## Children Views
+
 ## AdBadge
 
 Renders a small {Ad} badge on top-left corner of your ad.
@@ -306,15 +349,13 @@ import { AdBadge } from "react-native-admob-native-ads";
 />;
 ```
 
-### `props`
-
-Style the outer `View` Component.
+### props
 
 #### `style:ViewStyle`
-
-Style the inner `Text` Component
+Style the outer `View` Component.
 
 #### `textStyle:TextStyle`
+Style the inner `Text` Component
 
 ## HeadlineView
 
@@ -453,43 +494,7 @@ import { MediaView } from "react-native-admob-native-ads";
 `style:ViewStyle`
 
 
-## Events
 
-All events are available through props.The following event are available on both Android and iOS:
-
-#### `onUnifiedNativeAdLoaded`
-
-This event return a data object which contains all the images and text etc. related to the ad incase you need it. Usually you wont need this because everything is loaded automatically.
-
-#### `onAdFailedToLoad`
-
-Called when ad has failed to load and returns reason due to which ad was not loaded.
-
-#### `onAdLoaded`
-
-Called when ad has successfully loaded without any errors.
-
-#### `onAdOpened`
-
-Called when ad is opened.
-
-#### `onAdClosed`
-
-Called when ad is closed.
-
-#### `onAdLeftApplication`
-
-Called when ad is loaded but user has left the application
-
-#### `onAdImpression`
-
-User impression has been recorded
-
-#### `onAdClicked`
-
-User has clicked on the ad.
-
-#
 
 ## Contributing
 
