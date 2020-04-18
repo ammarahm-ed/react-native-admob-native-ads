@@ -146,7 +146,6 @@ return (
           style={{
             height: 100,
             width: "100%",
-
             backgroundColor: "white",
           }}
         >
@@ -218,9 +217,31 @@ return (
 <h1>📃 Reference</h1>
 </div>
 
-
 ## NativeAdView
+
 NativeAdView will wrap all your views related to the ad and provides a context through which all the Views get their respective information and load it automatically. It has the following properties to it.
+
+```jsx
+<NativeAdView
+  style={{
+    width: "95%",
+    alignSelf: "center",
+    height: 100,
+  }}
+  adUnitID="ca-app-pub-3940256099942544/2247696110" // TEST adUnitID
+>
+  <View
+    style={{
+      height: 100,
+      width: "100%",
+      backgroundColor: "white",
+    }}
+  >
+    // Everything else
+  </View>
+</NativeAdView>
+```
+
 ### Props
 
 #### `adUnitID`
@@ -257,8 +278,8 @@ Setting this to true will load a placeholder ad incase you have no internet etc 
 
 Time in ms after which a new ad should be requested from the server.
 
-| Type     | Required | Default | Platform |
-| -------- | -------- | ------- | -------- |
+| Type     | Required | Default  | Platform |
+| -------- | -------- | -------- | -------- |
 | `number` | no       | 60000 ms | All      |
 
 #
@@ -268,6 +289,7 @@ Time in ms after which a new ad should be requested from the server.
 All events are available through props.The following event are available on both Android and iOS:
 
 #### `onUnifiedNativeAdLoaded`
+
 This event return a data object which contains all the images and text etc. related to the ad incase you need it. Usually you wont need this because everything is loaded automatically.
 
 #### `onAdFailedToLoad`
