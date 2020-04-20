@@ -44,7 +44,7 @@ type NativeAd = {
 
 
   /**
-   * IF ad has video content or not.
+   * if ad has video content or not.
    */
   video: boolean;
 }
@@ -94,8 +94,14 @@ type SimpleViewProps = {
 };
 
 type NestedTextProps = {
-  style: ViewStyle;
-  textStyle: TextStyle;
+  style?: ViewStyle;
+  textStyle?: TextStyle;
+}
+
+type AdBadgeProps = {
+  style?: ViewStyle;
+  textStyle?: TextStyle;
+  allCaps?:boolean
 }
 
 declare module "react-native-admob-native-ads" {
@@ -111,7 +117,7 @@ declare module "react-native-admob-native-ads" {
 
 
   /**
-   * Ad Badge shows the {ad} badge on top of the ad.
+   * Ad Badge shows the {ad} badge on top of the ad telling the user that this is an AD.
    * 
    */
 
