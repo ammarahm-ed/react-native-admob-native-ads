@@ -29,7 +29,7 @@ const AdBadge = (props) => {
           props.textStyle,
         ]}
       >
-        Ad
+       {props.allCaps ? 'AD' : 'Ad'}
       </Text>
     </View>
   );
