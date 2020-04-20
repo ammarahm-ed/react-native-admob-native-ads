@@ -406,6 +406,14 @@ import { AdvertiserView } from "react-native-admob-native-ads";
 
 Inherits all the props from Text Component.
 
+#### `allCaps`
+
+| Type      | Required | Platform |
+| --------- | -------- | -------- |
+| `boolean` | no       | All      |
+
+Whether all text should be in capital letters
+
 ## StoreView
 
 Renders the name of the store (Google Playstore / AppStore) if the ad is for an app.
