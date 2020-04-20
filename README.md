@@ -341,6 +341,14 @@ Style the outer `View` Component.
 
 Style the inner `Text` Component
 
+#### `allCaps`
+
+| Type      | Required | Platform |
+| --------- | -------- | -------- |
+| `boolean` | no       | All      |
+
+Whether all text should be in capital letters
+
 ## HeadlineView
 
 Renders the headline or title for the ad recieved from server.
