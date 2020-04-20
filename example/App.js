@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {View, Platform} from 'react-native';
 import NativeAdView, {
   CallToActionView,
   IconView,
@@ -7,6 +7,11 @@ import NativeAdView, {
   TaglineView,
   AdvertiserView,
 } from 'react-native-admob-native-ads';
+
+
+const NATIVE_AD_ID = Platform.OS ==="ios"? 'ca-app-pub-3940256099942544/3986624511' : 'ca-app-pub-3940256099942544/2247696110'
+
+const NATIVE_AD_VIDEO_ID = Platform.OS ==="ios"? 'ca-app-pub-3940256099942544/2521693316' : 'ca-app-pub-3940256099942544/1044960115'
 
 const App = () => {
   const [adLoaded, setAdLoaded] = useState(false);
@@ -17,6 +22,9 @@ const App = () => {
   const _onAdLoaded = () => {
     console.log('Ad has loaded');
   };
+
+
+
 
   return (
     <View
@@ -38,14 +46,13 @@ const App = () => {
           style={{
             width: '95%',
             alignSelf: 'center',
-            height: 100,
+            height: 400,
           }}
-          adUnitID="ca-app-pub-3940256099942544/2247696110">
+          adUnitID={NATIVE_AD_ID}>
           <View
             style={{
-              height: 100,
+              height: 400,
               width: '100%',
-              
               backgroundColor: 'white',
             }}>
             <View
@@ -102,12 +109,8 @@ const App = () => {
               textStyle={{color: 'white', fontSize: 14}}
             />
 
-            </View>
-
-            
-
-
            
+            </View>
 
 
           </View>
