@@ -26,7 +26,7 @@ const App = () => {
         marginTop: 10,
       }}>
       <View>
-        <NativeAdView
+      <NativeAdView
           onAdLoaded={_onAdLoaded}
           onAdFailedToLoad={_onAdFailedToLoad}
           onAdClicked={() => {
@@ -103,13 +103,6 @@ const App = () => {
             />
 
             </View>
-
-            
-
-
-           
-
-
           </View>
         </NativeAdView>
       </View>
