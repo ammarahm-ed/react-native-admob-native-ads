@@ -28,7 +28,8 @@ target="_blank"
 <img  src="https://img.shields.io/npm/dt/react-native-admob-native-ads?color=green"/>
 </a> 
 </div>
-</div
+</div>
+
 <p>
 If you are working on a React Native Application, you might have felt limited when it comes to displaying ads that look beautiful and match the app design. Not just displaying ads but making them look as good as your app design (Not the old banner and interstitials).
 
@@ -36,37 +37,17 @@ This library aims to solve that problem by providing complete support for Admob 
 
 </p>
 
-### iOS
-
+<div
+align="center"
+>
 <img
 src="https://i.imgur.com/DOaoU1t.png"
 />
 <img
 src="https://i.imgur.com/yX5GKhN.png"
 />
+</div>
 
-### Android
-
-<img
- width="300"
-src="https://i.imgur.com/sEKEoma.png"
-/>
-<img
-  width="300"
-src="https://i.imgur.com/OVmEZzi.png"
-/>
-<img
-  width="250"
-src="https://i.imgur.com/ci3U0ZM.png"
-/>
-<img
-  width="250"
-src="https://i.imgur.com/JUxap7Y.png"
-/>
-<img
-  width="300"
-src="https://i.imgur.com/SiY3JeN.png"
-/>
 
 <div align="center">
 <h2> 💫 Features</h2>
@@ -228,13 +209,13 @@ import NativeAdView from "react-native-admob-native-ads";
   style={{
     width: "95%",
     alignSelf: "center",
-    height: 100,
+    height: 100, // Height should be provided.
   }}
   adUnitID="ca-app-pub-3940256099942544/2247696110" // TEST adUnitID
 >
   <View
     style={{
-      height: 100,
+      height: 100, // could be '100%' too.
       width: "100%",
       backgroundColor: "white",
     }}
@@ -248,7 +229,7 @@ import NativeAdView from "react-native-admob-native-ads";
 
 #### `style:ViewStyle`
 
-Style your NativeAdView.
+Style your NativeAdView. Always give a width and height value.
 
 #### `adUnitID`
 
@@ -272,7 +253,7 @@ Set testDevices during testing ads or during development.
 
 #### `enableTestMode`
 
-Setting this to true will load a placeholder ad incase you have no internet etc so you can design your ad as you want to with ease. Remember to set `adUnitID` to null when using this so the placeholder ad is not replaced by a real ad.
+Setting this to true will load a placeholder ad (Not from Admob server) incase you have no internet etc so you can design your ad as you want to with ease. Remember to set the `adUnitID` to null when using this so the placeholder ad is not replaced by a real ad.
 
 | Type      | Required | Platform |
 | --------- | -------- | -------- |
@@ -286,7 +267,7 @@ Time in ms after which a new ad should be requested from the server.
 
 | Type     | Required | Default  | Platform |
 | -------- | -------- | -------- | -------- |
-| `number` | no       | 60000 ms | All      |
+| `number` | no       | 60000 ms (1 minute) | All      |
 
 #
 
@@ -330,7 +311,7 @@ User has clicked on the ad.
 
 ## AdBadge
 
-Renders a small {Ad} badge on top-left corner of your ad.
+Renders a small {Ad} badge on top-left corner of your ad showing the user that this is an Ad.
 
 ```jsx
 import { AdBadge } from "react-native-admob-native-ads";
