@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, Platform} from 'react-native';
 import NativeAdView, {
   CallToActionView,
@@ -14,7 +14,7 @@ const NATIVE_AD_ID = Platform.OS ==="ios"? 'ca-app-pub-3940256099942544/39866245
 const NATIVE_AD_VIDEO_ID = Platform.OS ==="ios"? 'ca-app-pub-3940256099942544/2521693316' : 'ca-app-pub-3940256099942544/1044960115'
 
 const App = () => {
-  const [adLoaded, setAdLoaded] = useState(false);
+  
   const _onAdFailedToLoad = event => {
     console.log(event.nativeEvent);
   };
@@ -23,25 +23,19 @@ const App = () => {
     console.log('Ad has loaded');
   };
 
-
-
-
   return (
     <View
       style={{
         height: '100%',
         width: '100%',
-        marginTop: 10,
+        justifyContent:'center'
       }}>
       <View>
         <NativeAdView
           onAdLoaded={_onAdLoaded}
           onAdFailedToLoad={_onAdFailedToLoad}
-          onAdClicked={() => {
-            //alert('clicked me hey');
-          }}
           onUnifiedNativeAdLoaded={() => {
-            setAdLoaded(true);
+           
           }}
           style={{
             width: '95%',
@@ -109,10 +103,7 @@ const App = () => {
               textStyle={{color: 'white', fontSize: 14}}
             />
 
-           
             </View>
-
-
           </View>
         </NativeAdView>
       </View>
