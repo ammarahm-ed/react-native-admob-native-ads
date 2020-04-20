@@ -2,7 +2,8 @@ package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
+import android.os.Parcelable;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,10 +20,17 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.VideoOptions;
-import com.google.android.gms.ads.formats.AdChoicesView;
 import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Random;
 
 public class RNNativeAdWrapper extends LinearLayout {
 
@@ -40,8 +48,6 @@ public class RNNativeAdWrapper extends LinearLayout {
     public static final String adCallToAction = "adCallToAction";
     public static final String adStoreView = "adStoreView";
 
-
-    public int AdChoicesViewId = 733;
     private String admobAdUnitId = "";
 
     private Handler handler;
@@ -62,6 +68,7 @@ public class RNNativeAdWrapper extends LinearLayout {
         mContext = context;
         createView(context);
         handler = new Handler();
+        Constants.cacheManager.attachAdListener(adListener);
     }
 
     public void createView(Context context) {
@@ -90,6 +97,8 @@ public class RNNativeAdWrapper extends LinearLayout {
 
 
     private void setNativeAdToJS(UnifiedNativeAd nativeAd) {
+
+
         try {
             WritableMap args = Arguments.createMap();
             args.putString("headline", nativeAd.getHeadline());
@@ -116,10 +125,8 @@ public class RNNativeAdWrapper extends LinearLayout {
 
             sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
 
+
             attachViews();
-
-            nativeAdView.requestLayout();
-
 
         } catch (Exception e) {
 
@@ -256,6 +263,7 @@ public class RNNativeAdWrapper extends LinearLayout {
         public void onAdLoaded() {
             super.onAdLoaded();
             sendEvent(RNAdMobNativeViewManager.EVENT_AD_LOADED, null);
+            loadAd();
         }
 
         @Override
@@ -273,45 +281,36 @@ public class RNNativeAdWrapper extends LinearLayout {
 
 
     private void loadAd() {
+        if (Constants.cacheManager.numberOfAds() != 0) {
 
-        try {
+            int numOfAds = Constants.cacheManager.numberOfAds();
 
+            Random random = new Random();
+            int randomNumber = random.nextInt(numOfAds - 0) + 0;
 
+            UnifiedNativeAd nativeAd = Constants.cacheManager.getNativeAd(randomNumber);
 
-        AdLoader.Builder builder = new AdLoader.Builder(mContext, admobAdUnitId);
-        builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
+            if (nativeAd != null) {
 
-        VideoOptions videoOptions = new VideoOptions.Builder()
-                .setStartMuted(true)
-                .build();
+                if (nativeAd != null) {
+                    unifiedNativeAd = nativeAd;
+                    nativeAdView.setNativeAd(unifiedNativeAd);
+                }
+                setNativeAdToJS(nativeAd);
 
-        NativeAdOptions adOptions = new NativeAdOptions.Builder()
-                .setVideoOptions(videoOptions)
-                .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT)
-                .build();
-        builder.withNativeAdOptions(adOptions);
+            }
 
-        AdLoader adLoader = builder.withAdListener(adListener)
-                .build();
-
-        adLoader.loadAd(new AdRequest.Builder().build());
-
-        } catch (Exception e) {
         }
-
 
     }
 
     public void addNewView(View child, int index) {
         try {
-
-
-        nativeAdView.addView(child, index);
+            nativeAdView.addView(child, index);
 
         } catch (Exception e) {
 
         }
-
     }
 
     public void setAdRefreshInterval(int interval) {
