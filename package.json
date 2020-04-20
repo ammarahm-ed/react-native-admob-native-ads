@@ -1,7 +1,7 @@
 {
   "name": "react-native-admob-native-ads",
-  "version": "0.1.2",
-  "description": "Simple and easy to use AdMob Native Ads for react native Android & iOS with styling support!",
+  "version": "0.2.0",
+  "description": "A simple and robust library for creating & displaying Admob Native Ads in your React Native App using Native Views",
   "author": "Ammar Ahmed <ammarahmed6506@gmail.com>",
   "main": "index.js",
   "license": "MIT",
@@ -21,10 +21,19 @@
     "native-ads",
     "admob-native-ads",
     "admob-ads",
-    "react-native-admob"
+    "react-native-admob",
+    "admob-ads",
+    "google-admob",
+    "react",
+    "native",
+    "admob",
+    "native",
+    "ads"
   ],
   "dependencies": {
-   "prop-types": "15.7.2"
+   "prop-types": "15.7.2",
+   "react-native-star-rating": "1.1.0",
+   "react-native-gesture-handler": "1.6.1"
   },
   "peerDependencies": {
     "react-native": "0.61.5"

@@ -23,8 +23,12 @@ public class RNAdMobNativePackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-      return Arrays.<ViewManager>asList(
-        new RNAdMobNativeViewManager()
-      );
+
+        return Arrays.<ViewManager>asList(
+                new RNAdMobNativeViewManager(),
+                new RNAdMobMediaViewManager(),
+                new RNAdComponentsWrapperManager(),
+                new RNAdmobAdChoicesManager()
+        );
     }
 }

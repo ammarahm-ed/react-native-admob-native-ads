@@ -1,10 +1,26 @@
 import React from 'react';
-import {View} from 'react-native';
-import NativeAdView from 'react-native-admob-native-ads';
+import {View, Platform} from 'react-native';
+import NativeAdView, {
+  CallToActionView,
+  IconView,
+  HeadlineView,
+  TaglineView,
+  AdvertiserView,
+} from 'react-native-admob-native-ads';
+
+const NATIVE_AD_ID =
+  Platform.OS === 'ios'
+    ? 'ca-app-pub-3940256099942544/3986624511'
+    : 'ca-app-pub-3940256099942544/2247696110';
+
+const NATIVE_AD_VIDEO_ID =
+  Platform.OS === 'ios'
+    ? 'ca-app-pub-3940256099942544/2521693316'
+    : 'ca-app-pub-3940256099942544/1044960115';
 
 const App = () => {
   const _onAdFailedToLoad = event => {
-    console.log(event);
+    console.log(event.nativeEvent);
   };
 
   const _onAdLoaded = () => {
@@ -12,42 +28,88 @@ const App = () => {
   };
 
   return (
-    <>
-      <View
-        style={{
-          justifyContent: 'center',
-          flex: 1,
-          paddingHorizontal: 10,
-          alignItems: 'center',
-        }}>
-
+    <View
+      style={{
+        height: '100%',
+        width: '100%',
+        justifyContent: 'center',
+      }}>
+      <View>
         <NativeAdView
-          adSize="large" // Change to small or medium.
           onAdLoaded={_onAdLoaded}
           onAdFailedToLoad={_onAdFailedToLoad}
-          buttonStyle={{
-            borderRadius:5,
-            textColor:'#008BBA',
-            backgroundColor:'#ffffff',
-            borderWidth:2,
-            borderColor:'#008BBA',
-          }}
-          headlineTextColor="#000000"
-          descriptionTextColor="#a9a9a9"
-          advertiserTextColor="#a9a9a9"
-          backgroundStyle={{
-            borderWidth:2,
-            borderRadius:10,
-            borderColor:"#008BBA",
-            backgroundColor:"#ffffff"
-          }}
+          onUnifiedNativeAdLoaded={() => {}}
           style={{
-            width: '100%',
+            width: '95%',
+            alignSelf: 'center',
+            height: 400,
           }}
-          adUnitID="ca-app-pub-3940256099942544/3986624511"
-        />
+          adUnitID={NATIVE_AD_ID} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
+        >
+          <View
+            style={{
+              height: 400,
+              width: '100%',
+              backgroundColor: 'white',
+            }}>
+            <View
+              style={{
+                height: 100,
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                paddingHorizontal: 10,
+              }}>
+              <IconView
+                style={{
+                  width: 60,
+                  height: 60,
+                }}
+              />
+              <View
+                style={{
+                  width: '65%',
+                  maxWidth: '65%',
+                  paddingHorizontal: 6,
+                }}>
+                <HeadlineView
+                  style={{
+                    fontWeight: 'bold',
+                    fontSize: 13,
+                  }}
+                />
+                <TaglineView
+                  numberOfLines={1}
+                  style={{
+                    fontSize: 11,
+                  }}
+                />
+                <AdvertiserView
+                  style={{
+                    fontSize: 10,
+                    color: 'gray',
+                  }}
+                />
+              </View>
+
+              <CallToActionView
+                style={{
+                  height: 45,
+                  paddingHorizontal: 12,
+                  backgroundColor: 'purple',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 5,
+                  elevation: 10,
+                }}
+                textStyle={{color: 'white', fontSize: 14}}
+              />
+            </View>
+          </View>
+        </NativeAdView>
       </View>
-    </>
+    </View>
   );
 };
 

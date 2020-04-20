@@ -1,9 +1,9 @@
 <div align="center">
-<img src="https://i.imgur.com/zDUWhHv.png" ></img>
+<img src="https://i.imgur.com/4DZhFR2.png" ></img>
 </div>
 <div align="center">
 	<p>
-		Simple and easy to use AdMob Native Ads for react native Android & iOS with styling support!
+    A simple and robust library for creating & displaying <a href="https://developers.google.com/admob/android/native/start">Admob Native Ads</a> in your React Native App using Native Views.
 	</p>
 <div
 align="center"
@@ -28,57 +28,39 @@ target="_blank"
 <img  src="https://img.shields.io/npm/dt/react-native-admob-native-ads?color=green"/>
 </a> 
 </div>
-</div
+</div>
+
 <p>
-While you might have seen native ads on a react-native application, I have tried to take everything to another level so its really really really easy for you guys to get native ads up and running in a few steps with <b>with styling support</b>
+If you are working on a React Native Application, you might have felt limited when it comes to displaying ads that look beautiful and match the app design. Not just displaying ads but making them look as good as your app design (Not the old banner and interstitials).
+
+This library aims to solve that problem by providing complete support for Admob Native Ads which is dead simple and easy to use. Now you can create your own ads from ground up using custom React Native Views.
+
 </p>
 
-### iOS
-
+<div
+align="center"
+>
 <img
 src="https://i.imgur.com/DOaoU1t.png"
 />
 <img
 src="https://i.imgur.com/yX5GKhN.png"
 />
+</div>
 
-### Android
-
-<img
- width="300"
-src="https://i.imgur.com/sEKEoma.png"
-/>
-<img
-  width="300"
-src="https://i.imgur.com/OVmEZzi.png"
-/>
-<img
-  width="250"
-src="https://i.imgur.com/ci3U0ZM.png"
-/>
-<img
-  width="250"
-src="https://i.imgur.com/JUxap7Y.png"
-/>
-<img
-  width="300"
-src="https://i.imgur.com/SiY3JeN.png"
-/>
 
 <div align="center">
 <h2> 💫 Features</h2>
 </div>
 <p align="center">
 
-1.  Native Admob Ads
+1.  [Admob Native Ads](https://developers.google.com/admob/android/native/start)
 2.  Cross Platform (iOS and Android)
-3.  Identical Working on Android and iOS
-4.  Style your ads as you wish!
-5.  No need to manage .xml or .xib layout files to match ad style to app theme!
-6.  Adding styles is as simple as adding styles to any other react-native `View`
-7.  AutoRefresh ad
-8.  Multiple Ad Sizes
-9.  Support Video Ads & Image Ads!
+3.  Identical Working on both platforms
+4.  You can create your ads from ground up as you desire, **no limits.**
+5.  No need to manage any .xml or .xib layout files!
+6.  AutoRefresh ad at specific intervals
+7.  **Support for Video Ads**
 
 </p>
 
@@ -103,89 +85,151 @@ or if you use yarn:
 
     yarn add react-native-admob-native-ads
 
-### iOS
+### iOS Setup
 
-**Step 1:** Follow the guide to add [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project. Also don't forget to update your info.plist file also to add AppID.
+Follow the guide to add [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project. Also don't forget to update your info.plist file to add AppID.
 
-**Step 2:** Add .xib files to your main project:
-
-1.  Open **`.xcworkspace`** file inside the `ios` folder in your
-    project in Xcode.
- 2. Select the root folder of your project and right click for the dropdown menu.
- 3. Click on **`Add files to YOUR_PROJECT_NAME`**
- 4. In select file window, go to **`YOUR_PROJECT/node_modules/react-native-admob-native-ads/ios`**
- 5. Select **`GADTMediumTemplateView.xib`** and **`GADTSmallTemplateView.xib`** files and add them to your project. **Make sure copy items if needed is checked and add groups is selected!**
- 
- <img
-  width="300"
-src="https://i.imgur.com/mhkKEpE.png"
-/>
-   
-### [](https://github.com/sbugert/react-native-admob#android)Android
-
-Add your AdMob App ID to `AndroidManifest.xml`, as described in the  [Google Mobile Ads SDK documentation](https://developers.google.com/admob/android/quick-start#update_your_androidmanifestxml).
-
-### [](https://github.com/sbugert/react-native-admob#android)Android
+### Android Setup
 
 Add your AdMob App ID to `AndroidManifest.xml`, as described in the [Google Mobile Ads SDK documentation](https://developers.google.com/admob/android/quick-start#update_your_androidmanifestxml).
 
 <div align="center">
-<h2>Usage Example</h2>
+<h2>Basic Usage Example</h2>
 </div>
-For complete usage, see the example project.
+This example demonstrates creation of a simple Banner Ad.  For complete usage, see the example project.
 
 ```jsx
-import React from "react";
-import { View } from "react-native";
-import NativeAdView from "react-native-admob-native-ads";
+import NativeAdView, {
+  CallToActionView,
+  IconView,
+  HeadlineView,
+  TaglineView,
+  AdvertiserView,
+  AdBadge,
+} from "react-native-admob-native-ads";
 
-const App = () => {
-  return (
-    <>
-      <View
+return (
+  <>
+    <View
+      style={{
+        flex: 1,
+      }}
+    >
+      <NativeAdView
         style={{
-          justifyContent: "center",
-          flex: 1,
-          paddingHorizontal: 10,
-          alignItems: "center"
+          width: "95%",
+          alignSelf: "center",
+          height: 100,
         }}
+        adUnitID="ca-app-pub-3940256099942544/2247696110" // TEST adUnitID
       >
-        <NativeAdView
-          adSize="large"
-          buttonStyle={{
-            borderRadius: 5,
-            textColor: "#008BBA", // ALL Colors must always be 6 digit Hex
-            backgroundColor: "#ffffff",
-            borderWidth: 2,
-            borderColor: "#008BBA"
-          }}
-          headlineTextColor="#000000"
-          descriptionTextColor="#a9a9a9"
-          advertiserTextColor="#a9a9a9"
-          backgroundStyle={{
-            borderWidth: 2,
-            borderRadius: 10,
-            borderColor: "#008BBA",
-            backgroundColor: "#ffffff"
-          }}
+        <View
           style={{
-            width: "100%"
+            height: 100,
+            width: "100%",
+            backgroundColor: "white",
           }}
-          adUnitID="YOUR_NATIVE_AD_ID"
-        />
-      </View>
-    </>
-  );
-};
+        >
+          <AdBadge />
+          <View
+            style={{
+              height: 100,
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              paddingHorizontal: 10,
+            }}
+          >
+            <IconView
+              style={{
+                width: 60,
+                height: 60,
+              }}
+            />
+            <View
+              style={{
+                width: "65%",
+                maxWidth: "65%",
+                paddingHorizontal: 6,
+              }}
+            >
+              <HeadlineView
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 13,
+                }}
+              />
+              <TaglineView
+                numberOfLines={1}
+                style={{
+                  fontSize: 11,
+                }}
+              />
+              <AdvertiserView
+                style={{
+                  fontSize: 10,
+                  color: "gray",
+                }}
+              />
+            </View>
 
-export default App;
+            <CallToActionView
+              style={{
+                height: 45,
+                paddingHorizontal: 12,
+                backgroundColor: "purple",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 5,
+                elevation: 10,
+              }}
+              textStyle={{ color: "white", fontSize: 14 }}
+            />
+          </View>
+        </View>
+      </NativeAdView>
+    </View>
+  </>
+);
 ```
 
 <div align="center">
 <h1>📃 Reference</h1>
 </div>
 
-## Props
+## NativeAdView
+
+NativeAdView will wrap all your views related to the ad and provides a context through which all the Views get their respective information and load it automatically. It has the following properties to it.
+
+```jsx
+import NativeAdView from "react-native-admob-native-ads";
+
+<NativeAdView
+  style={{
+    width: "95%",
+    alignSelf: "center",
+    height: 100, // Height should be provided.
+  }}
+  adUnitID="ca-app-pub-3940256099942544/2247696110" // TEST adUnitID
+>
+  <View
+    style={{
+      height: 100, // could be '100%' too.
+      width: "100%",
+      backgroundColor: "white",
+    }}
+  >
+    // Everything else
+  </View>
+</NativeAdView>;
+```
+
+### Props
+
+#### `style:ViewStyle`
+
+Style your NativeAdView. Always give a width and height value.
 
 #### `adUnitID`
 
@@ -194,19 +238,6 @@ Set Ad Unit ID for Native Advanced Ads that you created on your AdMob account.
 | Type     | Required | Platform |
 | -------- | -------- | -------- |
 | `string` | Yes      | All      |
-
-#
-
-#### `adSize`
-
-Select which size of ad you want to display.
-
-| Type     | Required | Default | Platform |
-| -------- | -------- | ------- | -------- |
-| `string` | no       | "small" | All      |
-
-**Android adSizes:** "small", "medium" , "large"
-**iOS adSizes:** "small" and "medium" only.
 
 #
 
@@ -220,92 +251,33 @@ Set testDevices during testing ads or during development.
 
 #
 
-#### `buttonStyle`
+#### `enableTestMode`
 
-style the callToAction button in Native ad according to your app look and feel.
+Setting this to true will load a placeholder ad (Not from Admob server) incase you have no internet etc so you can design your ad as you want to with ease. Remember to set the `adUnitID` to null when using this so the placeholder ad is not replaced by a real ad.
 
-| Type     | Required | Platform |
-| -------- | -------- | -------- |
-| `object` | no       | All      |
-
-The following styles properties are available at the moment.
-
-| Name             | Type                          | Required |
-| ---------------- | ----------------------------- | -------- |
-| `backroundColor` | 6 digit hex color string only | Yes      |
-| `textColor`      | 6 digit hex color string only | Yes      |
-| `borderColor`    | 6 digit hex color string only | Yes      |
-| `borderWidth`    | number                        | Yes      |
-| `borderRadius`   | number                        | Yes      |
-
-**Note:** Currently you will need to set all available properties and give them a valid value. **value can't be null**
+| Type      | Required | Platform |
+| --------- | -------- | -------- |
+| `boolean` | no       | All      |
 
 #
 
-#### `backgroundStyle`
+#### `refreshInterval`
 
-Style the background of Native Ad View.
+Time in ms after which a new ad should be requested from the server.
 
-| Type     | Required | Platform |
-| -------- | -------- | -------- |
-| `object` | no       | All      |
-
-The following styles properties are available at the moment.
-
-| Name             | Type                          | Required |
-| ---------------- | ----------------------------- | -------- |
-| `backroundColor` | 6 digit hex color string only | Yes      |
-| `borderColor`    | 6 digit hex color string only | Yes      |
-| `borderWidth`    | number                        | Yes      |
-| `borderRadius`   | number                        | Yes      |
-
-**Note:** Currently you will need to set all available properties and give them a valid value. **value can't be null**
+| Type     | Required | Default  | Platform |
+| -------- | -------- | -------- | -------- |
+| `number` | no       | 60000 ms (1 minute) | All      |
 
 #
 
-#### `headlineTextColor`
-
-Set color for the heading text of Ad.
-
-| Type                          | Required | Platform |
-| ----------------------------- | -------- | -------- |
-| 6 digit hex color string only | no       | All      |
-
-#
-
-#### `descriptionTextColor`
-
-Set color for the description text of Ad.
-
-| Type                          | Required | Platform |
-| ----------------------------- | -------- | -------- |
-| 6 digit hex color string only | no       | All      |
-
-#
-
-#### `advertiserTextColor`
-
-Set color for the description text of Ad.
-
-| Type                          | Required | Platform |
-| ----------------------------- | -------- | -------- |
-| 6 digit hex color string only | no       | All      |
-
-#
-
-#### `ratingBarColor`
-
-Set color for the description text of Ad.
-
-| Type                          | Required | Platform     |
-| ----------------------------- | -------- | ------------ |
-| 6 digit hex color string only | no       | Android Only |
-
-#
-
-## Events
+### Events
 
 All events are available through props.The following event are available on both Android and iOS:
+
+#### `onUnifiedNativeAdLoaded`
+
+This event return a data object which contains all the images and text etc. related to the ad incase you need it. Usually you wont need this because everything is loaded automatically.
 
 #### `onAdFailedToLoad`
 
@@ -335,18 +307,228 @@ User impression has been recorded
 
 User has clicked on the ad.
 
-#
+## Children Views
+The children views render different data recieved in the Ad from the server. All the values etc are assigned automatically, all you need to do is style the according to your design. 
 
-## Contributing
-There are multiple ways in which you can contribute to this library. Feel free to open an issue if you have an idea in mind or if you have found a bug.
+**Note:** Do not set `nativeID` and `onLayout` prop on any of the Children views as these are used to register the views on Native iOS and Android.
 
-If the templates do not suit your requirments and you decide to make your own templates, feel free to submit them here and I will add them in the library.
+## AdBadge
 
+Renders a small {Ad} badge on top-left corner of your ad showing the user that this is an Ad.
 
- 
+```jsx
+import { AdBadge } from "react-native-admob-native-ads";
 
-## Find this library useful? ❤️
+<AdBadge
+  style={{
+    width: 15,
+    height: 15,
+    borderWidth: 1,
+    borderRadius: 2,
+    borderColor: "green",
+  }}
+  textStyle={{
+    fontSize: 9,
+    color: "green",
+  }}
+/>;
+```
 
-Support it by joining **stargazers** for this repository. ⭐️ and follow me for my next creations!
+### props
 
-### MIT Licensed
+#### `style:ViewStyle`
+
+Style the outer `View` Component.
+
+#### `textStyle:TextStyle`
+
+Style the inner `Text` Component
+
+#### `allCaps`
+
+| Type      | Required | Platform |
+| --------- | -------- | -------- |
+| `boolean` | no       | All      |
+
+Whether all text should be in capital letters
+
+## HeadlineView
+
+Renders the headline or title for the ad recieved from server.
+
+```jsx
+import { HeadlineView } from "react-native-admob-native-ads";
+
+<HeadlineView
+  style={{
+    fontWeight: "bold",
+    fontSize: 13,
+  }}
+/>;
+```
+
+### props
+
+Inherits all the props from Text Component.
+
+## TaglineView
+
+Renders the description for the ad recieved from server.
+
+```jsx
+import { TaglineView } from "react-native-admob-native-ads";
+
+<TaglineView
+  style={{
+    fontWeight: "bold",
+    fontSize: 12,
+  }}
+/>;
+```
+
+### props
+
+Inherits all the props from Text Component.
+
+## AdvertiserView
+
+Renders the advertiser name for the ad recieved from server.
+
+```jsx
+import { AdvertiserView } from "react-native-admob-native-ads";
+
+<AdvertiserView
+  style={{
+    fontWeight: "bold",
+    fontSize: 10,
+  }}
+/>;
+```
+
+### props
+
+Inherits all the props from Text Component.
+
+#### `allCaps`
+
+| Type      | Required | Platform |
+| --------- | -------- | -------- |
+| `boolean` | no       | All      |
+
+Whether all text should be in capital letters
+
+## StoreView
+
+Renders the name of the store (Google Playstore / AppStore) if the ad is for an app.
+
+```jsx
+import { StoreView } from "react-native-admob-native-ads";
+
+<StoreView
+  style={{
+    fontWeight: "bold",
+    fontSize: 10,
+  }}
+/>;
+```
+
+### props
+
+Inherits all the props from Text Component.
+
+## PriceView
+
+Renders the price if the ad is from a paid service/app.
+
+```jsx
+import { PriceView } from "react-native-admob-native-ads";
+
+<PriceView
+  style={{
+    fontWeight: "bold",
+    fontSize: 10,
+  }}
+/>;
+```
+
+### props
+
+Inherits all the props from Text Component.
+
+## StarRatingView
+
+Renders the star rating if the ad is for an app on Google Playstore or AppStore.
+
+```jsx
+import { StarRatingView } from "react-native-admob-native-ads";
+
+<StarRatingView
+  maxStars={5} // Always keep it to 5
+/>;
+```
+
+### props
+
+Inherits all the props from [react-native-star-rating](https://github.com/djchie/react-native-star-rating) library.
+
+**Note:** Do not set the `rating` prop. This is handled automatically.
+
+## ImageView
+
+Renders an Image for the ad recieved from server.
+
+```jsx
+import { ImageView } from "react-native-admob-native-ads";
+
+<ImageView
+  style={{
+    width: "100%",
+    height: 250,
+  }}
+/>;
+```
+
+### props
+
+Inherits all the props from Image Component.
+
+## MediaView
+
+Renders the MediaView used for displaying video & image both.
+
+```jsx
+import { MediaView } from "react-native-admob-native-ads";
+
+<MediaView
+  style={{
+    width: "100%",
+    height: 250,
+  }}
+/>;
+```
+
+### props
+
+`style:ViewStyle`
+style your media view.
+
+## Contact & Support
+
+- Create a GitHub issue for bug reports, feature requests, or questions
+- Follow [@ammarahm-ed](https://github.com/ammarahm-ed) for announcements
+- Add a ⭐️ [star on GitHub](https://github.com/ammarahm-ed/react-native-admob-native-ads) or ❤️ tweet to support the project!
+
+## I want to contribute
+
+That is awesome news! There is alot happening at a very fast pace in this library right now. Every little help is precious. You can contribute in many ways:
+
+- Suggest code improvements on native iOS and Android
+- If you have suggestion or idea you want to discuss, open an issue.
+- [Open an issue](https://github.com/ammarahm-ed/react-native-admob-native-ads/issues/) if you want to make a pull request, and tell me what you want to improve or add so we can discuss
+- I am always open to new ideas
+
+## License
+
+This library is licensed under the [MIT license](https://github.com/ammarahm-ed/react-native-admob-native-ads/blob/master/LICENSE).
+
+Copyright © Ammar Ahmed ([@ammarahm-ed](https://github.com/ammarahm-ed))
