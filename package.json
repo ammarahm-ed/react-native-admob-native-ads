@@ -21,7 +21,14 @@
     "native-ads",
     "admob-native-ads",
     "admob-ads",
-    "react-native-admob"
+    "react-native-admob",
+    "admob-ads",
+    "google-admob",
+    "react",
+    "native",
+    "admob",
+    "native",
+    "ads"
   ],
   "dependencies": {
    "prop-types": "15.7.2",
