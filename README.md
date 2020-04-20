@@ -308,6 +308,9 @@ User impression has been recorded
 User has clicked on the ad.
 
 ## Children Views
+The children views render different data recieved in the Ad from the server. All the values etc are assigned automatically, all you need to do is style the according to your design. 
+
+**Note:** Do not set `nativeID` and `onLayout` prop on any of the Children views as these are used to register the views on Native iOS and Android.
 
 ## AdBadge
 
