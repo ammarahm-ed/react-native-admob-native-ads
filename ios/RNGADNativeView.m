@@ -24,18 +24,11 @@ NSNumber *refreshingInterval;
 - (instancetype)initWithBridge:(RCTBridge *)_bridge
 {
     refreshingInterval = @60000;
-  if (self = [super init]) {
-    bridge = _bridge;
-  }
-  return self;
+    if (self = [super init]) {
+        bridge = _bridge;
+    }
+    return self;
 }
-
-
-
-
-
-
-
 
 - (void)setTestDevices:(NSArray *)testDevices
 {
@@ -56,15 +49,17 @@ NSNumber *refreshingInterval;
 - (void)setHeadline:(NSNumber *)headline {
     
     dispatch_async(RCTGetUIManagerQueue(),^{
-          
-          [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-
-              UIView *headlineView = viewRegistry[headline];
-                           if (headlineView != nil) {
-                                               [self setHeadlineView:headlineView];
-                                           }
-            }];
-      });
+        
+        [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+            
+            UIView *headlineView = viewRegistry[headline];
+            
+            if (headlineView != nil) {
+                headlineView.userInteractionEnabled = NO;
+                [self setHeadlineView:headlineView];
+            }
+        }];
+    });
 }
 
 - (void)setIcon:(NSNumber *)icon {
@@ -72,30 +67,32 @@ NSNumber *refreshingInterval;
     dispatch_async(RCTGetUIManagerQueue(),^{
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-
+            
             UIView *iconView = viewRegistry[icon];
-                         if (iconView != nil) {
-                                             [self setIconView:iconView];
-                                         }
-          }];
+            if (iconView != nil) {
+                iconView.userInteractionEnabled = NO;
+                [self setIconView:iconView];
+            }
+        }];
     });
     
-  
+    
 }
 
 - (void)setImage:(NSNumber *)image {
     
     dispatch_async(RCTGetUIManagerQueue(),^{
-                     
-                     [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-
-                         UIView *imageView = viewRegistry[image];
-                                      if (imageView != nil) {
-                                                          [self setImageView:imageView];
-                                                      }
-                       }];
-                 });
-
+        
+        [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+            
+            UIView *imageView = viewRegistry[image];
+            if (imageView != nil) {
+                imageView.userInteractionEnabled = NO;
+                [self setImageView:imageView];
+            }
+        }];
+    });
+    
 }
 
 - (void)setMediaview:(NSNumber *)mediaview
@@ -103,12 +100,13 @@ NSNumber *refreshingInterval;
     dispatch_async(RCTGetUIManagerQueue(),^{
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-
+            
             GADMediaView *mediaView = (GADMediaView *) viewRegistry[mediaview];
-                         if (mediaView != nil) {
-                                             [self setMediaView:mediaView];
-                                         }
-          }];
+            if (mediaView != nil) {
+                mediaView.userInteractionEnabled = NO;
+                [self setMediaView:mediaView];
+            }
+        }];
     });
 }
 
@@ -116,48 +114,51 @@ NSNumber *refreshingInterval;
 {
     
     dispatch_async(RCTGetUIManagerQueue(),^{
-                  
-                  [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-
-                      UIView *taglineView = viewRegistry[tagline];
-                                   if (taglineView != nil) {
-                                                       [self setPriceView:taglineView];
-                                                   }
-                    }];
-              });
-   
+        
+        [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+            
+            UIView *taglineView = viewRegistry[tagline];
+            if (taglineView != nil) {
+                taglineView.userInteractionEnabled = NO;
+                [self setPriceView:taglineView];
+            }
+        }];
+    });
+    
 }
 
 - (void)setAdvertiser:(NSNumber *)advertiser
 {
     dispatch_async(RCTGetUIManagerQueue(),^{
-                
-                [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-
-                    UIView *advertiserView = viewRegistry[advertiser];
-                                 if (advertiserView != nil) {
-                                                     [self setPriceView:advertiserView];
-                                                 }
-                  }];
-            });
+        
+        [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+            
+            UIView *advertiserView = viewRegistry[advertiser];
+            if (advertiserView != nil) {
+                advertiserView.userInteractionEnabled = NO;
+                [self setAdvertiserView:advertiserView];
+            }
+        }];
+    });
     
 }
 - (void)setPrice:(NSNumber *)price
 {
     
     dispatch_async(RCTGetUIManagerQueue(),^{
-             
-             [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-
-                 UIView *priceView = viewRegistry[price];
-                              if (priceView != nil) {
-                                                  [self setPriceView:priceView];
-                                              }
-               }];
-         });
+        
+        [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+            
+            UIView *priceView = viewRegistry[price];
+            if (priceView != nil) {
+                priceView.userInteractionEnabled = NO;
+                [self setPriceView:priceView];
+            }
+        }];
+    });
     
     
-   
+    
     
     
 }
@@ -166,15 +167,16 @@ NSNumber *refreshingInterval;
 {
     
     dispatch_async(RCTGetUIManagerQueue(),^{
-           
-           [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-
-               UIView *storeView = viewRegistry[store];
-                            if (storeView != nil) {
-                                                [self setStoreView:storeView];
-                                            }
-             }];
-       });
+        
+        [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+            
+            UIView *storeView = viewRegistry[store];
+            if (storeView != nil) {
+                storeView.userInteractionEnabled = NO;
+                [self setStoreView:storeView];
+            }
+        }];
+    });
     
     
     
@@ -187,14 +189,15 @@ NSNumber *refreshingInterval;
     dispatch_async(RCTGetUIManagerQueue(),^{
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-
+            
             UIView *starratingView = viewRegistry[starrating];
-                          if (starratingView != nil) {
-                              [self setStarRatingView:starratingView];
-                          }
-          }];
+            if (starratingView != nil) {
+                starratingView.userInteractionEnabled = NO;
+                [self setStarRatingView:starratingView];
+            }
+        }];
     });
- 
+    
 }
 
 - (void)setCallToAction:(NSNumber *)callToAction
@@ -204,15 +207,16 @@ NSNumber *refreshingInterval;
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
             
-             UIView *callToActionView = viewRegistry[callToAction];
+            UIView *callToActionView = viewRegistry[callToAction];
             
-             if (callToActionView != nil){
+            if (callToActionView != nil){
+                callToActionView.userInteractionEnabled = NO;
                 [self setCallToActionView:callToActionView];
-             }
+            }
             
-          }];
+        }];
     });
-
+    
 }
 
 
@@ -253,7 +257,7 @@ NSNumber *refreshingInterval;
     if (self.onAdLoaded) {
         self.onAdLoaded(@{});
     }
-
+    
     nativeAd.delegate = self;
     [self setNativeAd:nativeAd];
     
@@ -269,18 +273,18 @@ NSNumber *refreshingInterval;
         
         
         if (nativeAd.mediaContent.hasVideoContent) {
-           [dic setValue:@YES forKey:@"video"];
+            [dic setValue:@YES forKey:@"video"];
         }else {
-           [dic setValue:@NO forKey:@"video"];
+            [dic setValue:@NO forKey:@"video"];
         }
-       
         
-     NSMutableArray *images = [NSMutableArray array];
         
-         GADNativeAdImage *image = [nativeAd.images objectAtIndex:0];
-         NSString *url = [image.imageURL absoluteString];
-          [images addObject:url];
-            
+        NSMutableArray *images = [NSMutableArray array];
+        
+        GADNativeAdImage *image = [nativeAd.images objectAtIndex:0];
+        NSString *url = [image.imageURL absoluteString];
+        [images addObject:url];
+        
         [dic setObject:images forKey:@"images"];
         [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
         [dic setValue:nativeAd.starRating forKey:@"rating"];
@@ -288,7 +292,7 @@ NSNumber *refreshingInterval;
         self.onUnifiedNativeAdLoaded(dic);
     }
     
-
+    
     double delayInSeconds = refreshingInterval.intValue/1000;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -297,8 +301,8 @@ NSNumber *refreshingInterval;
     
     
     
-   
-
+    
+    
 }
 
 
@@ -306,7 +310,7 @@ NSNumber *refreshingInterval;
 {
     if (self.onAdImpression) {
         self.onAdImpression(@{});
-    
+        
     }
 }
 
