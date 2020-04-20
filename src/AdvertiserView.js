@@ -16,7 +16,7 @@ const AdvertiserView = (props) => {
 
   return (
     <Text {...props} nativeID="adAdvertiserView" onLayout={_onLayout}>
-      {nativeAd ? nativeAd.advertiser : null}
+      {nativeAd ? props.allCaps? nativeAd.advertiser?.toUpperCase() : nativeAd.advertiser : null}
     </Text>
   );
 };
