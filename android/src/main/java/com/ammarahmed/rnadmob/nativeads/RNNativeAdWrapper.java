@@ -117,18 +117,6 @@ public class RNNativeAdWrapper extends LinearLayout {
 
             sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
 
-            attachViews();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    attachViews();
-                }
-            },500);
-
-            nativeAdView.requestLayout();
-
-
 
 
         } catch (Exception e) {
@@ -143,67 +131,7 @@ public class RNNativeAdWrapper extends LinearLayout {
             }, adRefreshInterval);
         }
     }
-
-    public  void removeHandler() {
-        if (handler != null) {
-            handler.removeCallbacks(null);
-            handler = null;
-        }
-
-    }
-
-
-
-
-    public void attachViews() {
-
-        try {
-
-            if (nativeAdView != null) {
-
-                View advertiser = ReactFindViewUtil.findView(nativeAdView, adAdvertiser);
-                if (advertiser != null)
-                    nativeAdView.setAdvertiserView(advertiser);
-
-                View headline = ReactFindViewUtil.findView(nativeAdView, adHeadline);
-                if (headline != null)
-                    nativeAdView.setHeadlineView(headline);
-
-                View tagline = ReactFindViewUtil.findView(nativeAdView, adTagline);
-                if (tagline != null)
-                    nativeAdView.setBodyView(tagline);
-
-                View store = ReactFindViewUtil.findView(nativeAdView, adStoreView);
-                if (store != null)
-                    nativeAdView.setStoreView(store);
-
-                View iconv = ReactFindViewUtil.findView(nativeAdView, adIconView);
-                if (iconv != null)
-                    nativeAdView.setIconView(iconv);
-
-                View image = ReactFindViewUtil.findView(nativeAdView, adImageView);
-                if (image != null)
-
-                    nativeAdView.setImageView(image);
-
-                View callToAction = ReactFindViewUtil.findView(nativeAdView, adCallToAction);
-                if (callToAction != null)
-                    nativeAdView.setCallToActionView(callToAction);
-
-                View adPriceView = ReactFindViewUtil.findView(nativeAdView, adPriceViews);
-                if (adPriceView != null)
-                    nativeAdView.setCallToActionView(adPriceView);
-
-                View starRating = ReactFindViewUtil.findView(nativeAdView, adStarRating);
-                if (starRating != null)
-                    nativeAdView.setStarRatingView(starRating);
-            }
-
-        } catch (Exception e) {
-
-        }
-
-    }
+    
 
     private void sendEvent(String name, @Nullable WritableMap event) {
 
@@ -304,7 +232,6 @@ public class RNNativeAdWrapper extends LinearLayout {
                 try {
 
 
-
                     AdLoader.Builder builder = new AdLoader.Builder(mContext, admobAdUnitId);
                     builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
 
@@ -327,23 +254,22 @@ public class RNNativeAdWrapper extends LinearLayout {
                 }
 
             }
-        },loadWithDelay);
-
+        }, loadWithDelay);
 
 
     }
 
-    public  void setLoadWithDelay(int delay) {
+    public void setLoadWithDelay(int delay) {
         loadWithDelay = delay;
     }
 
-   
+
     public void addNewView(View child, int index) {
         try {
 
 
-        nativeAdView.addView(child, index);
-        nativeAdView.requestLayout();
+            nativeAdView.addView(child, index);
+            nativeAdView.requestLayout();
         } catch (Exception e) {
 
         }
@@ -363,6 +289,15 @@ public class RNNativeAdWrapper extends LinearLayout {
     public void requestLayout() {
         super.requestLayout();
         post(measureAndLayout);
+    }
+
+
+    public void removeHandler() {
+        if (handler != null) {
+            handler.removeCallbacks(null);
+            handler = null;
+        }
+
     }
 
 
