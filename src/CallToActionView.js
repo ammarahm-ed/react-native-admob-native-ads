@@ -32,7 +32,11 @@ const CallToActionView = (props) => {
       ]}
     >
       <Text style={[props.textStyle]}>
-        {nativeAd ? nativeAd.callToAction : null}
+        {nativeAd
+          ? props.allCaps
+            ? nativeAd.callToAction?.toUpperCase()
+            : nativeAd.callToAction
+          : null}
       </Text>
     </RawButton>
   );
