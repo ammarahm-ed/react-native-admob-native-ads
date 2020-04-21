@@ -2,6 +2,8 @@ package com.ammarahmed.rnadmob.nativeads;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.common.MapBuilder;
@@ -31,7 +33,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String EVENT_AD_LOADED = "onAdLoaded";
     public static final String EVENT_AD_LEFT_APPLICATION = "onAdLeftApplication";
     public static final String EVENT_UNIFIED_NATIVE_AD_LOADED = "onUnifiedNativeAdLoaded";
-
+    public static final String PROP_DELAY_AD_LOAD = "delayAdLoad";
     public static final String PROP_TEST_DEVICES = "testDevices";
     public static final String PROP_AD_UNIT_ID = "adUnitID";
     public static final String PROP_MEDIA_VIEW = "mediaview";
@@ -77,11 +79,17 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
     }
 
-
     @ReactProp(name = PROP_REFRESH_INTERVAL)
     public void setRefreshInterval(final RNNativeAdWrapper view, final int interval) {
 
         nativeAdView.setAdRefreshInterval(interval);
+    }
+
+    @ReactProp(name = PROP_DELAY_AD_LOAD)
+    public void setPropDelayAdLoad(final RNNativeAdWrapper view, final int delay) {
+
+        nativeAdView.setLoadWithDelay(delay);
+
     }
 
     @ReactProp(name = PROP_MEDIA_VIEW)
@@ -109,5 +117,11 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
         nativeAdView.setAdUnitId(adUnitId);
 
+    }
+
+    @Override
+    public void onDropViewInstance(@NonNull RNNativeAdWrapper view) {
+        super.onDropViewInstance(view);
+        nativeAdView.removeHandler();
     }
 }

@@ -40,6 +40,7 @@ public class RNNativeAdWrapper extends LinearLayout {
     public static final String adCallToAction = "adCallToAction";
     public static final String adStoreView = "adStoreView";
 
+    private int loadWithDelay = 1000;
 
     public int AdChoicesViewId = 733;
     private String admobAdUnitId = "";
@@ -117,20 +118,41 @@ public class RNNativeAdWrapper extends LinearLayout {
             sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
 
             attachViews();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    attachViews();
+                }
+            },500);
 
             nativeAdView.requestLayout();
+
+
 
 
         } catch (Exception e) {
 
         }
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadAd();
-            }
-        }, adRefreshInterval);
+        if (handler != null) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadAd();
+                }
+            }, adRefreshInterval);
+        }
     }
+
+    public  void removeHandler() {
+        if (handler != null) {
+            handler.removeCallbacks(null);
+            handler = null;
+        }
+
+    }
+
+
 
 
     public void attachViews() {
@@ -274,40 +296,54 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     private void loadAd() {
 
-        try {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+
+                try {
 
 
 
-        AdLoader.Builder builder = new AdLoader.Builder(mContext, admobAdUnitId);
-        builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
+                    AdLoader.Builder builder = new AdLoader.Builder(mContext, admobAdUnitId);
+                    builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
 
-        VideoOptions videoOptions = new VideoOptions.Builder()
-                .setStartMuted(true)
-                .build();
+                    VideoOptions videoOptions = new VideoOptions.Builder()
+                            .setStartMuted(true)
+                            .build();
 
-        NativeAdOptions adOptions = new NativeAdOptions.Builder()
-                .setVideoOptions(videoOptions)
-                .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT)
-                .build();
-        builder.withNativeAdOptions(adOptions);
+                    NativeAdOptions adOptions = new NativeAdOptions.Builder()
+                            .setVideoOptions(videoOptions)
+                            .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT)
+                            .build();
+                    builder.withNativeAdOptions(adOptions);
 
-        AdLoader adLoader = builder.withAdListener(adListener)
-                .build();
+                    AdLoader adLoader = builder.withAdListener(adListener)
+                            .build();
 
-        adLoader.loadAd(new AdRequest.Builder().build());
+                    adLoader.loadAd(new AdRequest.Builder().build());
 
-        } catch (Exception e) {
-        }
+                } catch (Exception e) {
+                }
+
+            }
+        },loadWithDelay);
+
 
 
     }
 
+    public  void setLoadWithDelay(int delay) {
+        loadWithDelay = delay;
+    }
+
+   
     public void addNewView(View child, int index) {
         try {
 
 
         nativeAdView.addView(child, index);
-
+        nativeAdView.requestLayout();
         } catch (Exception e) {
 
         }
