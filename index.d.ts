@@ -105,13 +105,10 @@ type SimpleViewProps = {
 type NestedTextProps = {
   style?: ViewStyle;
   textStyle?: TextStyle;
-}
-
-type AdBadgeProps = {
-  style?: ViewStyle;
-  textStyle?: TextStyle;
   allCaps?:boolean
 }
+
+
 
 declare module "react-native-admob-native-ads" {
 
