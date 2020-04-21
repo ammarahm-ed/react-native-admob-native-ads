@@ -2,12 +2,15 @@ package com.ammarahmed.rnadmob.nativeads;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.util.ReactFindViewUtil;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 
@@ -31,11 +34,21 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String EVENT_AD_LOADED = "onAdLoaded";
     public static final String EVENT_AD_LEFT_APPLICATION = "onAdLeftApplication";
     public static final String EVENT_UNIFIED_NATIVE_AD_LOADED = "onUnifiedNativeAdLoaded";
-
+    public static final String PROP_DELAY_AD_LOAD = "delayAdLoad";
     public static final String PROP_TEST_DEVICES = "testDevices";
     public static final String PROP_AD_UNIT_ID = "adUnitID";
     public static final String PROP_MEDIA_VIEW = "mediaview";
     public static final String PROP_REFRESH_INTERVAL = "refreshInterval";
+
+    public static final String PROP_HEADLINE_VIEW = "headline";
+    public static final String PROP_TAGLINE_VIEW = "tagline";
+    public static final String PROP_ADVERTISER_VIEW = "advertiser";
+    public static final String PROP_STORE_VIEW = "store";
+    public static final String PROP_IMAGE_VIEW = "image";
+    public static final String PROP_CALL_TO_ACTION_VIEW = "callToAction";
+    public static final String PROP_PRICE_VIEW = "price";
+    public static final String PROP_ICON_VIEW = "icon";
+    public static final String PROP_STAR_RATING_VIEW = "starrating";
 
 
     @javax.annotation.Nullable
@@ -77,19 +90,107 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
     }
 
-
     @ReactProp(name = PROP_REFRESH_INTERVAL)
     public void setRefreshInterval(final RNNativeAdWrapper view, final int interval) {
 
         nativeAdView.setAdRefreshInterval(interval);
     }
 
-    @ReactProp(name = PROP_MEDIA_VIEW)
-    public void setMediaView(final RNNativeAdWrapper view, final int mediaViewId) {
+    @ReactProp(name = PROP_DELAY_AD_LOAD)
+    public void setPropDelayAdLoad(final RNNativeAdWrapper view, final int delay) {
 
-        nativeAdView.addMediaView(mediaViewId);
+        nativeAdView.setLoadWithDelay(delay);
 
     }
+
+    @ReactProp(name = PROP_MEDIA_VIEW)
+    public void setMediaView(final RNNativeAdWrapper view, final int id) {
+
+        nativeAdView.addMediaView(id);
+
+    }
+
+    @ReactProp(name = PROP_HEADLINE_VIEW)
+    public void setHeadlineView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null)
+            nativeAdView.nativeAdView.setHeadlineView(view);
+
+    }
+
+    @ReactProp(name = PROP_TAGLINE_VIEW)
+    public void setPropTaglineView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setBodyView(view);
+
+    }
+
+    @ReactProp(name = PROP_ADVERTISER_VIEW)
+    public void setPropAdvertiserView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setAdvertiserView(view);
+
+    }
+
+    @ReactProp(name = PROP_IMAGE_VIEW)
+    public void setPropImageView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setImageView(view);
+
+    }
+
+    @ReactProp(name = PROP_ICON_VIEW)
+    public void setPropIconView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setIconView(view);
+
+    }
+
+    @ReactProp(name = PROP_STORE_VIEW)
+    public void setPropStoreView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setAdvertiserView(view);
+
+    }
+
+    @ReactProp(name = PROP_PRICE_VIEW)
+    public void setPropPriceView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setAdvertiserView(view);
+
+    }
+
+    @ReactProp(name = PROP_STAR_RATING_VIEW)
+    public void setPropStarRatingView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setAdvertiserView(view);
+
+    }
+
+    @ReactProp(name = PROP_CALL_TO_ACTION_VIEW)
+    public void setPropCallToActionView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setAdvertiserView(view);
+
+    }
+
 
     @ReactProp(name = PROP_TEST_DEVICES)
     public void setPropTestDevices(final RNNativeAdWrapper view, final ReadableArray testDevices) {
@@ -103,11 +204,16 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
 
-
     @ReactProp(name = PROP_AD_UNIT_ID)
     public void setPropAdUnitId(final RNNativeAdWrapper view, final String adUnitId) {
 
         nativeAdView.setAdUnitId(adUnitId);
 
+    }
+
+    @Override
+    public void onDropViewInstance(@NonNull RNNativeAdWrapper view) {
+        super.onDropViewInstance(view);
+        nativeAdView.removeHandler();
     }
 }

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { requireNativeComponent, Platform } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Platform, requireNativeComponent } from "react-native";
 import { NativeAdContext, nativeAdView } from "./context";
 import Wrapper from "./Wrapper";
 
@@ -86,6 +86,7 @@ const NativeAdView = (props) => {
         onAdOpened={_onAdOpened}
         onAdClosed={_onAdClosed}
         onAdImpression={_onAdImpression}
+        delayAdLoad={props.delayAdLoad? props.delayAdLoad : 1000}
         style={props.style}
         onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
         adUnitID={props.adUnitID}

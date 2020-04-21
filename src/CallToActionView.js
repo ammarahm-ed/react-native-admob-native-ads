@@ -1,5 +1,5 @@
 import React, { createRef, useContext } from "react";
-import { findNodeHandle, Platform, Text } from "react-native";
+import { findNodeHandle, Text } from "react-native";
 import { RawButton } from "react-native-gesture-handler";
 import { NativeAdContext, nativeAdView } from "./context";
 
@@ -8,7 +8,6 @@ const CallToActionView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-    if (Platform.OS === "android") return;
     let handle = findNodeHandle(callToActionRef.current);
     nativeAdView.current?.setNativeProps({
       callToAction: handle,
@@ -17,7 +16,6 @@ const CallToActionView = (props) => {
 
   return (
     <RawButton
-      nativeID="adCallToAction"
       ref={callToActionRef}
       onLayout={_onLayout}
       style={[
@@ -34,7 +32,11 @@ const CallToActionView = (props) => {
       ]}
     >
       <Text style={[props.textStyle]}>
-        {nativeAd ? nativeAd.callToAction : null}
+        {nativeAd
+          ? props.allCaps
+            ? nativeAd.callToAction?.toUpperCase()
+            : nativeAd.callToAction
+          : null}
       </Text>
     </RawButton>
   );

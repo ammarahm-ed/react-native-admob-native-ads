@@ -1,5 +1,5 @@
-import React, { useContext, createRef } from "react";
-import { Image, findNodeHandle, Platform } from "react-native";
+import React, { createRef, useContext } from "react";
+import { findNodeHandle, Image } from "react-native";
 import { NativeAdContext, nativeAdView } from "./context";
 
 const iconViewRef = createRef();
@@ -8,7 +8,6 @@ const IconView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-    if (Platform.OS === "android") return;
     let handle = findNodeHandle(iconViewRef.current);
     nativeAdView.current?.setNativeProps({
       icon: handle,
@@ -21,7 +20,6 @@ const IconView = (props) => {
       resizeMode="cover"
       ref={iconViewRef}
       onLayout={_onLayout}
-      nativeID="adIconView"
       source={{ uri: nativeAd.icon }}
     />
   ) : null;

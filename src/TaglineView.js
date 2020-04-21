@@ -1,5 +1,5 @@
-import React, { useContext, createRef } from "react";
-import { Text, Platform, findNodeHandle } from "react-native";
+import React, { createRef, useContext } from "react";
+import { findNodeHandle, Text } from "react-native";
 import { NativeAdContext, nativeAdView } from "./context";
 
 const taglineRef = createRef();
@@ -7,7 +7,6 @@ const TaglineView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-    if (Platform.OS === "android") return;
     let handle = findNodeHandle(taglineRef.current);
     nativeAdView.current?.setNativeProps({
       tagline: handle,
@@ -15,12 +14,7 @@ const TaglineView = (props) => {
   };
 
   return (
-    <Text
-      {...props}
-      ref={taglineRef}
-      onLayout={_onLayout}
-      nativeID="adTaglineView"
-    >
+    <Text {...props} ref={taglineRef} onLayout={_onLayout}>
       {nativeAd ? nativeAd.tagline : null}
     </Text>
   );

@@ -1,9 +1,7 @@
 import { ViewStyle, TextProps, ImageProps, TextStyle } from "react-native";
 import { StarRatingProps } from "react-native-star-rating";
 
-
 type NativeAd = {
-
   /**
    * Title of the native ad.
    */
@@ -42,22 +40,19 @@ type NativeAd = {
    */
   rating: number;
 
-
   /**
    * if ad has video content or not.
    */
   video: boolean;
-}
+};
 
 type NativeAdViewProps = {
-
   /**
    * When you are designing your ad, placeholders for the ad will be loaded
    * so you can easily design, because for each type of ad recieved from the server, not all the info is available.
    */
 
   enableTestMode?: boolean;
-
 
   style?: ViewStyle;
 
@@ -75,7 +70,14 @@ type NativeAdViewProps = {
   refreshInterval?: number;
 
   /**
-   * Set testdevices for the ad. 
+   * Time in milliseconds to delay ad loading. Default is 1000ms.
+   * This is usually done so that ad request is done after the views are attached.
+   */
+
+  delayAdLoading?: number;
+
+  /**
+   * Set testdevices for the ad.
    */
   testDevices?: Array<string>;
   onAdOpened?: Function<void>;
@@ -90,41 +92,35 @@ type NativeAdViewProps = {
 
 type SimpleViewProps = {
   style?: ViewStyle;
-
 };
 
 type NestedTextProps = {
   style?: ViewStyle;
   textStyle?: TextStyle;
-}
-
-type AdBadgeProps = {
-  style?: ViewStyle;
-  textStyle?: TextStyle;
-  allCaps?:boolean
-}
+  allCaps?: boolean;
+};
 
 declare module "react-native-admob-native-ads" {
-
   /**
-   * 
+   *
    * Wrapper for the UnifiedNativeAdView from Google Ads SDK. All your views should be
    * wrapped inside this view always.
-   * 
+   *
    */
 
-  export default function NativeAdView(props: NativeAdViewProps): React.FunctionComponent;
-
+  export default function NativeAdView(
+    props: NativeAdViewProps
+  ): React.FunctionComponent;
 
   /**
    * Ad Badge shows the {ad} badge on top of the ad telling the user that this is an AD.
-   * 
+   *
    */
 
   export function AdBadge(props: NestedTextProps): React.FunctionComponent;
 
   /**
-   * The title of the native ad recieved from server is renderd here. 
+   * The title of the native ad recieved from server is renderd here.
    * You dont need to pass any values to it. It will automatically get the title from
    * context and load it.
    * You should on style it as you want.
@@ -132,12 +128,12 @@ declare module "react-native-admob-native-ads" {
   export function HeadlineView(props: TextProps): React.FunctionComponent;
 
   /**
-   *  * The description of the native ad recieved from server is renderd here. 
+   *  * The description of the native ad recieved from server is renderd here.
    */
   export function TaglineView(props: TextProps): React.FunctionComponent;
 
   /**
-   *  * The adveriser name of the native ad recieved from server is renderd here. 
+   *  * The adveriser name of the native ad recieved from server is renderd here.
    */
   export function AdvertiserView(props: TextProps): React.FunctionComponent;
   /**
@@ -147,7 +143,7 @@ declare module "react-native-admob-native-ads" {
 
   /**
    * Many times, the ad recieved will be from the Google Playstore or AppStore for iOS.
-   * In that case, you can show the store name using this view. 
+   * In that case, you can show the store name using this view.
    */
   export function StoreView(props: TextProps): React.FunctionComponent;
 
@@ -166,19 +162,20 @@ declare module "react-native-admob-native-ads" {
   export function MediaView(props: SimpleViewProps): React.FunctionComponent;
 
   /**
-   * A simple button to open the adveriser website or store page etc. It is a simple 
-   * Text Component wrapped in a View. I dont know how to make the Touchables or Buttons 
+   * A simple button to open the adveriser website or store page etc. It is a simple
+   * Text Component wrapped in a View. I dont know how to make the Touchables or Buttons
    * work since they have no effect. Native side does not recieve the call hence simple
    * Text Component is used to receive the clicks.
    */
-  export function CallToActionView(props: NestedTextProps): React.FunctionComponent;
+  export function CallToActionView(
+    props: NestedTextProps
+  ): React.FunctionComponent;
 
   /**
    * A Star Rating View to show the star rating for the app ads that you might recieve from
    * the server.
    */
-  export function StarRatingView(props: StarRatingProps): React.FunctionComponent;
-
-
-  
+  export function StarRatingView(
+    props: StarRatingProps
+  ): React.FunctionComponent;
 }

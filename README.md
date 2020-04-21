@@ -48,7 +48,6 @@ src="https://i.imgur.com/yX5GKhN.png"
 />
 </div>
 
-
 <div align="center">
 <h2> 💫 Features</h2>
 </div>
@@ -265,8 +264,8 @@ Setting this to true will load a placeholder ad (Not from Admob server) incase y
 
 Time in ms after which a new ad should be requested from the server.
 
-| Type     | Required | Default  | Platform |
-| -------- | -------- | -------- | -------- |
+| Type     | Required | Default             | Platform |
+| -------- | -------- | ------------------- | -------- |
 | `number` | no       | 60000 ms (1 minute) | All      |
 
 #
@@ -308,7 +307,8 @@ User impression has been recorded
 User has clicked on the ad.
 
 ## Children Views
-The children views render different data recieved in the Ad from the server. All the values etc are assigned automatically, all you need to do is style the according to your design. 
+
+The children views render different data recieved in the Ad from the server. All the values etc are assigned automatically, all you need to do is style the according to your design.
 
 **Note:** Do not set `nativeID` and `onLayout` prop on any of the Children views as these are used to register the views on Native iOS and Android.
 
@@ -506,11 +506,60 @@ import { MediaView } from "react-native-admob-native-ads";
   }}
 />;
 ```
+### props
+
+#### `style:ViewStyle`
+
+Style the outer `MediaView` Component.
+
+## CallToActionView
+
+Renders a CallToAction Button
+
+```jsx
+import { CallToActionView } from "react-native-admob-native-ads";
+
+<CallToActionView
+  style={{
+    height: 45,
+    paddingHorizontal: 12,
+    backgroundColor: "purple",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+    elevation: 10,
+  }}
+  textStyle={{ color: "white", fontSize: 14 }}
+/>;
+```
+### props
+
+#### `allCaps`
+
+| Type      | Required | Platform |
+| --------- | -------- | -------- |
+| `boolean` | no       | All      |
+
+Whether all text should be in capital letters
 
 ### props
 
-`style:ViewStyle`
-style your media view.
+#### `style:ViewStyle`
+
+Style the outer `View` Component.
+
+#### `textStyle:TextStyle`
+
+Style the inner `Text` Component
+
+#### `allCaps`
+
+| Type      | Required | Platform |
+| --------- | -------- | -------- |
+| `boolean` | no       | All      |
+
+Whether all text should be in capital letters
+
 
 ## Contact & Support
 

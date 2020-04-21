@@ -1,5 +1,5 @@
 import React, { createRef } from "react";
-import { requireNativeComponent, findNodeHandle } from "react-native";
+import { findNodeHandle, requireNativeComponent } from "react-native";
 import { nativeAdView } from "./context";
 
 const adMediaView = createRef();

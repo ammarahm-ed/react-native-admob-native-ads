@@ -12,7 +12,7 @@
 @property (nonatomic, copy) NSArray *testDevices;
 @property (nonatomic, copy) NSNumber *refreshInterval;
 @property (nonatomic, copy) NSString *adUnitID;
-
+@property (nonatomic, copy) NSNumber *delayAdLoad;
 @property (nonatomic, copy) NSNumber *headline;
 @property (nonatomic, copy) NSNumber *tagline;
 @property (nonatomic, copy) NSNumber *advertiser;

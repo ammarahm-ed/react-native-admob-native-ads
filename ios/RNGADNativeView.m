@@ -20,14 +20,22 @@ RCTBridge *bridge;
 
 NSString *adUnitId;
 NSNumber *refreshingInterval;
+NSNumber *delay;
+
 
 - (instancetype)initWithBridge:(RCTBridge *)_bridge
 {
+    delay = @1000;
     refreshingInterval = @60000;
     if (self = [super init]) {
         bridge = _bridge;
     }
     return self;
+}
+
+- (void)setDelayAdLoad:(NSNumber *)delayAdLoad
+{
+    delay = delayAdLoad;
 }
 
 - (void)setTestDevices:(NSArray *)testDevices
@@ -253,6 +261,7 @@ NSNumber *refreshingInterval;
 
 
 - (void)adLoader:(GADAdLoader *)adLoader didReceiveUnifiedNativeAd:(GADUnifiedNativeAd *)nativeAd {
+     dispatch_after((int64_t)((delay.intValue/1000) * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void){
     
     if (self.onAdLoaded) {
         self.onAdLoaded(@{});
@@ -271,16 +280,13 @@ NSNumber *refreshingInterval;
         [dic setValue:nativeAd.price forKey:@"price"];
         [dic setValue:nativeAd.callToAction forKey:@"callToAction"];
         
-        
         if (nativeAd.mediaContent.hasVideoContent) {
             [dic setValue:@YES forKey:@"video"];
         }else {
             [dic setValue:@NO forKey:@"video"];
         }
         
-        
         NSMutableArray *images = [NSMutableArray array];
-        
         GADNativeAdImage *image = [nativeAd.images objectAtIndex:0];
         NSString *url = [image.imageURL absoluteString];
         [images addObject:url];
@@ -298,11 +304,7 @@ NSNumber *refreshingInterval;
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [self loadAd:adUnitId];
     });
-    
-    
-    
-    
-    
+ });
 }
 
 
