@@ -8,7 +8,7 @@ const CallToActionView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-    if (Platform.OS === "android") return;
+   
     let handle = findNodeHandle(callToActionRef.current);
     nativeAdView.current?.setNativeProps({
       callToAction: handle,

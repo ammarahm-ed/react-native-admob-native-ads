@@ -8,7 +8,7 @@ const HeadlineView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-    if (Platform.OS === "android") return;
+    
     let handle = findNodeHandle(headlineRef.current);
     nativeAdView.current?.setNativeProps({
       headline: handle,

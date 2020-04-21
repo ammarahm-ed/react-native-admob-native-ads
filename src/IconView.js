@@ -8,7 +8,7 @@ const IconView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-    if (Platform.OS === "android") return;
+ 
     let handle = findNodeHandle(iconViewRef.current);
     nativeAdView.current?.setNativeProps({
       icon: handle,

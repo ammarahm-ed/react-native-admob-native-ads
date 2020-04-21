@@ -7,7 +7,7 @@ const StoreView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-    if (Platform.OS === "android") return;
+  
     let handle = findNodeHandle(storeViewRef.current);
     nativeAdView.current?.setNativeProps({
       store: handle,

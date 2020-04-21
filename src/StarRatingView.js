@@ -8,7 +8,7 @@ const StarRatingView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-    if (Platform.OS === "android") return;
+
     let handle = findNodeHandle(starRatingRef.current);
     nativeAdView.current?.setNativeProps({
       starrating: handle,

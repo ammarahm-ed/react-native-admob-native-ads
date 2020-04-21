@@ -8,7 +8,7 @@ const PriceView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-    if (Platform.OS === "android") return;
+  
     let handle = findNodeHandle(priceViewRef.current);
     nativeAdView.current?.setNativeProps({
       price: handle,

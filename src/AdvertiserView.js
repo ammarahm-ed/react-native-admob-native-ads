@@ -7,7 +7,7 @@ const AdvertiserView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-    if (Platform.OS === "android") return;
+ 
     let handle = findNodeHandle(advertiserRef.current);
     nativeAdView.current?.setNativeProps({
       advertiser: handle,

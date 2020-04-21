@@ -7,7 +7,7 @@ const TaglineView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-    if (Platform.OS === "android") return;
+  
     let handle = findNodeHandle(taglineRef.current);
     nativeAdView.current?.setNativeProps({
       tagline: handle,
