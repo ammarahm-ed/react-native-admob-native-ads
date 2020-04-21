@@ -7,7 +7,6 @@ const AdvertiserView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
- 
     let handle = findNodeHandle(advertiserRef.current);
     nativeAdView.current?.setNativeProps({
       advertiser: handle,
@@ -16,7 +15,11 @@ const AdvertiserView = (props) => {
 
   return (
     <Text {...props} nativeID="adAdvertiserView" onLayout={_onLayout}>
-      {nativeAd ? props.allCaps? nativeAd.advertiser?.toUpperCase() : nativeAd.advertiser : null}
+      {nativeAd
+        ? props.allCaps
+          ? nativeAd.advertiser?.toUpperCase()
+          : nativeAd.advertiser
+        : null}
     </Text>
   );
 };

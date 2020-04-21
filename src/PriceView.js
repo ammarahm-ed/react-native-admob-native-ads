@@ -8,19 +8,13 @@ const PriceView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-  
     let handle = findNodeHandle(priceViewRef.current);
     nativeAdView.current?.setNativeProps({
       price: handle,
     });
   };
   return (
-    <Text
-      {...props}
-      nativeID="adPriceView"
-      ref={priceViewRef}
-      onLayout={_onLayout}
-    >
+    <Text {...props} ref={priceViewRef} onLayout={_onLayout}>
       {nativeAd ? nativeAd.price : null}
     </Text>
   );

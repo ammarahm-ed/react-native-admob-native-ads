@@ -8,7 +8,6 @@ const CallToActionView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-   
     let handle = findNodeHandle(callToActionRef.current);
     nativeAdView.current?.setNativeProps({
       callToAction: handle,
@@ -17,7 +16,6 @@ const CallToActionView = (props) => {
 
   return (
     <RawButton
-      nativeID="adCallToAction"
       ref={callToActionRef}
       onLayout={_onLayout}
       style={[

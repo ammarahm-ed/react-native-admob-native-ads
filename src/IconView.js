@@ -8,7 +8,6 @@ const IconView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
- 
     let handle = findNodeHandle(iconViewRef.current);
     nativeAdView.current?.setNativeProps({
       icon: handle,
@@ -21,7 +20,6 @@ const IconView = (props) => {
       resizeMode="cover"
       ref={iconViewRef}
       onLayout={_onLayout}
-      nativeID="adIconView"
       source={{ uri: nativeAd.icon }}
     />
   ) : null;

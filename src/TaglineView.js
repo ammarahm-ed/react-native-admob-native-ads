@@ -7,7 +7,6 @@ const TaglineView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-  
     let handle = findNodeHandle(taglineRef.current);
     nativeAdView.current?.setNativeProps({
       tagline: handle,
@@ -15,12 +14,7 @@ const TaglineView = (props) => {
   };
 
   return (
-    <Text
-      {...props}
-      ref={taglineRef}
-      onLayout={_onLayout}
-      nativeID="adTaglineView"
-    >
+    <Text {...props} ref={taglineRef} onLayout={_onLayout}>
       {nativeAd ? nativeAd.tagline : null}
     </Text>
   );

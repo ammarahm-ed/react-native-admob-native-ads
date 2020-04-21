@@ -8,7 +8,6 @@ const StarRatingView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-
     let handle = findNodeHandle(starRatingRef.current);
     nativeAdView.current?.setNativeProps({
       starrating: handle,
@@ -19,7 +18,6 @@ const StarRatingView = (props) => {
     <StarRating
       {...props}
       ref={starRatingRef}
-      nativeID="adStarRating"
       rating={nativeAd ? nativeAd.rating : null}
       onLayout={_onLayout}
     />

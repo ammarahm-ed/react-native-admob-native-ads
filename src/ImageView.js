@@ -8,7 +8,6 @@ const ImageView = (props) => {
   const { nativeAd, setNativeAd } = useContext(NativeAdContext);
 
   const _onLayout = () => {
-   
     let handle = findNodeHandle(imageViewRef.current);
     nativeAdView.current?.setNativeProps({
       image: handle,
@@ -20,7 +19,6 @@ const ImageView = (props) => {
       {...props}
       ref={imageViewRef}
       onLayout={_onLayout}
-      nativeID="adImageView"
       source={{ uri: nativeAd.images[0] }}
     />
   ) : null;
