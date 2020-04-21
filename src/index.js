@@ -86,6 +86,7 @@ const NativeAdView = (props) => {
         onAdOpened={_onAdOpened}
         onAdClosed={_onAdClosed}
         onAdImpression={_onAdImpression}
+        delayAdLoad={props.delayAdLoad? props.delayAdLoad : 1000}
         style={props.style}
         onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
         adUnitID={props.adUnitID}

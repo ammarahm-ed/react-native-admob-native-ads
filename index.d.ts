@@ -74,6 +74,15 @@ type NativeAdViewProps = {
    */
   refreshInterval?: number;
 
+
+   /**
+   * Time in milliseconds to delay ad loading. Default is 1000ms.
+   * This is usually done so that ad request is done after the views are attached.
+   */
+
+  delayAdLoading?: number;
+
+
   /**
    * Set testdevices for the ad. 
    */
