@@ -10,6 +10,7 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.util.ReactFindViewUtil;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 
@@ -38,6 +39,16 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String PROP_AD_UNIT_ID = "adUnitID";
     public static final String PROP_MEDIA_VIEW = "mediaview";
     public static final String PROP_REFRESH_INTERVAL = "refreshInterval";
+
+    public static final String PROP_HEADLINE_VIEW = "headline";
+    public static final String PROP_TAGLINE_VIEW = "tagline";
+    public static final String PROP_ADVERTISER_VIEW = "advertiser";
+    public static final String PROP_STORE_VIEW = "store";
+    public static final String PROP_IMAGE_VIEW = "image";
+    public static final String PROP_CALL_TO_ACTION_VIEW = "callToAction";
+    public static final String PROP_PRICE_VIEW = "price";
+    public static final String PROP_ICON_VIEW = "icon";
+    public static final String PROP_STAR_RATING_VIEW = "starrating";
 
 
     @javax.annotation.Nullable
@@ -93,11 +104,93 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
     @ReactProp(name = PROP_MEDIA_VIEW)
-    public void setMediaView(final RNNativeAdWrapper view, final int mediaViewId) {
+    public void setMediaView(final RNNativeAdWrapper view, final int id) {
 
-        nativeAdView.addMediaView(mediaViewId);
+        nativeAdView.addMediaView(id);
 
     }
+
+    @ReactProp(name = PROP_HEADLINE_VIEW)
+    public void setHeadlineView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null)
+            nativeAdView.nativeAdView.setHeadlineView(view);
+
+    }
+
+    @ReactProp(name = PROP_TAGLINE_VIEW)
+    public void setPropTaglineView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setBodyView(view);
+
+    }
+
+    @ReactProp(name = PROP_ADVERTISER_VIEW)
+    public void setPropAdvertiserView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setAdvertiserView(view);
+
+    }
+
+    @ReactProp(name = PROP_IMAGE_VIEW)
+    public void setPropImageView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setImageView(view);
+
+    }
+
+    @ReactProp(name = PROP_ICON_VIEW)
+    public void setPropIconView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setIconView(view);
+
+    }
+
+    @ReactProp(name = PROP_STORE_VIEW)
+    public void setPropStoreView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setAdvertiserView(view);
+
+    }
+
+    @ReactProp(name = PROP_PRICE_VIEW)
+    public void setPropPriceView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setAdvertiserView(view);
+
+    }
+
+    @ReactProp(name = PROP_STAR_RATING_VIEW)
+    public void setPropStarRatingView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setAdvertiserView(view);
+
+    }
+
+    @ReactProp(name = PROP_CALL_TO_ACTION_VIEW)
+    public void setPropCallToActionView(final RNNativeAdWrapper v, final int id) {
+
+        View view = nativeAdView.findViewById(id);
+        if (view != null && nativeAdView.nativeAdView != null)
+            nativeAdView.nativeAdView.setAdvertiserView(view);
+
+    }
+
 
     @ReactProp(name = PROP_TEST_DEVICES)
     public void setPropTestDevices(final RNNativeAdWrapper view, final ReadableArray testDevices) {
@@ -109,7 +202,6 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
                 new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
         MobileAds.setRequestConfiguration(configuration);
     }
-
 
 
     @ReactProp(name = PROP_AD_UNIT_ID)
