@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { requireNativeComponent, Platform } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Platform, requireNativeComponent } from "react-native";
 import { NativeAdContext, nativeAdView } from "./context";
 import Wrapper from "./Wrapper";
 

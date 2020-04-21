@@ -1,7 +1,7 @@
-import React, { useContext, createRef } from "react";
-import { Platform, findNodeHandle } from "react-native";
-import { NativeAdContext, nativeAdView } from "./context";
+import React, { createRef, useContext } from "react";
+import { findNodeHandle } from "react-native";
 import StarRating from "react-native-star-rating";
+import { NativeAdContext, nativeAdView } from "./context";
 const starRatingRef = createRef();
 
 const StarRatingView = (props) => {

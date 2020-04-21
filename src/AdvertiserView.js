@@ -1,5 +1,5 @@
-import React, { useContext, createRef } from "react";
-import { Text, Platform, findNodeHandle } from "react-native";
+import React, { createRef, useContext } from "react";
+import { findNodeHandle, Text } from "react-native";
 import { NativeAdContext, nativeAdView } from "./context";
 const advertiserRef = createRef();
 

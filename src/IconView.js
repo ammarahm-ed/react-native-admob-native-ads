@@ -1,5 +1,5 @@
-import React, { useContext, createRef } from "react";
-import { Image, findNodeHandle, Platform } from "react-native";
+import React, { createRef, useContext } from "react";
+import { findNodeHandle, Image } from "react-native";
 import { NativeAdContext, nativeAdView } from "./context";
 
 const iconViewRef = createRef();

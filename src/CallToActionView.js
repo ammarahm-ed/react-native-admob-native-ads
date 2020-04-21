@@ -1,5 +1,5 @@
 import React, { createRef, useContext } from "react";
-import { findNodeHandle, Platform, Text } from "react-native";
+import { findNodeHandle, Text } from "react-native";
 import { RawButton } from "react-native-gesture-handler";
 import { NativeAdContext, nativeAdView } from "./context";
 
