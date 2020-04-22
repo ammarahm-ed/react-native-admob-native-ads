@@ -16,6 +16,13 @@ const testNativeAd = {
   images: ["https://dummyimage.com/qvga"],
 };
 
+const waitAsync = (ms) =>
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(true);
+    }, ms);
+  });
+
 const NativeAdView = (props) => {
   const [nativeAd, setNativeAd] = useState(null);
   const [forceRefresh, setForceRefresh] = useState(false);
@@ -76,13 +83,6 @@ const NativeAdView = (props) => {
       updateAd(null);
     }
   }, [props.enableTestMode]);
-
-  const waitAsync = (ms) =>
-    new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(true);
-      }, ms);
-    });
 
   useEffect(() => {
     if (props.delayAdLoading) {
