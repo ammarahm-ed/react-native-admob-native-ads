@@ -19,6 +19,8 @@ const testNativeAd = {
 const NativeAdView = (props) => {
   const [nativeAd, setNativeAd] = useState(null);
   const [forceRefresh, setForceRefresh] = useState(false);
+  const [pauseAdLoading, setPauseAdLoading] = useState(true);
+  let delayAdLoadBy = 0;
   function updateAd(ad) {
     if (ad) {
       setNativeAd(ad);
@@ -75,7 +77,25 @@ const NativeAdView = (props) => {
     }
   }, [props.enableTestMode]);
 
-  return (
+  const waitAsync = (ms) =>
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(true);
+      }, ms);
+    });
+
+  useEffect(() => {
+    if (props.delayAdLoading) {
+      delayAdLoadBy = props.delayAdLoading;
+    }
+    waitAsync(delayAdLoadBy).then(() => {
+      setPauseAdLoading(false);
+    });
+  }, []);
+
+  return pauseAdLoading ? (
+    <></>
+  ) : (
     <NativeAdContext.Provider value={{ nativeAd, setNativeAd }}>
       <UnifiedNativeAdView
         ref={nativeAdView}
@@ -86,7 +106,6 @@ const NativeAdView = (props) => {
         onAdOpened={_onAdOpened}
         onAdClosed={_onAdClosed}
         onAdImpression={_onAdImpression}
-        delayAdLoad={props.delayAdLoad? props.delayAdLoad : 1000}
         style={props.style}
         onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
         adUnitID={props.adUnitID}

@@ -48,8 +48,11 @@ type NativeAd = {
 
 type NativeAdViewProps = {
   /**
-   * When you are designing your ad, placeholders for the ad will be loaded
-   * so you can easily design, because for each type of ad recieved from the server, not all the info is available.
+   * When you are designing your ad, placeholders
+   * for the ad will be loaded so you can easily
+   * design, because for each type of ad
+   * recieved from the server, not all 
+   * the info is available.
    */
 
   enableTestMode?: boolean;
@@ -70,8 +73,11 @@ type NativeAdViewProps = {
   refreshInterval?: number;
 
   /**
-   * Time in milliseconds to delay ad loading. Default is 1000ms.
-   * This is usually done so that ad request is done after the views are attached.
+   * Time in milliseconds to delay ad rendering. 
+   * Use this if you are rendering multiple ads
+   * in your screen such as in a list. Default is 0ms.
+   * This is usually done so that ad request is done 
+   * after the views are attached.
    */
 
   delayAdLoading?: number;
