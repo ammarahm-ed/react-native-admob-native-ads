@@ -260,6 +260,17 @@ Setting this to true will load a placeholder ad (Not from Admob server) incase y
 
 #
 
+#### `delayAdloading`
+
+Delay ad loading and rendering by the specified time in milliseconds. This is a workaround to fix rendering of multiple ads in the same screen. For example in a list. So what you should do is incrementally increase the delay from first and to the last. However it is suggested to you should always render only one ad, in one screen at one time.
+
+| Type     | Required | Default             | Platform |
+| -------- | -------- | ------------------- | -------- |
+| `number` | no       | 0 ms  | All      |
+
+
+#
+
 #### `refreshInterval`
 
 Time in ms after which a new ad should be requested from the server.
