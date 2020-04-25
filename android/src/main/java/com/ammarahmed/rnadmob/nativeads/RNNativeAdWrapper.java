@@ -3,6 +3,7 @@ package com.ammarahmed.rnadmob.nativeads;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Choreographer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -69,6 +70,7 @@ public class RNNativeAdWrapper extends LinearLayout {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View viewRoot = layoutInflater.inflate(R.layout.medium_template, this, true);
         nativeAdView = (UnifiedNativeAdView) viewRoot.findViewById(R.id.native_ad_view);
+        setupLayoutHack();
     }
 
 
@@ -266,10 +268,8 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     public void addNewView(View child, int index) {
         try {
-
-
             nativeAdView.addView(child, index);
-            nativeAdView.requestLayout();
+            setupLayoutHack();
         } catch (Exception e) {
 
         }
@@ -298,6 +298,27 @@ public class RNNativeAdWrapper extends LinearLayout {
             handler = null;
         }
 
+    }
+
+    void setupLayoutHack() {
+
+        Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
+            @Override
+            public void doFrame(long frameTimeNanos) {
+                manuallyLayoutChildren();
+                getViewTreeObserver().dispatchOnGlobalLayout();
+                Choreographer.getInstance().postFrameCallback(this);
+            }
+        });
+    }
+
+    void manuallyLayoutChildren() {
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            child.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY));
+            child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
+        }
     }
 
 
