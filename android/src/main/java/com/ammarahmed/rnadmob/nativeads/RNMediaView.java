@@ -1,6 +1,7 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
+import android.view.Choreographer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -36,6 +37,7 @@ public class RNMediaView extends LinearLayout {
         View viewRoot = layoutInflater.inflate(R.layout.media_view, this, true);
         mediaContainer = (LinearLayout) viewRoot.findViewById(R.id.media_view_container);
         mediaView = (MediaView) mediaContainer.findViewById(R.id.media_view_id);
+        setupLayoutHack();
 
     }
 
@@ -44,4 +46,28 @@ public class RNMediaView extends LinearLayout {
         super.requestLayout();
         post(measureAndLayout);
     }
+
+
+    void setupLayoutHack() {
+
+        Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
+            @Override
+            public void doFrame(long frameTimeNanos) {
+                manuallyLayoutChildren();
+                getViewTreeObserver().dispatchOnGlobalLayout();
+                Choreographer.getInstance().postFrameCallback(this);
+            }
+        });
+    }
+
+    void manuallyLayoutChildren() {
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            child.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY));
+            child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
+        }
+    }
+
+
 }
