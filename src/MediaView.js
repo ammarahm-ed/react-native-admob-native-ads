@@ -1,25 +1,19 @@
-import React, { createRef, useContext } from "react";
+import React, { createRef } from "react";
 import { findNodeHandle, requireNativeComponent } from "react-native";
-import { NativeAdContext, nativeAdView } from "./context";
-import ImageView from "./ImageView";
+import { nativeAdView } from "./context";
 
 const adMediaView = createRef();
 
 const MediaView = (props) => {
-  const { nativeAd, setNativeAd } = useContext(NativeAdContext);
   const _onLayout = () => {
     let handle = findNodeHandle(adMediaView.current);
     nativeAdView.current?.setNativeProps({
       mediaview: handle,
-    });  
+    });
   };
-  return (nativeAd && !nativeAd.video? <ImageView
-  style={
-    props.style
-  }
-  /> : <AdMediaView 
-    style={props.style}
-    ref={adMediaView} onLayout={_onLayout} />
+
+  return (
+    <AdMediaView ref={adMediaView} onLayout={_onLayout} style={props.style} />
   );
 };
 
