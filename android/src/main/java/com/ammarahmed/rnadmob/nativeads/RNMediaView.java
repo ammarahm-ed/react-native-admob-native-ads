@@ -34,7 +34,7 @@ public class RNMediaView extends LinearLayout {
     public void createMediaView(Context context) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View viewRoot = layoutInflater.inflate(R.layout.media_view, this, true);
+        View viewRoot = layoutInflater.inflate(R.layout.rn_ad_media_view, this, true);
         mediaContainer = (LinearLayout) viewRoot.findViewById(R.id.media_view_container);
         mediaView = (MediaView) mediaContainer.findViewById(R.id.media_view_id);
         setupLayoutHack();

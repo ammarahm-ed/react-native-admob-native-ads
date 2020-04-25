@@ -2,7 +2,6 @@ package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Choreographer;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +14,10 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
-import com.facebook.react.uimanager.util.ReactFindViewUtil;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.VideoOptions;
-import com.google.android.gms.ads.formats.AdChoicesView;
 import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
@@ -68,7 +65,7 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     public void createView(Context context) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View viewRoot = layoutInflater.inflate(R.layout.medium_template, this, true);
+        View viewRoot = layoutInflater.inflate(R.layout.rn_ad_unified_native_ad, this, true);
         nativeAdView = (UnifiedNativeAdView) viewRoot.findViewById(R.id.native_ad_view);
         setupLayoutHack();
     }
