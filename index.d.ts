@@ -1,6 +1,23 @@
 import { ViewStyle, TextProps, ImageProps, TextStyle } from "react-native";
 import { StarRatingProps } from "react-native-star-rating";
 
+
+type Image = {
+  /**
+   * The url of the image 
+   */
+  url:string;
+  /**
+   * The height of the image
+   */
+  height:number;
+    /**
+   * The width of the image
+   */
+  width:number;
+}
+
+
 type NativeAd = {
   /**
    * Title of the native ad.
@@ -19,6 +36,12 @@ type NativeAd = {
    * If the ad is for a paid app or service, price value.
    */
   price: string;
+
+  /**
+   * Aspect ratio of the Content loaded inside MediaView.
+   * You should use this to calculate the correct width and height of the MediaView.
+   */
+  aspectRatio:number;
   /**
    * If ad is for an app, then name of the store.
    */
@@ -30,7 +53,7 @@ type NativeAd = {
   /**
    * An array of images along with the ad.
    */
-  images: Array<string>;
+  images: Array<Image>;
   /**
    * callToAction text value for the native ad.
    */
