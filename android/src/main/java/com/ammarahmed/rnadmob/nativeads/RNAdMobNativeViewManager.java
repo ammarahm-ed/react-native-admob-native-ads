@@ -10,7 +10,6 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.uimanager.util.ReactFindViewUtil;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 
@@ -24,7 +23,6 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
 
     public static final String REACT_CLASS = "RNGADNativeView";
-    private RNNativeAdWrapper nativeAdView;
 
     public static final String EVENT_AD_FAILED_TO_LOAD = "onAdFailedToLoad";
     public static final String EVENT_AD_CLICKED = "onAdClicked";
@@ -39,7 +37,6 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String PROP_AD_UNIT_ID = "adUnitID";
     public static final String PROP_MEDIA_VIEW = "mediaview";
     public static final String PROP_REFRESH_INTERVAL = "refreshInterval";
-
     public static final String PROP_HEADLINE_VIEW = "headline";
     public static final String PROP_TAGLINE_VIEW = "tagline";
     public static final String PROP_ADVERTISER_VIEW = "advertiser";
@@ -49,6 +46,8 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String PROP_PRICE_VIEW = "price";
     public static final String PROP_ICON_VIEW = "icon";
     public static final String PROP_STAR_RATING_VIEW = "starrating";
+
+    private RNNativeAdWrapper nativeAdView;
 
 
     @javax.annotation.Nullable
