@@ -5,10 +5,8 @@ import android.os.Handler;
 import android.view.Choreographer;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
-
 import androidx.annotation.Nullable;
-
+import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableArray;
@@ -22,28 +20,7 @@ import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 
-public class RNNativeAdWrapper extends LinearLayout {
-
-    Context mContext;
-    UnifiedNativeAdView nativeAdView;
-    UnifiedNativeAd unifiedNativeAd;
-    public int adRefreshInterval = 60000;
-    public static final String adPriceViews = "adPriceView";
-    public static final String adHeadline = "adHeadlineView";
-    public static final String adTagline = "adTaglineView";
-    public static final String adAdvertiser = "adAdvertiserView";
-    public static final String adStarRating = "adStarRating";
-    public static final String adImageView = "adImageView";
-    public static final String adIconView = "adIconView";
-    public static final String adCallToAction = "adCallToAction";
-    public static final String adStoreView = "adStoreView";
-
-    private int loadWithDelay = 1000;
-
-    public int AdChoicesViewId = 733;
-    private String admobAdUnitId = "";
-
-    private Handler handler;
+public class RNNativeAdWrapper extends ReactRootView {
 
     private final Runnable measureAndLayout = new Runnable() {
         @Override
@@ -54,111 +31,14 @@ public class RNNativeAdWrapper extends LinearLayout {
             layout(getLeft(), getTop(), getRight(), getBottom());
         }
     };
-
-
-    public RNNativeAdWrapper(Context context) {
-        super(context);
-        mContext = context;
-        createView(context);
-        handler = new Handler();
-    }
-
-    public void createView(Context context) {
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View viewRoot = layoutInflater.inflate(R.layout.rn_ad_unified_native_ad, this, true);
-        nativeAdView = (UnifiedNativeAdView) viewRoot.findViewById(R.id.native_ad_view);
-        setupLayoutHack();
-    }
-
-
-    public void addMediaView(int id) {
-
-        try {
-            RNMediaView adMediaView = (RNMediaView) nativeAdView.findViewById(id);
-
-            if (adMediaView != null) {
-                nativeAdView.setMediaView(adMediaView.mediaView);
-                if (unifiedNativeAd != null && unifiedNativeAd.getMediaContent().hasVideoContent()) {
-                    adMediaView.mediaView.setMediaContent(unifiedNativeAd.getMediaContent());
-                    unifiedNativeAd.getMediaContent().getVideoController().play();
-                }
-            }
-        } catch (Exception e) {
-
-        }
-    }
-
-
-    private void setNativeAdToJS(UnifiedNativeAd nativeAd) {
-        try {
-            WritableMap args = Arguments.createMap();
-            args.putString("headline", nativeAd.getHeadline());
-            args.putString("tagline", nativeAd.getBody());
-            args.putString("advertiser", nativeAd.getAdvertiser());
-            args.putString("callToAction", nativeAd.getCallToAction());
-            args.putBoolean("video", nativeAd.getMediaContent().hasVideoContent());
-            args.putString("price", nativeAd.getPrice());
-            if (nativeAd.getStore() != null) {
-                args.putString("store", nativeAd.getStore());
-            }
-
-            if (nativeAd.getStarRating() != null) {
-                args.putInt("rating", nativeAd.getStarRating().intValue());
-            }
-
-            WritableArray images = Arguments.createArray();
-
-            images.pushString(nativeAd.getImages().get(0).getUri().toString());
-            args.putArray("images", images);
-
-            args.putString("icon", nativeAd.getIcon().getUri().toString());
-
-
-            sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
-
-
-
-        } catch (Exception e) {
-
-        }
-        if (handler != null) {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    loadAd();
-                }
-            }, adRefreshInterval);
-        }
-    }
-    
-
-    private void sendEvent(String name, @Nullable WritableMap event) {
-
-        ReactContext reactContext = (ReactContext) mContext;
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                getId(),
-                name,
-                event);
-    }
-
-    UnifiedNativeAd.OnUnifiedNativeAdLoadedListener onUnifiedNativeAdLoadedListener = new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
-        @Override
-        public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
-            if (nativeAd != null) {
-                unifiedNativeAd = nativeAd;
-                nativeAdView.setNativeAd(unifiedNativeAd);
-            }
-
-            setNativeAdToJS(nativeAd);
-        }
-    };
-
-
+    public int adRefreshInterval = 60000;
+    Context mContext;
+    UnifiedNativeAdView nativeAdView;
+    UnifiedNativeAd unifiedNativeAd;
     AdListener adListener = new AdListener() {
         @Override
         public void onAdFailedToLoad(int i) {
             super.onAdFailedToLoad(i);
-
             String errorMessage = "Unknown error";
             switch (i) {
                 case AdRequest.ERROR_CODE_INTERNAL_ERROR:
@@ -178,7 +58,6 @@ public class RNNativeAdWrapper extends LinearLayout {
             WritableMap error = Arguments.createMap();
             error.putString("message", errorMessage);
             event.putMap("error", error);
-
             sendEvent(RNAdMobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
         }
 
@@ -219,7 +98,119 @@ public class RNNativeAdWrapper extends LinearLayout {
             sendEvent(RNAdMobNativeViewManager.EVENT_AD_LEFT_APPLICATION, null);
         }
     };
+    private int loadWithDelay = 1000;
+    private String admobAdUnitId = "";
+    private Handler handler;
+    UnifiedNativeAd.OnUnifiedNativeAdLoadedListener onUnifiedNativeAdLoadedListener = new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+        @Override
+        public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
+            if (nativeAd != null) {
+                unifiedNativeAd = nativeAd;
+                nativeAdView.setNativeAd(unifiedNativeAd);
+            }
 
+            setNativeAdToJS(nativeAd);
+        }
+    };
+
+
+    public RNNativeAdWrapper(Context context) {
+        super(context);
+        mContext = context;
+        createView(context);
+        handler = new Handler();
+    }
+
+    public void createView(Context context) {
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View viewRoot = layoutInflater.inflate(R.layout.rn_ad_unified_native_ad, this, true);
+        nativeAdView = (UnifiedNativeAdView) viewRoot.findViewById(R.id.native_ad_view);
+        setupLayoutHack();
+    }
+
+    public void addMediaView(int id) {
+
+        try {
+            RNMediaView adMediaView = (RNMediaView) nativeAdView.findViewById(id);
+
+            if (adMediaView != null) {
+                nativeAdView.setMediaView(adMediaView.mediaView);
+                if (unifiedNativeAd != null && unifiedNativeAd.getMediaContent().hasVideoContent()) {
+                    unifiedNativeAd.getMediaContent().getVideoController().play();
+                }
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    private void setNativeAdToJS(UnifiedNativeAd nativeAd) {
+        try {
+            WritableMap args = Arguments.createMap();
+            args.putString("headline", nativeAd.getHeadline());
+            args.putString("tagline", nativeAd.getBody());
+            args.putString("advertiser", nativeAd.getAdvertiser());
+            args.putString("callToAction", nativeAd.getCallToAction());
+            args.putBoolean("video", nativeAd.getMediaContent().hasVideoContent());
+            args.putString("price", nativeAd.getPrice());
+            if (nativeAd.getStore() != null) {
+                args.putString("store", nativeAd.getStore());
+            }
+            if (nativeAd.getStarRating() != null) {
+                args.putInt("rating", nativeAd.getStarRating().intValue());
+            }
+            args.putString("aspectRatio", String.valueOf(nativeAd.getMediaContent().getAspectRatio()));
+            WritableArray images = Arguments.createArray();
+
+            for (int i = 0; i < nativeAd.getImages().size(); i++) {
+                WritableMap map = Arguments.createMap();
+                map.putString("url", nativeAd.getImages().get(i).getUri().toString());
+                map.putInt("width", nativeAd.getImages().get(i).getWidth());
+                map.putInt("height", nativeAd.getImages().get(i).getHeight());
+                images.pushMap(map);
+            }
+            args.putArray("images", images);
+            args.putString("icon", nativeAd.getIcon().getUri().toString());
+            sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
+
+        } catch (Exception e) {
+
+        }
+        if (handler != null) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            }, adRefreshInterval);
+        }
+    }
+
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        loadAd();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        removeHandler();
+        if (unifiedNativeAd != null){
+            unifiedNativeAd.destroy();
+        }
+
+    }
+
+    private void sendEvent(String name, @Nullable WritableMap event) {
+
+        ReactContext reactContext = (ReactContext) mContext;
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
+                getId(),
+                name,
+                event);
+    }
 
     private void loadAd() {
 
@@ -255,7 +246,6 @@ public class RNNativeAdWrapper extends LinearLayout {
             }
         }, loadWithDelay);
 
-
     }
 
     public void setLoadWithDelay(int delay) {
@@ -279,7 +269,6 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     public void setAdUnitId(String id) {
         admobAdUnitId = id;
-        loadAd();
     }
 
     @Override
