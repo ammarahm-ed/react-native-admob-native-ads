@@ -19,7 +19,7 @@ const ImageView = (props) => {
       {...props}
       ref={imageViewRef}
       onLayout={_onLayout}
-      source={{ uri: nativeAd.images[0] }}
+      source={{ uri: nativeAd.images[0].url }}
     />
   ) : null;
 };
