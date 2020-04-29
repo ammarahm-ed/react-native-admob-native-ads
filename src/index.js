@@ -67,8 +67,11 @@ const NativeAdView = (props) => {
       setForceRefresh(!forceRefresh);
       setForceRefresh(!forceRefresh);
     }, 0);
+
     if (props.onUnifiedNativeAdLoaded) {
-      props.onUnifiedNativeAdLoaded(event.nativeEvent);
+      let ad = {...event.nativeEvent};
+      e.aspectRatio = parseFloat(ad.aspectRatio);
+      props.onUnifiedNativeAdLoaded(ad);
     }
   };
 
