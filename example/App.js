@@ -1,11 +1,12 @@
-import React from 'react';
-import {View, Platform} from 'react-native';
+import React, { useState } from 'react';
+import {View, Platform, Modal, ScrollView} from 'react-native';
 import NativeAdView, {
   CallToActionView,
   IconView,
   HeadlineView,
   TaglineView,
   AdvertiserView,
+  MediaView,
 } from 'react-native-admob-native-ads';
 
 const NATIVE_AD_ID =
@@ -19,6 +20,7 @@ const NATIVE_AD_VIDEO_ID =
     : 'ca-app-pub-3940256099942544/1044960115';
 
 const App = () => {
+  const [aspectRatio,setAspectRatio] = useState(1);
   const _onAdFailedToLoad = event => {
     console.log(event.nativeEvent);
   };
@@ -34,17 +36,19 @@ const App = () => {
         width: '100%',
         justifyContent: 'center',
       }}>
-      <View>
+      <ScrollView>
         <NativeAdView
           onAdLoaded={_onAdLoaded}
           onAdFailedToLoad={_onAdFailedToLoad}
-          onUnifiedNativeAdLoaded={() => {}}
+          onUnifiedNativeAdLoaded={event => {
+            setAspectRatio(event.aspectRatio);
+          }}
           style={{
             width: '95%',
             alignSelf: 'center',
-            height: 400,
+            height: 900,
           }}
-          adUnitID={NATIVE_AD_ID} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
+          adUnitID={NATIVE_AD_VIDEO_ID} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
         >
           <View
             style={{
@@ -69,8 +73,8 @@ const App = () => {
               />
               <View
                 style={{
-                  width: '65%',
-                  maxWidth: '65%',
+                  width: '60%',
+                  maxWidth: '60%',
                   paddingHorizontal: 6,
                 }}>
                 <HeadlineView
@@ -106,9 +110,18 @@ const App = () => {
                 textStyle={{color: 'white', fontSize: 14}}
               />
             </View>
+            <MediaView
+              style={{
+                width:400,
+                height: 400/aspectRatio,
+                backgroundColor: 'gray',
+              }}
+            />
           </View>
         </NativeAdView>
-      </View>
+       
+
+      </ScrollView>
     </View>
   );
 };
