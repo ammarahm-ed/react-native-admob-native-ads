@@ -1,15 +1,11 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
-import android.view.Choreographer;
-import android.view.View;
-import com.facebook.react.ReactRootView;
 import com.google.android.gms.ads.formats.MediaView;
 
-public class RNMediaView extends ReactRootView {
+public class RNMediaView extends MediaView {
 
     Context mContext;
-    MediaView mediaView;
 
     private final Runnable measureAndLayout = new Runnable() {
         @Override
@@ -25,15 +21,19 @@ public class RNMediaView extends ReactRootView {
     public RNMediaView(Context context) {
         super(context);
         mContext = context;
-        createMediaView(context);
+        requestLayout();
     }
 
-    public void createMediaView(Context context) {
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
 
-        mediaView = new MediaView(context);
-        addView(mediaView);
-        setupLayoutHack();
+    }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        requestLayout();
     }
 
     @Override
@@ -41,28 +41,4 @@ public class RNMediaView extends ReactRootView {
         super.requestLayout();
         post(measureAndLayout);
     }
-
-
-    void setupLayoutHack() {
-
-        Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
-            @Override
-            public void doFrame(long frameTimeNanos) {
-                manuallyLayoutChildren();
-                getViewTreeObserver().dispatchOnGlobalLayout();
-                Choreographer.getInstance().postFrameCallback(this);
-            }
-        });
-    }
-
-    void manuallyLayoutChildren() {
-        for (int i = 0; i < getChildCount(); i++) {
-            View child = getChildAt(i);
-            child.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), MeasureSpec.EXACTLY),
-                    MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY));
-            child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
-        }
-    }
-
-
 }
