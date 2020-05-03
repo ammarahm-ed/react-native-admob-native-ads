@@ -2,11 +2,12 @@ package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
 import android.os.Handler;
-import android.view.Choreographer;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
+
 import androidx.annotation.Nullable;
-import com.facebook.react.ReactRootView;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableArray;
@@ -20,7 +21,7 @@ import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 
-public class RNNativeAdWrapper extends ReactRootView {
+public class RNNativeAdWrapper extends LinearLayout {
 
     private final Runnable measureAndLayout = new Runnable() {
         @Override
@@ -125,16 +126,16 @@ public class RNNativeAdWrapper extends ReactRootView {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View viewRoot = layoutInflater.inflate(R.layout.rn_ad_unified_native_ad, this, true);
         nativeAdView = (UnifiedNativeAdView) viewRoot.findViewById(R.id.native_ad_view);
-        setupLayoutHack();
+
     }
 
     public void addMediaView(int id) {
 
         try {
             RNMediaView adMediaView = (RNMediaView) nativeAdView.findViewById(id);
-
             if (adMediaView != null) {
-                nativeAdView.setMediaView(adMediaView.mediaView);
+                nativeAdView.setMediaView(adMediaView);
+                adMediaView.requestLayout();
                 if (unifiedNativeAd != null && unifiedNativeAd.getMediaContent().hasVideoContent()) {
                     unifiedNativeAd.getMediaContent().getVideoController().play();
                 }
@@ -180,7 +181,7 @@ public class RNNativeAdWrapper extends ReactRootView {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-
+                    loadAd();
                 }
             }, adRefreshInterval);
         }
@@ -190,17 +191,11 @@ public class RNNativeAdWrapper extends ReactRootView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        loadAd();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        removeHandler();
-        if (unifiedNativeAd != null){
-            unifiedNativeAd.destroy();
-        }
-
     }
 
     private void sendEvent(String name, @Nullable WritableMap event) {
@@ -214,14 +209,7 @@ public class RNNativeAdWrapper extends ReactRootView {
 
     private void loadAd() {
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-
                 try {
-
-
                     AdLoader.Builder builder = new AdLoader.Builder(mContext, admobAdUnitId);
                     builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
 
@@ -243,8 +231,6 @@ public class RNNativeAdWrapper extends ReactRootView {
                 } catch (Exception e) {
                 }
 
-            }
-        }, loadWithDelay);
 
     }
 
@@ -256,11 +242,18 @@ public class RNNativeAdWrapper extends ReactRootView {
     public void addNewView(View child, int index) {
         try {
             nativeAdView.addView(child, index);
-            setupLayoutHack();
+            requestLayout();
+            nativeAdView.requestLayout();
         } catch (Exception e) {
 
         }
 
+    }
+
+    @Override
+    public void addView(View child) {
+        super.addView(child);
+        requestLayout();
     }
 
     public void setAdRefreshInterval(int interval) {
@@ -269,6 +262,7 @@ public class RNNativeAdWrapper extends ReactRootView {
 
     public void setAdUnitId(String id) {
         admobAdUnitId = id;
+        loadAd();
     }
 
     @Override
@@ -284,27 +278,6 @@ public class RNNativeAdWrapper extends ReactRootView {
             handler = null;
         }
 
-    }
-
-    void setupLayoutHack() {
-
-        Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
-            @Override
-            public void doFrame(long frameTimeNanos) {
-                manuallyLayoutChildren();
-                getViewTreeObserver().dispatchOnGlobalLayout();
-                Choreographer.getInstance().postFrameCallback(this);
-            }
-        });
-    }
-
-    void manuallyLayoutChildren() {
-        for (int i = 0; i < getChildCount(); i++) {
-            View child = getChildAt(i);
-            child.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), MeasureSpec.EXACTLY),
-                    MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY));
-            child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
-        }
     }
 
 
