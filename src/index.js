@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Platform, requireNativeComponent } from "react-native";
-import { NativeAdContext, nativeAdView } from "./context";
-
+import { NativeAdContext } from "./context";
 
 const testNativeAd = {
   headline: "Test Ad: Lorem ipsum dolor ",
@@ -25,9 +24,12 @@ const waitAsync = (ms) =>
 
 const NativeAdView = (props) => {
   const [nativeAd, setNativeAd] = useState(null);
+  const [nativeAdView, setNativeAdView] = useState(null);
   const [forceRefresh, setForceRefresh] = useState(false);
   const [pauseAdLoading, setPauseAdLoading] = useState(true);
+  let nativeAdRef;
   let delayAdLoadBy = 0;
+
   function updateAd(ad) {
     if (ad) {
       setNativeAd(ad);
@@ -69,7 +71,7 @@ const NativeAdView = (props) => {
     }, 0);
 
     if (props.onUnifiedNativeAdLoaded) {
-      let ad = {...event.nativeEvent};
+      let ad = { ...event.nativeEvent };
       e.aspectRatio = parseFloat(ad.aspectRatio);
       props.onUnifiedNativeAdLoaded(ad);
     }
@@ -99,9 +101,15 @@ const NativeAdView = (props) => {
   return pauseAdLoading ? (
     <></>
   ) : (
-    <NativeAdContext.Provider value={{ nativeAd, setNativeAd }}>
+    <NativeAdContext.Provider
+      value={{ nativeAd, nativeAdView, setNativeAdView, setNativeAd }}
+    >
       <UnifiedNativeAdView
-        ref={nativeAdView}
+        ref={(ref) => {
+          nativeAdRef = ref;
+          setNativeAdView(nativeAdRef);
+          return nativeAdRef;
+        }}
         onAdLoaded={_onAdLoaded}
         onAdFailedToLoad={_onAdFailedToLoad}
         onAdClicked={_onAdClicked}

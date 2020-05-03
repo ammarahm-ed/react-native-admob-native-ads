@@ -1,18 +1,24 @@
-import React, { createRef, useContext } from "react";
+import React, { createRef, useContext, useEffect } from "react";
 import { findNodeHandle, Text } from "react-native";
 import { RawButton } from "react-native-gesture-handler";
-import { NativeAdContext, nativeAdView } from "./context";
+import { NativeAdContext } from "./context";
 
-const callToActionRef = createRef();
 const CallToActionView = (props) => {
-  const { nativeAd, setNativeAd } = useContext(NativeAdContext);
-
+  const { nativeAd, nativeAdView, setNativeAdView, setNativeAd } = useContext(
+    NativeAdContext
+  );
+  const callToActionRef = createRef();
   const _onLayout = () => {
+    if (!nativeAdView) return;
     let handle = findNodeHandle(callToActionRef.current);
-    nativeAdView.current?.setNativeProps({
+    nativeAdView.setNativeProps({
       callToAction: handle,
     });
   };
+
+  useEffect(() => {
+    _onLayout();
+  }, [nativeAd, nativeAdView]);
 
   return (
     <RawButton
