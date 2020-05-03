@@ -72,7 +72,7 @@ const NativeAdView = (props) => {
 
     if (props.onUnifiedNativeAdLoaded) {
       let ad = { ...event.nativeEvent };
-      e.aspectRatio = parseFloat(ad.aspectRatio);
+      ad.aspectRatio = parseFloat(ad.aspectRatio);
       props.onUnifiedNativeAdLoaded(ad);
     }
   };
@@ -119,6 +119,8 @@ const NativeAdView = (props) => {
         onAdImpression={_onAdImpression}
         style={props.style}
         onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
+        refreshInterval={props.refreshInterval? props.refreshInterval : 60000}
+        testDevices={props.testDevices? props.testDevices : []}
         adUnitID={props.adUnitID}
       >
         {props.children}
