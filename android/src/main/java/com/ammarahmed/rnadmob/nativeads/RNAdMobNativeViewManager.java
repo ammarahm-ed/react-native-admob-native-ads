@@ -214,5 +214,10 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public void onDropViewInstance(@NonNull RNNativeAdWrapper view) {
         super.onDropViewInstance(view);
         nativeAdView.removeHandler();
+        if (nativeAdView.unifiedNativeAd != null){
+            nativeAdView.unifiedNativeAd.destroy();
+        }
     }
+
+
 }
