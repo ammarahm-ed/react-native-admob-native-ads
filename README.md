@@ -571,10 +571,12 @@ Style the inner `Text` Component
 
 Whether all text should be in capital letters
 
+## Become a Backer
+
+It costs me alot of time to keep the library updated and address all the bugs & issues. If this library has helped you,  become a backer by [donating](https://ko-fi.com/ammarahmed)** to the development of this library .
 
 ## Contact & Support
 
-- **[Support me by donating](https://ko-fi.com/ammarahmed)** 
 - Add a ⭐️ [star on GitHub](https://github.com/ammarahm-ed/react-native-admob-native-ads) to support the project!
 - Create a GitHub issue for bug reports, feature requests, or questions
 - Follow [@ammarahm-ed](https://github.com/ammarahm-ed) for announcements
