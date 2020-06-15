@@ -571,9 +571,9 @@ Style the inner `Text` Component
 
 Whether all text should be in capital letters
 
-## Become a Backer
+## Buy me a coffee
 
-It costs me alot of time to keep the library updated and address all the bugs & issues. If this library has helped you,  become a backer by [donating](https://ko-fi.com/ammarahmed) to the development of this library .
+It costs me alot of time to keep the library updated and address all the bugs & issues.  If this library has helped you [buy me a coffee](https://ko-fi.com/ammarahmed).
 
 ## Contact & Support
 
