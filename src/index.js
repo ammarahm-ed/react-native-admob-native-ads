@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Platform, requireNativeComponent } from "react-native";
 import { NativeAdContext } from "./context";
+import Wrapper from "./Wrapper";
 
 const testNativeAd = {
   headline: "Test Ad: Lorem ipsum dolor ",
@@ -123,7 +124,9 @@ const NativeAdView = (props) => {
         testDevices={props.testDevices? props.testDevices : []}
         adUnitID={props.adUnitID}
       >
+        <Wrapper>
         {props.children}
+        </Wrapper>
       </UnifiedNativeAdView>
     </NativeAdContext.Provider>
   );

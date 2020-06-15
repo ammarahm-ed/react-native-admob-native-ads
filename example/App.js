@@ -54,7 +54,6 @@ const App = () => {
             style={{
               height: 400,
               width: '100%',
-              backgroundColor: 'white',
             }}>
             <View
               style={{

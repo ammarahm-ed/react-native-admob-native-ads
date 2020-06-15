@@ -137,7 +137,7 @@ public class RNNativeAdWrapper extends LinearLayout {
                 nativeAdView.setMediaView(adMediaView);
                 adMediaView.requestLayout();
                 if (unifiedNativeAd != null && unifiedNativeAd.getMediaContent().hasVideoContent()) {
-                    unifiedNativeAd.getMediaContent().getVideoController().play();
+                    //unifiedNativeAd.getMediaContent().getVideoController().play();
                 }
             }
         } catch (Exception e) {
@@ -160,16 +160,21 @@ public class RNNativeAdWrapper extends LinearLayout {
             if (nativeAd.getStarRating() != null) {
                 args.putInt("rating", nativeAd.getStarRating().intValue());
             }
-            args.putString("aspectRatio", String.valueOf(nativeAd.getMediaContent().getAspectRatio()));
-            WritableArray images = Arguments.createArray();
 
-            for (int i = 0; i < nativeAd.getImages().size(); i++) {
-                WritableMap map = Arguments.createMap();
-                map.putString("url", nativeAd.getImages().get(i).getUri().toString());
-                map.putInt("width", nativeAd.getImages().get(i).getWidth());
-                map.putInt("height", nativeAd.getImages().get(i).getHeight());
-                images.pushMap(map);
+            args.putString("aspectRatio", String.valueOf(1));
+
+            WritableArray images = Arguments.createArray();
+                
+            if (nativeAd.getImages() != null &&  nativeAd.getImages().size() > 0 ) {
+                for (int i = 0; i < nativeAd.getImages().size(); i++) {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("url", nativeAd.getImages().get(i).getUri().toString());
+                    map.putInt("width", nativeAd.getImages().get(i).getWidth());
+                    map.putInt("height", nativeAd.getImages().get(i).getHeight());
+                    images.pushMap(map);
+                }
             }
+
             args.putArray("images", images);
             args.putString("icon", nativeAd.getIcon().getUri().toString());
             sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
