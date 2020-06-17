@@ -10,6 +10,8 @@ import StarRatingView from './src/StarRatingView'
 import PriceView from "./src/PriceView";
 import AdBadge from "./src/AdBadge";
 import NativeAdView from './src';
+import {AdOptions} from "./src/utils"
+
 export default NativeAdView;
 
 export {
@@ -24,6 +26,7 @@ export {
   StarRatingView,
   PriceView,
   AdBadge,
+  AdOptions
 }
 
 
