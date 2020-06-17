@@ -46,6 +46,8 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String PROP_PRICE_VIEW = "price";
     public static final String PROP_ICON_VIEW = "icon";
     public static final String PROP_STAR_RATING_VIEW = "starrating";
+    public static final String PROP_AD_CHOICES_PLACEMENT = "adChoicesPlacement";
+    public static final String PROP_NON_PERSONALIZED_ADS = "requestNonPersonalizedAdsOnly";
 
     private RNNativeAdWrapper nativeAdView;
 
@@ -81,6 +83,8 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
         return nativeAdView;
     }
 
+
+
     @Override
     public void addView(RNNativeAdWrapper parent, View child, int index) {
         //super.addView(parent, child, index);
@@ -94,6 +98,20 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
         nativeAdView.setAdRefreshInterval(interval);
     }
+
+    @ReactProp(name = PROP_NON_PERSONALIZED_ADS, defaultBoolean = false)
+    public void setPropNonPersonalizedAds(final RNNativeAdWrapper view, final boolean npa) {
+
+        nativeAdView.setRequestNonPersonalizedAdsOnly(npa);
+    }
+
+
+    @ReactProp(name = PROP_AD_CHOICES_PLACEMENT)
+    public void setPropAdChoicesPlacement(final RNNativeAdWrapper view, final int location) {
+
+        nativeAdView.setAdChoicesPlacement(location);
+    }
+
 
     @ReactProp(name = PROP_DELAY_AD_LOAD)
     public void setPropDelayAdLoad(final RNNativeAdWrapper view, final int delay) {
