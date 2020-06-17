@@ -1,6 +1,7 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
@@ -36,6 +38,11 @@ public class RNNativeAdWrapper extends LinearLayout {
     Context mContext;
     UnifiedNativeAdView nativeAdView;
     UnifiedNativeAd unifiedNativeAd;
+
+    private int adChoicesPlacement = 1;
+    private boolean requestNonPersonalizedAdsOnly = false;
+
+
     AdListener adListener = new AdListener() {
         @Override
         public void onAdFailedToLoad(int i) {
@@ -136,9 +143,7 @@ public class RNNativeAdWrapper extends LinearLayout {
             if (adMediaView != null) {
                 nativeAdView.setMediaView(adMediaView);
                 adMediaView.requestLayout();
-                if (unifiedNativeAd != null && unifiedNativeAd.getMediaContent().hasVideoContent()) {
-                    //unifiedNativeAd.getMediaContent().getVideoController().play();
-                }
+
             }
         } catch (Exception e) {
 
@@ -161,11 +166,27 @@ public class RNNativeAdWrapper extends LinearLayout {
                 args.putInt("rating", nativeAd.getStarRating().intValue());
             }
 
-            args.putString("aspectRatio", String.valueOf(1));
+
+            float aspectRatio = 1.0f;
+
+            if (nativeAd.getMediaContent() != null) {
+                try {
+                    aspectRatio = nativeAd.getMediaContent().getAspectRatio();
+
+                    if (aspectRatio > 0) {
+                        args.putString("aspectRatio", String.valueOf(aspectRatio));
+                    } else {
+                        args.putString("aspectRatio", String.valueOf(1));
+                    }
+                } catch (Exception e) {
+                    args.putString("aspectRatio", String.valueOf(1));
+                }
+            }
+
 
             WritableArray images = Arguments.createArray();
-                
-            if (nativeAd.getImages() != null &&  nativeAd.getImages().size() > 0 ) {
+
+            if (nativeAd.getImages() != null && nativeAd.getImages().size() > 0) {
                 for (int i = 0; i < nativeAd.getImages().size(); i++) {
                     WritableMap map = Arguments.createMap();
                     map.putString("url", nativeAd.getImages().get(i).getUri().toString());
@@ -174,6 +195,7 @@ public class RNNativeAdWrapper extends LinearLayout {
                     images.pushMap(map);
                 }
             }
+
 
             args.putArray("images", images);
             args.putString("icon", nativeAd.getIcon().getUri().toString());
@@ -214,27 +236,39 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     private void loadAd() {
 
-                try {
-                    AdLoader.Builder builder = new AdLoader.Builder(mContext, admobAdUnitId);
-                    builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
 
-                    VideoOptions videoOptions = new VideoOptions.Builder()
-                            .setStartMuted(true)
-                            .build();
+        try {
+            AdLoader.Builder builder = new AdLoader.Builder(mContext, admobAdUnitId);
+            builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
 
-                    NativeAdOptions adOptions = new NativeAdOptions.Builder()
-                            .setVideoOptions(videoOptions)
-                            .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT)
-                            .build();
-                    builder.withNativeAdOptions(adOptions);
+            VideoOptions videoOptions = new VideoOptions.Builder()
+                    .setStartMuted(true)
+                    .build();
 
-                    AdLoader adLoader = builder.withAdListener(adListener)
-                            .build();
+            NativeAdOptions adOptions = new NativeAdOptions.Builder()
+                    .setVideoOptions(videoOptions)
+                    .setAdChoicesPlacement(adChoicesPlacement)
+                    .build();
+            builder.withNativeAdOptions(adOptions);
 
-                    adLoader.loadAd(new AdRequest.Builder().build());
 
-                } catch (Exception e) {
-                }
+            AdLoader adLoader = builder.withAdListener(adListener)
+                    .build();
+
+            AdRequest adRequest;
+
+            if (requestNonPersonalizedAdsOnly) {
+                Bundle extras = new Bundle();
+                extras.putString("npa", "1");
+                adRequest = new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
+            } else {
+                adRequest = new AdRequest.Builder().build();
+            }
+
+            adLoader.loadAd(adRequest);
+
+        } catch (Exception e) {
+        }
 
 
     }
@@ -267,6 +301,15 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     public void setAdUnitId(String id) {
         admobAdUnitId = id;
+        loadAd();
+    }
+
+    public void setAdChoicesPlacement(int location) {
+        adChoicesPlacement = location;
+    }
+
+    public void setRequestNonPersonalizedAdsOnly(boolean npa) {
+        requestNonPersonalizedAdsOnly = npa;
         loadAd();
     }
 
