@@ -113,6 +113,7 @@ const NativeAdView = (props) => {
           setNativeAdView(nativeAdRef);
           return nativeAdRef;
         }}
+        adUnitID={props.adUnitID}
         onAdLoaded={_onAdLoaded}
         onAdFailedToLoad={_onAdFailedToLoad}
         onAdClicked={_onAdClicked}
@@ -121,12 +122,12 @@ const NativeAdView = (props) => {
         onAdClosed={_onAdClosed}
         onAdImpression={_onAdImpression}
         style={props.style}
-        adChoicesPlacement={props.adChoicesPlacement? props.adChoicesPlacement : 1}
-        requestNonPersonalizedAdsOnly={props.requestNonPersonalizedAdsOnly? true : false}
         onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
         refreshInterval={props.refreshInterval? props.refreshInterval : 60000}
         testDevices={props.testDevices? props.testDevices : []}
-        adUnitID={props.adUnitID}
+        adChoicesPlacement={props.adChoicesPlacement > -1? props.adChoicesPlacement : 1}
+        requestNonPersonalizedAdsOnly={props.requestNonPersonalizedAdsOnly? true : false}
+       
       >
         <Wrapper>
         {props.children}
