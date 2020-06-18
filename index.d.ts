@@ -72,7 +72,7 @@ type NativeAd = {
   video: boolean;
 };
 
-type AdOptions = {
+type options = {
   adChoicesPlacement: {
     TOP_LEFT:number,
     TOP_RIGHT:number,
@@ -188,7 +188,7 @@ declare module "react-native-admob-native-ads" {
    *
    */
     
-  export const AdOptions = AdOptions; 
+  export const AdOptions:options; 
 
   export function AdBadge(props: NestedTextProps): React.FunctionComponent;
 
