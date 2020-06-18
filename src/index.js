@@ -121,7 +121,7 @@ const NativeAdView = (props) => {
         onAdClosed={_onAdClosed}
         onAdImpression={_onAdImpression}
         style={props.style}
-        adChoicesPlacement={props.adChoicesPlacement? props.adChoicesPlacement : }
+        adChoicesPlacement={props.adChoicesPlacement? props.adChoicesPlacement : 1}
         requestNonPersonalizedAdsOnly={props.requestNonPersonalizedAdsOnly? true : false}
         onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
         refreshInterval={props.refreshInterval? props.refreshInterval : 60000}
