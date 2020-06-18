@@ -21,6 +21,9 @@ RCTBridge *bridge;
 NSString *adUnitId;
 NSNumber *refreshingInterval;
 NSNumber *delay;
+NSNumber *adChoicesPlace;
+BOOL *nonPersonalizedAds;
+
 
 
 - (instancetype)initWithBridge:(RCTBridge *)_bridge
@@ -31,6 +34,16 @@ NSNumber *delay;
         bridge = _bridge;
     }
     return self;
+}
+
+- (void)setAdChoicesPlacement:(NSNumber *)adChoicesPlacement {
+    
+    adChoicesPlace = adChoicesPlacement;
+}
+
+- (void)setRequestNonPersonalizedAdsOnly:(BOOL *)requestNonPersonalizedAdsOnly {
+    
+    nonPersonalizedAds = requestNonPersonalizedAdsOnly;
 }
 
 - (void)setDelayAdLoad:(NSNumber *)delayAdLoad
@@ -164,10 +177,6 @@ NSNumber *delay;
         }];
     });
     
-    
-    
-    
-    
 }
 
 - (void)setStore:(NSNumber *)store
@@ -184,10 +193,6 @@ NSNumber *delay;
             }
         }];
     });
-    
-    
-    
-    
 }
 
 - (void)setStarrating:(NSNumber *)starrating
@@ -235,7 +240,22 @@ NSNumber *delay;
     
     GADNativeAdViewAdOptions *adViewOptions = [GADNativeAdViewAdOptions new];
     
-    adViewOptions.preferredAdChoicesPosition = GADAdChoicesPositionTopRightCorner;
+    
+    if ([adChoicesPlace isEqualToNumber:@0]) {
+        [adViewOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopLeftCorner];
+    } else if ([adChoicesPlace isEqualToNumber:@1]) {
+        [adViewOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
+    }  else if ([adChoicesPlace isEqualToNumber:@2]) {
+        [adViewOptions setPreferredAdChoicesPosition:GADAdChoicesPositionBottomRightCorner];
+    }  else if ([adChoicesPlace isEqualToNumber:@3]) {
+        [adViewOptions setPreferredAdChoicesPosition:GADAdChoicesPositionBottomLeftCorner];
+    } else {
+        [adViewOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
+       
+    }
+    
+    
+    
     
     
     self.adLoader = [[GADAdLoader alloc]
@@ -244,8 +264,16 @@ NSNumber *delay;
                      adTypes:@[ kGADAdLoaderAdTypeUnifiedNative ]
                      options:@[adViewOptions]];
     
+    
     self.adLoader.delegate = self;
     GADRequest *request = [GADRequest request];
+    
+    if (nonPersonalizedAds) {
+        GADExtras *extras = [[GADExtras alloc] init];
+        extras.additionalParameters = @{@"npa": @"1"};
+        [request registerAdNetworkExtras:extras];
+    }
+    
     GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers = _testDevices;
     [self.adLoader loadRequest:request];
 }
@@ -299,7 +327,7 @@ NSNumber *delay;
                 NSInteger val2 = @(image.image.size.height).integerValue;
                 [imageDic setValue: [NSNumber numberWithInteger:val2] forKey:@"height"];
                 [images addObject:imageDic];
-            
+                
             }
             
             
