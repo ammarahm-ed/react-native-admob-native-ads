@@ -176,10 +176,11 @@ public class RNNativeAdWrapper extends LinearLayout {
                     if (aspectRatio > 0) {
                         args.putString("aspectRatio", String.valueOf(aspectRatio));
                     } else {
-                        args.putString("aspectRatio", String.valueOf(1));
+                        args.putString("aspectRatio", String.valueOf(aspectRatio));
                     }
                 } catch (Exception e) {
-                    args.putString("aspectRatio", String.valueOf(1));
+                    aspectRatio = 1.0f;
+                    args.putString("aspectRatio", String.valueOf(aspectRatio));
                 }
             }
 
@@ -187,6 +188,7 @@ public class RNNativeAdWrapper extends LinearLayout {
             WritableArray images = Arguments.createArray();
 
             if (nativeAd.getImages() != null && nativeAd.getImages().size() > 0) {
+
                 for (int i = 0; i < nativeAd.getImages().size(); i++) {
                     WritableMap map = Arguments.createMap();
                     map.putString("url", nativeAd.getImages().get(i).getUri().toString());
@@ -197,8 +199,18 @@ public class RNNativeAdWrapper extends LinearLayout {
             }
 
 
-            args.putArray("images", images);
-            args.putString("icon", nativeAd.getIcon().getUri().toString());
+            if (images != null) {
+                args.putArray("images", images);
+            } else {
+                args.putArray("images", null);
+            }
+
+            if (nativeAd.getIcon() != null || nativeAd.getIcon().getUri() != null) {
+                args.putString("icon", nativeAd.getIcon().getUri().toString());
+            } else {
+                args.putString("icon", "empty");
+            }
+
             sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
 
         } catch (Exception e) {
