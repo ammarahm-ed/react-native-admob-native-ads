@@ -217,6 +217,9 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
         if (nativeAdView.unifiedNativeAd != null){
             nativeAdView.unifiedNativeAd.destroy();
         }
+	if (nativeAdView.nativeAdView != null){
+            nativeAdView.nativeAdView.destroy();
+        }
     }
 
 
