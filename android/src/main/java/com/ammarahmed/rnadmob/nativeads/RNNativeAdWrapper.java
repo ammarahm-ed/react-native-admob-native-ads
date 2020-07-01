@@ -145,6 +145,8 @@ public class RNNativeAdWrapper extends LinearLayout {
         }
     }
 
+    private Runnable runnable;
+
     private void setNativeAdToJS(UnifiedNativeAd nativeAd) {
         try {
             WritableMap args = Arguments.createMap();
@@ -178,12 +180,13 @@ public class RNNativeAdWrapper extends LinearLayout {
 
         }
         if (handler != null) {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    loadAd();
-                }
-            }, adRefreshInterval);
+            runnable = new Runnable() {
+               @Override
+               public void run() {
+                   loadAd();
+               }
+            };
+            handler.postDelayed(runnable, adRefreshInterval);
         }
     }
 
@@ -271,14 +274,10 @@ public class RNNativeAdWrapper extends LinearLayout {
         post(measureAndLayout);
     }
 
-
     public void removeHandler() {
         if (handler != null) {
-            handler.removeCallbacks(null);
+            handler.removeCallbacks(runnable);
             handler = null;
         }
-
     }
-
-
 }
