@@ -108,6 +108,7 @@ const NativeAdView = (props) => {
       value={{ nativeAd, nativeAdView, setNativeAdView, setNativeAd }}
     >
       <UnifiedNativeAdView
+       
         ref={(ref) => {
           nativeAdRef = ref;
           setNativeAdView(nativeAdRef);
@@ -125,9 +126,8 @@ const NativeAdView = (props) => {
         onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
         refreshInterval={props.refreshInterval? props.refreshInterval : 60000}
         testDevices={props.testDevices? props.testDevices : []}
-        adChoicesPlacement={props.adChoicesPlacement > -1? props.adChoicesPlacement : 1}
         requestNonPersonalizedAdsOnly={props.requestNonPersonalizedAdsOnly? true : false}
-       
+        adChoicesPlacement={props.adChoicesPlacement > -1? props.adChoicesPlacement : 1}
       >
         <Wrapper>
         {props.children}
