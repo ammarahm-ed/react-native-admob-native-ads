@@ -1,5 +1,5 @@
 #import "RNAdmobNativeAdsManager.h"
-
+#import "RNAdMobUtils.h"
 @import GoogleMobileAds;
 
 @implementation RNAdmobNativeAdsManager
@@ -56,9 +56,10 @@ RCT_EXPORT_METHOD(setRequestConfiguration:(NSDictionary *)config)
     };
     
     if ([[config allKeys] containsObject:@"testDeviceIds"]) {
-        NSArray *testDevices = [config valueForKey:@"testDeviceIds"];
         
+        NSArray *testDevices = RNAdMobProcessTestDevices([config valueForKey:@"testDeviceIds"], kDFPSimulatorID);
         [[[GADMobileAds sharedInstance] requestConfiguration] setTestDeviceIdentifiers:testDevices];
+        
     };
     
 
