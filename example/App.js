@@ -8,6 +8,7 @@ import NativeAdView, {
   AdvertiserView,
   MediaView,
 } from 'react-native-admob-native-ads';
+import { AdManager } from 'react-native-admob-native-ads';
 
 const NATIVE_AD_ID =
   Platform.OS === 'ios'
@@ -26,6 +27,7 @@ const App = () => {
   };
 
   const _onAdLoaded = () => {
+
     console.log('Ad has loaded');
   };
 
@@ -48,7 +50,7 @@ const App = () => {
             alignSelf: 'center',
             height: 900,
           }}
-          adUnitID={NATIVE_AD_VIDEO_ID} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
+          adUnitID={NATIVE_AD_ID} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
         >
           <View
             style={{
