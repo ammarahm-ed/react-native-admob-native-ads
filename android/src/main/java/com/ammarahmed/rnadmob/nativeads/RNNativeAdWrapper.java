@@ -166,22 +166,22 @@ public class RNNativeAdWrapper extends LinearLayout {
                 args.putInt("rating", nativeAd.getStarRating().intValue());
             }
 
-
             float aspectRatio = 1.0f;
 
-            if (nativeAd.getMediaContent() != null) {
-                try {
+
+            if (nativeAd.getResponseInfo().getMediationAdapterClassName().equals("com.google.ads.mediation.admob.AdMobAdapter")) {
+                if (nativeAd.getMediaContent() != null) {
                     aspectRatio = nativeAd.getMediaContent().getAspectRatio();
 
                     if (aspectRatio > 0) {
                         args.putString("aspectRatio", String.valueOf(aspectRatio));
                     } else {
-                        args.putString("aspectRatio", String.valueOf(aspectRatio));
+                        args.putString("aspectRatio", String.valueOf(1.0f));
                     }
-                } catch (Exception e) {
-                    aspectRatio = 1.0f;
-                    args.putString("aspectRatio", String.valueOf(aspectRatio));
+
                 }
+            } else {
+                args.putString("aspectRatio", String.valueOf(1.0f));
             }
 
 
@@ -197,7 +197,6 @@ public class RNNativeAdWrapper extends LinearLayout {
                     images.pushMap(map);
                 }
             }
-
 
             if (images != null) {
                 args.putArray("images", images);
@@ -281,8 +280,6 @@ public class RNNativeAdWrapper extends LinearLayout {
 
         } catch (Exception e) {
         }
-
-
     }
 
     public void setLoadWithDelay(int delay) {
@@ -322,7 +319,6 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     public void setRequestNonPersonalizedAdsOnly(boolean npa) {
         requestNonPersonalizedAdsOnly = npa;
-        loadAd();
     }
 
     @Override
@@ -337,8 +333,5 @@ public class RNNativeAdWrapper extends LinearLayout {
             handler.removeCallbacks(null);
             handler = null;
         }
-
     }
-
-
 }
