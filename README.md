@@ -612,16 +612,6 @@ import { CallToActionView } from "react-native-admob-native-ads";
 
 ### props
 
-#### `allCaps`
-
-| Type      | Required | Platform |
-| --------- | -------- | -------- |
-| `boolean` | no       | All      |
-
-Whether all text should be in capital letters
-
-### props
-
 #### `style:ViewStyle`
 
 Style the outer `View` Component.
@@ -630,6 +620,9 @@ Style the outer `View` Component.
 
 Style the inner `Text` Component
 
+#### `allowFontScaling`
+All font scaling on text
+
 #### `allCaps`
 
 | Type      | Required | Platform |
@@ -637,6 +630,8 @@ Style the inner `Text` Component
 | `boolean` | no       | All      |
 
 Whether all text should be in capital letters
+
+
 
 ## Buy me a coffee
 
