@@ -346,6 +346,42 @@ Time in ms after which a new ad should be requested from the server.
 
 #
 
+#### `adChoicesPlacement`
+
+Placement of AdChoicesView in any of the 4 corners of the ad
+
+import AdOptions then pass the value from there. AdOptions.adChoicesPlacement
+
+**AdOptions.adChoicesPlacement**
+
+| Name         | Description                                   |
+| ------------ | --------------------------------------------- |
+| TOP_LEFT     | Show AdChoices on top right side of the Ad    |
+| TOP_RIGHT    | Show AdChoices on top lef side of the Ad      |
+| BOTTOM_LEFT  | Show AdChoices on bottom right side of the Ad |
+| BOTTOM_RIGHT | Show AdChoices on bottom left side of the Ad  |
+
+#
+
+#### `requestNonPersonalizedAdsOnly`
+
+Under the Google EU User Consent Policy, you must make certain disclosures
+to your users in the European Economic Area (EEA) and obtain their consent
+to use cookies or other local storage, where legally required, and to use
+personal data (such as AdID) to serve ads. This policy reflects the requirements
+of the EU ePrivacy Directive and the General Data Protection Regulation (GDPR).
+
+You can use library such as: https://github.com/birgernass/react-native-ad-consent
+to obtain the consent or if you are using rn-firebase you can obtain the consent from
+there and then pass the consent to this library. If user has selected
+non-personalized-ads then pass `true` and non-personalized ads will be shown to the user.
+
+| Type      | Required | Platform |
+| --------- | -------- | -------- |
+| `boolean` | no       | All      |
+
+#
+
 ### Events
 
 All events are available through props.The following event are available on both Android and iOS:
@@ -621,6 +657,7 @@ Style the outer `View` Component.
 Style the inner `Text` Component
 
 #### `allowFontScaling`
+
 All font scaling on text
 
 #### `allCaps`
@@ -630,8 +667,6 @@ All font scaling on text
 | `boolean` | no       | All      |
 
 Whether all text should be in capital letters
-
-
 
 ## Buy me a coffee
 
