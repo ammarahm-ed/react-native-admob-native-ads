@@ -1,6 +1,5 @@
 import { ViewStyle, TextProps, ImageProps, TextStyle } from "react-native";
 import { StarRatingProps } from "react-native-star-rating";
-import { AdOptions } from "./src/utils";
 
 
 type Image = {
@@ -81,6 +80,31 @@ type options = {
   }
 }
 
+type MAX_AD_CONTENT_RATING = {
+  G: string,
+  MA:string,
+  PG: string,
+  T: string,
+  UNSPECIFIED:string,
+}
+type TAG_FOR_CHILD_DIRECTED_TREATMENT = {
+  TRUE:number,
+  FALSE:number
+}
+
+type TAG_FOR_UNDER_AGE_CONSENT = {
+  TRUE:number,
+  FALSE:number
+}
+
+type config = {
+  maxAdContentRating:MAX_AD_CONTENT_RATING,
+  tagForChildDirectedTreatment:TAG_FOR_CHILD_DIRECTED_TREATMENT,
+  tagForUnderAgeConsent:TAG_FOR_UNDER_AGE_CONSENT,
+  testDeviceIds:Array<string>
+}
+
+
 type NativeAdViewProps = {
   /**
    * When you are designing your ad, placeholders
@@ -146,7 +170,7 @@ type NativeAdViewProps = {
   requestNonPersonalizedAdsOnly:boolean;
 
   /**
-   * Set testdevices for the ad.
+   * Set testdevices for the ad. (DEPRECATED)
    */
   testDevices?: Array<string>;
   onAdOpened?: Function<void>;
@@ -172,6 +196,8 @@ type NestedTextProps = {
 
 
 declare module "react-native-admob-native-ads" {
+
+
   /**
    *
    * Wrapper for the UnifiedNativeAdView from Google Ads SDK. All your views should be
@@ -183,12 +209,100 @@ declare module "react-native-admob-native-ads" {
     props: NativeAdViewProps
   ): React.FunctionComponent;
 
+ 
+ const MAX_AD_CONTENT_RATING:MAX_AD_CONTENT_RATING;
+ const TAG_FOR_CHILD_DIRECTED_TREATMENT:TAG_FOR_CHILD_DIRECTED_TREATMENT;
+ const TAG_FOR_UNDER_AGE_CONSENT:TAG_FOR_UNDER_AGE_CONSENT;
+
+
   /**
+   * AdManager can be used to configure your ads on App Startup such as setting test devices.
+   * 
+   */
+
+ export const AdManager = {
+
+   /**
+   * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
+
+  | Name      | Type | Required |
+  | --------- | -------- | -------- |
+  | testDeviceIds | `Array<string>` | no  |
+  | maxAdContentRating | AdManager.MAX_AD_CONTENT_RATING | no  |
+  | tagForChildDirectedTreatment | AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT | no  |
+  | tagForUnderAgeConsent | AdManager.TAG_FOR_UNDER_AGE_CONSENT | no  |
+
+  Example:
+
+  ```js
+
+  const config = {
+    testDeviceIds:["YOUR_TEST_DEVICE_ID"],
+    maxAdContetRating:AdManager.MAX_AD_CONTENT_RATING.MA,
+    tagForChildDirectedTreatment:AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT.FALSE,
+    tagForUnderAgeConsent:AdManager.TAG_FOR_UNDER_AGE_CONSENT.FALSE
+  }
+
+  AdManager.setRequestConfiguration(config);
+
+  ```
+   * 
+   */
+
+  setRequestConfiguration: (config:config) => {},
+
+  /**
+   * Check if the current device is registered as a test device to show test ads.
+
+```js
+  AdManager.isTestDevice().then(result => console.log(result))
+```
+return: `boolean`
+   */
+  isTestDevice:async () => {},
+
+
+  /**
+   * | Name      | Description | 
+| --------- | -------- | 
+| G | "General audiences." Content suitable for all audiences, including families and children.  |
+| MA | "Mature audiences." Content suitable only for mature audiences; includes topics such as alcohol, gambling, sexual content, and weapons.  | 
+| PG | "Parental guidance." Content suitable for most audiences with parental guidance, including topics like non-realistic, cartoonish violence.  |
+| T | "Teen." Content suitable for teen and older audiences, including topics such as general health, social networks, scary imagery, and fight sports. | 
+| UNSPECIFIED | Set default value to ""| 
+   */
+
+  MAX_AD_CONTENT_RATING:MAX_AD_CONTENT_RATING,
+
+
+  /**
+   * | Name      | Description | 
+| --------- | -------- | 
+| TRUE | Enabled  |
+| FALSE | Disabled  | 
+   */
+
+  TAG_FOR_CHILD_DIRECTED_TREATMENT:TAG_FOR_CHILD_DIRECTED_TREATMENT,
+
+  /**
+   * | Name      | Description | 
+| --------- | -------- | 
+| TRUE | Enabled |
+| FALSE | Disabled  | 
+   */
+
+
+  TAG_FOR_UNDER_AGE_CONSENT:TAG_FOR_UNDER_AGE_CONSENT     
+}
+
+    
+  export const AdOptions:options; 
+
+
+   /**
    * Ad Badge shows the {ad} badge on top of the ad telling the user that this is an AD.
    *
    */
-    
-  export const AdOptions:options; 
 
   export function AdBadge(props: NestedTextProps): React.FunctionComponent;
 
