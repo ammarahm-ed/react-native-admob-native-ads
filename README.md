@@ -198,64 +198,71 @@ return (
 </div>
 
 ## AdManager
+
 AdManager allows you to configure your ads globally when the app starts
 
+```jsx
+import { AdManager } from "react-native-admob-native-ads";
+```
+
 ### setRequestConfiguration(config)
+
 Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
 
-| Name      | Type | Required |
-| --------- | -------- | -------- |
-| testDeviceIds | `Array<string>` | no  |
-| maxAdContentRating | AdManager.MAX_AD_CONTENT_RATING | no  |
-| tagForChildDirectedTreatment | AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT | no  |
-| tagForUnderAgeConsent | AdManager.TAG_FOR_UNDER_AGE_CONSENT | no  |
+| Name                         | Type                                       | Required |
+| ---------------------------- | ------------------------------------------ | -------- |
+| testDeviceIds                | `Array<string>`                            | no       |
+| maxAdContentRating           | AdManager.MAX_AD_CONTENT_RATING            | no       |
+| tagForChildDirectedTreatment | AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT | no       |
+| tagForUnderAgeConsent        | AdManager.TAG_FOR_UNDER_AGE_CONSENT        | no       |
 
 ```js
-
 const config = {
-  testDeviceIds:["YOUR_TEST_DEVICE_ID"],
-  maxAdContetRating:AdManager.MAX_AD_CONTENT_RATING.MA,
-  tagForChildDirectedTreatment:AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT.FALSE,
-  tagForUnderAgeConsent:AdManager.TAG_FOR_UNDER_AGE_CONSENT.FALSE
-}
+  testDeviceIds: ["YOUR_TEST_DEVICE_ID"],
+  maxAdContetRating: AdManager.MAX_AD_CONTENT_RATING.MA,
+  tagForChildDirectedTreatment:
+    AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT.FALSE,
+  tagForUnderAgeConsent: AdManager.TAG_FOR_UNDER_AGE_CONSENT.FALSE,
+};
 
 AdManager.setRequestConfiguration(config);
-
 ```
 
 ### isTestDevice()
+
 Check if the current device is registered as a test device to show test ads.
 
 ```js
-  AdManager.isTestDevice().then(result => console.log(result))
+AdManager.isTestDevice().then((result) => console.log(result));
 ```
+
 return: `boolean`
 
 ### AdManager.MAX_AD_CONTENT_RATING
 
-| Name      | Description | 
-| --------- | -------- | 
-| G | "General audiences." Content suitable for all audiences, including families and children.  |
-| MA | "Mature audiences." Content suitable only for mature audiences; includes topics such as alcohol, gambling, sexual content, and weapons.  | 
-| PG | "Parental guidance." Content suitable for most audiences with parental guidance, including topics like non-realistic, cartoonish violence.  |
-| T | "Teen." Content suitable for teen and older audiences, including topics such as general health, social networks, scary imagery, and fight sports. | 
-| UNSPECIFIED | Set default value to ""| 
+| Name        | Description                                                                                                                                       |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| G           | "General audiences." Content suitable for all audiences, including families and children.                                                         |
+| MA          | "Mature audiences." Content suitable only for mature audiences; includes topics such as alcohol, gambling, sexual content, and weapons.           |
+| PG          | "Parental guidance." Content suitable for most audiences with parental guidance, including topics like non-realistic, cartoonish violence.        |
+| T           | "Teen." Content suitable for teen and older audiences, including topics such as general health, social networks, scary imagery, and fight sports. |
+| UNSPECIFIED | Set default value to ""                                                                                                                           |
 
 ### AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT
 
-| Name      | Description | 
-| --------- | -------- | 
-| TRUE | Enabled  |
-| FALSE | Disabled  | 
+| Name  | Description |
+| ----- | ----------- |
+| TRUE  | Enabled     |
+| FALSE | Disabled    |
 
 ### AdManager.TAG_FOR_UNDER_AGE_CONSENT
 
-| Name      | Description | 
-| --------- | -------- | 
-| TRUE | Enabled |
-| FALSE | Disabled  | 
- 
-# 
+| Name  | Description |
+| ----- | ----------- |
+| TRUE  | Enabled     |
+| FALSE | Disabled    |
+
+#
 
 ## NativeAdView
 
@@ -298,7 +305,7 @@ Set Ad Unit ID for Native Advanced Ads that you created on your AdMob account.
 | -------- | -------- | -------- |
 | `string` | Yes      | All      |
 
-# 
+#
 
 #### `testDevices`
 
@@ -308,7 +315,7 @@ Set testDevices during testing ads or during development.
 | --------------- | -------- | -------- |
 | `Array<string>` | no       | All      |
 
-# 
+#
 
 #### `enableTestMode`
 
@@ -318,18 +325,17 @@ Setting this to true will load a placeholder ad (Not from Admob server) incase y
 | --------- | -------- | -------- |
 | `boolean` | no       | All      |
 
-# 
+#
 
-#### `delayAdloading`
+#### `delayAdLoading`
 
 Delay ad loading and rendering by the specified time in milliseconds. This is a workaround to fix rendering of multiple ads in the same screen. For example in a list. So what you should do is incrementally increase the delay from first and to the last. However it is suggested to you should always render only one ad, in one screen at one time.
 
-| Type     | Required | Default             | Platform |
-| -------- | -------- | ------------------- | -------- |
-| `number` | no       | 0 ms  | All      |
+| Type     | Required | Default | Platform |
+| -------- | -------- | ------- | -------- |
+| `number` | no       | 0 ms    | All      |
 
-
-# 
+#
 
 #### `refreshInterval`
 
@@ -339,7 +345,7 @@ Time in ms after which a new ad should be requested from the server.
 | -------- | -------- | ------------------- | -------- |
 | `number` | no       | 60000 ms (1 minute) | All      |
 
-# 
+#
 
 ### Events
 
@@ -577,6 +583,7 @@ import { MediaView } from "react-native-admob-native-ads";
   }}
 />;
 ```
+
 ### props
 
 #### `style:ViewStyle`
@@ -603,6 +610,7 @@ import { CallToActionView } from "react-native-admob-native-ads";
   textStyle={{ color: "white", fontSize: 14 }}
 />;
 ```
+
 ### props
 
 #### `allCaps`
@@ -633,14 +641,13 @@ Whether all text should be in capital letters
 
 ## Buy me a coffee
 
-It costs me alot of time to keep the library updated and address all the bugs & issues.  If this library has helped you [buy me a coffee](https://ko-fi.com/ammarahmed).
+It costs me alot of time to keep the library updated and address all the bugs & issues. If this library has helped you [buy me a coffee](https://ko-fi.com/ammarahmed).
 
 ## Contact & Support
 
 - Add a ⭐️ [star on GitHub](https://github.com/ammarahm-ed/react-native-admob-native-ads) to support the project!
 - Create a GitHub issue for bug reports, feature requests, or questions
 - Follow [@ammarahm-ed](https://github.com/ammarahm-ed) for announcements
-
 
 ## I want to contribute
 
