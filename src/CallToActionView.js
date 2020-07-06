@@ -37,7 +37,7 @@ const CallToActionView = (props) => {
         props.style,
       ]}
     >
-      <Text style={[props.textStyle]}>
+      <Text allowFontScaling={props.allowFontScaling} style={[props.textStyle]}>
         {nativeAd
           ? props.allCaps
             ? nativeAd.callToAction?.toUpperCase()

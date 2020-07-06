@@ -127,6 +127,7 @@ type NestedTextProps = {
   style?: ViewStyle;
   textStyle?: TextStyle;
   allCaps?: boolean;
+  allowFontScaling?: boolean;
 };
 
 declare module "react-native-admob-native-ads" {
