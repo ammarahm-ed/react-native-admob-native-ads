@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Platform, requireNativeComponent } from "react-native";
 import { NativeAdContext } from "./context";
+import Wrapper from "./Wrapper";
 
 const testNativeAd = {
   headline: "Test Ad: Lorem ipsum dolor ",
@@ -14,6 +15,8 @@ const testNativeAd = {
   icon: "https://dummyimage.com/300.png/09f/fff",
   images: ["https://dummyimage.com/qvga"],
 };
+
+
 
 const waitAsync = (ms) =>
   new Promise((resolve, reject) => {
@@ -66,8 +69,6 @@ const NativeAdView = (props) => {
     updateAd(event.nativeEvent);
     setTimeout(() => {
       setForceRefresh(!forceRefresh);
-      setForceRefresh(!forceRefresh);
-      setForceRefresh(!forceRefresh);
     }, 0);
 
     if (props.onUnifiedNativeAdLoaded) {
@@ -105,11 +106,13 @@ const NativeAdView = (props) => {
       value={{ nativeAd, nativeAdView, setNativeAdView, setNativeAd }}
     >
       <UnifiedNativeAdView
+       
         ref={(ref) => {
           nativeAdRef = ref;
           setNativeAdView(nativeAdRef);
           return nativeAdRef;
         }}
+        adUnitID={props.adUnitID}
         onAdLoaded={_onAdLoaded}
         onAdFailedToLoad={_onAdFailedToLoad}
         onAdClicked={_onAdClicked}
@@ -121,9 +124,12 @@ const NativeAdView = (props) => {
         onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
         refreshInterval={props.refreshInterval? props.refreshInterval : 60000}
         testDevices={props.testDevices? props.testDevices : []}
-        adUnitID={props.adUnitID}
+        requestNonPersonalizedAdsOnly={props.requestNonPersonalizedAdsOnly? true : false}
+        adChoicesPlacement={props.adChoicesPlacement > -1? props.adChoicesPlacement : 1}
       >
+        <Wrapper>
         {props.children}
+        </Wrapper>
       </UnifiedNativeAdView>
     </NativeAdContext.Provider>
   );

@@ -197,6 +197,66 @@ return (
 <h1>📃 Reference</h1>
 </div>
 
+## AdManager
+AdManager allows you to configure your ads globally when the app starts
+
+### setRequestConfiguration(config)
+Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
+
+| Name      | Type | Required |
+| --------- | -------- | -------- |
+| testDeviceIds | `Array<string>` | no  |
+| maxAdContentRating | AdManager.MAX_AD_CONTENT_RATING | no  |
+| tagForChildDirectedTreatment | AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT | no  |
+| tagForUnderAgeConsent | AdManager.TAG_FOR_UNDER_AGE_CONSENT | no  |
+
+```js
+
+const config = {
+  testDeviceIds:["YOUR_TEST_DEVICE_ID"],
+  maxAdContetRating:AdManager.MAX_AD_CONTENT_RATING.MA,
+  tagForChildDirectedTreatment:AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT.FALSE,
+  tagForUnderAgeConsent:AdManager.TAG_FOR_UNDER_AGE_CONSENT.FALSE
+}
+
+AdManager.setRequestConfiguration(config);
+
+```
+
+### isTestDevice()
+Check if the current device is registered as a test device to show test ads.
+
+```js
+  AdManager.isTestDevice().then(result => console.log(result))
+```
+return: `boolean`
+
+### AdManager.MAX_AD_CONTENT_RATING
+
+| Name      | Description | 
+| --------- | -------- | 
+| G | "General audiences." Content suitable for all audiences, including families and children.  |
+| MA | "Mature audiences." Content suitable only for mature audiences; includes topics such as alcohol, gambling, sexual content, and weapons.  | 
+| PG | "Parental guidance." Content suitable for most audiences with parental guidance, including topics like non-realistic, cartoonish violence.  |
+| T | "Teen." Content suitable for teen and older audiences, including topics such as general health, social networks, scary imagery, and fight sports. | 
+| UNSPECIFIED | Set default value to ""| 
+
+### AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT
+
+| Name      | Description | 
+| --------- | -------- | 
+| TRUE | Enabled  |
+| FALSE | Disabled  | 
+
+### AdManager.TAG_FOR_UNDER_AGE_CONSENT
+
+| Name      | Description | 
+| --------- | -------- | 
+| TRUE | Enabled |
+| FALSE | Disabled  | 
+ 
+# 
+
 ## NativeAdView
 
 NativeAdView will wrap all your views related to the ad and provides a context through which all the Views get their respective information and load it automatically. It has the following properties to it.
@@ -238,7 +298,7 @@ Set Ad Unit ID for Native Advanced Ads that you created on your AdMob account.
 | -------- | -------- | -------- |
 | `string` | Yes      | All      |
 
-#
+# 
 
 #### `testDevices`
 
@@ -248,7 +308,7 @@ Set testDevices during testing ads or during development.
 | --------------- | -------- | -------- |
 | `Array<string>` | no       | All      |
 
-#
+# 
 
 #### `enableTestMode`
 
@@ -258,7 +318,7 @@ Setting this to true will load a placeholder ad (Not from Admob server) incase y
 | --------- | -------- | -------- |
 | `boolean` | no       | All      |
 
-#
+# 
 
 #### `delayAdloading`
 
@@ -269,7 +329,7 @@ Delay ad loading and rendering by the specified time in milliseconds. This is a 
 | `number` | no       | 0 ms  | All      |
 
 
-#
+# 
 
 #### `refreshInterval`
 
@@ -279,7 +339,7 @@ Time in ms after which a new ad should be requested from the server.
 | -------- | -------- | ------------------- | -------- |
 | `number` | no       | 60000 ms (1 minute) | All      |
 
-#
+# 
 
 ### Events
 
