@@ -24,8 +24,9 @@ function setRequestConfiguration(config) {
   RNAdmobNativeAdsManager.setRequestConfiguration(config);
 }
 
-function isTestDevice() {
+async function isTestDevice() {
 
+  return await RNAdmobNativeAdsManager.isTestDevice();
 }
 
 export default {
