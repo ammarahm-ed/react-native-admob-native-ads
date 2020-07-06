@@ -211,13 +211,13 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
     @ReactProp(name = PROP_TEST_DEVICES)
     public void setPropTestDevices(final RNNativeAdWrapper view, final ReadableArray testDevices) {
-        ReadableNativeArray nativeArray = (ReadableNativeArray) testDevices;
-        ArrayList<Object> list = nativeArray.toArrayList();
+      //  ReadableNativeArray nativeArray = (ReadableNativeArray) testDevices;
+      //  ArrayList<Object> list = nativeArray.toArrayList();
 
-        List<String> testDeviceIds = Arrays.asList(list.toArray(new String[list.size()]));
-        RequestConfiguration configuration =
-                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-        MobileAds.setRequestConfiguration(configuration);
+      //  List<String> testDeviceIds = Arrays.asList(list.toArray(new String[list.size()]));
+      //  RequestConfiguration configuration =
+      //          new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+     //   MobileAds.setRequestConfiguration(configuration);
     }
 
 

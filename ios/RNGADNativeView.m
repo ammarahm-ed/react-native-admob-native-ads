@@ -53,7 +53,7 @@ BOOL *nonPersonalizedAds;
 
 - (void)setTestDevices:(NSArray *)testDevices
 {
-    _testDevices = RNAdMobProcessTestDevices(testDevices, kDFPSimulatorID);
+   // _testDevices = RNAdMobProcessTestDevices(testDevices, kDFPSimulatorID);
 }
 
 - (void)setRefreshInterval:(NSNumber *)refreshInterval
@@ -274,7 +274,7 @@ BOOL *nonPersonalizedAds;
         [request registerAdNetworkExtras:extras];
     }
     
-    GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers = _testDevices;
+    //GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers = _testDevices;
     [self.adLoader loadRequest:request];
 }
 
