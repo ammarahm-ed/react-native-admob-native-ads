@@ -69,8 +69,6 @@ const NativeAdView = (props) => {
     updateAd(event.nativeEvent);
     setTimeout(() => {
       setForceRefresh(!forceRefresh);
-      setForceRefresh(!forceRefresh);
-      setForceRefresh(!forceRefresh);
     }, 0);
 
     if (props.onUnifiedNativeAdLoaded) {
