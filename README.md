@@ -307,7 +307,7 @@ Set Ad Unit ID for Native Advanced Ads that you created on your AdMob account.
 
 #
 
-#### `testDevices`
+#### `testDevices` (Deprecated, Use AdManager)
 
 Set testDevices during testing ads or during development.
 
