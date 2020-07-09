@@ -43,6 +43,7 @@ const App = () => {
 
   const _onUnifiedNativeAdLoaded = (event) => {
     console.log('Views have populated with the Ad');
+    console.log(event.aspectRatio);
     setAdLoaded(true);
     setAspectRatio(event.aspectRatio);
   };
@@ -67,6 +68,7 @@ const App = () => {
           width: '95%',
           alignSelf: 'center',
         }}
+        delayAdLoading={10000}
         adUnitID={NATIVE_AD_ID} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
       >
         <View
@@ -75,26 +77,12 @@ const App = () => {
           }}>
           <View
             style={{
-              width: '100%',
-              height: 100,
-              backgroundColor: '#f0f0f0',
-              justifyContent: 'center',
-              alignItems: 'center',
-              position: adLoaded ? 'relative' : 'absolute',
-              display: adLoaded ? 'none' : 'flex',
-            }}>
-            <Text>Loading an Ad</Text>
-          </View>
-
-          <View
-            style={{
               height: 100,
               width: '100%',
               flexDirection: 'row',
               justifyContent: 'flex-start',
               alignItems: 'center',
               paddingHorizontal: 10,
-              display: !adLoaded ? 'none' : 'flex',
             }}>
             <IconView
               style={{
@@ -148,7 +136,6 @@ const App = () => {
               width: '100%',
               height: 400 / aspectRatio,
               backgroundColor: 'white',
-              display: !adLoaded ? 'none' : 'flex',
             }}
           />
         </View>
