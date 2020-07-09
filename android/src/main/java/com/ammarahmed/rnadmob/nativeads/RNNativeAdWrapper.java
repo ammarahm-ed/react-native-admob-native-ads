@@ -217,7 +217,15 @@ public class RNNativeAdWrapper extends LinearLayout {
                 args.putString("icon", nativeAd.getIcon().getUri().toString());
 
             } else {
-                args.putString("icon", "empty");
+                if (nativeAd.getResponseInfo().getMediationAdapterClassName().equals("com.google.ads.mediation.admob.AdMobAdapter")) {
+                    args.putString("icon", "noicon");
+                } else {
+                    args.putString("icon", "empty");
+                }
+
+
+
+
             }
 
             sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
