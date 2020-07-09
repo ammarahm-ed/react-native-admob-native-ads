@@ -3,6 +3,7 @@ package com.ammarahmed.rnadmob.nativeads;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -13,6 +14,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
@@ -22,6 +24,8 @@ import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
+
+import java.util.ArrayList;
 
 public class RNNativeAdWrapper extends LinearLayout {
 
@@ -144,6 +148,7 @@ public class RNNativeAdWrapper extends LinearLayout {
                 nativeAdView.setMediaView(adMediaView);
                 adMediaView.requestLayout();
 
+
             }
         } catch (Exception e) {
 
@@ -187,16 +192,18 @@ public class RNNativeAdWrapper extends LinearLayout {
             }
 
 
-            WritableArray images = Arguments.createArray();
+            WritableArray images = new WritableNativeArray();
 
             if (nativeAd.getImages() != null && nativeAd.getImages().size() > 0) {
 
                 for (int i = 0; i < nativeAd.getImages().size(); i++) {
                     WritableMap map = Arguments.createMap();
-                    map.putString("url", nativeAd.getImages().get(i).getUri().toString());
-                    map.putInt("width", nativeAd.getImages().get(i).getWidth());
-                    map.putInt("height", nativeAd.getImages().get(i).getHeight());
-                    images.pushMap(map);
+                    if (nativeAd.getImages().get(i) != null) {
+                        map.putString("url", nativeAd.getImages().get(i).getUri().toString());
+                        map.putInt("width", nativeAd.getImages().get(i).getWidth());
+                        map.putInt("height", nativeAd.getImages().get(i).getHeight());
+                        images.pushMap(map);
+                    }
                 }
             }
 
@@ -206,8 +213,9 @@ public class RNNativeAdWrapper extends LinearLayout {
                 args.putArray("images", null);
             }
 
-            if (nativeAd.getIcon() != null || nativeAd.getIcon().getUri() != null) {
+            if (nativeAd.getIcon() != null) {
                 args.putString("icon", nativeAd.getIcon().getUri().toString());
+
             } else {
                 args.putString("icon", "empty");
             }
@@ -215,7 +223,7 @@ public class RNNativeAdWrapper extends LinearLayout {
             sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
 
         } catch (Exception e) {
-
+            Log.d("HELLO", e.getMessage());
         }
         if (handler != null) {
             runnable = new Runnable() {
@@ -239,7 +247,7 @@ public class RNNativeAdWrapper extends LinearLayout {
         super.onDetachedFromWindow();
     }
 
-    private void sendEvent(String name, @Nullable WritableMap event) {
+    public void sendEvent(String name, @Nullable WritableMap event) {
 
         ReactContext reactContext = (ReactContext) mContext;
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
@@ -312,7 +320,9 @@ public class RNNativeAdWrapper extends LinearLayout {
     }
 
     public void setAdUnitId(String id) {
+
         admobAdUnitId = id;
+        if (id == null) return;
         loadAd();
     }
 

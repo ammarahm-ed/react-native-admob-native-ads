@@ -64,7 +64,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
                 EVENT_AD_IMPRESSION,
                 EVENT_AD_LOADED,
                 EVENT_AD_LEFT_APPLICATION,
-                EVENT_UNIFIED_NATIVE_AD_LOADED
+                EVENT_UNIFIED_NATIVE_AD_LOADED,
         };
         for (String event : events) {
             builder.put(event, MapBuilder.of("registrationName", event));
@@ -131,8 +131,10 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public void setHeadlineView(final RNNativeAdWrapper v, final int id) {
 
         View view = nativeAdView.findViewById(id);
-        if (view != null)
+        if (view != null) {
             nativeAdView.nativeAdView.setHeadlineView(view);
+        }
+
 
     }
 
@@ -223,7 +225,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
     @ReactProp(name = PROP_AD_UNIT_ID)
     public void setPropAdUnitId(final RNNativeAdWrapper view, final String adUnitId) {
-
+        if (adUnitId == null) return;
         nativeAdView.setAdUnitId(adUnitId);
 
     }
