@@ -42,6 +42,7 @@ const App = () => {
   };
 
   const _onUnifiedNativeAdLoaded = (event) => {
+    console.log(event)
     console.log('Views have populated with the Ad');
     console.log(event.aspectRatio);
     setAdLoaded(true);
