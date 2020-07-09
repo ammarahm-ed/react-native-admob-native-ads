@@ -177,7 +177,7 @@ type NativeAdViewProps = {
   onAdClosed?: Function<void>;
   onAdLeftApplication?: Function<void>;
   onAdImpression?: Function<void>;
-  onAdClick?: Function<void>;
+  onAdClicked?: Function<void>;
   onAdLoaded?: Function<void>;
   onUnifiedNativeAdLoaded?: (event: NativeAd) => {};
   onAdFailedToLoad?: Function<void>;
