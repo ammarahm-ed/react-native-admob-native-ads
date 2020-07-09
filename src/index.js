@@ -90,29 +90,19 @@ const NativeAdView = (props) => {
     }
   }, [props.enableTestMode]);
 
-  useEffect(() => {
-    if (props.delayAdLoading) {
-      delayAdLoadBy = props.delayAdLoading;
-    }
-    waitAsync(delayAdLoadBy).then(() => {
-      setPauseAdLoading(false);
-    });
-  }, []);
 
-  return pauseAdLoading ? (
-    <></>
-  ) : (
-    <NativeAdContext.Provider
+
+  return  <NativeAdContext.Provider
       value={{ nativeAd, nativeAdView, setNativeAdView, setNativeAd }}
     >
       <UnifiedNativeAdView
-       
+
         ref={(ref) => {
           nativeAdRef = ref;
           setNativeAdView(nativeAdRef);
           return nativeAdRef;
         }}
-        adUnitID={props.adUnitID}
+        adUnitID={pauseAdLoading? null : props.adUnitID}
         onAdLoaded={_onAdLoaded}
         onAdFailedToLoad={_onAdFailedToLoad}
         onAdClicked={_onAdClicked}
@@ -127,12 +117,21 @@ const NativeAdView = (props) => {
         requestNonPersonalizedAdsOnly={props.requestNonPersonalizedAdsOnly? true : false}
         adChoicesPlacement={props.adChoicesPlacement > -1? props.adChoicesPlacement : 1}
       >
-        <Wrapper>
+        <Wrapper
+        onLayout={event => {
+          if (props.delayAdLoading) {
+            delayAdLoadBy = props.delayAdLoading;
+          }
+          setTimeout(() => {
+            setPauseAdLoading(false);
+          },delayAdLoadBy)
+        }}
+        >
         {props.children}
         </Wrapper>
       </UnifiedNativeAdView>
     </NativeAdContext.Provider>
-  );
+
 };
 
 NativeAdView.simulatorId = "SIMULATOR";
