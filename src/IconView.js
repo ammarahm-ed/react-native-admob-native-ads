@@ -28,7 +28,7 @@ const IconView = (props) => {
       onLayout={_onLayout}
       source={{ uri: nativeAd.icon }}
     />
-  ) : (
+  ) : nativeAd && nativeAd.icon && nativeAd.icon !== "noicon" ? null :   (
     <Image
       {...props}
       resizeMode="cover"
