@@ -331,8 +331,25 @@ BOOL *nonPersonalizedAds;
             }
             
             
+            
             [dic setObject:images forKey:@"images"];
-            [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
+            if (nativeAd.icon != nil) {
+                     [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
+            } else {
+                
+                NSString * someString = nativeAd.responseInfo.adNetworkClassName;
+                NSLog(@"%@", someString);
+                
+                if ([nativeAd.responseInfo.adNetworkClassName isEqualToString:@"GADMAdapterGoogleAdMobAds"]) {
+                             [dic setValue:@"noicon" forKey:@"icon"];
+                } else {
+                      [dic setValue:@"empty" forKey:@"icon"];
+                }
+            
+            
+            }
+           
+            
             [dic setValue:nativeAd.starRating forKey:@"rating"];
             
             self.onUnifiedNativeAdLoaded(dic);
