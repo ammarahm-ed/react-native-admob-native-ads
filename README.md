@@ -84,6 +84,16 @@ or if you use yarn:
 
     yarn add react-native-admob-native-ads
 
+Also install the following packages:
+
+  `yarn add react-native-gesture-handler`
+
+and
+
+  `yarn add react-native-vector-icons`
+
+Don't forget to setup [react-native-vector-icons ](https://github.com/oblador/react-native-vector-icons) as the guide states for iOS & Android
+
 ### iOS Setup
 
 Follow the guide to add [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project. Also don't forget to update your info.plist file to add AppID.
