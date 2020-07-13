@@ -115,7 +115,7 @@ type NativeAdViewProps = {
    */
 
   enableTestMode?: boolean;
-
+  children: React.ReactNode;
   style?: ViewStyle;
 
   /**
@@ -208,7 +208,7 @@ declare module "react-native-admob-native-ads" {
 
   export default function NativeAdView(
     props: NativeAdViewProps
-  ): React.FunctionComponent;
+  ): JSX.Element;
 
  
  const MAX_AD_CONTENT_RATING:MAX_AD_CONTENT_RATING;
@@ -305,7 +305,7 @@ return: `boolean`
    *
    */
 
-  export function AdBadge(props: NestedTextProps): React.FunctionComponent;
+  export function AdBadge(props: NestedTextProps): JSX.Element;
 
   /**
    * The title of the native ad recieved from server is renderd here.
@@ -313,41 +313,41 @@ return: `boolean`
    * context and load it.
    * You should on style it as you want.
    */
-  export function HeadlineView(props: TextProps): React.FunctionComponent;
+  export function HeadlineView(props: TextProps): JSX.Element;
 
   /**
    *  * The description of the native ad recieved from server is renderd here.
    */
-  export function TaglineView(props: TextProps): React.FunctionComponent;
+  export function TaglineView(props: TextProps): JSX.Element;
 
   /**
    *  * The adveriser name of the native ad recieved from server is renderd here.
    */
-  export function AdvertiserView(props: TextProps): React.FunctionComponent;
+  export function AdvertiserView(props: TextProps): JSX.Element;
   /**
    * If the ad or service is paid,then this view can be used to show the price.
    */
-  export function PriceView(props: TextProps): React.FunctionComponent;
+  export function PriceView(props: TextProps): JSX.Element;
 
   /**
    * Many times, the ad recieved will be from the Google Playstore or AppStore for iOS.
    * In that case, you can show the store name using this view.
    */
-  export function StoreView(props: TextProps): React.FunctionComponent;
+  export function StoreView(props: TextProps): JSX.Element;
 
   /**
    * If you want to explicitly show only Images and no video etc, use ImageView.
    */
-  export function ImageView(props: ImageProps): React.FunctionComponent;
+  export function ImageView(props: ImageProps): JSX.Element;
   /**
    * Icon/Logo of the adveriser shown inside this view
    */
-  export function IconView(props: ImageProps): React.FunctionComponent;
+  export function IconView(props: ImageProps): JSX.Element;
 
   /**
    * If the ad has images or video content. It will be loaded inside the MediaView.
    */
-  export function MediaView(props: SimpleViewProps): React.FunctionComponent;
+  export function MediaView(props: SimpleViewProps): JSX.Element;
 
   /**
    * A simple button to open the adveriser website or store page etc. It is a simple
@@ -357,7 +357,7 @@ return: `boolean`
    */
   export function CallToActionView(
     props: NestedTextProps
-  ): React.FunctionComponent;
+  ): JSX.Element;
 
   /**
    * A Star Rating View to show the star rating for the app ads that you might recieve from
@@ -365,5 +365,5 @@ return: `boolean`
    */
   export function StarRatingView(
     props: StarRatingProps
-  ): React.FunctionComponent;
+  ): JSX.Element;
 }
