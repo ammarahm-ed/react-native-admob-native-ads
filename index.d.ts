@@ -4,7 +4,7 @@ import { StarRatingProps } from "react-native-star-rating";
 
 type Image = {
   /**
-   * The url of the image 
+   * The url of the image
    */
   url:string;
   /**
@@ -74,7 +74,7 @@ type NativeAdViewProps = {
    * When you are designing your ad, placeholders
    * for the ad will be loaded so you can easily
    * design, because for each type of ad
-   * recieved from the server, not all 
+   * recieved from the server, not all
    * the info is available.
    */
 
@@ -96,10 +96,10 @@ type NativeAdViewProps = {
   refreshInterval?: number;
 
   /**
-   * Time in milliseconds to delay ad rendering. 
+   * Time in milliseconds to delay ad rendering.
    * Use this if you are rendering multiple ads
    * in your screen such as in a list. Default is 0ms.
-   * This is usually done so that ad request is done 
+   * This is usually done so that ad request is done
    * after the views are attached.
    */
 
@@ -179,11 +179,11 @@ declare module "react-native-admob-native-ads" {
   /**
    * If you want to explicitly show only Images and no video etc, use ImageView.
    */
-  export function ImageView(props: ImageProps): React.FunctionComponent;
+  export function ImageView(props: Partial<ImageProps>): React.FunctionComponent;
   /**
    * Icon/Logo of the adveriser shown inside this view
    */
-  export function IconView(props: ImageProps): React.FunctionComponent;
+  export function IconView(props: Partial<ImageProps>): React.FunctionComponent;
 
   /**
    * If the ad has images or video content. It will be loaded inside the MediaView.
