@@ -20,7 +20,7 @@ const IconView = (props) => {
     _onLayout();
   }, [nativeAd, nativeAdView]);
 
-  return nativeAd && nativeAd.icon ? (
+  return nativeAd && nativeAd.icon && nativeAd.icon !== "empty" && nativeAd.icon !== "noicon" ? (
     <Image
       {...props}
       resizeMode="cover"
@@ -28,7 +28,14 @@ const IconView = (props) => {
       onLayout={_onLayout}
       source={{ uri: nativeAd.icon }}
     />
-  ) : null;
+  ) : nativeAd && nativeAd.icon && nativeAd.icon === "noicon" ? null :   (
+    <Image
+      {...props}
+      resizeMode="cover"
+      ref={iconViewRef}
+      onLayout={_onLayout}
+    />
+  );
 };
 
 export default IconView;

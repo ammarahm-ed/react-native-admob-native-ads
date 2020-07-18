@@ -46,6 +46,8 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String PROP_PRICE_VIEW = "price";
     public static final String PROP_ICON_VIEW = "icon";
     public static final String PROP_STAR_RATING_VIEW = "starrating";
+    public static final String PROP_AD_CHOICES_PLACEMENT = "adChoicesPlacement";
+    public static final String PROP_NON_PERSONALIZED_ADS = "requestNonPersonalizedAdsOnly";
 
     private RNNativeAdWrapper nativeAdView;
 
@@ -62,7 +64,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
                 EVENT_AD_IMPRESSION,
                 EVENT_AD_LOADED,
                 EVENT_AD_LEFT_APPLICATION,
-                EVENT_UNIFIED_NATIVE_AD_LOADED
+                EVENT_UNIFIED_NATIVE_AD_LOADED,
         };
         for (String event : events) {
             builder.put(event, MapBuilder.of("registrationName", event));
@@ -81,6 +83,8 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
         return nativeAdView;
     }
 
+
+
     @Override
     public void addView(RNNativeAdWrapper parent, View child, int index) {
         //super.addView(parent, child, index);
@@ -94,6 +98,20 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
         nativeAdView.setAdRefreshInterval(interval);
     }
+
+    @ReactProp(name = PROP_NON_PERSONALIZED_ADS, defaultBoolean = false)
+    public void setPropNonPersonalizedAds(final RNNativeAdWrapper view, final boolean npa) {
+
+        nativeAdView.setRequestNonPersonalizedAdsOnly(npa);
+    }
+
+
+    @ReactProp(name = PROP_AD_CHOICES_PLACEMENT)
+    public void setPropAdChoicesPlacement(final RNNativeAdWrapper view, final int location) {
+
+        nativeAdView.setAdChoicesPlacement(location);
+    }
+
 
     @ReactProp(name = PROP_DELAY_AD_LOAD)
     public void setPropDelayAdLoad(final RNNativeAdWrapper view, final int delay) {
@@ -113,8 +131,10 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public void setHeadlineView(final RNNativeAdWrapper v, final int id) {
 
         View view = nativeAdView.findViewById(id);
-        if (view != null)
+        if (view != null) {
             nativeAdView.nativeAdView.setHeadlineView(view);
+        }
+
 
     }
 
@@ -193,19 +213,19 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
     @ReactProp(name = PROP_TEST_DEVICES)
     public void setPropTestDevices(final RNNativeAdWrapper view, final ReadableArray testDevices) {
-        ReadableNativeArray nativeArray = (ReadableNativeArray) testDevices;
-        ArrayList<Object> list = nativeArray.toArrayList();
+      //  ReadableNativeArray nativeArray = (ReadableNativeArray) testDevices;
+      //  ArrayList<Object> list = nativeArray.toArrayList();
 
-        List<String> testDeviceIds = Arrays.asList(list.toArray(new String[list.size()]));
-        RequestConfiguration configuration =
-                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-        MobileAds.setRequestConfiguration(configuration);
+      //  List<String> testDeviceIds = Arrays.asList(list.toArray(new String[list.size()]));
+      //  RequestConfiguration configuration =
+      //          new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+     //   MobileAds.setRequestConfiguration(configuration);
     }
 
 
     @ReactProp(name = PROP_AD_UNIT_ID)
     public void setPropAdUnitId(final RNNativeAdWrapper view, final String adUnitId) {
-
+        if (adUnitId == null) return;
         nativeAdView.setAdUnitId(adUnitId);
 
     }
@@ -216,6 +236,9 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
         nativeAdView.removeHandler();
         if (nativeAdView.unifiedNativeAd != null){
             nativeAdView.unifiedNativeAd.destroy();
+        }
+	if (nativeAdView.nativeAdView != null){
+            nativeAdView.nativeAdView.destroy();
         }
     }
 

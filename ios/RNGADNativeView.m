@@ -21,6 +21,9 @@ RCTBridge *bridge;
 NSString *adUnitId;
 NSNumber *refreshingInterval;
 NSNumber *delay;
+NSNumber *adChoicesPlace;
+BOOL *nonPersonalizedAds;
+
 
 
 - (instancetype)initWithBridge:(RCTBridge *)_bridge
@@ -33,6 +36,16 @@ NSNumber *delay;
     return self;
 }
 
+- (void)setAdChoicesPlacement:(NSNumber *)adChoicesPlacement {
+    
+    adChoicesPlace = adChoicesPlacement;
+}
+
+- (void)setRequestNonPersonalizedAdsOnly:(BOOL *)requestNonPersonalizedAdsOnly {
+    
+    nonPersonalizedAds = requestNonPersonalizedAdsOnly;
+}
+
 - (void)setDelayAdLoad:(NSNumber *)delayAdLoad
 {
     delay = delayAdLoad;
@@ -40,7 +53,7 @@ NSNumber *delay;
 
 - (void)setTestDevices:(NSArray *)testDevices
 {
-    _testDevices = RNAdMobProcessTestDevices(testDevices, kDFPSimulatorID);
+   // _testDevices = RNAdMobProcessTestDevices(testDevices, kDFPSimulatorID);
 }
 
 - (void)setRefreshInterval:(NSNumber *)refreshInterval
@@ -164,10 +177,6 @@ NSNumber *delay;
         }];
     });
     
-    
-    
-    
-    
 }
 
 - (void)setStore:(NSNumber *)store
@@ -184,10 +193,6 @@ NSNumber *delay;
             }
         }];
     });
-    
-    
-    
-    
 }
 
 - (void)setStarrating:(NSNumber *)starrating
@@ -235,7 +240,22 @@ NSNumber *delay;
     
     GADNativeAdViewAdOptions *adViewOptions = [GADNativeAdViewAdOptions new];
     
-    adViewOptions.preferredAdChoicesPosition = GADAdChoicesPositionTopRightCorner;
+    
+    if ([adChoicesPlace isEqualToNumber:@0]) {
+        [adViewOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopLeftCorner];
+    } else if ([adChoicesPlace isEqualToNumber:@1]) {
+        [adViewOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
+    }  else if ([adChoicesPlace isEqualToNumber:@2]) {
+        [adViewOptions setPreferredAdChoicesPosition:GADAdChoicesPositionBottomRightCorner];
+    }  else if ([adChoicesPlace isEqualToNumber:@3]) {
+        [adViewOptions setPreferredAdChoicesPosition:GADAdChoicesPositionBottomLeftCorner];
+    } else {
+        [adViewOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
+       
+    }
+    
+    
+    
     
     
     self.adLoader = [[GADAdLoader alloc]
@@ -244,9 +264,17 @@ NSNumber *delay;
                      adTypes:@[ kGADAdLoaderAdTypeUnifiedNative ]
                      options:@[adViewOptions]];
     
+    
     self.adLoader.delegate = self;
     GADRequest *request = [GADRequest request];
-    GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers = _testDevices;
+    
+    if (nonPersonalizedAds) {
+        GADExtras *extras = [[GADExtras alloc] init];
+        extras.additionalParameters = @{@"npa": @"1"};
+        [request registerAdNetworkExtras:extras];
+    }
+    
+    //GADMobileAds.sharedInstance.requestConfiguration.testDeviceIdentifiers = _testDevices;
     [self.adLoader loadRequest:request];
 }
 
@@ -299,12 +327,29 @@ NSNumber *delay;
                 NSInteger val2 = @(image.image.size.height).integerValue;
                 [imageDic setValue: [NSNumber numberWithInteger:val2] forKey:@"height"];
                 [images addObject:imageDic];
-            
+                
             }
             
             
+            
             [dic setObject:images forKey:@"images"];
-            [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
+            if (nativeAd.icon != nil) {
+                     [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
+            } else {
+                
+                NSString * someString = nativeAd.responseInfo.adNetworkClassName;
+                NSLog(@"%@", someString);
+                
+                if ([nativeAd.responseInfo.adNetworkClassName isEqualToString:@"GADMAdapterGoogleAdMobAds"]) {
+                             [dic setValue:@"noicon" forKey:@"icon"];
+                } else {
+                      [dic setValue:@"empty" forKey:@"icon"];
+                }
+            
+            
+            }
+           
+            
             [dic setValue:nativeAd.starRating forKey:@"rating"];
             
             self.onUnifiedNativeAdLoaded(dic);
