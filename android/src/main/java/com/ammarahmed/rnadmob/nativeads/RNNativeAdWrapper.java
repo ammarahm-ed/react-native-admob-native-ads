@@ -23,6 +23,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.VideoOptions;
+import com.google.android.gms.ads.formats.MediaView;
 import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
@@ -45,6 +46,7 @@ public class RNNativeAdWrapper extends LinearLayout {
     ReactContext mContext;
     UnifiedNativeAdView nativeAdView;
     UnifiedNativeAd unifiedNativeAd;
+    MediaView mediaView;
 
     protected @Nullable
     String messagingModuleName;
@@ -132,9 +134,19 @@ public class RNNativeAdWrapper extends LinearLayout {
     UnifiedNativeAd.OnUnifiedNativeAdLoadedListener onUnifiedNativeAdLoadedListener = new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
         @Override
         public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
+
+            if (unifiedNativeAd != null) {
+                unifiedNativeAd.destroy();
+            }
             if (nativeAd != null) {
+
                 unifiedNativeAd = nativeAd;
                 nativeAdView.setNativeAd(unifiedNativeAd);
+                if (mediaView != null) {
+                    nativeAdView.setMediaView(mediaView);
+                    mediaView.requestLayout();
+                }
+
             }
 
             setNativeAdToJS(nativeAd);
@@ -174,6 +186,7 @@ public class RNNativeAdWrapper extends LinearLayout {
     private Runnable runnable;
 
     private void setNativeAdToJS(UnifiedNativeAd nativeAd) {
+
         try {
             WritableMap args = Arguments.createMap();
             args.putString("headline", nativeAd.getHeadline());
