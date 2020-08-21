@@ -68,7 +68,7 @@ height=600
 </div>
 <p align="center">
 
-1.  [Admob Native Ads](https://developers.google.com/admob/android/native/start)
+1.  [Admob Native Advanced Ads](https://developers.google.com/admob/android/native/start)
 2.  Cross Platform (iOS and Android)
 3.  Identical Working on both platforms
 4.  You can create your ads from ground up as you desire, **no limits.**
