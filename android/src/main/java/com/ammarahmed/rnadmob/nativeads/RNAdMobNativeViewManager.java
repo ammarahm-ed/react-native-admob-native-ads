@@ -4,8 +4,11 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.facebook.react.bridge.CatalystInstance;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableNativeArray;
+import com.facebook.react.bridge.WritableNativeArray;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -81,7 +84,15 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     protected RNNativeAdWrapper createViewInstance(ThemedReactContext reactContext) {
         nativeAdView = new RNNativeAdWrapper(reactContext);
         return nativeAdView;
+
     }
+
+    @ReactProp(name = "messagingModuleName")
+    public void setMessagingModuleName(RNNativeAdWrapper view, String moduleName) {
+        ((RNNativeAdWrapper) view).setMessagingModuleName(moduleName);
+    }
+
+
 
 
 
@@ -91,49 +102,50 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
         nativeAdView.addNewView(child, index);
 
+
     }
 
     @ReactProp(name = PROP_REFRESH_INTERVAL)
     public void setRefreshInterval(final RNNativeAdWrapper view, final int interval) {
 
-        nativeAdView.setAdRefreshInterval(interval);
+        view.setAdRefreshInterval(interval);
+
     }
 
     @ReactProp(name = PROP_NON_PERSONALIZED_ADS, defaultBoolean = false)
     public void setPropNonPersonalizedAds(final RNNativeAdWrapper view, final boolean npa) {
 
-        nativeAdView.setRequestNonPersonalizedAdsOnly(npa);
+        view.setRequestNonPersonalizedAdsOnly(npa);
     }
 
 
     @ReactProp(name = PROP_AD_CHOICES_PLACEMENT)
     public void setPropAdChoicesPlacement(final RNNativeAdWrapper view, final int location) {
 
-        nativeAdView.setAdChoicesPlacement(location);
+        view.setAdChoicesPlacement(location);
     }
 
 
     @ReactProp(name = PROP_DELAY_AD_LOAD)
     public void setPropDelayAdLoad(final RNNativeAdWrapper view, final int delay) {
 
-        nativeAdView.setLoadWithDelay(delay);
+        view.setLoadWithDelay(delay);
 
     }
 
     @ReactProp(name = PROP_MEDIA_VIEW)
     public void setMediaView(final RNNativeAdWrapper view, final int id) {
 
-        nativeAdView.addMediaView(id);
+        view.addMediaView(id);
 
     }
 
     @ReactProp(name = PROP_HEADLINE_VIEW)
     public void setHeadlineView(final RNNativeAdWrapper v, final int id) {
 
-        View view = nativeAdView.findViewById(id);
-        if (view != null) {
-            nativeAdView.nativeAdView.setHeadlineView(view);
-        }
+        View view = v.findViewById(id);
+        v.nativeAdView.setHeadlineView(view);
+
 
 
     }
@@ -141,72 +153,64 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     @ReactProp(name = PROP_TAGLINE_VIEW)
     public void setPropTaglineView(final RNNativeAdWrapper v, final int id) {
 
-        View view = nativeAdView.findViewById(id);
-        if (view != null && nativeAdView.nativeAdView != null)
-            nativeAdView.nativeAdView.setBodyView(view);
+        View view = v.findViewById(id);
+            v.nativeAdView.setBodyView(view);
 
     }
 
     @ReactProp(name = PROP_ADVERTISER_VIEW)
     public void setPropAdvertiserView(final RNNativeAdWrapper v, final int id) {
 
-        View view = nativeAdView.findViewById(id);
-        if (view != null && nativeAdView.nativeAdView != null)
-            nativeAdView.nativeAdView.setAdvertiserView(view);
+        View view = v.findViewById(id);
+            v.nativeAdView.setAdvertiserView(view);
 
     }
 
     @ReactProp(name = PROP_IMAGE_VIEW)
     public void setPropImageView(final RNNativeAdWrapper v, final int id) {
 
-        View view = nativeAdView.findViewById(id);
-        if (view != null && nativeAdView.nativeAdView != null)
-            nativeAdView.nativeAdView.setImageView(view);
+        View view = v.findViewById(id);
+            v.nativeAdView.setImageView(view);
 
     }
 
     @ReactProp(name = PROP_ICON_VIEW)
     public void setPropIconView(final RNNativeAdWrapper v, final int id) {
 
-        View view = nativeAdView.findViewById(id);
-        if (view != null && nativeAdView.nativeAdView != null)
-            nativeAdView.nativeAdView.setIconView(view);
+        View view = v.findViewById(id);
+        v.nativeAdView.setIconView(view);
 
     }
 
     @ReactProp(name = PROP_STORE_VIEW)
     public void setPropStoreView(final RNNativeAdWrapper v, final int id) {
 
-        View view = nativeAdView.findViewById(id);
-        if (view != null && nativeAdView.nativeAdView != null)
-            nativeAdView.nativeAdView.setAdvertiserView(view);
+        View view = v.findViewById(id);
+            v.nativeAdView.setStoreView(view);
 
     }
 
     @ReactProp(name = PROP_PRICE_VIEW)
     public void setPropPriceView(final RNNativeAdWrapper v, final int id) {
 
-        View view = nativeAdView.findViewById(id);
-        if (view != null && nativeAdView.nativeAdView != null)
-            nativeAdView.nativeAdView.setAdvertiserView(view);
+        View view = v.findViewById(id);
+            v.nativeAdView.setPriceView(view);
 
     }
 
     @ReactProp(name = PROP_STAR_RATING_VIEW)
     public void setPropStarRatingView(final RNNativeAdWrapper v, final int id) {
 
-        View view = nativeAdView.findViewById(id);
-        if (view != null && nativeAdView.nativeAdView != null)
-            nativeAdView.nativeAdView.setAdvertiserView(view);
+        View view = v.findViewById(id);
+        v.nativeAdView.setStarRatingView(view);
 
     }
 
     @ReactProp(name = PROP_CALL_TO_ACTION_VIEW)
     public void setPropCallToActionView(final RNNativeAdWrapper v, final int id) {
 
-        View view = nativeAdView.findViewById(id);
-        if (view != null && nativeAdView.nativeAdView != null)
-            nativeAdView.nativeAdView.setAdvertiserView(view);
+            View view = v.findViewById(id);
+            v.nativeAdView.setCallToActionView(view);
 
     }
 
@@ -226,7 +230,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     @ReactProp(name = PROP_AD_UNIT_ID)
     public void setPropAdUnitId(final RNNativeAdWrapper view, final String adUnitId) {
         if (adUnitId == null) return;
-        nativeAdView.setAdUnitId(adUnitId);
+        view.setAdUnitId(adUnitId);
 
     }
 
