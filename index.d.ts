@@ -338,11 +338,12 @@ return: `boolean`
   /**
    * If you want to explicitly show only Images and no video etc, use ImageView.
    */
-  export function ImageView(props: ImageProps): JSX.Element;
+  export function ImageView(props: Partial<ImageProps>): JSX.Element;
+  
   /**
    * Icon/Logo of the adveriser shown inside this view
    */
-  export function IconView(props: ImageProps): JSX.Element;
+  export function IconView(props: Partial<ImageProps>): JSX.Element;
 
   /**
    * If the ad has images or video content. It will be loaded inside the MediaView.
