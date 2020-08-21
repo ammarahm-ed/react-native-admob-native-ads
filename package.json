@@ -25,7 +25,7 @@
     "index.js",
     "index.d.ts",
     "src/*.js",
-    "react-native-admob-native-ads.podspec",
+    "react-native-admob-native-ads.podspec"
   ],
   "keywords": [
     "android",
@@ -48,7 +48,7 @@
     "admob-native-advanced-ads"
   ],
   "peerDependencies": {
-    "react-native": "0.61.5",
+   "react-native": "0.61.5",
    "prop-types": "15.7.2",
    "react-native-star-rating": "1.1.0",
    "react-native-gesture-handler": "1.6.1"
