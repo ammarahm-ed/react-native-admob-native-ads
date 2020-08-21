@@ -4,7 +4,7 @@ import { RawButton, GestureHandlerRootView } from "react-native-gesture-handler"
 import { NativeAdContext } from "./context";
 
 const CallToActionView = (props) => {
-  const { nativeAd, nativeAdView, setNativeAdView, setNativeAd } = useContext(
+  const { nativeAd, nativeAdView } = useContext(
     NativeAdContext
   );
   const callToActionRef = createRef();
@@ -18,7 +18,8 @@ const CallToActionView = (props) => {
 
   useEffect(() => {
     _onLayout();
-  }, [nativeAd, nativeAdView]);
+
+  }, [nativeAd]);
 
   return (
     <GestureHandlerRootView>
