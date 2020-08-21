@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
 } from 'react-native';
 import {AdView} from './AdView';
 
@@ -161,9 +162,27 @@ const App = () => {
             {modalData.info}
           </Text>
 
-          {modalData.type === 'banner' || modalData.type === 'media' ? (
+          {modalData.type === 'media' ? (
+            <View
+              style={{
+                height: 400,
+              }}>
+              <ScrollView
+                style={{
+                  height: 401,
+                }}
+                contentContainerStyle={{
+                  height: 401,
+                }}>
+                {modalData.type === 'banner' || modalData.type === 'media' ? (
+                  <AdView type={selected} media={modalData.type === 'media'} />
+                ) : null}
+              </ScrollView>
+            </View>
+          ) : modalData.type === 'banner' ? (
             <AdView type={selected} media={modalData.type === 'media'} />
           ) : null}
+
 
           {modalData.type === 'list' ? (
             <View
