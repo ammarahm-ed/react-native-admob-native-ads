@@ -267,7 +267,7 @@ PODS:
     - React-cxxreact (= 0.63.0)
     - React-jsi (= 0.63.0)
   - React-jsinspector (0.63.0)
-  - react-native-admob-native-ads (0.3.1):
+  - react-native-admob-native-ads (0.3.3):
     - React
   - React-RCTActionSheet (0.63.0):
     - React-Core/RCTActionSheetHeaders (= 0.63.0)
@@ -502,7 +502,7 @@ SPEC CHECKSUMS:
   React-jsi: 254710f3a97e587427bfbf3011dacec2af66a1fc
   React-jsiexecutor: 0e0cb4e170ca72d4bb1179843d08dcbea3d100ac
   React-jsinspector: fc661eff8edbfb7e22119382c13f33bcadde0f3c
-  react-native-admob-native-ads: a9c8fa2790ecdc302809e3f9b464bdc062ad057c
+  react-native-admob-native-ads: 8c00b380363f7b8d3fce8aa8e7f3c571353e4f77
   React-RCTActionSheet: aadd91a1d6cbfae50dd41f140004f816e9e47ade
   React-RCTAnimation: 7fa2ef6c0ef1e3f0b7d2261c827ec94412deb5e6
   React-RCTBlob: ccbbc70295aee3a76a70323b48f63fb7a7fcffd6

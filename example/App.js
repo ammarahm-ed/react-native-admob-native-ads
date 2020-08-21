@@ -1,53 +1,21 @@
 import React, {useState} from 'react';
-import {View, Platform, Modal, ScrollView, Pressable, Text} from 'react-native';
-import NativeAdView, {
-  CallToActionView,
-  IconView,
-  HeadlineView,
-  TaglineView,
-  AdvertiserView,
-  MediaView,
-  StarRatingView,
-} from 'react-native-admob-native-ads';
-import {AdManager} from 'react-native-admob-native-ads';
-
-const NATIVE_AD_ID =
-  Platform.OS === 'ios'
-    ? 'ca-app-pub-3940256099942544/3986624511'
-    : 'ca-app-pub-3940256099942544/2247696110';
-
-const NATIVE_AD_VIDEO_ID =
-  Platform.OS === 'ios'
-    ? 'ca-app-pub-3940256099942544/2521693316'
-    : 'ca-app-pub-3940256099942544/1044960115';
+import {
+  FlatList,
+  Image,
+  Modal,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {AdView} from './AdView';
 
 const App = () => {
-  const [aspectRatio, setAspectRatio] = useState(1);
-  const [adLoaded, setAdLoaded] = useState(false);
-  const _onAdFailedToLoad = (event) => {
-    console.log(event.nativeEvent);
-    setAdLoaded(false);
-  };
-
-  const _onAdLoaded = () => {
-    console.log('Ad has loaded successfully');
-  };
-
-  const _onAdClicked = () => {
-    console.log('User has clicked the ad');
-  };
-
-  const _onAdImpression = () => {
-    console.log('Ad impressionr recorded');
-  };
-
-  const _onUnifiedNativeAdLoaded = (event) => {
-    console.log(event)
-    console.log('Views have populated with the Ad');
-    console.log(event.aspectRatio);
-    setAdLoaded(true);
-    setAspectRatio(event.aspectRatio);
-  };
+  const [modalData, setModalData] = useState({
+    visible: false,
+    title: '',
+    info: '',
+    type: null,
+  });
 
   return (
     <View
@@ -55,92 +23,228 @@ const App = () => {
         height: '100%',
         width: '100%',
         justifyContent: 'center',
+        alignItems: 'center',
       }}>
-      <NativeAdView
-        onAdLoaded={_onAdLoaded}
-        onAdFailedToLoad={_onAdFailedToLoad}
-        onAdLeftApplication={() => {
-          console.log('ad has left the application');
-        }}
-        onAdClicked={_onAdClicked}
-        onAdImpression={_onAdImpression}
-        onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
+      <View
         style={{
-          width: '95%',
-          alignSelf: 'center',
-        }}
-        delayAdLoading={10000}
-        adUnitID={NATIVE_AD_ID} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
-      >
+          alignItems: 'center',
+          marginBottom: 50,
+        }}>
+        <Image
+          source={require('./images.jpg')}
+          style={{
+            width: 120,
+            height: 120,
+            marginBottom: 30,
+            borderRadius: 100,
+          }}
+        />
+
+        <Text
+          style={{
+            fontSize: 18,
+            letterSpacing: 1,
+            textAlign: 'center',
+          }}>
+          Admob Native Advanced Ads {'\n'} for React Native
+        </Text>
+      </View>
+
+      <TouchableOpacity
+        onPress={() =>
+          setModalData({
+            visible: true,
+            title: 'Simple Banner Ad',
+            info: 'A banner ad without full size image.',
+            type: 'banner',
+          })
+        }
+        activeOpacity={0.8}
+        style={{
+          backgroundColor: 'orange',
+          width: '90%',
+          alignItems: 'center',
+          height: 50,
+          justifyContent: 'center',
+          borderRadius: 5,
+          marginBottom: 5,
+        }}>
+        <Text
+          style={{
+            color: 'white',
+          }}>
+          Simple Banner Ad
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() =>
+          setModalData({
+            visible: true,
+            title: 'A Video/Image Ad',
+            info: 'An ad with a full size image or video',
+            type: 'media',
+          })
+        }
+        activeOpacity={0.8}
+        style={{
+          backgroundColor: 'orange',
+          width: '90%',
+          alignItems: 'center',
+          height: 50,
+          justifyContent: 'center',
+          borderRadius: 5,
+          marginBottom: 5,
+        }}>
+        <Text
+          style={{
+            color: 'white',
+          }}>
+          Ad with Video/Image
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() =>
+          setModalData({
+            visible: true,
+            title: 'Ads in a List',
+            info:
+              'You can see the ads are displayed in a list after an interval of 3 items',
+            type: 'list',
+          })
+        }
+        activeOpacity={0.8}
+        style={{
+          backgroundColor: 'orange',
+          width: '90%',
+          alignItems: 'center',
+          height: 50,
+          justifyContent: 'center',
+          borderRadius: 5,
+          marginBottom: 5,
+        }}>
+        <Text
+          style={{
+            color: 'white',
+          }}>
+          Multiple Ads in a List
+        </Text>
+      </TouchableOpacity>
+
+      <Modal visible={modalData.visible} animationType="slide">
         <View
           style={{
+            backgroundColor: 'white',
+            height: '100%',
             width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <View
+          <Text
             style={{
-              height: 100,
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              paddingHorizontal: 10,
+              color: 'black',
+              fontSize: 25,
+              letterSpacing: 1,
             }}>
-            <IconView
-              style={{
-                width: 60,
-                height: 60,
-              }}
-            />
+            {modalData.title}
+          </Text>
+          <Text
+            style={{
+              width: '90%',
+              alignSelf: 'center',
+              color: 'gray',
+              textAlign: 'center',
+              marginBottom: 30,
+            }}>
+            {modalData.info}
+          </Text>
+
+          {modalData.type === 'banner' || modalData.type === 'media' ? (
+            <AdView media={modalData.type === 'media'} />
+          ) : null}
+
+          {modalData.type === 'list' ? (
             <View
               style={{
-                width: '60%',
-                maxWidth: '60%',
-                paddingHorizontal: 6,
+                height: 300,
               }}>
-              <HeadlineView
+              <FlatList
                 style={{
-                  fontWeight: 'bold',
-                  fontSize: 13,
+                  height: 300,
+                  width: '100%',
                 }}
+                data={[
+                  'Apple',
+                  'Jam',
+                  'Banana',
+                  'ad',
+                  'Orange',
+                  'Pineapple',
+                  'Apple',
+                  'ad',
+                  'Jam',
+                  'Banana',
+                  'Orange',
+                  'ad',
+                  'Pineapple',
+                ]}
+                renderItem={({item, index}) =>
+                  item === 'ad' ? (
+                    <AdView media={false} />
+                  ) : (
+                    <View
+                      style={{
+                        borderBottomWidth: 1,
+                        borderBottomColor: 'orange',
+                      }}>
+                      <Text
+                        style={{
+                          paddingHorizontal: 12,
+                          height: 60,
+                          textAlignVertical: 'center',
+                        }}>
+                        {item}
+                      </Text>
+                    </View>
+                  )
+                }
               />
-              <TaglineView
-                numberOfLines={1}
-                style={{
-                  fontSize: 11,
-                }}
-              />
-              <AdvertiserView
-                style={{
-                  fontSize: 10,
-                  color: 'gray',
-                }}
-              />
-
-              <StarRatingView />
             </View>
+          ) : null}
 
-            <CallToActionView
-              style={{
-                height: 45,
-                paddingHorizontal: 12,
-                backgroundColor: 'purple',
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 5,
-                elevation: 10,
-              }}
-              textStyle={{color: 'white', fontSize: 14}}
-            />
-          </View>
-          <MediaView
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() =>
+              setModalData({
+                ...modalData,
+                visible: false,
+              })
+            }
             style={{
-              width: '100%',
-              height: 400 / aspectRatio,
+              width: '90%',
+              alignItems: 'center',
+              height: 100,
+              width: 100,
+              borderWidth: 1,
+              borderColor: 'orange',
+              justifyContent: 'center',
+              borderRadius: 100,
+              marginBottom: 5,
+              marginTop: 100,
               backgroundColor: 'white',
-            }}
-          />
+            }}>
+            <Text
+              style={{
+                color: 'black',
+                fontSize: 16,
+                letterSpacing: 1,
+              }}>
+              Go Back
+            </Text>
+          </TouchableOpacity>
         </View>
-      </NativeAdView>
+      </Modal>
     </View>
   );
 };
