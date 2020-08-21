@@ -1,6 +1,6 @@
 import React, { createRef, useContext, useEffect } from "react";
 import { findNodeHandle, Text } from "react-native";
-import { RawButton } from "react-native-gesture-handler";
+import { RawButton, GestureHandlerRootView } from "react-native-gesture-handler";
 import { NativeAdContext } from "./context";
 
 const CallToActionView = (props) => {
@@ -21,30 +21,32 @@ const CallToActionView = (props) => {
   }, [nativeAd, nativeAdView]);
 
   return (
-    <RawButton
-      ref={callToActionRef}
-      onLayout={_onLayout}
-      style={[
-        {
-          paddingVertical: 8,
-          paddingHorizontal: 12,
-          backgroundColor: "#5DADE2",
-          justifyContent: "center",
-          alignItems: "center",
-          borderRadius: 5,
-          elevation: 10,
-        },
-        props.style,
-      ]}
-    >
-      <Text allowFontScaling={props.allowFontScaling ? props.allowFontScaling : false} style={[props.textStyle]}>
-        {nativeAd
-          ? props.allCaps
-            ? nativeAd.callToAction?.toUpperCase()
-            : nativeAd.callToAction
-          : null}
-      </Text>
-    </RawButton>
+    <GestureHandlerRootView>
+      <RawButton
+        ref={callToActionRef}
+        onLayout={_onLayout}
+        style={[
+          {
+            paddingVertical: 8,
+            paddingHorizontal: 12,
+            backgroundColor: "#5DADE2",
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 5,
+            elevation: 10,
+          },
+          props.style,
+        ]}
+      >
+        <Text allowFontScaling={props.allowFontScaling ? props.allowFontScaling : false} style={[props.textStyle]}>
+          {nativeAd
+            ? props.allCaps
+              ? nativeAd.callToAction?.toUpperCase()
+              : nativeAd.callToAction
+            : null}
+        </Text>
+      </RawButton>
+    </GestureHandlerRootView>
   );
 };
 
