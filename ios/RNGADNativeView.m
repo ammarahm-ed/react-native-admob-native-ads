@@ -222,7 +222,6 @@ BOOL *nonPersonalizedAds;
             UIView *callToActionView = viewRegistry[callToAction];
             
             if (callToActionView != nil){
-                callToActionView.userInteractionEnabled = NO;
                 [self setCallToActionView:callToActionView];
             }
             
@@ -282,6 +281,13 @@ BOOL *nonPersonalizedAds;
 - (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(GADRequestError *)error {
     if (self.onAdFailedToLoad) {
         self.onAdFailedToLoad(@{ @"error": @{ @"message": [error localizedDescription] } });
+        
+         double delayInSeconds = refreshingInterval.intValue/1000;
+               dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+               dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                   [self loadAd:adUnitId];
+         });
+        
     }
     
 }
