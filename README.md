@@ -42,20 +42,24 @@ align="center"
 >
 <img
 src="https://i.imgur.com/dmu35Id.png"
-style="width:33%;"
+width="33%"
+height=600
 />
 <img
 src="https://i.imgur.com/60B5tO6.png"
-style="width:33%;"
+width="33%"
+height=600
 />
 <img
 src="https://i.imgur.com/WMe6yLg.png"
-style="width:33%;"
+width="33%"
+height=600
 />
 
 <img
 src="https://i.imgur.com/ROMCCUw.png"
-style="width:33%;"
+width="33%"
+height=600
 />
 </div>
 
