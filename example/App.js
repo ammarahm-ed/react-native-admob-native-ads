@@ -16,6 +16,7 @@ const App = () => {
     info: '',
     type: null,
   });
+  const [selected, setSelected] = useState('image');
 
   return (
     <View
@@ -161,13 +162,14 @@ const App = () => {
           </Text>
 
           {modalData.type === 'banner' || modalData.type === 'media' ? (
-            <AdView media={modalData.type === 'media'} />
+            <AdView type={selected} media={modalData.type === 'media'} />
           ) : null}
 
           {modalData.type === 'list' ? (
             <View
               style={{
-                height: 300,
+                height: 400,
+                width: '100%',
               }}>
               <FlatList
                 style={{
@@ -197,6 +199,8 @@ const App = () => {
                       style={{
                         borderBottomWidth: 1,
                         borderBottomColor: 'orange',
+                        width: '100%',
+                        paddingHorizontal: 12,
                       }}>
                       <Text
                         style={{
@@ -210,6 +214,57 @@ const App = () => {
                   )
                 }
               />
+            </View>
+          ) : null}
+
+          {modalData.type === 'media' ? (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                marginTop: 50,
+                width: '100%',
+                alignSelf: 'center',
+              }}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => setSelected('video')}
+                style={{
+                  width: '90%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 5,
+                  marginTop: 20,
+                }}>
+                <Text
+                  style={{
+                    color: selected === 'video' ? 'orange' : 'black',
+                    fontSize: 16,
+                    letterSpacing: 1,
+                  }}>
+                  Video Ad
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => setSelected('image')}
+                style={{
+                  width: '90%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 5,
+                  marginTop: 20,
+                }}>
+                <Text
+                  style={{
+                    color: selected === 'image' ? 'orange' : 'black',
+                    fontSize: 16,
+                    letterSpacing: 1,
+                  }}>
+                  Image Ad
+                </Text>
+              </TouchableOpacity>
             </View>
           ) : null}
 
