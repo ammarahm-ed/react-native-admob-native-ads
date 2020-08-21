@@ -10,6 +10,18 @@ import {
 } from 'react-native';
 import {AdView} from './AdView';
 
+function listItemsGenerator(num) {
+  let list = [];
+  for (var i = 0; i < num; i++) {
+    list = [
+      ...list,
+      ...['Apple', 'Banana', 'Orange', 'Pineapple', 'Pancakes', 'ad'],
+    ];
+  }
+
+  return list;
+}
+
 const App = () => {
   const [modalData, setModalData] = useState({
     visible: false,
@@ -183,7 +195,6 @@ const App = () => {
             <AdView type={selected} media={modalData.type === 'media'} />
           ) : null}
 
-
           {modalData.type === 'list' ? (
             <View
               style={{
@@ -195,24 +206,10 @@ const App = () => {
                   height: 300,
                   width: '100%',
                 }}
-                data={[
-                  'Apple',
-                  'Jam',
-                  'Banana',
-                  'ad',
-                  'Orange',
-                  'Pineapple',
-                  'Apple',
-                  'ad',
-                  'Jam',
-                  'Banana',
-                  'Orange',
-                  'ad',
-                  'Pineapple',
-                ]}
+                data={listItemsGenerator(10)}
                 renderItem={({item, index}) =>
                   item === 'ad' ? (
-                    <AdView media={false} />
+                    <AdView type="image" delay={50 * index} media={false} />
                   ) : (
                     <View
                       style={{

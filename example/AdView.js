@@ -21,7 +21,7 @@ const NATIVE_AD_VIDEO_ID =
     ? 'ca-app-pub-3940256099942544/2521693316'
     : 'ca-app-pub-3940256099942544/1044960115';
 
-export const AdView = ({media, type}) => {
+export const AdView = ({media, type,delay=0}) => {
   const [aspectRatio, setAspectRatio] = useState(1);
   const [adLoaded, setAdLoaded] = useState(false);
   const _onAdFailedToLoad = (event) => {
@@ -56,6 +56,7 @@ export const AdView = ({media, type}) => {
       onAdLeftApplication={() => {
         console.log('ad has left the application');
       }}
+      delayAdLoading={delay}
       onAdClicked={_onAdClicked}
       onAdImpression={_onAdImpression}
       onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
