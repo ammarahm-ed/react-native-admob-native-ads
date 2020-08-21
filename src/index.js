@@ -25,6 +25,8 @@ const waitAsync = (ms) =>
     }, ms);
   });
 
+
+
 export class NativeAdView extends Component {
   constructor(props) {
     super(props);
@@ -38,7 +40,7 @@ export class NativeAdView extends Component {
     this.delayDuration = 0;
   }
 
-  messagingModuleName = `NativeAdMessageHandler${(AdManager.uniqueRef += 1)}`;
+  messagingModuleName = `NativeAdMessageHandler${(Date.now() + Math.random())}`;
 
   _onAdFailedToLoad = (event) => {
     if (this.props.onAdFailedToLoad) {
@@ -123,7 +125,7 @@ export class NativeAdView extends Component {
           onAdOpened={this._onAdOpened}
           onAdClosed={this._onAdClosed}
           onAdImpression={this._onAdImpression}
-          style={[this.props.style, { height: this.state.nativeAd ? null : 0 }]}
+          style={[this.props.style, Platform.OS === "ios" ?  { display: this.state.nativeAd ? "flex" : "none" } : { height: this.state.nativeAd ? null : 0 }  ]}
           onUnifiedNativeAdLoaded={this.onUnifiedNativeAdLoaded}
           refreshInterval={
             this.props.refreshInterval ? this.props.refreshInterval : 60000
