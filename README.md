@@ -41,10 +41,21 @@ This library aims to solve that problem by providing complete support for Admob 
 align="center"
 >
 <img
-src="https://i.imgur.com/DOaoU1t.png"
+src="https://i.imgur.com/dmu35Id.png"
+style="width:33%;"
 />
 <img
-src="https://i.imgur.com/yX5GKhN.png"
+src="https://i.imgur.com/60B5tO6.png"
+style="width:33%;"
+/>
+<img
+src="https://i.imgur.com/WMe6yLg.png"
+style="width:33%;"
+/>
+
+<img
+src="https://i.imgur.com/ROMCCUw.png"
+style="width:33%;"
 />
 </div>
 
