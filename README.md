@@ -86,7 +86,7 @@ or if you use yarn:
 
 Also install the following packages:
 
-  `yarn add react-native-gesture-handler`
+  `yarn add react-native-gesture-handler react-native-star-rating`
 
 and
 
