@@ -11,10 +11,12 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.CatalystInstance;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
@@ -26,6 +28,7 @@ import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class RNNativeAdWrapper extends LinearLayout {
 
@@ -39,9 +42,12 @@ public class RNNativeAdWrapper extends LinearLayout {
         }
     };
     public int adRefreshInterval = 60000;
-    Context mContext;
+    ReactContext mContext;
     UnifiedNativeAdView nativeAdView;
     UnifiedNativeAd unifiedNativeAd;
+
+    protected @Nullable
+    String messagingModuleName;
 
     private int adChoicesPlacement = 1;
     private boolean requestNonPersonalizedAdsOnly = false;
@@ -71,6 +77,16 @@ public class RNNativeAdWrapper extends LinearLayout {
             error.putString("message", errorMessage);
             event.putMap("error", error);
             sendEvent(RNAdMobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
+
+            if (handler != null) {
+                runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        loadAd();
+                    }
+                };
+                handler.postDelayed(runnable, adRefreshInterval);
+            }
         }
 
         @Override
@@ -126,11 +142,13 @@ public class RNNativeAdWrapper extends LinearLayout {
     };
 
 
-    public RNNativeAdWrapper(Context context) {
+    public RNNativeAdWrapper(ReactContext context) {
         super(context);
         mContext = context;
         createView(context);
         handler = new Handler();
+        mCatalystInstance = mContext.getCatalystInstance();
+        setId(UUID.randomUUID().hashCode() + this.getId());
     }
 
     public void createView(Context context) {
@@ -147,8 +165,6 @@ public class RNNativeAdWrapper extends LinearLayout {
             if (adMediaView != null) {
                 nativeAdView.setMediaView(adMediaView);
                 adMediaView.requestLayout();
-
-
             }
         } catch (Exception e) {
 
@@ -223,15 +239,14 @@ public class RNNativeAdWrapper extends LinearLayout {
                     args.putString("icon", "empty");
                 }
 
-
-
-
             }
 
-            sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
+            //sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
+            sendDirectMessage(args);
 
         } catch (Exception e) {
             Log.d("HELLO", e.getMessage());
+
         }
         if (handler != null) {
             runnable = new Runnable() {
@@ -249,6 +264,27 @@ public class RNNativeAdWrapper extends LinearLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
     }
+
+
+    public void setMessagingModuleName(String moduleName) {
+        messagingModuleName = moduleName;
+    }
+
+    CatalystInstance mCatalystInstance;
+    protected void sendDirectMessage(WritableMap data) {
+
+        WritableNativeMap event = new WritableNativeMap();
+        event.putMap("nativeEvent", data);
+        WritableNativeArray params = new WritableNativeArray();
+        params.pushMap(event);
+
+        if (mCatalystInstance != null){
+            mCatalystInstance.callFunction(messagingModuleName, "onUnifiedNativeAdLoaded", params);
+        }
+
+    }
+
+
 
     @Override
     protected void onDetachedFromWindow() {
