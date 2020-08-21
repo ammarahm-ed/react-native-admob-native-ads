@@ -4,9 +4,7 @@ import { NativeAdContext } from "./context";
 import StarRating from "react-native-star-rating";
 
 const StarRatingView = (props) => {
-  const { nativeAd, nativeAdView, setNativeAdView, setNativeAd } = useContext(
-    NativeAdContext
-  );
+  const { nativeAd, nativeAdView } = useContext(NativeAdContext);
   const starRatingRef = createRef();
   const _onLayout = () => {
     if (!nativeAdView) return;

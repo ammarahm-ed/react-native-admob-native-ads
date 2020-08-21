@@ -3,7 +3,7 @@ import { findNodeHandle, Text } from "react-native";
 import { NativeAdContext } from "./context";
 
 const AdvertiserView = (props) => {
-  const { nativeAd, nativeAdView, setNativeAdView, setNativeAd } = useContext(
+  const { nativeAd, nativeAdView } = useContext(
     NativeAdContext
   );
   const advertiserRef = createRef();

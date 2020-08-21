@@ -3,9 +3,7 @@ import { findNodeHandle, Image } from "react-native";
 import { NativeAdContext } from "./context";
 
 const ImageView = (props) => {
-  const { nativeAd, nativeAdView, setNativeAdView, setNativeAd } = useContext(
-    NativeAdContext
-  );
+  const { nativeAd, nativeAdView } = useContext(NativeAdContext);
   const imageViewRef = createRef();
   const _onLayout = () => {
     if (!nativeAdView) return;

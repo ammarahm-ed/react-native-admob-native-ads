@@ -3,9 +3,7 @@ import { findNodeHandle, requireNativeComponent } from "react-native";
 import { NativeAdContext } from "./context";
 
 const MediaView = (props) => {
-  const { nativeAd, nativeAdView, setNativeAdView, setNativeAd } = useContext(
-    NativeAdContext
-  );
+  const { nativeAd, nativeAdView } = useContext(NativeAdContext);
   const adMediaView = createRef();
 
   const _onLayout = () => {

@@ -3,9 +3,7 @@ import { findNodeHandle, Text } from "react-native";
 import { NativeAdContext } from "./context";
 
 const HeadlineView = (props) => {
-  const { nativeAd, nativeAdView, setNativeAdView, setNativeAd } = useContext(
-    NativeAdContext
-  );
+  const { nativeAd, nativeAdView } = useContext(NativeAdContext);
   const headlineRef = createRef();
   const _onLayout = () => {
     if (!nativeAdView) return;
