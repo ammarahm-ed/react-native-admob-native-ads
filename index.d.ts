@@ -1,20 +1,18 @@
-import { ViewStyle, TextProps, ImageProps, TextStyle } from "react-native";
-import { StarRatingProps } from "react-native-star-rating";
-
+import { ViewStyle, TextProps, ImageProps, TextStyle, StyleProp } from "react-native";
 
 type Image = {
   /**
-   * The url of the image 
+   * The url of the image
    */
-  url:string;
+  url: string;
   /**
    * The height of the image
    */
-  height:number;
-    /**
-   * The width of the image
-   */
-  width:number;
+  height: number;
+  /**
+ * The width of the image
+ */
+  width: number;
 }
 
 
@@ -43,7 +41,7 @@ type NativeAd = {
    * Aspect ratio of the Content loaded inside MediaView.
    * You should use this to calculate the correct width and height of the MediaView.
    */
-  aspectRatio:number;
+  aspectRatio: number;
   /**
    * If ad is for an app, then name of the store.
    */
@@ -73,36 +71,31 @@ type NativeAd = {
 
 type options = {
   adChoicesPlacement: {
-    TOP_LEFT:number,
-    TOP_RIGHT:number,
-    BOTTOM_RIGHT:number,
+    TOP_LEFT: number,
+    TOP_RIGHT: number,
+    BOTTOM_RIGHT: number,
     BOTTOM_LEFT: number
   }
 }
+/**
+ * | Name      | Description |
+| --------- | -------- |
+| G | "General audiences." Content suitable for all audiences, including families and children.  |
+| MA | "Mature audiences." Content suitable only for mature audiences; includes topics such as alcohol, gambling, sexual content, and weapons.  |
+| PG | "Parental guidance." Content suitable for most audiences with parental guidance, including topics like non-realistic, cartoonish violence.  |
+| T | "Teen." Content suitable for teen and older audiences, including topics such as general health, social networks, scary imagery, and fight sports. |
+| UNSPECIFIED | Set default value to ""|
+ */
+type MAX_AD_CONTENT_RATING = 'G' | 'MA' | 'PG' | 'T' | 'UNSPECIFIED';
 
-type MAX_AD_CONTENT_RATING = {
-  G: string,
-  MA:string,
-  PG: string,
-  T: string,
-  UNSPECIFIED:string,
-}
-type TAG_FOR_CHILD_DIRECTED_TREATMENT = {
-  TRUE:number,
-  FALSE:number
+type AdManagerConfiguration = {
+  maxAdContentRating: MAX_AD_CONTENT_RATING,
+  tagForChildDirectedTreatment: boolean,
+  tagForUnderAgeConsent: boolean,
+  testDeviceIds: Array<string>
 }
 
-type TAG_FOR_UNDER_AGE_CONSENT = {
-  TRUE:number,
-  FALSE:number
-}
-
-type config = {
-  maxAdContentRating:MAX_AD_CONTENT_RATING,
-  tagForChildDirectedTreatment:TAG_FOR_CHILD_DIRECTED_TREATMENT,
-  tagForUnderAgeConsent:TAG_FOR_UNDER_AGE_CONSENT,
-  testDeviceIds:Array<string>
-}
+type ImagePropsWithOptionalSource = Omit<ImageProps, 'source'> & Partial<Pick<ImageProps, 'source'>>;
 
 
 type NativeAdViewProps = {
@@ -110,13 +103,13 @@ type NativeAdViewProps = {
    * When you are designing your ad, placeholders
    * for the ad will be loaded so you can easily
    * design, because for each type of ad
-   * recieved from the server, not all 
+   * recieved from the server, not all
    * the info is available.
    */
 
   enableTestMode?: boolean;
   children: React.ReactNode;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 
   /**
    * Ad Unit ID for Native ads. Remember to use only test-ids during
@@ -132,10 +125,10 @@ type NativeAdViewProps = {
   refreshInterval?: number;
 
   /**
-   * Time in milliseconds to delay ad rendering. 
+   * Time in milliseconds to delay ad rendering.
    * Use this if you are rendering multiple ads
    * in your screen such as in a list. Default is 0ms.
-   * This is usually done so that ad request is done 
+   * This is usually done so that ad request is done
    * after the views are attached.
    */
 
@@ -143,31 +136,31 @@ type NativeAdViewProps = {
 
   /**
    * Placement of AdChoicesView in any of the 4 corners of the ad
-   * 
+   *
    * import AdOptions then pass the value from there. AdOptions.adChoicesPlacement
    */
 
   adChoicesPlacement?: {
-    TOP_LEFT:number,
-    TOP_RIGHT:number,
-    BOTTOM_RIGHT:number,
+    TOP_LEFT: number,
+    TOP_RIGHT: number,
+    BOTTOM_RIGHT: number,
     BOTTOM_LEFT: number
   }
 
   /**
-   * Under the Google EU User Consent Policy, you must make certain disclosures 
-   * to your users in the European Economic Area (EEA) and obtain their consent 
-   * to use cookies or other local storage, where legally required, and to use 
-   * personal data (such as AdID) to serve ads. This policy reflects the requirements 
+   * Under the Google EU User Consent Policy, you must make certain disclosures
+   * to your users in the European Economic Area (EEA) and obtain their consent
+   * to use cookies or other local storage, where legally required, and to use
+   * personal data (such as AdID) to serve ads. This policy reflects the requirements
    * of the EU ePrivacy Directive and the General Data Protection Regulation (GDPR).
-   * 
+   *
    * You can use library such as: https://github.com/birgernass/react-native-ad-consent
    * to obtain the consent or if you are using rn-firebase you can obtain the consent from
-   * there and then pass the consent to this library. If user has selected 
+   * there and then pass the consent to this library. If user has selected
    * non-personalized-ads then pass `true` and non-personalized ads will be shown to the user.
-   * 
+   *
    */
-  requestNonPersonalizedAdsOnly:boolean;
+  requestNonPersonalizedAdsOnly: boolean;
 
   /**
    * Set testdevices for the ad. (DEPRECATED)
@@ -184,11 +177,11 @@ type NativeAdViewProps = {
 };
 
 type SimpleViewProps = {
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 };
 
 type NestedTextProps = {
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   textStyle?: TextStyle;
   allCaps?: boolean;
   allowFontScaling?: boolean;
@@ -210,100 +203,62 @@ declare module "react-native-admob-native-ads" {
     props: NativeAdViewProps
   ): JSX.Element;
 
- 
- const MAX_AD_CONTENT_RATING:MAX_AD_CONTENT_RATING;
- const TAG_FOR_CHILD_DIRECTED_TREATMENT:TAG_FOR_CHILD_DIRECTED_TREATMENT;
- const TAG_FOR_UNDER_AGE_CONSENT:TAG_FOR_UNDER_AGE_CONSENT;
-
 
   /**
    * AdManager can be used to configure your ads on App Startup such as setting test devices.
-   * 
-   */
-
- export const AdManager = {
-
-   /**
-   * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
-
-  | Name      | Type | Required |
-  | --------- | -------- | -------- |
-  | testDeviceIds | `Array<string>` | no  |
-  | maxAdContentRating | AdManager.MAX_AD_CONTENT_RATING | no  |
-  | tagForChildDirectedTreatment | AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT | no  |
-  | tagForUnderAgeConsent | AdManager.TAG_FOR_UNDER_AGE_CONSENT | no  |
-
-  Example:
-
-  ```js
-
-  const config = {
-    testDeviceIds:["YOUR_TEST_DEVICE_ID"],
-    maxAdContetRating:AdManager.MAX_AD_CONTENT_RATING.MA,
-    tagForChildDirectedTreatment:AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT.FALSE,
-    tagForUnderAgeConsent:AdManager.TAG_FOR_UNDER_AGE_CONSENT.FALSE
-  }
-
-  AdManager.setRequestConfiguration(config);
-
-  ```
-   * 
-   */
-
-  setRequestConfiguration: (config:config) => {},
-
-  /**
-   * Check if the current device is registered as a test device to show test ads.
-
-```js
-  AdManager.isTestDevice().then(result => console.log(result))
-```
-return: `boolean`
-   */
-  isTestDevice:async () => {},
-
-
-  /**
-   * | Name      | Description | 
-| --------- | -------- | 
-| G | "General audiences." Content suitable for all audiences, including families and children.  |
-| MA | "Mature audiences." Content suitable only for mature audiences; includes topics such as alcohol, gambling, sexual content, and weapons.  | 
-| PG | "Parental guidance." Content suitable for most audiences with parental guidance, including topics like non-realistic, cartoonish violence.  |
-| T | "Teen." Content suitable for teen and older audiences, including topics such as general health, social networks, scary imagery, and fight sports. | 
-| UNSPECIFIED | Set default value to ""| 
-   */
-
-  MAX_AD_CONTENT_RATING:MAX_AD_CONTENT_RATING,
-
-
-  /**
-   * | Name      | Description | 
-| --------- | -------- | 
-| TRUE | Enabled  |
-| FALSE | Disabled  | 
-   */
-
-  TAG_FOR_CHILD_DIRECTED_TREATMENT:TAG_FOR_CHILD_DIRECTED_TREATMENT,
-
-  /**
-   * | Name      | Description | 
-| --------- | -------- | 
-| TRUE | Enabled |
-| FALSE | Disabled  | 
-   */
-
-
-  TAG_FOR_UNDER_AGE_CONSENT:TAG_FOR_UNDER_AGE_CONSENT     
-}
-
-    
-  export const AdOptions:options; 
-
-
-   /**
-   * Ad Badge shows the {ad} badge on top of the ad telling the user that this is an AD.
    *
    */
+
+  export const AdManager = {
+
+    /**
+    * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
+
+   | Name      | Type | Required |
+   | --------- | -------- | -------- |
+   | testDeviceIds | `Array<string>` | no  |
+   | maxAdContentRating | AdManager.MAX_AD_CONTENT_RATING | no  |
+   | tagForChildDirectedTreatment | AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT | no  |
+   | tagForUnderAgeConsent | AdManager.TAG_FOR_UNDER_AGE_CONSENT | no  |
+
+   Example:
+
+   ```js
+
+   const config = {
+     testDeviceIds:["YOUR_TEST_DEVICE_ID"],
+     maxAdContetRating: 'MA',
+     tagForChildDirectedTreatment: false,
+     tagForUnderAgeConsent: false
+   }
+
+   AdManager.setRequestConfiguration(config);
+
+   ```
+    *
+    */
+
+    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => { },
+
+    /**
+     * Check if the current device is registered as a test device to show test ads.
+
+  ```js
+    AdManager.isTestDevice().then(result => console.log(result))
+  ```
+  return: `boolean`
+     */
+    isTestDevice: async () => { },
+  }
+
+
+  export const AdOptions: options;
+
+
+  /**
+  * Ad Badge shows the {ad} badge on top of the ad telling the user that this is an AD.
+  *
+  */
 
   export function AdBadge(props: NestedTextProps): JSX.Element;
 
@@ -338,12 +293,11 @@ return: `boolean`
   /**
    * If you want to explicitly show only Images and no video etc, use ImageView.
    */
-  export function ImageView(props: Partial<ImageProps>): JSX.Element;
-  
+  export function ImageView(props: ImagePropsWithOptionalSource): JSX.Element;
   /**
    * Icon/Logo of the adveriser shown inside this view
    */
-  export function IconView(props: Partial<ImageProps>): JSX.Element;
+  export function IconView(props: ImagePropsWithOptionalSource): JSX.Element;
 
   /**
    * If the ad has images or video content. It will be loaded inside the MediaView.

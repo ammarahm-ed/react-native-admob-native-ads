@@ -8,7 +8,7 @@ import { AdManager } from 'react-native-admob-native-ads';
 
 
 AdManager.setRequestConfiguration({
-  tagForChildDirectedTreatment:AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT.FALSE
+  tagForChildDirectedTreatment: false
 })
 
 AppRegistry.registerComponent(appName, () => App);
