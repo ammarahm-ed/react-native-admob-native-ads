@@ -37,6 +37,7 @@ export class NativeAdView extends Component {
     this.nativeAdRef;
     this.currentId = 0;
     this.delayDuration = 0;
+    this.componentMounted = false;
   }
 
   messagingModuleName = `NativeAdMessageHandler${(Date.now() + Math.random())}`;
@@ -83,12 +84,15 @@ export class NativeAdView extends Component {
   };
 
   updateAd(ad) {
-    this.setState({
-      nativeAd: ad,
-    });
+    if (this.componentMounted) {
+      this.setState({
+        nativeAd: ad,
+      });
+    }
   }
 
   componentDidMount() {
+    this.componentMounted = true;
     if (this.props.enableTestMode) {
       this.updateAd(testNativeAd);
     } else {
@@ -104,6 +108,10 @@ export class NativeAdView extends Component {
         delayRender: false,
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.componentMounted = false;
   }
 
   render() {
