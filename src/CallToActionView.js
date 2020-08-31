@@ -1,5 +1,5 @@
 import React, { createRef, useContext, useEffect } from "react";
-import { findNodeHandle, Text } from "react-native";
+import { findNodeHandle, StyleSheet, Text } from "react-native";
 import {
   RawButton,
   GestureHandlerRootView,
@@ -27,15 +27,7 @@ const CallToActionView = (props) => {
         ref={callToActionRef}
         onLayout={_onLayout}
         style={[
-          {
-            paddingVertical: 8,
-            paddingHorizontal: 12,
-            backgroundColor: "#5DADE2",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 5,
-            elevation: 10,
-          },
+          styles.container,
           props.style,
         ]}
       >
@@ -43,7 +35,7 @@ const CallToActionView = (props) => {
           allowFontScaling={
             props.allowFontScaling ? props.allowFontScaling : false
           }
-          style={[props.textStyle]}
+          style={props.textStyle}
         >
           {nativeAd
             ? props.allCaps
@@ -57,3 +49,14 @@ const CallToActionView = (props) => {
 };
 
 export default CallToActionView;
+
+const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+    elevation: 10,
+  },
+})
