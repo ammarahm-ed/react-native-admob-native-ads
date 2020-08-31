@@ -187,6 +187,14 @@ type NestedTextProps = {
   allowFontScaling?: boolean;
 };
 
+type StarViewProps = {
+  style?: StyleProp<ViewStyle>,
+  size?: number,
+  iconSet?: 'Entypo' | 'EvilIcons' | 'Feather' | 'FontAwesome' | 'Foundation' | 'Ionicons' | 'MaterialIcons' | 'MaterialCommunityIcons' | 'Octicons' | 'Zocial' | 'SimpleLineIcons',
+  fullIcon?: string,
+  halfIcon?: string,
+  emptyIcon?: string,
+}
 
 
 declare module "react-native-admob-native-ads" {
@@ -319,6 +327,6 @@ declare module "react-native-admob-native-ads" {
    * the server.
    */
   export function StarRatingView(
-    props: StarRatingProps
+    props: StarViewProps
   ): JSX.Element;
 }
