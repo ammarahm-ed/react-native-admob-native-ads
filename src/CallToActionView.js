@@ -26,24 +26,13 @@ const CallToActionView = (props) => {
       <RawButton
         ref={callToActionRef}
         onLayout={_onLayout}
-        style={[
-          {
-            paddingVertical: 8,
-            paddingHorizontal: 12,
-            backgroundColor: "#5DADE2",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 5,
-            elevation: 10,
-          },
-          props.style,
-        ]}
+        style={props.style}
       >
         <Text
           allowFontScaling={
             props.allowFontScaling ? props.allowFontScaling : false
           }
-          style={[props.textStyle]}
+          style={props.textStyle}
         >
           {nativeAd
             ? props.allCaps

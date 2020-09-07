@@ -1,8 +1,9 @@
 package com.ammarahmed.rnadmob.nativeads;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
@@ -12,65 +13,63 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
-
-    private ReactContext reactContext;
-
-    public RNAdmobNativeAdsManager(ReactApplicationContext rc) {
-        super(rc);
-        reactContext = rc;
-
+    public RNAdmobNativeAdsManager(ReactApplicationContext context) {
+        super(context);
+        MobileAds.initialize(context);
     }
 
+    @NonNull
     @Override
     public String getName() {
         return "RNAdmobNativeAdsManager";
     }
 
-
-
-
     @ReactMethod
     public void setRequestConfiguration(ReadableMap config) {
-
-
         RequestConfiguration.Builder configuration = new RequestConfiguration.Builder();
 
         if (config.hasKey("maxAdContentRating")) {
             if (config.getString("maxAdContentRating") != null) {
-                configuration.setMaxAdContentRating(config.getString("maxAdContentRating"));
+                String maxAdContentRating = config.getString("maxAdContentRating");
+                if (maxAdContentRating != null) {
+                    if (maxAdContentRating.equals("UNSPECIFIED"))
+                        maxAdContentRating = "";
+                    configuration.setMaxAdContentRating(maxAdContentRating);
+                }
             }
         }
 
         if (config.hasKey("tagForChildDirectedTreatment")) {
-            configuration.setTagForChildDirectedTreatment(config.getInt("tagForChildDirectedTreatment"));
+            boolean tagForChildDirectedTreatment = config.getBoolean("tagForChildDirectedTreatment");
+            configuration.setTagForChildDirectedTreatment(tagForChildDirectedTreatment ? 1 : 0);
         }
         if (config.hasKey("tagForUnderAgeOfConsent")) {
-            configuration.setTagForUnderAgeOfConsent(config.getInt("TagForUnderAgeOfConsent"));
+            boolean tagForUnderAgeOfConsent = config.getBoolean("tagForUnderAgeOfConsent");
+            configuration.setTagForUnderAgeOfConsent(tagForUnderAgeOfConsent ? 1 : 0);
         }
         if (config.hasKey("testDeviceIds")) {
             ReadableNativeArray nativeArray = (ReadableNativeArray) config.getArray("testDeviceIds");
-            ArrayList<Object> list = nativeArray.toArrayList();
-            List<String> testDeviceIds = Arrays.asList(list.toArray(new String[list.size()]));
-            configuration.setTestDeviceIds(testDeviceIds);
+            if (nativeArray != null) {
+                ArrayList<Object> list = nativeArray.toArrayList();
+                List<String> testDeviceIds = new ArrayList<>(list.size());
+                for (Object object : list) {
+                    testDeviceIds.add(object != null ? object.toString() : null);
+                }
+                configuration.setTestDeviceIds(testDeviceIds);
+            }
         }
 
         MobileAds.setRequestConfiguration(configuration.build());
-        MobileAds.initialize(reactContext);
-
+        // TODO: Is it a problem that I'm calling initialize twice?
+        MobileAds.initialize(getReactApplicationContext());
     }
-
-
 
     @ReactMethod
     public void isTestDevice(Promise promise) {
-
-         AdRequest builder =   new AdRequest.Builder().build();
-         if (builder != null) {
-             promise.resolve(builder.isTestDevice(reactContext));
-         }
+        AdRequest builder = new AdRequest.Builder().build();
+        promise.resolve(builder.isTestDevice(getReactApplicationContext()));
     }
 }

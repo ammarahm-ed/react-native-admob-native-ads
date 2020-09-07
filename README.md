@@ -243,10 +243,9 @@ Configure your Ad Requests during App Startup. You need to pass a single object 
 ```js
 const config = {
   testDeviceIds: ["YOUR_TEST_DEVICE_ID"],
-  maxAdContetRating: AdManager.MAX_AD_CONTENT_RATING.MA,
-  tagForChildDirectedTreatment:
-    AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT.FALSE,
-  tagForUnderAgeConsent: AdManager.TAG_FOR_UNDER_AGE_CONSENT.FALSE,
+  maxAdContetRating: 'MA',
+  tagForChildDirectedTreatment: false,
+  tagForUnderAgeConsent: false
 };
 
 AdManager.setRequestConfiguration(config);

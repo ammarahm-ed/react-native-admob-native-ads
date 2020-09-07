@@ -1,15 +1,19 @@
 import React from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 const Wrapper = (props) => {
   return (
     <View
       {...props}
-      style={{
-        backgroundColor: "rgba(0,0,0,0)",
-      }}
+      style={styles.container}
     />
   );
 };
 
 export default Wrapper;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'transparent'
+  }
+})
