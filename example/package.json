@@ -13,8 +13,6 @@
     "react": "16.13.1",
     "react-native": "0.63.0",
     "react-native-admob-native-ads": "../",
-    "react-native-gesture-handler": "^1.6.1",
-    "react-native-star-rating": "^1.1.0",
     "react-native-vector-icons": "^7.0.0"
   },
   "devDependencies": {
