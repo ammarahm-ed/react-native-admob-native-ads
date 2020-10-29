@@ -49,9 +49,7 @@
   ],
   "peerDependencies": {
     "react-native": "0.61.5",
-    "prop-types": "15.7.2",
-    "react-native-star-rating": "1.1.0",
-    "react-native-gesture-handler": "1.6.1"
+    "prop-types": "15.7.2"
   },
   "private": false,
   "devDependencies": {
