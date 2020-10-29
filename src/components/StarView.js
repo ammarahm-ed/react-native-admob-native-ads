@@ -1,6 +1,17 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { View, StyleSheet} from 'react-native';
-
+import EntypoIcons from 'react-native-vector-icons/Entypo';
+import EvilIconsIcons from 'react-native-vector-icons/EvilIcons';
+import FeatherIcons from 'react-native-vector-icons/Feather';
+import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
+import FoundationIcons from 'react-native-vector-icons/Foundation';
+import IoniconsIcons from 'react-native-vector-icons/Ionicons';
+import MaterialIconsIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import OcticonsIcons from 'react-native-vector-icons/Octicons';
+import ZocialIcons from 'react-native-vector-icons/Zocial';
+import SimpleLineIconsIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 /*
 export interface StarViewProps {
   style?: StyleProp<ViewStyle>;
@@ -12,9 +23,21 @@ export interface StarViewProps {
 }
 */
 
-function requireIconSet(iconSet) {
-  return require(`react-native-vector-icons/${iconSet}`).default;
-}
+const iconSets = {
+  Entypo: EntypoIcons,
+  EvilIcons: EvilIconsIcons,
+  Feather: FeatherIcons,
+  Fontisto:Fontisto,
+  FontAwesome: FontAwesomeIcons,
+  Foundation: FoundationIcons,
+  Ionicons: IoniconsIcons,
+  MaterialIcons: MaterialIconsIcons,
+  MaterialCommunityIcons: MaterialCommunityIcons,
+  Octicons: OcticonsIcons,
+  Zocial: ZocialIcons,
+  SimpleLineIcons: SimpleLineIconsIcons,
+};
+
 
 export default function StarView({
   style = undefined,
@@ -22,15 +45,15 @@ export default function StarView({
   size = 15,
   iconSet = 'MaterialCommunityIcons',
   fullIcon = 'star',
-  halfIcon = 'shield-half-full',
-  emptyIcon = 'shield-outline',
+  halfIcon = 'star-half-full',
+  emptyIcon = 'star-outline',
   ...passThroughProps
 }) {
-  const [Icon, setIcon] = useState();
-
+  let Icon = MaterialCommunityIcons;
+  
   const viewStyle = useMemo(() => [styles.row, style], [style]);
-
   const renderIcons = useCallback(
+
     (_stars, _size, icons = [], emptyStars = 5) => {
       if (typeof stars !== 'number') return null;
       if (typeof _size !== 'number') return null;
@@ -56,7 +79,7 @@ export default function StarView({
   );
 
   useEffect(() => {
-    setIcon(requireIconSet(iconSet));
+    Icon = iconSets[iconSet];
   }, [iconSet]);
 
   if (stars == null || typeof stars !== 'number') return null;
