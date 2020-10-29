@@ -24,5 +24,5 @@ Pod::Spec.new do |s|
     'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/Google-Mobile-Ads-SDK/Frameworks/**"',
   }
 
-  s.dependency 'React'
+  s.dependency 'React-Core'
 end
