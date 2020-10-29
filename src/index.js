@@ -14,7 +14,7 @@ const testNativeAd = {
   rating: 4.5,
   price: "$ 1",
   icon: "https://dummyimage.com/300.png/09f/fff",
-  images: ["https://dummyimage.com/qvga"],
+  images: [{url:"https://dummyimage.com/qvga"}],
 };
 
 const waitAsync = (ms) =>
