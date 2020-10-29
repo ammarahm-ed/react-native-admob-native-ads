@@ -138,15 +138,17 @@ export const AdView = ({media, type,delay=0}) => {
           </View>
           <CallToActionView
             style={{
-              height: 45,
+              minHeight: 45,
               paddingHorizontal: 12,
               backgroundColor: 'purple',
               justifyContent: 'center',
               alignItems: 'center',
               borderRadius: 5,
               elevation: 10,
+              maxWidth:100
             }}
-            textStyle={{color: 'white', fontSize: 14}}
+            allCaps
+            textStyle={{color: 'white', fontSize: 13,flexWrap:'wrap',textAlign:'center'}}
           />
         </View>
 
