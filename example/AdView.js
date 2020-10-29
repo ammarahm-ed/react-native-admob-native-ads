@@ -145,7 +145,7 @@ export const AdView = ({media, type,delay=0}) => {
               alignItems: 'center',
               borderRadius: 5,
               elevation: 10,
-              maxWidth:100
+              maxWidth:100,
             }}
             allCaps
             textStyle={{color: 'white', fontSize: 13,flexWrap:'wrap',textAlign:'center'}}
