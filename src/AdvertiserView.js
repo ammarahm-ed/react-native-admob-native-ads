@@ -1,4 +1,4 @@
-import React, { createRef, useContext, useEffect } from "react";
+import React, { useRef, useContext, useEffect } from "react";
 import { findNodeHandle, Text } from "react-native";
 import { NativeAdContext } from "./context";
 
@@ -6,7 +6,7 @@ const AdvertiserView = (props) => {
   const { nativeAd, nativeAdView } = useContext(
     NativeAdContext
   );
-  const advertiserRef = createRef();
+  const advertiserRef = useRef();
 
   const _onLayout = () => {
     if (!nativeAdView) return;

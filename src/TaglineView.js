@@ -1,10 +1,10 @@
-import React, { createRef, useContext, useEffect } from "react";
+import React, { useRef, useContext, useEffect } from "react";
 import { findNodeHandle, Text } from "react-native";
 import { NativeAdContext } from "./context";
 
 const TaglineView = (props) => {
   const { nativeAd, nativeAdView } = useContext(NativeAdContext);
-  const taglineRef = createRef();
+  const taglineRef = useRef();
   const _onLayout = () => {
     if (!nativeAdView) return;
     let handle = findNodeHandle(taglineRef.current);

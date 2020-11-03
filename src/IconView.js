@@ -1,10 +1,10 @@
-import React, { createRef, useContext, useEffect } from "react";
+import React, { useRef, useContext, useEffect } from "react";
 import { findNodeHandle, Image } from "react-native";
 import { NativeAdContext } from "./context";
 
 const IconView = (props) => {
   const { nativeAd, nativeAdView } = useContext(NativeAdContext);
-  const iconViewRef = createRef();
+  const iconViewRef = useRef();
 
   const _onLayout = () => {
     if (!nativeAdView) return;
