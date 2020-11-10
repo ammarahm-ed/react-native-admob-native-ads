@@ -1,29 +1,28 @@
 package com.ammarahmed.rnadmob.nativeads;
 
-import android.content.Context;
-import android.util.Log;
 import androidx.annotation.NonNull;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableArray;
-import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableNativeArray;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
-import com.google.android.gms.ads.initialization.AdapterStatus;
-import com.google.android.gms.ads.initialization.InitializationStatus;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-public class RNAdmobNativeAdManager extends ReactContextBaseJavaModule {
-
-    public RNAdmobNativeAdManager(ReactApplicationContext context) {
+public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
+    CacheManager cacheManager;
+    public ReactApplicationContext mContext;
+    public RNAdmobNativeAdsManager(ReactApplicationContext context) {
         super(context);
+        mContext = context;
+        MobileAds.initialize(context);
+        cacheManager = new CacheManager();
     }
 
     @NonNull
@@ -61,7 +60,15 @@ public class RNAdmobNativeAdManager extends ReactContextBaseJavaModule {
             configuration.setTagForUnderAgeOfConsent(tagForUnderAgeOfConsent ? 1 : 0);
         }
         if (config.hasKey("testDeviceIds")) {
-            configuration.setTestDeviceIds(Arguments.toList(config.getArray("testDeviceIds")));
+            ReadableNativeArray nativeArray = (ReadableNativeArray) config.getArray("testDeviceIds");
+            if (nativeArray != null) {
+                ArrayList<Object> list = nativeArray.toArrayList();
+                List<String> testDeviceIds = new ArrayList<>(list.size());
+                for (Object object : list) {
+                    testDeviceIds.add(object != null ? object.toString() : null);
+                }
+                configuration.setTestDeviceIds(testDeviceIds);
+            }
         }
 
         MobileAds.setRequestConfiguration(configuration.build());
@@ -83,4 +90,21 @@ public class RNAdmobNativeAdManager extends ReactContextBaseJavaModule {
         AdRequest builder = new AdRequest.Builder().build();
         promise.resolve(builder.isTestDevice(getReactApplicationContext()));
     }
+
+    @ReactMethod
+    public void loadNativeAds(ReadableMap config){
+        cacheManager.loadNativeAds(mContext, config);
+    }
+
+    @ReactMethod
+    public void printAds(){
+        cacheManager.printAds();
+    }
+
+    @ReactMethod
+    public void hasLoadedAd(String id, Promise promise) {
+        System.out.println("younes llllllllllllll");
+        promise.resolve(cacheManager.hasLoadedAd(id));
+    }
+
 }

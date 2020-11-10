@@ -142,7 +142,19 @@ type NativeAdViewProps = {
   /**
    * Placement of AdChoicesView in any of the 4 corners of the ad
    *
+   * import AdOptions then pass the value from there. AdOptions.adChoicesPlacement
    */
+  refreshInterval?: number;
+
+  /**
+   * Time in milliseconds to delay ad rendering.
+   * Use this if you are rendering multiple ads
+   * in your screen such as in a list. Default is 0ms.
+   * This is usually done so that ad request is done
+   * after the views are attached.
+   */
+
+  delayAdLoading?: number;
 
   adChoicesPlacement?: "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
 
@@ -240,6 +252,8 @@ type StarViewProps = {
 };
 
 declare module "react-native-admob-native-ads" {
+
+
   /**
    *
    * Wrapper for the UnifiedNativeAdView from Google Ads SDK. All your views should be
