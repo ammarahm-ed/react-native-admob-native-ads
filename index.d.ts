@@ -257,6 +257,32 @@ declare module "react-native-admob-native-ads" {
   return: `boolean`
      */
     isTestDevice: async () => { },
+
+    /**
+     * Preload native ads
+     ``` js
+     AdManager.loadNativeAds({
+      adUnitId: 'ca-app-pub-3940256099942544/2247696110',
+      numOfAds: 3,
+      requestNonPersonalizedAdsOnly: false,
+     });
+     */
+    loadNativeAds: (config: {
+      adUnitId: string,
+      numOfAds: number,
+      requestNonPersonalizedAdsOnly: boolean,
+    })=>{ },
+
+    /**
+     * Chech if there is loaded ad for a adUnitId
+     ``` js
+     AdManager.hasLoadedAd("id").then(result => console.log(result))
+     ```
+     return {
+        "unit id" : boolean
+     }
+     */
+    hasLoadedAd: async (adUnitId: string)=>{}
   }
 
 

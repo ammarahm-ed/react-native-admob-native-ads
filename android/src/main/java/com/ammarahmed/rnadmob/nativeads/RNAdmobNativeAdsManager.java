@@ -16,9 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
+    CacheManager cacheManager;
+    public ReactApplicationContext mContext;
     public RNAdmobNativeAdsManager(ReactApplicationContext context) {
         super(context);
+        mContext = context;
         MobileAds.initialize(context);
+        cacheManager = new CacheManager();
     }
 
     @NonNull
@@ -72,4 +76,21 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
         AdRequest builder = new AdRequest.Builder().build();
         promise.resolve(builder.isTestDevice(getReactApplicationContext()));
     }
+
+    @ReactMethod
+    public void loadNativeAds(ReadableMap config){
+        cacheManager.loadNativeAds(mContext, config);
+    }
+
+    @ReactMethod
+    public void printAds(){
+        cacheManager.printAds();
+    }
+
+    @ReactMethod
+    public void hasLoadedAd(String id, Promise promise) {
+        System.out.println("younes llllllllllllll");
+        promise.resolve(cacheManager.hasLoadedAd(id));
+    }
+
 }
