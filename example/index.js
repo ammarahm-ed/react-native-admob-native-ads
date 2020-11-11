@@ -34,14 +34,14 @@ AdManager.loadNativeAds({
   requestNonPersonalizedAdsOnly: false,
 });
 
-setTimeout(() => {
-  AdManager.hasLoadedAd(NATIVE_AD_ID).then((value) =>
-    console.log('image ad: ', value),
-  );
-  AdManager.hasLoadedAd(NATIVE_AD_VIDEO_ID).then((value) =>
-    console.log('video ad: ', value),
-  );
-  AdManager.printAds();
-}, 10000);
+// setTimeout(() => {
+//   AdManager.hasLoadedAd(NATIVE_AD_ID).then((value) =>
+//     console.log('image ad: ', value),
+//   );
+//   AdManager.hasLoadedAd(NATIVE_AD_VIDEO_ID).then((value) =>
+//     console.log('video ad: ', value),
+//   );
+//   AdManager.printAds();
+// }, 10000);
 
 AppRegistry.registerComponent(appName, () => App);
