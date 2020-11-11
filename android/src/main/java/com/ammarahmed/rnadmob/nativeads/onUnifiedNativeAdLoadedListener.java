@@ -23,6 +23,7 @@ public class onUnifiedNativeAdLoadedListener implements UnifiedNativeAd.OnUnifie
 
     @Override
     public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
+        System.out.println("younes ad loaded for : " + adUnitId);
         ArrayList<UnifiedNativeAd> temp;
         if (this.nativeAds.containsKey(this.adUnitId)) {
             temp = this.nativeAds.get(this.adUnitId);
