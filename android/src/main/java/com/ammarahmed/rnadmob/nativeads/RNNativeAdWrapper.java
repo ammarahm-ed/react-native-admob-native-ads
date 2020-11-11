@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.CatalystInstance;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
@@ -29,6 +30,7 @@ import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 public class RNNativeAdWrapper extends LinearLayout {
@@ -131,27 +133,27 @@ public class RNNativeAdWrapper extends LinearLayout {
     private int loadWithDelay = 1000;
     private String admobAdUnitId = "";
     private Handler handler;
-    UnifiedNativeAd.OnUnifiedNativeAdLoadedListener onUnifiedNativeAdLoadedListener = new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
-        @Override
-        public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
-
-            if (unifiedNativeAd != null) {
-                unifiedNativeAd.destroy();
-            }
-            if (nativeAd != null) {
-
-                unifiedNativeAd = nativeAd;
-                nativeAdView.setNativeAd(unifiedNativeAd);
-                if (mediaView != null) {
-                    nativeAdView.setMediaView(mediaView);
-                    mediaView.requestLayout();
-                }
-
-            }
-
-            setNativeAdToJS(nativeAd);
-        }
-    };
+//    UnifiedNativeAd.OnUnifiedNativeAdLoadedListener onUnifiedNativeAdLoadedListener = new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+//        @Override
+//        public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
+//
+//            if (unifiedNativeAd != null) {
+//                unifiedNativeAd.destroy();
+//            }
+//            if (nativeAd != null) {
+//
+//                unifiedNativeAd = nativeAd;
+//                nativeAdView.setNativeAd(unifiedNativeAd);
+//                if (mediaView != null) {
+//                    nativeAdView.setMediaView(mediaView);
+//                    mediaView.requestLayout();
+//                }
+//
+//            }
+//
+//            setNativeAdToJS(nativeAd);
+//        }
+//    };
 
 
     public RNNativeAdWrapper(ReactContext context) {
@@ -161,6 +163,7 @@ public class RNNativeAdWrapper extends LinearLayout {
         handler = new Handler();
         mCatalystInstance = mContext.getCatalystInstance();
         setId(UUID.randomUUID().hashCode() + this.getId());
+        Constants.cacheManager.attachAdListener(adListener);
     }
 
     public void createView(Context context) {
@@ -314,9 +317,47 @@ public class RNNativeAdWrapper extends LinearLayout {
     }
 
     private void loadAd() {
-
-
         try {
+            System.out.println("younes get the ad for: " + admobAdUnitId);
+            if (Constants.cacheManager.numberOfAds(admobAdUnitId) != 0) {
+
+                System.out.println("younes I have ad for: " + admobAdUnitId);
+
+                UnifiedNativeAd nativeAd = Constants.cacheManager.getNativeAd(admobAdUnitId);
+                System.out.println("younes the ad i have is: ");
+                System.out.println("younes the title: " + nativeAd.getHeadline());
+                System.out.println("younes the body: " + nativeAd.getBody());
+
+                // todo :: check if this is required
+//                if (unifiedNativeAd != null) {
+//                    unifiedNativeAd.destroy();
+//                }
+                if (nativeAd != null) {
+
+                    unifiedNativeAd = nativeAd;
+                    nativeAdView.setNativeAd(unifiedNativeAd);
+                    if (mediaView != null) {
+                        nativeAdView.setMediaView(mediaView);
+                        mediaView.requestLayout();
+                    }
+
+                }
+
+                setNativeAdToJS(nativeAd);
+
+            } else {
+                if (!Constants.cacheManager.isLoading()){
+                    System.out.println("younes I am not loading");
+                    WritableMap config = Arguments.createMap();
+                    config.putString("adUnitId", admobAdUnitId);
+                    config.putInt("numOfAds", 5);
+                    config.putBoolean("requestNonPersonalizedAdsOnly", requestNonPersonalizedAdsOnly);
+                    Constants.cacheManager.loadNativeAds(mContext, config);
+                }
+                if (adListener != null)
+                    adListener.onAdFailedToLoad(3);
+            }
+            /*
             AdLoader.Builder builder = new AdLoader.Builder(mContext, admobAdUnitId);
             builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
 
@@ -345,8 +386,10 @@ public class RNNativeAdWrapper extends LinearLayout {
             }
 
             adLoader.loadAd(adRequest);
+             */
 
         } catch (Exception e) {
+            System.out.println("younes there is error in getting ad: " + e.getMessage());
         }
     }
 

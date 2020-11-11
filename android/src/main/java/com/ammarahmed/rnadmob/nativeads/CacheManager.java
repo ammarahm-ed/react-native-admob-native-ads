@@ -65,9 +65,9 @@ public class CacheManager {
         @Override
         public void onAdFailedToLoad(int i) {
             super.onAdFailedToLoad(i);
+            System.out.println("younes ad failed to load ");
             if (adListener == null) return;
             adListener.onAdFailedToLoad(i);
-            System.out.println("younes ad failed to load ");
         }
 
         @Override
@@ -95,6 +95,7 @@ public class CacheManager {
         @Override
         public void onAdLoaded() {
             super.onAdLoaded();
+            System.out.println("younes ad loadeddddd ");
             if (adListener == null) return;
             if (nativeAds.size() == 1) {
                 adListener.onAdLoaded();
@@ -123,6 +124,8 @@ public class CacheManager {
             String adUnitID;
             if (config.hasKey("adUnitId") && config.getString("adUnitId") != null){
                 adUnitID = config.getString("adUnitId");
+
+                System.out.println("younes start loading for "+adUnitID);
 
                 int numOfAdsToLoad = 5;
                 if (config.hasKey("numOfAds")){
@@ -155,6 +158,7 @@ public class CacheManager {
                 adLoader.loadAds(adRequest, numOfAdsToLoad);
             }
         } catch (Exception e) {
+            System.out.println("younes error in "+ e.getMessage());
             e.printStackTrace();
         }
     }

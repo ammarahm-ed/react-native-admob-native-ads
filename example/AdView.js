@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Platform, View, Dimensions} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Platform, View, Dimensions, DeviceEventEmitter} from 'react-native';
 import NativeAdView, {
   AdvertiserView,
   CallToActionView,
@@ -21,9 +21,32 @@ const NATIVE_AD_VIDEO_ID =
     ? 'ca-app-pub-3940256099942544/2521693316'
     : 'ca-app-pub-3940256099942544/1044960115';
 
-export const AdView = ({media, type,delay=0}) => {
+export const AdView = ({media, type, delay = 0}) => {
   const [aspectRatio, setAspectRatio] = useState(1);
   const [adLoaded, setAdLoaded] = useState(false);
+  const [hasLoadedImgAds, setHasLoadedImgAds] = useState(false);
+  const [hasLoadedVideoAds, setHasLoadedVideoAds] = useState(false);
+
+  useEffect(() => {
+    const eventEmitter = DeviceEventEmitter.addListener(
+      'onAdPreloadLoaded',
+      (value) => {
+        console.log('ad loaded', value);
+        if (value[NATIVE_AD_ID] && value[NATIVE_AD_ID] > 0) {
+          console.log('image ad: ', value[NATIVE_AD_ID]);
+          // setHasLoadedImgAds(value[NATIVE_AD_ID]);
+        }
+        if (value[NATIVE_AD_VIDEO_ID] && value[NATIVE_AD_VIDEO_ID] > 0) {
+          // setHasLoadedVideoAds(value[NATIVE_AD_VIDEO_ID]);
+          console.log('video ad: ', value[NATIVE_AD_VIDEO_ID]);
+        }
+      },
+    );
+    return () => {
+      eventEmitter.remove();
+    };
+  }, []);
+
   const _onAdFailedToLoad = (event) => {
     console.log(event.nativeEvent);
     setAdLoaded(false);
@@ -145,10 +168,15 @@ export const AdView = ({media, type,delay=0}) => {
               alignItems: 'center',
               borderRadius: 5,
               elevation: 10,
-              maxWidth:100,
+              maxWidth: 100,
             }}
             allCaps
-            textStyle={{color: 'white', fontSize: 13,flexWrap:'wrap',textAlign:'center'}}
+            textStyle={{
+              color: 'white',
+              fontSize: 13,
+              flexWrap: 'wrap',
+              textAlign: 'center',
+            }}
           />
         </View>
 
