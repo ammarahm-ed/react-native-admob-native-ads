@@ -21,14 +21,14 @@ const NATIVE_AD_VIDEO_ID =
     : 'ca-app-pub-3940256099942544/1044960115';
 
 // image test ad
-AdManager.loadNativeAds({
+AdManager.registerNativeAd({
   adUnitId: NATIVE_AD_ID,
   numOfAds: 3,
   requestNonPersonalizedAdsOnly: false,
 });
 
 // video test ad
-AdManager.loadNativeAds({
+AdManager.registerNativeAd({
   adUnitId: NATIVE_AD_VIDEO_ID,
   numOfAds: 3,
   requestNonPersonalizedAdsOnly: false,
