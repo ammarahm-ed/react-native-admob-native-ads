@@ -47,22 +47,48 @@ public class CacheManager {
         }
     }
 
+    public void detachAdListener(String id) {
+        if (nativeAdsMap.get(id) != null){
+            nativeAdsMap.get(id).detachAdListener();
+        }
+    }
 
-    public void registerAd(Context context, ReadableMap config) {
-
+    public String registerAd(Context context, ReadableMap config) {
         try {
             String adUnitID;
             if (config.hasKey("adUnitId") && config.getString("adUnitId") != null){
                 adUnitID = config.getString("adUnitId");
                 System.out.println("younes start loading for "+adUnitID);
                 nativeAdsMap.put(adUnitID, new RNAdMobUnifiedAdWrapper(context, config));
+                return adUnitID;
             }
+            return null;
         } catch (Exception e) {
             System.out.println("younes error in "+ e.getMessage());
             e.printStackTrace();
+            return null;
         }
     }
 
+    public void unRegisterAd(String id) {
+        nativeAdsMap.remove(id);
+    }
+
+    public void resetCache(){
+        nativeAdsMap.clear();
+    }
+
+    public void requestAds(String adUnitId){
+        nativeAdsMap.get(adUnitId).loadAds();
+    }
+
+    public void requestAd(String adUnitId){
+        nativeAdsMap.get(adUnitId).loadAd();
+    }
+
+    public Boolean isRegistered(String adUnitID){
+        return nativeAdsMap.containsKey(adUnitID);
+    }
 
     public UnifiedNativeAd getNativeAd(String id) {
 
@@ -73,18 +99,17 @@ public class CacheManager {
         }
     }
 
-//    public WritableMap hasLoadedAd(String id) {
-//
-//        if (nativeAdsMap.containsKey(id) && nativeAdsMap.get(id).size() != 0) {
-//            WritableMap args = Arguments.createMap();
-//            args.putBoolean(id, true);
-//            return args;
-//        } else {
-//            WritableMap args = Arguments.createMap();
-//            args.putBoolean(id, false);
-//            return args;
-//        }
-//    }
+    public WritableMap hasLoadedAd(String id) {
+
+        if (nativeAdsMap.containsKey(id)) {
+            return nativeAdsMap.get(id).hasLoadedAd();
+        } else {
+            WritableMap args = Arguments.createMap();
+            args.putInt("muted", 0);
+            args.putInt("unMuted", 0);
+            return args;
+        }
+    }
 
 }
 

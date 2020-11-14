@@ -38,6 +38,8 @@ public class onUnifiedNativeAdLoadedListener implements UnifiedNativeAd.OnUnifie
         } else {
             temp = new Stack<>();
         }
+        System.out.println("younes ad llll title " + nativeAd.getHeadline());
+        System.out.println("younes ad llll body " + nativeAd.getBody());
         temp.push(tempAd);
         WritableMap args = Arguments.createMap();
         args.putInt(this.adUnitId, temp.size());
