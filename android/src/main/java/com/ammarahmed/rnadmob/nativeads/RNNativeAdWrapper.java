@@ -133,28 +133,6 @@ public class RNNativeAdWrapper extends LinearLayout {
     private int loadWithDelay = 1000;
     private String admobAdUnitId = "";
     private Handler handler;
-//    UnifiedNativeAd.OnUnifiedNativeAdLoadedListener onUnifiedNativeAdLoadedListener = new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
-//        @Override
-//        public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
-//
-//            if (unifiedNativeAd != null) {
-//                unifiedNativeAd.destroy();
-//            }
-//            if (nativeAd != null) {
-//
-//                unifiedNativeAd = nativeAd;
-//                nativeAdView.setNativeAd(unifiedNativeAd);
-//                if (mediaView != null) {
-//                    nativeAdView.setMediaView(mediaView);
-//                    mediaView.requestLayout();
-//                }
-//
-//            }
-//
-//            setNativeAdToJS(nativeAd);
-//        }
-//    };
-
 
     public RNNativeAdWrapper(ReactContext context) {
         super(context);
@@ -163,7 +141,7 @@ public class RNNativeAdWrapper extends LinearLayout {
         handler = new Handler();
         mCatalystInstance = mContext.getCatalystInstance();
         setId(UUID.randomUUID().hashCode() + this.getId());
-        Constants.cacheManager.attachAdListener(adListener);
+        Constants.cacheManager.attachAdListener(admobAdUnitId, adListener);
     }
 
     public void createView(Context context) {
@@ -346,47 +324,17 @@ public class RNNativeAdWrapper extends LinearLayout {
                 setNativeAdToJS(nativeAd);
 
             } else {
-                if (!Constants.cacheManager.isLoading()){
+                if (!Constants.cacheManager.isLoading(admobAdUnitId)){
                     System.out.println("younes I am not loading");
                     WritableMap config = Arguments.createMap();
                     config.putString("adUnitId", admobAdUnitId);
                     config.putInt("numOfAds", 5);
                     config.putBoolean("requestNonPersonalizedAdsOnly", requestNonPersonalizedAdsOnly);
-                    Constants.cacheManager.loadNativeAds(mContext, config);
+                    Constants.cacheManager.registerAd(mContext, config);
                 }
                 if (adListener != null)
                     adListener.onAdFailedToLoad(3);
             }
-            /*
-            AdLoader.Builder builder = new AdLoader.Builder(mContext, admobAdUnitId);
-            builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
-
-            VideoOptions videoOptions = new VideoOptions.Builder()
-                    .setStartMuted(true)
-                    .build();
-
-            NativeAdOptions adOptions = new NativeAdOptions.Builder()
-                    .setVideoOptions(videoOptions)
-                    .setAdChoicesPlacement(adChoicesPlacement)
-                    .build();
-            builder.withNativeAdOptions(adOptions);
-
-
-            AdLoader adLoader = builder.withAdListener(adListener)
-                    .build();
-
-            AdRequest adRequest;
-
-            if (requestNonPersonalizedAdsOnly) {
-                Bundle extras = new Bundle();
-                extras.putString("npa", "1");
-                adRequest = new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
-            } else {
-                adRequest = new AdRequest.Builder().build();
-            }
-
-            adLoader.loadAd(adRequest);
-             */
 
         } catch (Exception e) {
             System.out.println("younes there is error in getting ad: " + e.getMessage());
