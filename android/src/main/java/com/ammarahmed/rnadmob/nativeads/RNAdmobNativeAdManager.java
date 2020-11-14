@@ -92,17 +92,17 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void loadNativeAds(ReadableMap config){
-        Constants.cacheManager.loadNativeAds(mContext, config);
+        Constants.cacheManager.registerAd(mContext, config);
     }
 
-    @ReactMethod
-    public void printAds(){
-        Constants.cacheManager.printAds();
-    }
-
-    @ReactMethod
-    public void hasLoadedAd(String id, Promise promise) {
-        promise.resolve(Constants.cacheManager.hasLoadedAd(id));
-    }
+//    @ReactMethod
+//    public void printAds(){
+//        Constants.cacheManager.printAds();
+//    }
+//
+//    @ReactMethod
+//    public void hasLoadedAd(String id, Promise promise) {
+//        promise.resolve(Constants.cacheManager.hasLoadedAd(id));
+//    }
 
 }
