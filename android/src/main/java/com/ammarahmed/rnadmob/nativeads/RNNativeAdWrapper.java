@@ -45,6 +45,8 @@ public class RNNativeAdWrapper extends LinearLayout {
         }
     };
     public int adRefreshInterval = 60000;
+    public Boolean requestMute = true;
+    public Boolean onlyCache = false;
     ReactContext mContext;
     UnifiedNativeAdView nativeAdView;
     UnifiedNativeAd unifiedNativeAd;
@@ -55,6 +57,7 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     private int adChoicesPlacement = 1;
     private boolean requestNonPersonalizedAdsOnly = false;
+    private boolean waitingForAd = false;
 
 
     AdListener adListener = new AdListener() {
@@ -114,7 +117,10 @@ public class RNNativeAdWrapper extends LinearLayout {
 
         @Override
         public void onAdLoaded() {
+            System.out.println("younes I am in adloaded listener in wrapper");
             super.onAdLoaded();
+            Constants.cacheManager.detachAdListener(admobAdUnitId);
+            loadAd();
             sendEvent(RNAdMobNativeViewManager.EVENT_AD_LOADED, null);
         }
 
@@ -141,7 +147,7 @@ public class RNNativeAdWrapper extends LinearLayout {
         handler = new Handler();
         mCatalystInstance = mContext.getCatalystInstance();
         setId(UUID.randomUUID().hashCode() + this.getId());
-        Constants.cacheManager.attachAdListener(admobAdUnitId, adListener);
+        // Constants.cacheManager.attachAdListener(admobAdUnitId, adListener);
     }
 
     public void createView(Context context) {
@@ -324,16 +330,27 @@ public class RNNativeAdWrapper extends LinearLayout {
                 setNativeAdToJS(nativeAd);
 
             } else {
-                if (!Constants.cacheManager.isLoading(admobAdUnitId)){
-                    System.out.println("younes I am not loading");
-                    WritableMap config = Arguments.createMap();
-                    config.putString("adUnitId", admobAdUnitId);
-                    config.putInt("numOfAds", 5);
-                    config.putBoolean("requestNonPersonalizedAdsOnly", requestNonPersonalizedAdsOnly);
-                    Constants.cacheManager.registerAd(mContext, config);
+                if (!onlyCache){
+                    if (!Constants.cacheManager.isRegistered(admobAdUnitId)){
+                        System.out.println("younes the ad not registered");
+                        waitingForAd = true;
+                        WritableMap config = Arguments.createMap();
+                        config.putString("adUnitId", admobAdUnitId);
+                        config.putInt("numOfAds", 5);
+                        config.putBoolean("requestNonPersonalizedAdsOnly", requestNonPersonalizedAdsOnly);
+                        config.putBoolean("mute", requestMute);
+                        Constants.cacheManager.registerAd(mContext, config);
+                    }
+                    if (!Constants.cacheManager.isLoading(admobAdUnitId)){
+                        Constants.cacheManager.attachAdListener(admobAdUnitId, adListener);
+                        Constants.cacheManager.requestAd(admobAdUnitId);
+                    }else{
+                        Constants.cacheManager.attachAdListener(admobAdUnitId, adListener);
+                    }
+                }else {
+                    if (adListener != null)
+                        adListener.onAdFailedToLoad(3);
                 }
-                if (adListener != null)
-                    adListener.onAdFailedToLoad(3);
             }
 
         } catch (Exception e) {
@@ -365,6 +382,14 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     public void setAdRefreshInterval(int interval) {
         adRefreshInterval = interval;
+    }
+
+    public void setMute(Boolean m) {
+        requestMute = m;
+    }
+
+    public void setShowCacheAds(Boolean flag) {
+        onlyCache = flag;
     }
 
     public void setAdUnitId(String id) {

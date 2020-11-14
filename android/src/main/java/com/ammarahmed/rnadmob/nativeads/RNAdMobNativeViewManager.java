@@ -51,6 +51,8 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String PROP_STAR_RATING_VIEW = "starrating";
     public static final String PROP_AD_CHOICES_PLACEMENT = "adChoicesPlacement";
     public static final String PROP_NON_PERSONALIZED_ADS = "requestNonPersonalizedAdsOnly";
+    public static final String PROP_MUTE_ADS = "requestMuteAdsOnly";
+    public static final String PROP_SHOW_CACHED_ADS = "requestCacheAdsOnly";
 
     private RNNativeAdWrapper nativeAdView;
 
@@ -231,7 +233,16 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public void setPropAdUnitId(final RNNativeAdWrapper view, final String adUnitId) {
         if (adUnitId == null) return;
         view.setAdUnitId(adUnitId);
+    }
 
+    @ReactProp(name = PROP_MUTE_ADS, defaultBoolean = true)
+    public void setPropMuteAds(final RNNativeAdWrapper view, final Boolean mute) {
+        view.setMute(mute);
+    }
+
+    @ReactProp(name = PROP_SHOW_CACHED_ADS, defaultBoolean = false)
+    public void setPropShowCachedAds(final RNNativeAdWrapper view, final Boolean flag) {
+        view.setShowCacheAds(flag);
     }
 
     @Override

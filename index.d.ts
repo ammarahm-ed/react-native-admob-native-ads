@@ -174,6 +174,8 @@ type NativeAdViewProps = {
   onAdLoaded?: Function<void>;
   onUnifiedNativeAdLoaded?: (event: NativeAd) => {};
   onAdFailedToLoad?: Function<void>;
+  requestMuteAdsOnly: boolean;
+  requestCacheAdsOnly: boolean;
 };
 
 type SimpleViewProps = {
@@ -261,17 +263,23 @@ declare module "react-native-admob-native-ads" {
     /**
      * Preload native ads
      ``` js
-     AdManager.loadNativeAds({
+     AdManager.registerNativeAd({
       adUnitId: 'ca-app-pub-3940256099942544/2247696110',
       numOfAds: 3,
       requestNonPersonalizedAdsOnly: false,
+      mute: true,
      });
      */
-    loadNativeAds: (config: {
+    registerNativeAd: (config: {
       adUnitId: string,
       numOfAds: number,
       requestNonPersonalizedAdsOnly: boolean,
+      mute: boolean,
     })=>{ },
+
+    unRegisterNativeAd: (adUnitId: string)=>{},
+
+    resetCache: ()=>{},
 
     /**
      * Chech if there is loaded ad for a adUnitId

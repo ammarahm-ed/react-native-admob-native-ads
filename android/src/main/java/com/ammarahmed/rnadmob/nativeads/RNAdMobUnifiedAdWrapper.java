@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Pair;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
@@ -23,6 +25,7 @@ public class RNAdMobUnifiedAdWrapper {
     public String adUnitId;
     public Boolean npa = true;
     public Integer totalAds = 5;
+    public long expirationInterval = 60*60*1000; // in ms
     public Boolean muted = true;
     private final AdLoader adLoader;
     private AdRequest adRequest;
@@ -36,7 +39,7 @@ public class RNAdMobUnifiedAdWrapper {
         @Override
         public void onAdFailedToLoad(int i) {
             super.onAdFailedToLoad(i);
-            System.out.println("younes ad failed to load ");
+            System.out.println("younes ad failed to load " + i);
             if (attachedAdListener == null) return;
             attachedAdListener.onAdFailedToLoad(i);
         }
@@ -93,6 +96,10 @@ public class RNAdMobUnifiedAdWrapper {
         attachedAdListener = listener;
     }
 
+    public void detachAdListener() {
+        attachedAdListener = null;
+    }
+
     public RNAdMobUnifiedAdWrapper(Context context, ReadableMap config){
         adUnitId = config.getString("adUnitId");
         nativeAdsMap.put(true, mutedAds);
@@ -130,15 +137,47 @@ public class RNAdMobUnifiedAdWrapper {
         builder.withNativeAdOptions(adOptions);
 
         adLoader = builder.withAdListener(adListener).build();
-        loadAds();
     }
 
     public void loadAds(){
         adLoader.loadAds(adRequest, totalAds);
+//        for (int i = 0; i<totalAds; i++){
+//            adLoader.loadAd(adRequest);
+//        }
+    }
+
+    public void loadAd(){
+        adLoader.loadAd(adRequest);
+        fillAd();
+    }
+
+    public void fillAd(){
+        System.out.println("younes I am in filling ad " + nativeAdsMap.get(true).size() + " " + nativeAdsMap.get(false).size() + " " + totalAds);
+        if (!isLoading()){
+            for (int i = 0; i<(totalAds-nativeAdsMap.get(muted).size()); i++){
+                System.out.println("younes I am in filling ad in for "+ i);
+                adLoader.loadAd(adRequest);
+            }
+        }
     }
 
     public UnifiedNativeAd getAd(){
-        return nativeAdsMap.get(muted).pop().second;
+        long now = System.currentTimeMillis();
+        Pair<Long, UnifiedNativeAd> ad;
+        while (true){
+            if (nativeAdsMap.get(muted).size() > 0){
+                ad = nativeAdsMap.get(muted).pop();
+//                fillAd();
+                if ((ad.first - now) < expirationInterval){
+                    System.out.println("younes I have the ad in given interval");
+                    break;
+                }
+            }else{
+                return null;
+            }
+        }
+        fillAd();
+        return ad.second;
     }
 
     public Boolean isLoading(){
@@ -146,5 +185,12 @@ public class RNAdMobUnifiedAdWrapper {
             return adLoader.isLoading();
         }
         return false;
+    }
+
+    public WritableMap hasLoadedAd(){
+        WritableMap args = Arguments.createMap();
+        args.putInt("muted", nativeAdsMap.get(true).size());
+        args.putInt("unMuted", nativeAdsMap.get(false).size());
+        return args;
     }
 }

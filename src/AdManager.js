@@ -10,22 +10,27 @@ function isTestDevice() {
   return RNAdmobNativeAdsManager.isTestDevice();
 }
 
-function loadNativeAds(config) {
-  return RNAdmobNativeAdsManager.loadNativeAds(config);
+function registerNativeAd(config) {
+  return RNAdmobNativeAdsManager.registerNativeAd(config);
 }
 
-function printAds() {
-  return RNAdmobNativeAdsManager.printAds();
+function unRegisterNativeAd(id) {
+  return RNAdmobNativeAdsManager.unRegisterNativeAd(id);
 }
 
 async function hasLoadedAd(id) {
   return RNAdmobNativeAdsManager.hasLoadedAd(id);
 }
 
+async function resetCache() {
+  return RNAdmobNativeAdsManager.resetCache();
+}
+
 export default {
   setRequestConfiguration,
   isTestDevice,
-  loadNativeAds,
-  printAds,
+  registerNativeAd,
   hasLoadedAd,
+  unRegisterNativeAd,
+  resetCache,
 }
