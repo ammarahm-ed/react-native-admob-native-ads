@@ -23,6 +23,7 @@ import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.formats.MediaView;
 import com.google.android.gms.ads.formats.NativeAdOptions;
@@ -62,10 +63,10 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     AdListener adListener = new AdListener() {
         @Override
-        public void onAdFailedToLoad(int i) {
-            super.onAdFailedToLoad(i);
+        public void onAdFailedToLoad(LoadAdError adError) {
+            super.onAdFailedToLoad(adError);
             String errorMessage = "Unknown error";
-            switch (i) {
+            switch (adError.getCode()) {
                 case AdRequest.ERROR_CODE_INTERNAL_ERROR:
                     errorMessage = "Internal error, an invalid response was received from the ad server.";
                     break;
@@ -81,7 +82,10 @@ public class RNNativeAdWrapper extends LinearLayout {
             }
             WritableMap event = Arguments.createMap();
             WritableMap error = Arguments.createMap();
+            error.putString("errorMessage", adError.getMessage());
             error.putString("message", errorMessage);
+            error.putInt("code", adError.getCode());
+            error.putString("responseInfo", adError.getResponseInfo().toString());
             event.putMap("error", error);
             sendEvent(RNAdMobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
 

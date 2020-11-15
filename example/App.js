@@ -29,6 +29,17 @@ const App = () => {
     init();
   }, []);
 
+  useEffect(()=>{
+    const eventEmitter = DeviceEventEmitter.addListener(
+      'onAdPreloadError',
+      (value) => {
+        console.log('ad preload error', value);
+      },
+    );
+    return () => {
+      eventEmitter.remove();
+    };
+  }, []);
   return (
     <SafeAreaView
       style={{

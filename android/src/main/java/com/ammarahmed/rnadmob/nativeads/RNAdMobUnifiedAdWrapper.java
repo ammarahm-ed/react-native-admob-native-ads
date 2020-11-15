@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.util.Pair;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
@@ -34,14 +36,46 @@ public class RNAdMobUnifiedAdWrapper {
     public Stack<Pair<Long, UnifiedNativeAd>> mutedAds= new Stack<>(); // every entry is => time of loading => ad loaded
     public Stack<Pair<Long, UnifiedNativeAd>> unMutedAds= new Stack<>(); // every entry is => time of loading => ad loaded
     public Map<Boolean, Stack<Pair<Long, UnifiedNativeAd>>> nativeAdsMap = new HashMap<>();
+    Context mContext;
 
     private final AdListener adListener = new AdListener() {
         @Override
-        public void onAdFailedToLoad(int i) {
-            super.onAdFailedToLoad(i);
-            System.out.println("younes ad failed to load " + i);
-            if (attachedAdListener == null) return;
-            attachedAdListener.onAdFailedToLoad(i);
+        public void onAdFailedToLoad(LoadAdError adError) {
+            super.onAdFailedToLoad(adError);
+            String errorMessage = "";
+            boolean stopPreloading = false;
+            switch (adError.getCode()) {
+                case AdRequest.ERROR_CODE_INTERNAL_ERROR:
+                    stopPreloading = true;
+                    errorMessage = "Internal error, an invalid response was received from the ad server.";
+                    break;
+                case AdRequest.ERROR_CODE_INVALID_REQUEST:
+                    stopPreloading = true;
+                    errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
+                    break;
+                case AdRequest.ERROR_CODE_NETWORK_ERROR:
+                    errorMessage = "The ad request was unsuccessful due to network connectivity.";
+                    break;
+                case AdRequest.ERROR_CODE_NO_FILL:
+                    errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
+                    break;
+            }
+//            System.out.println("younes ad failed to load " + adError.toString());
+            System.out.println("younes ad failed to load " + adError.getCause() + " " + adError.getCode()  + " " + adError.getDomain() +  " " + adError.getResponseInfo());
+            if (attachedAdListener == null) {
+                if (stopPreloading) {
+                    WritableMap event = Arguments.createMap();
+                    WritableMap error = Arguments.createMap();
+                    error.putString("errorMessage", adError.getMessage());
+                    error.putString("message", errorMessage);
+                    error.putInt("code", adError.getCode());
+                    error.putString("responseInfo", adError.getResponseInfo().toString());
+                    event.putMap("error", error);
+                    EventEmitter.sendEvent((ReactContext) mContext , Constants.EVENT_AD_PRELOAD_ERROR, event);
+                }
+                return;
+            };
+            attachedAdListener.onAdFailedToLoad(adError);
         }
 
         @Override
@@ -101,6 +135,7 @@ public class RNAdMobUnifiedAdWrapper {
     }
 
     public RNAdMobUnifiedAdWrapper(Context context, ReadableMap config){
+        mContext = context;
         adUnitId = config.getString("adUnitId");
         nativeAdsMap.put(true, mutedAds);
         nativeAdsMap.put(false, unMutedAds);
@@ -140,10 +175,10 @@ public class RNAdMobUnifiedAdWrapper {
     }
 
     public void loadAds(){
-        adLoader.loadAds(adRequest, totalAds);
-//        for (int i = 0; i<totalAds; i++){
-//            adLoader.loadAd(adRequest);
-//        }
+//        adLoader.loadAds(adRequest, totalAds);
+        for (int i = 0; i<totalAds; i++){
+            adLoader.loadAd(adRequest);
+        }
     }
 
     public void loadAd(){
