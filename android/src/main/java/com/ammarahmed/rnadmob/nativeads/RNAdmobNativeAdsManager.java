@@ -21,7 +21,6 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
         super(context);
         mContext = context;
         MobileAds.initialize(context);
-        System.out.println("younes ad manager constructed");
     }
 
     @NonNull

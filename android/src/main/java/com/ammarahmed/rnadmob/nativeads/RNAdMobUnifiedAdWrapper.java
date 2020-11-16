@@ -60,8 +60,6 @@ public class RNAdMobUnifiedAdWrapper {
                     errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
                     break;
             }
-//            System.out.println("younes ad failed to load " + adError.toString());
-            System.out.println("younes ad failed to load " + adError.getCause() + " " + adError.getCode()  + " " + adError.getDomain() +  " " + adError.getResponseInfo());
             if (attachedAdListener == null) {
                 if (stopPreloading) {
                     WritableMap event = Arguments.createMap();
@@ -103,7 +101,6 @@ public class RNAdMobUnifiedAdWrapper {
         @Override
         public void onAdLoaded() {
             super.onAdLoaded();
-            System.out.println("younes ad loadeddddd ");
             if (attachedAdListener == null) return;
             attachedAdListener.onAdLoaded();
 //            if (nativeAds.size() == 1) {
@@ -140,7 +137,6 @@ public class RNAdMobUnifiedAdWrapper {
         nativeAdsMap.put(true, mutedAds);
         nativeAdsMap.put(false, unMutedAds);
 
-        System.out.println("younes start loading for "+adUnitId);
 
         if (config.hasKey("numOfAds")){
             totalAds = config.getInt("numOfAds");
@@ -187,10 +183,8 @@ public class RNAdMobUnifiedAdWrapper {
     }
 
     public void fillAd(){
-        System.out.println("younes I am in filling ad " + nativeAdsMap.get(true).size() + " " + nativeAdsMap.get(false).size() + " " + totalAds);
         if (!isLoading()){
             for (int i = 0; i<(totalAds-nativeAdsMap.get(muted).size()); i++){
-                System.out.println("younes I am in filling ad in for "+ i);
                 adLoader.loadAd(adRequest);
             }
         }
@@ -204,7 +198,6 @@ public class RNAdMobUnifiedAdWrapper {
                 ad = nativeAdsMap.get(muted).pop();
 //                fillAd();
                 if ((ad.first - now) < expirationInterval){
-                    System.out.println("younes I have the ad in given interval");
                     break;
                 }
             }else{

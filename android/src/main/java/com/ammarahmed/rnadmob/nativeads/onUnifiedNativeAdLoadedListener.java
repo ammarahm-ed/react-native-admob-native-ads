@@ -30,7 +30,6 @@ public class onUnifiedNativeAdLoadedListener implements UnifiedNativeAd.OnUnifie
 
     @Override
     public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
-        System.out.println("younes ad loaded for : " + adUnitId);
         Stack<Pair<Long, UnifiedNativeAd>> temp;
         Pair<Long, UnifiedNativeAd> tempAd = new Pair<>(System.currentTimeMillis(), nativeAd);
         if (this.nativeAds.containsKey(mute)) {
@@ -38,8 +37,6 @@ public class onUnifiedNativeAdLoadedListener implements UnifiedNativeAd.OnUnifie
         } else {
             temp = new Stack<>();
         }
-        System.out.println("younes ad llll title " + nativeAd.getHeadline());
-        System.out.println("younes ad llll body " + nativeAd.getBody());
         temp.push(tempAd);
         WritableMap args = Arguments.createMap();
         args.putInt(this.adUnitId, temp.size());
