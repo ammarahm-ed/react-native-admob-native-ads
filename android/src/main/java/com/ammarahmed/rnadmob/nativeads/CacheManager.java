@@ -58,13 +58,11 @@ public class CacheManager {
             String adUnitID;
             if (config.hasKey("adUnitId") && config.getString("adUnitId") != null){
                 adUnitID = config.getString("adUnitId");
-                System.out.println("younes start loading for "+adUnitID);
                 nativeAdsMap.put(adUnitID, new RNAdMobUnifiedAdWrapper(context, config));
                 return adUnitID;
             }
             return null;
         } catch (Exception e) {
-            System.out.println("younes error in "+ e.getMessage());
             e.printStackTrace();
             return null;
         }

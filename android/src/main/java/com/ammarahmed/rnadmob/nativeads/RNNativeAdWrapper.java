@@ -20,6 +20,7 @@ import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
@@ -121,7 +122,6 @@ public class RNNativeAdWrapper extends LinearLayout {
 
         @Override
         public void onAdLoaded() {
-            System.out.println("younes I am in adloaded listener in wrapper");
             super.onAdLoaded();
             Constants.cacheManager.detachAdListener(admobAdUnitId);
             loadAd();
@@ -306,15 +306,9 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     private void loadAd() {
         try {
-            System.out.println("younes get the ad for: " + admobAdUnitId);
             if (Constants.cacheManager.numberOfAds(admobAdUnitId) != 0) {
 
-                System.out.println("younes I have ad for: " + admobAdUnitId);
-
                 UnifiedNativeAd nativeAd = Constants.cacheManager.getNativeAd(admobAdUnitId);
-                System.out.println("younes the ad i have is: ");
-                System.out.println("younes the title: " + nativeAd.getHeadline());
-                System.out.println("younes the body: " + nativeAd.getBody());
 
                 // todo :: check if this is required
 //                if (unifiedNativeAd != null) {
@@ -336,7 +330,6 @@ public class RNNativeAdWrapper extends LinearLayout {
             } else {
                 if (!onlyCache){
                     if (!Constants.cacheManager.isRegistered(admobAdUnitId)){
-                        System.out.println("younes the ad not registered");
                         waitingForAd = true;
                         WritableMap config = Arguments.createMap();
                         config.putString("adUnitId", admobAdUnitId);
@@ -353,7 +346,7 @@ public class RNNativeAdWrapper extends LinearLayout {
                     }
                 }else {
                     if (adListener != null)
-                        adListener.onAdFailedToLoad(3);
+                        adListener.onAdFailedToLoad(new LoadAdError(3, "", "", null, null));
                 }
             }
 
