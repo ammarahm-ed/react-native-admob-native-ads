@@ -11,15 +11,15 @@ import NativeAdView, {
   StoreView,
 } from 'react-native-admob-native-ads';
 
-const NATIVE_AD_ID =
-  Platform.OS === 'ios'
-    ? 'ca-app-pub-3940256099942544/3986624511'
-    : 'ca-app-pub-3940256099942544/2247696110';
+// const NATIVE_AD_ID =
+//   Platform.OS === 'ios'
+//     ? 'ca-app-pub-3940256099942544/3986624511'
+//     : 'ca-app-pub-3940256099942544/2247696110';
 
-const NATIVE_AD_VIDEO_ID =
-  Platform.OS === 'ios'
-    ? 'ca-app-pub-3940256099942544/2521693316'
-    : 'ca-app-pub-3940256099942544/1044960115';
+// const NATIVE_AD_VIDEO_ID =
+//   Platform.OS === 'ios'
+//     ? 'ca-app-pub-3940256099942544/2521693316'
+//     : 'ca-app-pub-3940256099942544/1044960115';
 
 export const AdView = ({media, type, delay = 0}) => {
   const [aspectRatio, setAspectRatio] = useState(1);
@@ -32,14 +32,6 @@ export const AdView = ({media, type, delay = 0}) => {
       'onAdPreloadLoaded',
       (value) => {
         console.log('ad loaded', value);
-        if (value[NATIVE_AD_ID] && value[NATIVE_AD_ID] > 0) {
-          console.log('image ad: ', value[NATIVE_AD_ID]);
-          // setHasLoadedImgAds(value[NATIVE_AD_ID]);
-        }
-        if (value[NATIVE_AD_VIDEO_ID] && value[NATIVE_AD_VIDEO_ID] > 0) {
-          // setHasLoadedVideoAds(value[NATIVE_AD_VIDEO_ID]);
-          console.log('video ad: ', value[NATIVE_AD_VIDEO_ID]);
-        }
       },
     );
     return () => {
@@ -89,7 +81,8 @@ export const AdView = ({media, type, delay = 0}) => {
         alignSelf: 'center',
         marginVertical: 10,
       }}
-      adUnitID={type === 'image' ? NATIVE_AD_ID : NATIVE_AD_VIDEO_ID} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
+      // adUnitID={type === 'image' ? NATIVE_AD_ID : NATIVE_AD_VIDEO_ID} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
+      repository={type === 'image' ? 'imageAd' : 'videoAd'} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
     >
       <View
         style={{

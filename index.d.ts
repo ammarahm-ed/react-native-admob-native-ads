@@ -119,6 +119,13 @@ type NativeAdViewProps = {
   adUnitID: string;
 
   /**
+   * Ad Repository for Native ads registered for caching. Remember to use only when there is
+   * a registered repository. when registered the adUnitId and other settings would be ignored
+   */
+
+  repository: string;
+
+  /**
    * Time after which a new ad should be
    * requested from the server. Default is 1 minute (60000 ms);
    */
@@ -166,16 +173,15 @@ type NativeAdViewProps = {
    * Set testdevices for the ad. (DEPRECATED)
    */
   testDevices?: Array<string>;
-  onAdOpened?: Function<void>;
-  onAdClosed?: Function<void>;
-  onAdLeftApplication?: Function<void>;
-  onAdImpression?: Function<void>;
-  onAdClicked?: Function<void>;
-  onAdLoaded?: Function<void>;
+  onAdOpened?: Function;
+  onAdClosed?: Function;
+  onAdLeftApplication?: Function;
+  onAdImpression?: Function;
+  onAdClicked?: Function;
+  onAdLoaded?: Function;
   onUnifiedNativeAdLoaded?: (event: NativeAd) => {};
-  onAdFailedToLoad?: Function<void>;
-  requestMuteAdsOnly: boolean;
-  requestCacheAdsOnly: boolean;
+  onAdFailedToLoad?: Function;
+  requestMuteAds: boolean;
 };
 
 type SimpleViewProps = {
@@ -218,81 +224,81 @@ declare module "react-native-admob-native-ads" {
    * AdManager can be used to configure your ads on App Startup such as setting test devices.
    *
    */
-
-  export const AdManager = {
-
+  export let AdManager: {
     /**
-    * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
+     * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with at least one of the following properties
 
-   | Name      | Type | Required |
-   | --------- | -------- | -------- |
-   | testDeviceIds | `Array<string>` | no  |
-   | maxAdContentRating | AdManager.MAX_AD_CONTENT_RATING | no  |
-   | tagForChildDirectedTreatment | AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT | no  |
-   | tagForUnderAgeConsent | AdManager.TAG_FOR_UNDER_AGE_CONSENT | no  |
+     | Name      | Type | Required |
+     | --------- | -------- | -------- |
+     | testDeviceIds | `Array<string>` | no  |
+     | maxAdContentRating | AdManager.MAX_AD_CONTENT_RATING | no  |
+     | tagForChildDirectedTreatment | AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT | no  |
+     | tagForUnderAgeConsent | AdManager.TAG_FOR_UNDER_AGE_CONSENT | no  |
 
-   Example:
+     Example:
 
-   ```js
+     ```js
 
-   const config = {
+     const config = {
      testDeviceIds:["YOUR_TEST_DEVICE_ID"],
-     maxAdContetRating: 'MA',
+     maxAdContentRating: 'MA',
      tagForChildDirectedTreatment: false,
      tagForUnderAgeConsent: false
    }
 
-   AdManager.setRequestConfiguration(config);
+     AdManager.setRequestConfiguration(config);
 
-   ```
-    *
-    */
+     ```
+     *
+     */
 
-    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => { },
-
+    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => void;
     /**
      * Check if the current device is registered as a test device to show test ads.
 
-  ```js
-    AdManager.isTestDevice().then(result => console.log(result))
-  ```
-  return: `boolean`
+     ```js
+     AdManager.isTestDevice().then(result => console.log(result))
+     ```
+     return: `boolean`
      */
-    isTestDevice: async () => { },
+    isTestDevice: () => Promise<any>
 
     /**
-     * Preload native ads
+     * register repository for a unitId with given settings for native ads
      ``` js
-     AdManager.registerNativeAd({
+     AdManager.registerRepository({
+      name: 'muteVideoAd'
       adUnitId: 'ca-app-pub-3940256099942544/2247696110',
       numOfAds: 3,
-      requestNonPersonalizedAdsOnly: false,
+      nonPersonalizedAdsOnly: false,
       mute: true,
+      expirationPeriod: 3600000, in MilliSeconds
+      mediationEnabled: true,
      });
      */
-    registerNativeAd: (config: {
-      adUnitId: string,
-      numOfAds: number,
-      requestNonPersonalizedAdsOnly: boolean,
-      mute: boolean,
-    })=>{ },
 
-    unRegisterNativeAd: (adUnitId: string)=>{},
-
-    resetCache: ()=>{},
-
+    registerRepository: (config: {
+        name: string;
+        adUnitId: string;
+        numOfAds: number;
+        nonPersonalizedAdsOnly: boolean;
+        mute: boolean,
+        expirationPeriod: number,
+        mediationEnabled: boolean,
+      } ) => Promise<{repo: string, success: boolean, error: string}>;
+    unRegisterRepository: (name: string) => void;
+    resetCache: () => void;
     /**
-     * Chech if there is loaded ad for a adUnitId
+     * Check if there is ad in a repo
      ``` js
-     AdManager.hasLoadedAd("id").then(result => console.log(result))
+     AdManager.hasAd("name").then(result => console.log(result))
      ```
      return {
-        "unit id" : boolean
-     }
+                "name" : boolean
+             }
      */
-    hasLoadedAd: async (adUnitId: string)=>{}
-  }
-
+    hasAd: (adUnitId: string) => Promise<any>;
+  };
 
   export const AdOptions: options;
 

@@ -6,7 +6,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ScrollView, DeviceEventEmitter,
+  ScrollView,
+  DeviceEventEmitter,
 } from 'react-native';
 import {AdView} from './AdView';
 
@@ -31,7 +32,7 @@ const App = () => {
   });
   const [selected, setSelected] = useState('image');
 
-  useEffect(()=>{
+  useEffect(() => {
     const eventEmitter = DeviceEventEmitter.addListener(
       'onAdPreloadError',
       (value) => {
