@@ -210,7 +210,7 @@ const App = () => {
                 keyExtractor={(item) => item}
                 data={listItemsGenerator(10)}
                 renderItem={({item, index}) =>
-                  item === 'ad' ? (
+                  item.includes('ad') ? (
                     <AdView type="image" media={false} />
                   ) : (
                     <View
