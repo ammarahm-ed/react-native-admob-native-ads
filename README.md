@@ -39,27 +39,23 @@ This library aims to solve that problem by providing complete support for Admob 
 
 <div
 align="center"
+width="100%"
 >
 <img
 src="https://i.imgur.com/dmu35Id.png"
 width="33%"
-height=600
 />
 <img
 src="https://i.imgur.com/60B5tO6.png"
 width="33%"
-height=600
 />
 <img
 src="https://i.imgur.com/WMe6yLg.png"
 width="33%"
-height=600
 />
-
 <img
 src="https://i.imgur.com/ROMCCUw.png"
 width="33%"
-height=600
 />
 
 </div>
