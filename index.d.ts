@@ -135,6 +135,7 @@ type NativeAdViewProps = {
   adUnitID: string;
 
   /**
+<<<<<<< HEAD
    * Ads returned will be of the desired aspectRatio
    */
   mediaAspectRatio?: "any" | "landscape" | "portrait" | "square" | "unknown";
@@ -143,6 +144,17 @@ type NativeAdViewProps = {
    * Placement of AdChoicesView in any of the 4 corners of the ad
    *
    * import AdOptions then pass the value from there. AdOptions.adChoicesPlacement
+=======
+   * Ad Repository for Native ads registered for caching. Remember to use only when there is
+   * a registered repository. when registered the adUnitId and other settings would be ignored
+   */
+
+  repository: string;
+
+  /**
+   * Time after which a new ad should be
+   * requested from the server. Default is 1 minute (60000 ms);
+>>>>>>> 5fa2df5 (refactor ad preload to add repository management)
    */
   refreshInterval?: number;
 
@@ -195,6 +207,7 @@ type NativeAdViewProps = {
     neighboringContentUrls?: Array<string>;
   };
   testDevices?: Array<string>;
+<<<<<<< HEAD
   onAdOpened?: () => void;
   onAdClosed?: () => void;
   onAdLeftApplication?: () => void;
@@ -203,6 +216,17 @@ type NativeAdViewProps = {
   onAdLoaded?: () => void;
   onNativeAdLoaded?: (event: NativeAd) => void;
   onAdFailedToLoad?: (error: { message: string }) => void;
+=======
+  onAdOpened?: Function;
+  onAdClosed?: Function;
+  onAdLeftApplication?: Function;
+  onAdImpression?: Function;
+  onAdClicked?: Function;
+  onAdLoaded?: Function;
+  onUnifiedNativeAdLoaded?: (event: NativeAd) => {};
+  onAdFailedToLoad?: Function;
+  requestMuteAds: boolean;
+>>>>>>> 5fa2df5 (refactor ad preload to add repository management)
 };
 
 type SimpleViewProps = {
@@ -257,48 +281,95 @@ declare module "react-native-admob-native-ads" {
    * AdManager can be used to configure your ads on App Startup such as setting test devices.
    *
    */
+<<<<<<< HEAD
 
   export const AdManager: {
+=======
+  export let AdManager: {
+>>>>>>> 5fa2df5 (refactor ad preload to add repository management)
     /**
-    * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
+     * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with at least one of the following properties
 
-   | Name      | Type | Required |
-   | --------- | -------- | -------- |
-   | testDeviceIds | `Array<string>` | no  |
-   | maxAdContentRating | AdManager.MAX_AD_CONTENT_RATING | no  |
-   | tagForChildDirectedTreatment | AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT | no  |
-   | tagForUnderAgeConsent | AdManager.TAG_FOR_UNDER_AGE_CONSENT | no  |
+     | Name      | Type | Required |
+     | --------- | -------- | -------- |
+     | testDeviceIds | `Array<string>` | no  |
+     | maxAdContentRating | AdManager.MAX_AD_CONTENT_RATING | no  |
+     | tagForChildDirectedTreatment | AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT | no  |
+     | tagForUnderAgeConsent | AdManager.TAG_FOR_UNDER_AGE_CONSENT | no  |
 
-   Example:
+     Example:
 
-   ```js
+     ```js
 
-   const config = {
+     const config = {
      testDeviceIds:["YOUR_TEST_DEVICE_ID"],
-     maxAdContetRating: 'MA',
+     maxAdContentRating: 'MA',
      tagForChildDirectedTreatment: false,
      tagForUnderAgeConsent: false
    }
 
-   AdManager.setRequestConfiguration(config);
+     AdManager.setRequestConfiguration(config);
 
-   ```
-    *
-    */
-
+<<<<<<< HEAD
     setRequestConfiguration: (
       config: Partial<AdManagerConfiguration>
     ) => Promise<MediationAdapterStatus[]>;
+=======
+     ```
+     *
+     */
+>>>>>>> 5fa2df5 (refactor ad preload to add repository management)
 
+    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => void;
     /**
      * Check if the current device is registered as a test device to show test ads.
 
-  ```js
-    AdManager.isTestDevice().then(result => console.log(result))
-  ```
-  return: `boolean`
+     ```js
+     AdManager.isTestDevice().then(result => console.log(result))
+     ```
+     return: `boolean`
      */
+<<<<<<< HEAD
     isTestDevice: () => Promise<boolean>;
+=======
+    isTestDevice: () => Promise<any>
+
+    /**
+     * register repository for a unitId with given settings for native ads
+     ``` js
+     AdManager.registerRepository({
+      name: 'muteVideoAd'
+      adUnitId: 'ca-app-pub-3940256099942544/2247696110',
+      numOfAds: 3,
+      nonPersonalizedAdsOnly: false,
+      mute: true,
+      expirationPeriod: 3600000, in MilliSeconds
+      mediationEnabled: true,
+     });
+     */
+
+    registerRepository: (config: {
+        name: string;
+        adUnitId: string;
+        numOfAds: number;
+        nonPersonalizedAdsOnly: boolean;
+        mute: boolean,
+        expirationPeriod: number,
+        mediationEnabled: boolean,
+      } ) => Promise<{repo: string, success: boolean, error: string}>;
+    unRegisterRepository: (name: string) => void;
+    resetCache: () => void;
+    /**
+     * Check if there is ad in a repo
+     ``` js
+     AdManager.hasAd("name").then(result => console.log(result))
+     ```
+     return {
+                "name" : boolean
+             }
+     */
+    hasAd: (adUnitId: string) => Promise<any>;
+>>>>>>> 5fa2df5 (refactor ad preload to add repository management)
   };
 
   export const AdOptions: options;

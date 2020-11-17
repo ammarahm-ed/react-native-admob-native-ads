@@ -22,19 +22,19 @@ import java.util.Set;
 
 public class CacheManager {
 
-    Map<String, RNAdMobUnifiedAdWrapper> nativeAdsMap = new HashMap<>();
+    Map<String, RNAdMobUnifiedAdWrapper> repositoriesMap = new HashMap<>();
 
     public boolean isLoading(String id) {
-        if (nativeAdsMap.get(id) != null) {
-            return nativeAdsMap.get(id).isLoading();
+        if (repositoriesMap.get(id) != null) {
+            return repositoriesMap.get(id).isLoading();
         } else {
             return false;
         }
     }
 
     public int numberOfAds(String id) {
-        if (nativeAdsMap.containsKey(id)) {
-            return nativeAdsMap.get(id).nativeAdsMap.get(true).size();
+        if (repositoriesMap.containsKey(id)) {
+            return repositoriesMap.get(id).nativeAds.size();
         } else {
             return 0;
         }
@@ -42,69 +42,90 @@ public class CacheManager {
     }
 
     public void attachAdListener(String id, AdListener listener) {
-        if (nativeAdsMap.get(id) != null){
-            nativeAdsMap.get(id).attachAdListener(listener);
+        if (repositoriesMap.get(id) != null){
+            repositoriesMap.get(id).attachAdListener(listener);
         }
     }
 
     public void detachAdListener(String id) {
-        if (nativeAdsMap.get(id) != null){
-            nativeAdsMap.get(id).detachAdListener();
+        if (repositoriesMap.get(id) != null){
+            repositoriesMap.get(id).detachAdListener();
         }
     }
 
-    public String registerAd(Context context, ReadableMap config) {
+    public WritableMap registerRepo(Context context, ReadableMap config) {
         try {
-            String adUnitID;
-            if (config.hasKey("adUnitId") && config.getString("adUnitId") != null){
-                adUnitID = config.getString("adUnitId");
-                nativeAdsMap.put(adUnitID, new RNAdMobUnifiedAdWrapper(context, config));
-                return adUnitID;
+            String repo = null;
+            WritableMap args = Arguments.createMap();
+            if (!config.hasKey("adUnitId") || config.getString("adUnitId") == null){
+                args.putBoolean("success", false);
+                args.putString("error", "the adUnitId has to be set in config");
             }
-            return null;
+            if (config.hasKey("name") && config.getString("name") != null) {
+                repo = config.getString("name");
+            } else {
+                if (config.hasKey("adUnitId") && config.getString("adUnitId") != null) {
+                    repo = config.getString("adUnitId");
+                }
+            }
+            if (repo != null){
+                if (!repositoriesMap.containsKey(repo)){
+                    repositoriesMap.put(repo, new RNAdMobUnifiedAdWrapper(context, config, repo));
+                    args.putBoolean("success", true);
+                    args.putString("repo", repo);
+                } else {
+                    args.putBoolean("success", false);
+                    args.putString("error", "the given repo has been registered before");
+                }
+            } else {
+                args.putBoolean("success", false);
+                args.putString("error", "the adUnitId or name has to be set in config");
+            }
+            return args;
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            WritableMap args = Arguments.createMap();
+            args.putBoolean("success", false);
+            args.putString("error", e.getCause().toString());
+            return args;
         }
     }
 
-    public void unRegisterAd(String id) {
-        nativeAdsMap.remove(id);
+    public void unRegisterRepo(String repo) {
+        repositoriesMap.remove(repo);
     }
 
     public void resetCache(){
-        nativeAdsMap.clear();
+        repositoriesMap.clear();
     }
 
-    public void requestAds(String adUnitId){
-        nativeAdsMap.get(adUnitId).loadAds();
+    public void requestAds(String repo){
+        repositoriesMap.get(repo).loadAds();
     }
 
-    public void requestAd(String adUnitId){
-        nativeAdsMap.get(adUnitId).loadAd();
+    public void requestAd(String repo){
+        repositoriesMap.get(repo).loadAd();
     }
 
-    public Boolean isRegistered(String adUnitID){
-        return nativeAdsMap.containsKey(adUnitID);
+    public Boolean isRegistered(String repo){
+        return repositoriesMap.containsKey(repo);
     }
 
-    public UnifiedNativeAd getNativeAd(String id) {
+    public UnifiedNativeAd getNativeAd(String repo) {
 
-        if (nativeAdsMap.containsKey(id)) {
-            return nativeAdsMap.get(id).getAd();
+        if (repositoriesMap.containsKey(repo)) {
+            return repositoriesMap.get(repo).getAd();
         } else {
             return null;
         }
     }
 
-    public WritableMap hasLoadedAd(String id) {
-
-        if (nativeAdsMap.containsKey(id)) {
-            return nativeAdsMap.get(id).hasLoadedAd();
+    public WritableMap hasAd(String repo) {
+        // todo : refactor
+        if (repositoriesMap.containsKey(repo)) {
+            return repositoriesMap.get(repo).hasAd();
         } else {
             WritableMap args = Arguments.createMap();
-            args.putInt("muted", 0);
-            args.putInt("unMuted", 0);
+            args.putInt(repo, 0);
             return args;
         }
     }

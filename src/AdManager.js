@@ -10,16 +10,16 @@ async function isTestDevice() {
   return RNAdmobNativeAdsManager.isTestDevice();
 }
 
-function registerNativeAd(config) {
-  return RNAdmobNativeAdsManager.registerNativeAd(config);
+function registerRepository(config) {
+  return RNAdmobNativeAdsManager.registerRepository(config);
 }
 
-function unRegisterNativeAd(id) {
-  return RNAdmobNativeAdsManager.unRegisterNativeAd(id);
+function unRegisterRepository(name) {
+  return RNAdmobNativeAdsManager.unRegisterRepository(name);
 }
 
-async function hasLoadedAd(id) {
-  return RNAdmobNativeAdsManager.hasLoadedAd(id);
+async function hasAd(name) {
+  return RNAdmobNativeAdsManager.hasAd(name);
 }
 
 async function resetCache() {
@@ -29,8 +29,8 @@ async function resetCache() {
 export default {
   setRequestConfiguration,
   isTestDevice,
-  registerNativeAd,
-  hasLoadedAd,
-  unRegisterNativeAd,
+  registerRepository,
+  hasAd,
+  unRegisterRepository,
   resetCache,
 }

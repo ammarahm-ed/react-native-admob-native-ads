@@ -21,18 +21,28 @@ const NATIVE_AD_VIDEO_ID =
     : 'ca-app-pub-3940256099942544/1044960115';
 
 // image test ad
-AdManager.registerNativeAd({
+AdManager.registerRepository({
+  name: 'imageAd',
   adUnitId: NATIVE_AD_ID,
   numOfAds: 3,
-  requestNonPersonalizedAdsOnly: false,
+  nonPersonalizedAdsOnly: false,
+  mute: true,
+  expirationPeriod: 3600000, // in milliseconds (optional)
+  mediationEnabled: false,
+}).then((result) => {
+  console.log('registered: ', result);
 });
 
 // video test ad
-AdManager.registerNativeAd({
-  adUnitId: NATIVE_AD_VIDEO_ID,
-  numOfAds: 3,
-  requestNonPersonalizedAdsOnly: false,
-});
+// AdManager.registerRepository({
+//   name: 'muteVideoAd',
+//   adUnitId: NATIVE_AD_VIDEO_ID,
+//   numOfAds: 3,
+//   nonPersonalizedAdsOnly: false,
+//   mute: true,
+//   expirationPeriod: 3600000, // in milliseconds (optional)
+//   mediationEnabled: false,
+// });
 
 // setTimeout(() => {
 //   AdManager.hasLoadedAd(NATIVE_AD_ID).then((value) =>

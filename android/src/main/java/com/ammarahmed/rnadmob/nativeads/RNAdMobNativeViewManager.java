@@ -34,6 +34,7 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     public static final String PROP_DELAY_AD_LOAD = "delayAdLoad";
     public static final String PROP_TEST_DEVICES = "testDevices";
     public static final String PROP_AD_UNIT_ID = "adUnitID";
+    public static final String PROP_AD_REPOSITORY = "repository";
     public static final String PROP_MEDIA_VIEW = "mediaview";
     public static final String PROP_REFRESH_INTERVAL = "refreshInterval";
     public static final String PROP_HEADLINE_VIEW = "headline";
@@ -47,11 +48,18 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     public static final String PROP_STAR_RATING_VIEW = "starrating";
     public static final String PROP_AD_CHOICES_PLACEMENT = "adChoicesPlacement";
     public static final String PROP_NON_PERSONALIZED_ADS = "requestNonPersonalizedAdsOnly";
+<<<<<<< HEAD
     public static final String PROP_PAUSE_AD_RELOAD = "pauseAdReload";
     public static final String PROP_MEDIA_ASPECT_RATIO = "mediaAspectRatio";
     public static final String PROP_VIDEO_OPTIONS = "videoOptions";
     public static final String PROP_MEDIATION_OPTIONS = "mediationOptions";
     public static final String PROP_TARGETING_OPTIONS = "targetingOptions";
+=======
+    public static final String PROP_MUTE_ADS = "requestMuteAds";
+
+    private RNNativeAdWrapper nativeAdView;
+
+>>>>>>> 5fa2df5 (refactor ad preload to add repository management)
 
     @javax.annotation.Nullable
     @Override
@@ -246,10 +254,27 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     @ReactProp(name = PROP_AD_UNIT_ID)
     public void setPropAdUnitId(final RNAdmobNativeView nativeAdWrapper, final String adUnitId) {
         if (adUnitId == null) return;
+<<<<<<< HEAD
         nativeAdWrapper.setAdUnitId(adUnitId);
 
     }
 
+=======
+        view.setAdUnitId(adUnitId);
+    }
+
+    @ReactProp(name = PROP_AD_REPOSITORY)
+    public void setPropAdRepository(final RNNativeAdWrapper view, final String repo) {
+        if (repo == null) return;
+        view.setAdRepository(repo);
+    }
+
+    @ReactProp(name = PROP_MUTE_ADS, defaultBoolean = true)
+    public void setPropMuteAds(final RNNativeAdWrapper view, final Boolean mute) {
+        view.setMute(mute);
+    }
+
+>>>>>>> 5fa2df5 (refactor ad preload to add repository management)
     @Override
     public void onDropViewInstance(@NonNull RNAdmobNativeView nativeAdWrapper) {
         super.onDropViewInstance(nativeAdWrapper);

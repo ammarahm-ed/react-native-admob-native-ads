@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, {useEffect, useState} from 'react';
 import {Image, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {AdManager} from 'react-native-admob-native-ads';
@@ -5,6 +6,20 @@ import {requestTrackingPermission} from 'react-native-tracking-transparency';
 import {AdView} from './src/AdView';
 import List from './src/List';
 import {routes} from './src/utils';
+=======
+import React, {useState, useEffect} from 'react';
+import {
+  FlatList,
+  Image,
+  Modal,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  DeviceEventEmitter,
+} from 'react-native';
+import {AdView} from './AdView';
+>>>>>>> 5fa2df5 (refactor ad preload to add repository management)
 
 const App = () => {
   const [currentRoute, setCurrentRoute] = useState(null);
@@ -29,7 +44,7 @@ const App = () => {
     init();
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     const eventEmitter = DeviceEventEmitter.addListener(
       'onAdPreloadError',
       (value) => {
