@@ -1,17 +1,11 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
-
 import com.google.android.gms.ads.formats.MediaView;
 
-public class RNMediaView extends LinearLayout {
+public class RNMediaView extends MediaView {
 
     Context mContext;
-    MediaView mediaView;
-    LinearLayout mediaContainer;
 
     private final Runnable measureAndLayout = new Runnable() {
         @Override
@@ -27,16 +21,19 @@ public class RNMediaView extends LinearLayout {
     public RNMediaView(Context context) {
         super(context);
         mContext = context;
-        createMediaView(context);
+        requestLayout();
     }
 
-    public void createMediaView(Context context) {
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
 
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View viewRoot = layoutInflater.inflate(R.layout.media_view, this, true);
-        mediaContainer = (LinearLayout) viewRoot.findViewById(R.id.media_view_container);
-        mediaView = (MediaView) mediaContainer.findViewById(R.id.media_view_id);
+    }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        requestLayout();
     }
 
     @Override

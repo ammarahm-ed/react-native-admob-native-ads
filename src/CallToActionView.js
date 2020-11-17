@@ -1,44 +1,42 @@
-import React, { createRef, useContext } from "react";
-import { findNodeHandle, Text } from "react-native";
-import { RawButton } from "react-native-gesture-handler";
-import { NativeAdContext, nativeAdView } from "./context";
+import React, { useContext, useEffect,useRef, useCallback } from "react";
+import { findNodeHandle, Text, View } from "react-native";
+import { NativeAdContext } from "./context";
 
-const callToActionRef = createRef();
 const CallToActionView = (props) => {
-  const { nativeAd, setNativeAd } = useContext(NativeAdContext);
+  const {nativeAd, nativeAdView} = useContext(NativeAdContext);
+  const callToActionRef = useRef();
 
-  const _onLayout = () => {
-    let handle = findNodeHandle(callToActionRef.current);
-    nativeAdView.current?.setNativeProps({
-      callToAction: handle,
+  const _onLayout = useCallback(() => {
+    if (!nativeAdView) {
+      return;
+    }
+    nativeAdView.setNativeProps({
+      callToAction: findNodeHandle(callToActionRef.current),
     });
-  };
+  }, [nativeAdView]);
+
+  useEffect(() => {
+    _onLayout();
+  }, [_onLayout]);
 
   return (
-    <RawButton
-      ref={callToActionRef}
-      onLayout={_onLayout}
-      style={[
-        {
-          paddingVertical: 8,
-          paddingHorizontal: 12,
-          backgroundColor: "#5DADE2",
-          justifyContent: "center",
-          alignItems: "center",
-          borderRadius: 5,
-          elevation: 10,
-        },
-        props.style,
-      ]}
-    >
-      <Text style={[props.textStyle]}>
-        {nativeAd
-          ? props.allCaps
-            ? nativeAd.callToAction?.toUpperCase()
-            : nativeAd.callToAction
-          : null}
-      </Text>
-    </RawButton>
+      <View
+        style={props.style}
+        onLayout={_onLayout}>
+        <Text
+          ref={callToActionRef}
+          allowFontScaling={
+            props.allowFontScaling ? props.allowFontScaling : false
+          }
+          style={props.textStyle}
+        >
+          {nativeAd
+            ? props.allCaps
+              ? nativeAd.callToAction?.toUpperCase()
+              : nativeAd.callToAction
+            : null}
+        </Text>
+      </View>
   );
 };
 

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { Component } from "react";
 import { Platform, requireNativeComponent } from "react-native";
-import { NativeAdContext, nativeAdView } from "./context";
+import BatchedBridge from "react-native/Libraries/BatchedBridge/BatchedBridge";
+import { NativeAdContext } from "./context";
 import Wrapper from "./Wrapper";
 
 const testNativeAd = {
@@ -13,96 +14,153 @@ const testNativeAd = {
   rating: 4.5,
   price: "$ 1",
   icon: "https://dummyimage.com/300.png/09f/fff",
-  images: ["https://dummyimage.com/qvga"],
+  images: [{url:"https://dummyimage.com/qvga"}],
 };
 
-const NativeAdView = (props) => {
-  const [nativeAd, setNativeAd] = useState(null);
-  const [forceRefresh, setForceRefresh] = useState(false);
-  function updateAd(ad) {
-    if (ad) {
-      setNativeAd(ad);
+const waitAsync = (ms) =>
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(true);
+    }, ms);
+  });
+
+
+
+export class NativeAdView extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      nativeAd: null,
+      nativeAdView: null,
+      delayRender: true,
+    };
+    this.nativeAdRef;
+    this.currentId = 0;
+    this.delayDuration = 0;
+    this.componentMounted = false;
+  }
+
+  messagingModuleName = `NativeAdMessageHandler${(Date.now() + Math.random())}`;
+
+  _onAdFailedToLoad = (event) => {
+    if (this.props.onAdFailedToLoad) {
+      this.props.onAdFailedToLoad(event);
+    }
+  };
+
+  _onAdLoaded = (event) => {
+    if (this.props.onAdLoaded) this.props.onAdLoaded(event.nativeEvent);
+  };
+
+  _onAdClicked = (event) => {
+    if (this.props.onAdClicked) this.props.onAdClicked(event.nativeEvent);
+  };
+
+  _onAdImpression = (event) => {
+    if (this.props.onAdImpression) this.props.onAdImpression(event.nativeEvent);
+  };
+
+  _onAdClosed = (event) => {
+    if (this.props.onAdClosed) this.props.onAdClosed(event.nativeEvent);
+  };
+
+  _onAdOpened = (event) => {
+    if (this.props.onAdOpened) this.props.onAdOpened(event.nativeEvent);
+  };
+
+  onUnifiedNativeAdLoaded = (event) => {
+    this.updateAd(event.nativeEvent);
+
+    if (this.props.onUnifiedNativeAdLoaded) {
+      let ad = { ...event.nativeEvent };
+      ad.aspectRatio = parseFloat(ad.aspectRatio);
+      this.props.onUnifiedNativeAdLoaded(ad);
+    }
+  };
+
+  _onAdLefApplication = (event) => {
+    if (this.props.onAdLeftApplication)
+      this.props.onAdLeftApplication(event.nativeEvent);
+  };
+
+  updateAd(ad) {
+    if (this.componentMounted) {
+      this.setState({
+        nativeAd: ad,
+      });
     }
   }
 
-  const _onAdFailedToLoad = (event) => {
-    if (props.onAdFailedToLoad) {
-      props.onAdFailedToLoad(event);
-    }
-  };
-
-  const _onAdLoaded = (event) => {
-    if (props.onAdLoaded) props.onAdLoaded(event.nativeEvent);
-  };
-
-  const _onAdClicked = (event) => {
-    if (props.onAdClicked) props.onAdClicked(event.nativeEvent);
-  };
-
-  const _onAdImpression = (event) => {
-    if (props.onAdImpression) props.onAdImpression(event.nativeEvent);
-  };
-
-  const _onAdClosed = (event) => {
-    if (props.onAdClosed) props.onAdClosed(event.nativeEvent);
-  };
-
-  const _onAdOpened = (event) => {
-    if (props.onAdOpened) props.onAdOpened(event.nativeEvent);
-  };
-
-  const _onUnifiedNativeAdLoaded = (event) => {
-    updateAd(event.nativeEvent);
-    setTimeout(() => {
-      setForceRefresh(!forceRefresh);
-      setForceRefresh(!forceRefresh);
-      setForceRefresh(!forceRefresh);
-    }, 0);
-    if (props.onUnifiedNativeAdLoaded) {
-      props.onUnifiedNativeAdLoaded(event.nativeEvent);
-    }
-  };
-
-  const _onAdLefApplication = (event) => {
-    if (props.onAdLeftApplication) props.onAdLeftApplication(event.nativeEvent);
-  };
-
-  useEffect(() => {
-    if (props.enableTestMode) {
-      updateAd(testNativeAd);
+  componentDidMount() {
+    this.componentMounted = true;
+    if (this.props.enableTestMode) {
+      this.updateAd(testNativeAd);
     } else {
-      updateAd(null);
+      this.updateAd(null);
     }
-  }, [props.enableTestMode]);
+    BatchedBridge.registerCallableModule(this.messagingModuleName, this);
 
-  return (
-    <NativeAdContext.Provider value={{ nativeAd, setNativeAd }}>
-      <UnifiedNativeAdView
-        ref={nativeAdView}
-        onAdLoaded={_onAdLoaded}
-        onAdFailedToLoad={_onAdFailedToLoad}
-        onAdClicked={_onAdClicked}
-        onAdLeftApplication={_onAdLefApplication}
-        onAdOpened={_onAdOpened}
-        onAdClosed={_onAdClosed}
-        onAdImpression={_onAdImpression}
-        delayAdLoad={props.delayAdLoad? props.delayAdLoad : 1000}
-        style={props.style}
-        onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
-        adUnitID={props.adUnitID}
-      >
-        <Wrapper
-          style={{
-            height: "100%",
-            width: "100%",
+    if (this.props.delayAdLoading) {
+      this.delayDuration = this.props.delayAdLoading;
+    }
+    waitAsync(this.delayDuration).then(() => {
+      this.setState({
+        delayRender: false,
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.componentMounted = false;
+  }
+
+  render() {
+    const { nativeAd, nativeAdView, delayRender } = this.state;
+
+    return delayRender ? null : (
+      <NativeAdContext.Provider value={{ nativeAd, nativeAdView }}>
+        <UnifiedNativeAdView
+          ref={(ref) => {
+            this.nativeAdRef = ref;
+            return this.nativeAdRef;
           }}
+          adUnitID={this.props.adUnitID}
+          onAdLoaded={this._onAdLoaded}
+          onAdFailedToLoad={this._onAdFailedToLoad}
+          onAdClicked={this._onAdClicked}
+          onAdLeftApplication={this._onAdLefApplication}
+          onAdOpened={this._onAdOpened}
+          onAdClosed={this._onAdClosed}
+          onAdImpression={this._onAdImpression}
+          style={[this.props.style, Platform.OS === "ios" ?  { display: this.state.nativeAd ? "flex" : "none" } : { height: this.state.nativeAd ? null : 0 }  ]}
+          onUnifiedNativeAdLoaded={this.onUnifiedNativeAdLoaded}
+          refreshInterval={
+            this.props.refreshInterval ? this.props.refreshInterval : 60000
+          }
+          messagingModuleName={this.messagingModuleName}
+          requestNonPersonalizedAdsOnly={
+            this.props.requestNonPersonalizedAdsOnly ? true : false
+          }
+          adChoicesPlacement={
+            this.props.adChoicesPlacement > -1
+              ? this.props.adChoicesPlacement
+              : 1
+          }
         >
-          {props.children}
-        </Wrapper>
-      </UnifiedNativeAdView>
-    </NativeAdContext.Provider>
-  );
-};
+          <Wrapper
+            onLayout={(event) => {
+              this.setState({
+                nativeAdView: this.nativeAdRef,
+              });
+            }}
+          >
+            {this.props.children}
+          </Wrapper>
+        </UnifiedNativeAdView>
+      </NativeAdContext.Provider>
+    );
+  }
+}
 
 NativeAdView.simulatorId = "SIMULATOR";
 

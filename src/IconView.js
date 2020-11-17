@@ -1,20 +1,27 @@
-import React, { createRef, useContext } from "react";
+import React, { useRef, useContext, useEffect } from "react";
 import { findNodeHandle, Image } from "react-native";
-import { NativeAdContext, nativeAdView } from "./context";
-
-const iconViewRef = createRef();
+import { NativeAdContext } from "./context";
 
 const IconView = (props) => {
-  const { nativeAd, setNativeAd } = useContext(NativeAdContext);
+  const { nativeAd, nativeAdView } = useContext(NativeAdContext);
+  const iconViewRef = useRef();
 
   const _onLayout = () => {
+    if (!nativeAdView) return;
     let handle = findNodeHandle(iconViewRef.current);
-    nativeAdView.current?.setNativeProps({
+    nativeAdView.setNativeProps({
       icon: handle,
     });
   };
 
-  return nativeAd && nativeAd.icon ? (
+  useEffect(() => {
+    _onLayout();
+  }, [nativeAd, nativeAdView]);
+
+  return nativeAd &&
+    nativeAd.icon &&
+    nativeAd.icon !== "empty" &&
+    nativeAd.icon !== "noicon" ? (
     <Image
       {...props}
       resizeMode="cover"
@@ -22,7 +29,14 @@ const IconView = (props) => {
       onLayout={_onLayout}
       source={{ uri: nativeAd.icon }}
     />
-  ) : null;
+  ) : nativeAd && nativeAd.icon && nativeAd.icon === "noicon" ? null : (
+    <Image
+      {...props}
+      resizeMode="cover"
+      ref={iconViewRef}
+      onLayout={_onLayout}
+    />
+  );
 };
 
 export default IconView;

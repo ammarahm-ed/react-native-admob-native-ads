@@ -23,6 +23,8 @@
 @property (nonatomic, copy) NSNumber *mediaview;
 @property (nonatomic, copy) NSNumber *starrating;
 @property (nonatomic, copy) NSNumber *callToAction;
+@property (nonatomic, copy) NSNumber *adChoicesPlacement;
+@property (nonatomic) BOOL *requestNonPersonalizedAdsOnly; 
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge;
 

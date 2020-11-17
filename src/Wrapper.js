@@ -1,19 +1,19 @@
 import React from "react";
-import { requireNativeComponent, Platform, View } from "react-native";
-
-
+import { StyleSheet, View } from "react-native";
 
 const Wrapper = (props) => {
-  return Platform.OS === "android" ? (
-    <AdWrapperView {...props} />
-  ) : (
-    <View {...props} />
+  return (
+    <View
+      {...props}
+      style={styles.container}
+    />
   );
 };
 
-const AdWrapperView =
-  Platform.OS === "android"
-    ? requireNativeComponent("RNAdComponentWrapper", Wrapper)
-    : null;
-
 export default Wrapper;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'transparent'
+  }
+})

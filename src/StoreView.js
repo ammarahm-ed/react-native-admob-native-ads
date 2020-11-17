@@ -1,17 +1,21 @@
-import React, { createRef, useContext } from "react";
+import React, { useRef, useContext, useEffect } from "react";
 import { findNodeHandle, Text } from "react-native";
-import { NativeAdContext, nativeAdView } from "./context";
+import { NativeAdContext } from "./context";
 
-const storeViewRef = createRef();
 const StoreView = (props) => {
-  const { nativeAd, setNativeAd } = useContext(NativeAdContext);
-
+  const { nativeAd, nativeAdView } = useContext(NativeAdContext);
+  const storeViewRef = useRef();
   const _onLayout = () => {
+    if (!nativeAdView) return;
     let handle = findNodeHandle(storeViewRef.current);
-    nativeAdView.current?.setNativeProps({
+    nativeAdView.setNativeProps({
       store: handle,
     });
   };
+
+  useEffect(() => {
+    _onLayout();
+  }, [nativeAd, nativeAdView]);
 
   return (
     <Text {...props} ref={storeViewRef} onLayout={_onLayout}>

@@ -3,7 +3,7 @@
 </div>
 <div align="center">
 	<p>
-    A simple and robust library for creating & displaying <a href="https://developers.google.com/admob/android/native/start">Admob Native Ads</a> in your React Native App using Native Views.
+    A simple and robust library for creating & displaying <a href="https://developers.google.com/admob/android/native/start">Admob Native Advanced Ads</a> in your React Native App using Native Views.
 	</p>
 <div
 align="center"
@@ -41,10 +41,25 @@ This library aims to solve that problem by providing complete support for Admob 
 align="center"
 >
 <img
-src="https://i.imgur.com/DOaoU1t.png"
+src="https://i.imgur.com/dmu35Id.png"
+width="33%"
+height=600
 />
 <img
-src="https://i.imgur.com/yX5GKhN.png"
+src="https://i.imgur.com/60B5tO6.png"
+width="33%"
+height=600
+/>
+<img
+src="https://i.imgur.com/WMe6yLg.png"
+width="33%"
+height=600
+/>
+
+<img
+src="https://i.imgur.com/ROMCCUw.png"
+width="33%"
+height=600
 />
 </div>
 
@@ -53,7 +68,7 @@ src="https://i.imgur.com/yX5GKhN.png"
 </div>
 <p align="center">
 
-1.  [Admob Native Ads](https://developers.google.com/admob/android/native/start)
+1.  [Admob Native Advanced Ads](https://developers.google.com/admob/android/native/start)
 2.  Cross Platform (iOS and Android)
 3.  Identical Working on both platforms
 4.  You can create your ads from ground up as you desire, **no limits.**
@@ -83,6 +98,16 @@ then run `yarn or npm install` in the example folder and finally to run the exam
 or if you use yarn:
 
     yarn add react-native-admob-native-ads
+
+Also install the following packages:
+
+  `yarn add react-native-gesture-handler react-native-star-rating`
+
+and
+
+  `yarn add react-native-vector-icons`
+
+Don't forget to setup [react-native-vector-icons ](https://github.com/oblador/react-native-vector-icons) as the guide states for iOS & Android
 
 ### iOS Setup
 
@@ -126,7 +151,6 @@ return (
           style={{
             height: 100,
             width: "100%",
-            backgroundColor: "white",
           }}
         >
           <AdBadge />
@@ -197,6 +221,72 @@ return (
 <h1>📃 Reference</h1>
 </div>
 
+## AdManager
+
+AdManager allows you to configure your ads globally when the app starts
+
+```jsx
+import { AdManager } from "react-native-admob-native-ads";
+```
+
+### setRequestConfiguration(config)
+
+Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
+
+| Name                         | Type                                       | Required |
+| ---------------------------- | ------------------------------------------ | -------- |
+| testDeviceIds                | `Array<string>`                            | no       |
+| maxAdContentRating           | AdManager.MAX_AD_CONTENT_RATING            | no       |
+| tagForChildDirectedTreatment | AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT | no       |
+| tagForUnderAgeConsent        | AdManager.TAG_FOR_UNDER_AGE_CONSENT        | no       |
+
+```js
+const config = {
+  testDeviceIds: ["YOUR_TEST_DEVICE_ID"],
+  maxAdContetRating: 'MA',
+  tagForChildDirectedTreatment: false,
+  tagForUnderAgeConsent: false
+};
+
+AdManager.setRequestConfiguration(config);
+```
+
+### isTestDevice()
+
+Check if the current device is registered as a test device to show test ads.
+
+```js
+AdManager.isTestDevice().then((result) => console.log(result));
+```
+
+return: `boolean`
+
+### AdManager.MAX_AD_CONTENT_RATING
+
+| Name        | Description                                                                                                                                       |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| G           | "General audiences." Content suitable for all audiences, including families and children.                                                         |
+| MA          | "Mature audiences." Content suitable only for mature audiences; includes topics such as alcohol, gambling, sexual content, and weapons.           |
+| PG          | "Parental guidance." Content suitable for most audiences with parental guidance, including topics like non-realistic, cartoonish violence.        |
+| T           | "Teen." Content suitable for teen and older audiences, including topics such as general health, social networks, scary imagery, and fight sports. |
+| UNSPECIFIED | Set default value to ""                                                                                                                           |
+
+### AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT
+
+| Name  | Description |
+| ----- | ----------- |
+| TRUE  | Enabled     |
+| FALSE | Disabled    |
+
+### AdManager.TAG_FOR_UNDER_AGE_CONSENT
+
+| Name  | Description |
+| ----- | ----------- |
+| TRUE  | Enabled     |
+| FALSE | Disabled    |
+
+#
+
 ## NativeAdView
 
 NativeAdView will wrap all your views related to the ad and provides a context through which all the Views get their respective information and load it automatically. It has the following properties to it.
@@ -240,7 +330,7 @@ Set Ad Unit ID for Native Advanced Ads that you created on your AdMob account.
 
 #
 
-#### `testDevices`
+#### `testDevices` (Deprecated, Use AdManager)
 
 Set testDevices during testing ads or during development.
 
@@ -260,6 +350,16 @@ Setting this to true will load a placeholder ad (Not from Admob server) incase y
 
 #
 
+#### `delayAdLoading`
+
+Delay ad loading and rendering by the specified time in milliseconds. This is a workaround to fix rendering of multiple ads in the same screen. For example in a list. So what you should do is incrementally increase the delay from first and to the last. However it is suggested to you should always render only one ad, in one screen at one time.
+
+| Type     | Required | Default | Platform |
+| -------- | -------- | ------- | -------- |
+| `number` | no       | 0 ms    | All      |
+
+#
+
 #### `refreshInterval`
 
 Time in ms after which a new ad should be requested from the server.
@@ -267,6 +367,42 @@ Time in ms after which a new ad should be requested from the server.
 | Type     | Required | Default             | Platform |
 | -------- | -------- | ------------------- | -------- |
 | `number` | no       | 60000 ms (1 minute) | All      |
+
+#
+
+#### `adChoicesPlacement`
+
+Placement of AdChoicesView in any of the 4 corners of the ad
+
+import AdOptions then pass the value from there. AdOptions.adChoicesPlacement
+
+**AdOptions.adChoicesPlacement**
+
+| Name         | Description                                   |
+| ------------ | --------------------------------------------- |
+| TOP_LEFT     | Show AdChoices on top right side of the Ad    |
+| TOP_RIGHT    | Show AdChoices on top lef side of the Ad      |
+| BOTTOM_LEFT  | Show AdChoices on bottom right side of the Ad |
+| BOTTOM_RIGHT | Show AdChoices on bottom left side of the Ad  |
+
+#
+
+#### `requestNonPersonalizedAdsOnly`
+
+Under the Google EU User Consent Policy, you must make certain disclosures
+to your users in the European Economic Area (EEA) and obtain their consent
+to use cookies or other local storage, where legally required, and to use
+personal data (such as AdID) to serve ads. This policy reflects the requirements
+of the EU ePrivacy Directive and the General Data Protection Regulation (GDPR).
+
+You can use library such as: https://github.com/birgernass/react-native-ad-consent
+to obtain the consent or if you are using rn-firebase you can obtain the consent from
+there and then pass the consent to this library. If user has selected
+non-personalized-ads then pass `true` and non-personalized ads will be shown to the user.
+
+| Type      | Required | Platform |
+| --------- | -------- | -------- |
+| `boolean` | no       | All      |
 
 #
 
@@ -506,6 +642,7 @@ import { MediaView } from "react-native-admob-native-ads";
   }}
 />;
 ```
+
 ### props
 
 #### `style:ViewStyle`
@@ -532,15 +669,6 @@ import { CallToActionView } from "react-native-admob-native-ads";
   textStyle={{ color: "white", fontSize: 14 }}
 />;
 ```
-### props
-
-#### `allCaps`
-
-| Type      | Required | Platform |
-| --------- | -------- | -------- |
-| `boolean` | no       | All      |
-
-Whether all text should be in capital letters
 
 ### props
 
@@ -552,6 +680,10 @@ Style the outer `View` Component.
 
 Style the inner `Text` Component
 
+#### `allowFontScaling`
+
+All font scaling on text
+
 #### `allCaps`
 
 | Type      | Required | Platform |
@@ -560,12 +692,15 @@ Style the inner `Text` Component
 
 Whether all text should be in capital letters
 
+## Buy me a coffee
+
+It costs me alot of time to keep the library updated and address all the bugs & issues. If this library has helped you [buy me a coffee](https://ko-fi.com/ammarahmed).
 
 ## Contact & Support
 
+- Add a ⭐️ [star on GitHub](https://github.com/ammarahm-ed/react-native-admob-native-ads) to support the project!
 - Create a GitHub issue for bug reports, feature requests, or questions
 - Follow [@ammarahm-ed](https://github.com/ammarahm-ed) for announcements
-- Add a ⭐️ [star on GitHub](https://github.com/ammarahm-ed/react-native-admob-native-ads) or ❤️ tweet to support the project!
 
 ## I want to contribute
 
