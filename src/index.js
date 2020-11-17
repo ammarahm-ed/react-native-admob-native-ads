@@ -61,7 +61,9 @@ export class NativeAdView extends Component {
 
   onUnifiedNativeAdLoaded = (event) => {
     this.ad = event.nativeEvent;
-    this.ad.aspectRatio = parseFloat(this.ad.aspectRatio);
+    if (this.ad.aspectRatio) {
+      this.ad.aspectRatio = parseFloat(this.ad.aspectRatio);  
+    }
     if (this.componentMounted) {
       this.updateAd();
       if (this.props.onUnifiedNativeAdLoaded) {
