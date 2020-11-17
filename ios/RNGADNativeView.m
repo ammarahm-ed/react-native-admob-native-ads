@@ -28,7 +28,7 @@ BOOL *nonPersonalizedAds;
 
 - (instancetype)initWithBridge:(RCTBridge *)_bridge
 {
-    delay = @1000;
+    delay = @1;
     refreshingInterval = @60000;
     if (self = [super init]) {
         bridge = _bridge;
@@ -48,7 +48,7 @@ BOOL *nonPersonalizedAds;
 
 - (void)setDelayAdLoad:(NSNumber *)delayAdLoad
 {
-    delay = delayAdLoad;
+   
 }
 
 - (void)setTestDevices:(NSArray *)testDevices
