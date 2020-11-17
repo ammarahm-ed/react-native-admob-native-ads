@@ -13,9 +13,10 @@ import {AdView} from './AdView';
 function listItemsGenerator(num) {
   let list = [];
   for (var i = 0; i < num; i++) {
+
     list = [
       ...list,
-      ...['Apple', 'Banana', 'Orange', 'Pineapple', 'Pancakes', 'ad'],
+      ...['Apple ' + i, 'Banana ' + i, 'Orange ' + i, 'Pineapple ' + i, 'Pancakes ' + i, 'ad ' + i],
     ];
   }
 
@@ -206,6 +207,7 @@ const App = () => {
                   height: 300,
                   width: '100%',
                 }}
+                keyExtractor={(item) => item}
                 data={listItemsGenerator(10)}
                 renderItem={({item, index}) =>
                   item === 'ad' ? (
