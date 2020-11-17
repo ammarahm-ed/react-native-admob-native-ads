@@ -20,7 +20,7 @@ const StarRatingView = (props) => {
   return nativeAd && nativeAd.rating && nativeAd.rating > 0 ? (
     <StarView
       {...props}
-      ref={starRatingRef}
+      passRef={starRatingRef}
       stars={nativeAd.rating ? nativeAd.rating : 0}
       onLayout={_onLayout}
     />
