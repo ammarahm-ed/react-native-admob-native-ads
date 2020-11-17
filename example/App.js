@@ -209,7 +209,7 @@ const App = () => {
                 data={listItemsGenerator(10)}
                 renderItem={({item, index}) =>
                   item === 'ad' ? (
-                    <AdView type="image" delay={50 * index} media={false} />
+                    <AdView type="image" media={false} />
                   ) : (
                     <View
                       style={{

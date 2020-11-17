@@ -56,7 +56,6 @@ export const AdView = ({media, type,delay=0}) => {
       onAdLeftApplication={() => {
         console.log('ad has left the application');
       }}
-      delayAdLoading={delay}
       onAdClicked={_onAdClicked}
       onAdImpression={_onAdImpression}
       onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
