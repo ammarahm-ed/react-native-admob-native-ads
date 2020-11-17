@@ -258,7 +258,7 @@ public class RNNativeAdWrapper extends LinearLayout {
             sendDirectMessage(args);
 
         } catch (Exception e) {
-            Log.d("HELLO", e.getMessage());
+            // Log.d("HELLO", e.getMessage());
 
         }
         if (handler != null) {

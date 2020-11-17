@@ -1,4 +1,4 @@
-import React, { useContext, useEffect,useRef } from "react";
+import React, { useContext, useEffect,useRef, useCallback } from "react";
 import { findNodeHandle, Text, View } from "react-native";
 import { NativeAdContext } from "./context";
 
