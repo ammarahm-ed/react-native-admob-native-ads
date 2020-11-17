@@ -23,6 +23,6 @@ const MediaView = (props) => {
   );
 };
 
-const AdMediaView = requireNativeComponent("MediaView", MediaView);
+const AdMediaView = requireNativeComponent("RNGADMediaView", MediaView);
 
 export default MediaView;
