@@ -297,7 +297,7 @@ declare module "react-native-admob-native-ads" {
                 "name" : boolean
              }
      */
-    hasAd: (adUnitId: string) => Promise<any>;
+    hasAd: (name: string) => Promise<any>;
   };
 
   export const AdOptions: options;
