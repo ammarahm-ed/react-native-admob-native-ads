@@ -135,7 +135,6 @@ type NativeAdViewProps = {
   adUnitID: string;
 
   /**
-<<<<<<< HEAD
    * Ads returned will be of the desired aspectRatio
    */
   mediaAspectRatio?: "any" | "landscape" | "portrait" | "square" | "unknown";
@@ -144,7 +143,6 @@ type NativeAdViewProps = {
    * Placement of AdChoicesView in any of the 4 corners of the ad
    *
    * import AdOptions then pass the value from there. AdOptions.adChoicesPlacement
-=======
    * Ad Repository for Native ads registered for caching. Remember to use only when there is
    * a registered repository. when registered the adUnitId and other settings would be ignored
    */
@@ -154,7 +152,6 @@ type NativeAdViewProps = {
   /**
    * Time after which a new ad should be
    * requested from the server. Default is 1 minute (60000 ms);
->>>>>>> 5fa2df5 (refactor ad preload to add repository management)
    */
   refreshInterval?: number;
 
@@ -207,7 +204,6 @@ type NativeAdViewProps = {
     neighboringContentUrls?: Array<string>;
   };
   testDevices?: Array<string>;
-<<<<<<< HEAD
   onAdOpened?: () => void;
   onAdClosed?: () => void;
   onAdLeftApplication?: () => void;
@@ -216,17 +212,7 @@ type NativeAdViewProps = {
   onAdLoaded?: () => void;
   onNativeAdLoaded?: (event: NativeAd) => void;
   onAdFailedToLoad?: (error: { message: string }) => void;
-=======
-  onAdOpened?: Function;
-  onAdClosed?: Function;
-  onAdLeftApplication?: Function;
-  onAdImpression?: Function;
-  onAdClicked?: Function;
-  onAdLoaded?: Function;
-  onUnifiedNativeAdLoaded?: (event: NativeAd) => {};
-  onAdFailedToLoad?: Function;
   requestMuteAds: boolean;
->>>>>>> 5fa2df5 (refactor ad preload to add repository management)
 };
 
 type SimpleViewProps = {
@@ -281,12 +267,7 @@ declare module "react-native-admob-native-ads" {
    * AdManager can be used to configure your ads on App Startup such as setting test devices.
    *
    */
-<<<<<<< HEAD
-
   export const AdManager: {
-=======
-  export let AdManager: {
->>>>>>> 5fa2df5 (refactor ad preload to add repository management)
     /**
      * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with at least one of the following properties
 
@@ -318,7 +299,6 @@ declare module "react-native-admob-native-ads" {
      ```
      *
      */
->>>>>>> 5fa2df5 (refactor ad preload to add repository management)
 
     setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => void;
     /**
@@ -329,9 +309,6 @@ declare module "react-native-admob-native-ads" {
      ```
      return: `boolean`
      */
-<<<<<<< HEAD
-    isTestDevice: () => Promise<boolean>;
-=======
     isTestDevice: () => Promise<any>
 
     /**
@@ -369,10 +346,10 @@ declare module "react-native-admob-native-ads" {
              }
      */
     hasAd: (adUnitId: string) => Promise<any>;
->>>>>>> 5fa2df5 (refactor ad preload to add repository management)
   };
 
   export const AdOptions: options;
+
 
   /**
    * Ad Badge shows the {ad} badge on top of the ad telling the user that this is an AD.
