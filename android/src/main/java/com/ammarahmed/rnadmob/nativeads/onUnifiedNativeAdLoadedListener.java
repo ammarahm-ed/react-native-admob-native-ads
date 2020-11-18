@@ -9,7 +9,6 @@ import com.facebook.react.bridge.WritableMap;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 
 import java.lang.Long;
-import java.util.Map;
 import java.util.Stack;
 
 public class onUnifiedNativeAdLoadedListener implements UnifiedNativeAd.OnUnifiedNativeAdLoadedListener {

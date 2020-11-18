@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
-import com.google.android.gms.ads.formats.AdChoicesView; 
+import com.google.android.gms.ads.nativead.AdChoicesView;
 
 public class RNAdmobAdChoicesManager extends ViewGroupManager<AdChoicesView> {
     private static final String REACT_CLASS = "AdChoicesView";

@@ -33,25 +33,30 @@ AdManager.registerRepository({
   console.log('registered: ', result);
 });
 
-// video test ad
-// AdManager.registerRepository({
-//   name: 'muteVideoAd',
-//   adUnitId: NATIVE_AD_VIDEO_ID,
-//   numOfAds: 3,
-//   nonPersonalizedAdsOnly: false,
-//   mute: true,
-//   expirationPeriod: 3600000, // in milliseconds (optional)
-//   mediationEnabled: false,
-// });
+// unmute video test ad
+AdManager.registerRepository({
+  name: 'videoAd',
+  adUnitId: NATIVE_AD_VIDEO_ID,
+  numOfAds: 3,
+  nonPersonalizedAdsOnly: false,
+  mute: false,
+  expirationPeriod: 3600000, // in milliseconds (optional)
+  mediationEnabled: false,
+}).then((result) => {
+  console.log('registered: ', result);
+});
 
-// setTimeout(() => {
-//   AdManager.hasLoadedAd(NATIVE_AD_ID).then((value) =>
-//     console.log('image ad: ', value),
-//   );
-//   AdManager.hasLoadedAd(NATIVE_AD_VIDEO_ID).then((value) =>
-//     console.log('video ad: ', value),
-//   );
-//   AdManager.printAds();
-// }, 10000);
+// mute video test ad
+AdManager.registerRepository({
+  name: 'muteVideoAd',
+  adUnitId: NATIVE_AD_VIDEO_ID,
+  numOfAds: 3,
+  nonPersonalizedAdsOnly: false,
+  mute: true,
+  expirationPeriod: 3600000, // in milliseconds (optional)
+  mediationEnabled: false,
+}).then((result) => {
+  console.log('registered: ', result);
+});
 
 AppRegistry.registerComponent(appName, () => App);

@@ -12,7 +12,7 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
- 
+
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -48,18 +48,15 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     public static final String PROP_STAR_RATING_VIEW = "starrating";
     public static final String PROP_AD_CHOICES_PLACEMENT = "adChoicesPlacement";
     public static final String PROP_NON_PERSONALIZED_ADS = "requestNonPersonalizedAdsOnly";
-<<<<<<< HEAD
     public static final String PROP_PAUSE_AD_RELOAD = "pauseAdReload";
     public static final String PROP_MEDIA_ASPECT_RATIO = "mediaAspectRatio";
     public static final String PROP_VIDEO_OPTIONS = "videoOptions";
     public static final String PROP_MEDIATION_OPTIONS = "mediationOptions";
     public static final String PROP_TARGETING_OPTIONS = "targetingOptions";
-=======
     public static final String PROP_MUTE_ADS = "requestMuteAds";
 
     private RNNativeAdWrapper nativeAdView;
 
->>>>>>> 5fa2df5 (refactor ad preload to add repository management)
 
     @javax.annotation.Nullable
     @Override
@@ -88,7 +85,7 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
 
     @Override
     protected RNAdmobNativeView createViewInstance(ThemedReactContext reactContext) {
-       
+
         return new RNAdmobNativeView(reactContext);
 
     }
@@ -99,19 +96,26 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     }
 
 
+
+
+
     @Override
     public void addView(RNAdmobNativeView parent, View child, int index) {
         //super.addView(parent, child, index);
-        parent.addNewView(child, index);
+
+        nativeAdView.addNewView(child, index);
 
     }
-
-
     @ReactProp(name = PROP_TARGETING_OPTIONS)
     public void setPropTargetingOptions(final RNAdmobNativeView nativeAdWrapper, final ReadableMap options) {
         nativeAdWrapper.setTargetingOptions(options);
     }
+    @ReactProp(name = PROP_REFRESH_INTERVAL)
+    public void setRefreshInterval(final RNNativeAdWrapper view, final int interval) {
 
+        view.setAdRefreshInterval(interval);
+
+    }
     @ReactProp(name = PROP_VIDEO_OPTIONS)
     public void setVideoOptions(final RNAdmobNativeView nativeAdWrapper, final ReadableMap options) {
         nativeAdWrapper.setVideoOptions(options);
@@ -123,11 +127,10 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     }
 
     @ReactProp(name = PROP_NON_PERSONALIZED_ADS, defaultBoolean = false)
-    public void setPropNonPersonalizedAds(final RNAdmobNativeView nativeAdWrapper, final boolean npa) {
+    public void setPropNonPersonalizedAds(final RNNativeAdWrapper nativeAdWrapper, final boolean npa) {
 
         nativeAdWrapper.setRequestNonPersonalizedAdsOnly(npa);
     }
-
 
 
     @ReactProp(name = PROP_AD_CHOICES_PLACEMENT)
@@ -138,15 +141,12 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     }
 
 
+    @ReactProp(name = PROP_DELAY_AD_LOAD)
+    public void setPropDelayAdLoad(final RNNativeAdWrapper view, final int delay) {
 
+        view.setLoadWithDelay(delay);
 
-    @ReactProp(name = PROP_MEDIA_ASPECT_RATIO)
-    public void setMediaAspectRatio(final RNAdmobNativeView nativeAdWrapper, final int type) {
-        nativeAdWrapper.setMediaAspectRatio(type);
     }
-
-
-
 
     @ReactProp(name = PROP_MEDIA_VIEW)
     public void setMediaView(final RNAdmobNativeView nativeAdWrapper, final int id) {
@@ -240,7 +240,6 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
                 .build();
     }
 
-
     @Override
     public void receiveCommand(RNAdmobNativeView nativeAdWrapper, int commandId, @Nullable ReadableArray args) {
         switch (commandId) {
@@ -249,18 +248,22 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
                 break;
         }
     }
+    @ReactProp(name = PROP_TEST_DEVICES)
+    public void setPropTestDevices(final RNNativeAdWrapper view, final ReadableArray testDevices) {
+      //  ReadableNativeArray nativeArray = (ReadableNativeArray) testDevices;
+      //  ArrayList<Object> list = nativeArray.toArrayList();
+
+      //  List<String> testDeviceIds = Arrays.asList(list.toArray(new String[list.size()]));
+      //  RequestConfiguration configuration =
+      //          new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+     //   MobileAds.setRequestConfiguration(configuration);
+    }
 
 
     @ReactProp(name = PROP_AD_UNIT_ID)
     public void setPropAdUnitId(final RNAdmobNativeView nativeAdWrapper, final String adUnitId) {
         if (adUnitId == null) return;
-<<<<<<< HEAD
         nativeAdWrapper.setAdUnitId(adUnitId);
-
-    }
-
-=======
-        view.setAdUnitId(adUnitId);
     }
 
     @ReactProp(name = PROP_AD_REPOSITORY)
@@ -274,7 +277,6 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
         view.setMute(mute);
     }
 
->>>>>>> 5fa2df5 (refactor ad preload to add repository management)
     @Override
     public void onDropViewInstance(@NonNull RNAdmobNativeView nativeAdWrapper) {
         super.onDropViewInstance(nativeAdWrapper);

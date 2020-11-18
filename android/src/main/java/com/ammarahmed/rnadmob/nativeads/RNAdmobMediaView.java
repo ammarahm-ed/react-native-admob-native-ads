@@ -39,7 +39,7 @@ public class RNAdmobMediaView extends MediaView {
         progress.putString("currentTime", String.valueOf(vc.getVideoCurrentTime()));
         progress.putString("duration", String.valueOf(vc.getVideoDuration()));
         Log.d("RNGADMediaView", "PROGRESS UPDATE");
-        sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_PROGRESS, progress);
+        sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_PROGRESS, progress);
 
     }
 
@@ -69,25 +69,25 @@ public class RNAdmobMediaView extends MediaView {
         @Override
         public void onVideoStart() {
             super.onVideoStart();
-            sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_START, null);
+            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_START, null);
         }
 
         @Override
         public void onVideoPlay() {
             super.onVideoPlay();
-            sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_PLAY, null);
+            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_PLAY, null);
         }
 
         @Override
         public void onVideoPause() {
             super.onVideoPause();
-            sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_PAUSE, null);
+            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_PAUSE, null);
         }
 
         @Override
         public void onVideoEnd() {
             super.onVideoEnd();
-            sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_END, null);
+            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_END, null);
         }
 
         @Override
@@ -96,7 +96,7 @@ public class RNAdmobMediaView extends MediaView {
 
             WritableMap event = Arguments.createMap();
             event.putBoolean("muted", b);
-            sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_MUTE, event);
+            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_MUTE, event);
 
         }
     };

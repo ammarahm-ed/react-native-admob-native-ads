@@ -11,15 +11,15 @@ import NativeAdView, {
   StoreView,
 } from 'react-native-admob-native-ads';
 
-// const NATIVE_AD_ID =
-//   Platform.OS === 'ios'
-//     ? 'ca-app-pub-3940256099942544/3986624511'
-//     : 'ca-app-pub-3940256099942544/2247696110';
+const NATIVE_AD_ID =
+  Platform.OS === 'ios'
+    ? 'ca-app-pub-3940256099942544/3986624511'
+    : 'ca-app-pub-3940256099942544/2247696110';
 
-// const NATIVE_AD_VIDEO_ID =
-//   Platform.OS === 'ios'
-//     ? 'ca-app-pub-3940256099942544/2521693316'
-//     : 'ca-app-pub-3940256099942544/1044960115';
+const NATIVE_AD_VIDEO_ID =
+  Platform.OS === 'ios'
+    ? 'ca-app-pub-3940256099942544/2521693316'
+    : 'ca-app-pub-3940256099942544/1044960115';
 
 export const AdView = ({media, type, delay = 0}) => {
   const [aspectRatio, setAspectRatio] = useState(1);
@@ -81,8 +81,8 @@ export const AdView = ({media, type, delay = 0}) => {
         alignSelf: 'center',
         marginVertical: 10,
       }}
-      // adUnitID={type === 'image' ? NATIVE_AD_ID : NATIVE_AD_VIDEO_ID} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
-      repository={type === 'image' ? 'imageAd' : 'videoAd'} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
+      // adUnitID={type === 'image' ? NATIVE_AD_ID : NATIVE_AD_VIDEO_ID}
+      repository={type === 'image' ? 'imageAd' : 'videoAd'} // when it is set other setting would be ignored, use adUnitID for non caching ads
     >
       <View
         style={{

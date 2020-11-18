@@ -10,12 +10,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class RNAdmobNativePackage implements ReactPackage {
+public class RNAdMobNativePackage implements ReactPackage {
 
     @Override 
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Arrays.<NativeModule>asList(
-                new RNAdmobNativeAdManager(reactContext)
+                new RNAdMobNativePackage(reactContext)
         );
     }
 
@@ -28,7 +28,7 @@ public class RNAdmobNativePackage implements ReactPackage {
 
         return Arrays.<ViewManager>asList(
                 new RNAdmobNativeViewManager(),
-                new RNAdmobMediaViewManager(),
+                new RNAdMobNativePackage(),
                 new RNAdmobComponentsWrapperManager(),
                 new RNAdmobAdChoicesManager(),
                 new RNAdmobButtonManager()

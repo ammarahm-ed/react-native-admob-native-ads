@@ -125,11 +125,11 @@ public class RNAdmobNativeView extends LinearLayout {
             sendEvent(RNAdmobNativeViewManager.EVENT_AD_IMPRESSION, null);
         }
 
-        @Override
-        public void onAdLeftApplication() {
-            super.onAdLeftApplication();
-            sendEvent(RNAdmobNativeViewManager.EVENT_AD_LEFT_APPLICATION, null);
-        }
+//        @Override
+//        public void onAdLeftApplication() {
+//            super.onAdLeftApplication();
+//            sendEvent(RNAdmobNativeViewManager.EVENT_AD_LEFT_APPLICATION, null);
+//        }
     };
     private String admobAdUnitId = "";
     private Handler handler;
