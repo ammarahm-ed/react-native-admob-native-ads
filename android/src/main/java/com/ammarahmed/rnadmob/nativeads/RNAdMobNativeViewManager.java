@@ -94,10 +94,6 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
         ((RNNativeAdWrapper) view).setMessagingModuleName(moduleName);
     }
 
-
-
-
-
     @Override
     public void addView(RNNativeAdWrapper parent, View child, int index) {
         //super.addView(parent, child, index);
@@ -116,7 +112,6 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
     @ReactProp(name = PROP_NON_PERSONALIZED_ADS, defaultBoolean = false)
     public void setPropNonPersonalizedAds(final RNNativeAdWrapper view, final boolean npa) {
-
         view.setRequestNonPersonalizedAdsOnly(npa);
     }
 

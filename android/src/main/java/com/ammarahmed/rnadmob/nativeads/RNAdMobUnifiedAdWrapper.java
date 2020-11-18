@@ -32,8 +32,9 @@ public class RNAdMobUnifiedAdWrapper {
     public Boolean muted = true;
     public Boolean mediation = false;
     private final AdLoader adLoader;
-    private final AdRequest adRequest;
+    private AdRequest adRequest;
     AdListener attachedAdListener;
+    private final onUnifiedNativeAdLoadedListener unifiedNativeAdLoadedListener;
     public Stack<Pair<Long, UnifiedNativeAd>> nativeAds= new Stack<>(); // every entry is => time of loading => ad loaded
     Context mContext;
 
@@ -70,7 +71,7 @@ public class RNAdMobUnifiedAdWrapper {
         } else {
             adRequest = new AdRequest.Builder().build();
         }
-        onUnifiedNativeAdLoadedListener unifiedNativeAdLoadedListener = new onUnifiedNativeAdLoadedListener(repo, nativeAds, context);
+        unifiedNativeAdLoadedListener = new onUnifiedNativeAdLoadedListener(repo, nativeAds, context);
         AdLoader.Builder builder = new AdLoader.Builder(context, adUnitId);
         builder.forUnifiedNativeAd(unifiedNativeAdLoadedListener);
         VideoOptions videoOptions = new VideoOptions.Builder()
@@ -112,7 +113,7 @@ public class RNAdMobUnifiedAdWrapper {
                         error.putString("errorMessage", adError.getMessage());
                         error.putString("message", errorMessage);
                         error.putInt("code", adError.getCode());
-                        error.putString("responseInfo", adError.getResponseInfo().toString());
+                        error.putString("responseInfo", adError.getResponseInfo() != null ? adError.getResponseInfo().toString() : "");
                         event.putMap("error", error);
                         EventEmitter.sendEvent((ReactContext) mContext, Constants.EVENT_AD_PRELOAD_ERROR, event);
                     }

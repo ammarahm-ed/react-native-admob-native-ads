@@ -1,24 +1,15 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
-import android.os.Bundle;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
-import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdLoader;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.VideoOptions;
-import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 
 public class CacheManager {
 
@@ -85,7 +76,7 @@ public class CacheManager {
         } catch (Exception e) {
             WritableMap args = Arguments.createMap();
             args.putBoolean("success", false);
-            args.putString("error", e.getCause().toString());
+            args.putString("error", e.getCause() != null ? e.getCause().toString() : "");
             return args;
         }
     }
@@ -120,7 +111,6 @@ public class CacheManager {
     }
 
     public WritableMap hasAd(String repo) {
-        // todo : refactor
         if (repositoriesMap.containsKey(repo)) {
             return repositoriesMap.get(repo).hasAd();
         } else {

@@ -79,7 +79,6 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
     @ReactMethod
     public void registerRepository(ReadableMap config, Promise promise){
         WritableMap result = Constants.cacheManager.registerRepo(mContext, config);
-        System.out.println("younes result: " + result.toString());
         if (result.hasKey("success") && result.getBoolean("success")){
             Constants.cacheManager.requestAds(result.getString("repo"));
         }
