@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useEffect } from "react";
 import { findNodeHandle } from "react-native";
-import StarView from "./components/StarView";
+import StarView from "./StarView";
 import { NativeAdContext } from "./context";
 
 const StarRatingView = (props) => {
