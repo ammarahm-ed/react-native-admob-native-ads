@@ -23,7 +23,7 @@
 
 @implementation RNGADMediaViewManager: RCTViewManager
 
-RCT_EXPORT_MODULE(MediaView);
+RCT_EXPORT_MODULE(RNGADMediaView);
 
 -(UIView *)view
 {

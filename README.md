@@ -39,28 +39,25 @@ This library aims to solve that problem by providing complete support for Admob 
 
 <div
 align="center"
+width="100%"
 >
 <img
 src="https://i.imgur.com/dmu35Id.png"
 width="33%"
-height=600
 />
 <img
 src="https://i.imgur.com/60B5tO6.png"
 width="33%"
-height=600
 />
 <img
 src="https://i.imgur.com/WMe6yLg.png"
 width="33%"
-height=600
 />
-
 <img
 src="https://i.imgur.com/ROMCCUw.png"
 width="33%"
-height=600
 />
+
 </div>
 
 <div align="center">
@@ -99,13 +96,11 @@ or if you use yarn:
 
     yarn add react-native-admob-native-ads
 
-Also install the following packages:
+Also install the following package:
 
-  `yarn add react-native-gesture-handler react-native-star-rating`
-
-and
-
-  `yarn add react-native-vector-icons`
+```bash
+yarn add react-native-vector-icons
+```
 
 Don't forget to setup [react-native-vector-icons ](https://github.com/oblador/react-native-vector-icons) as the guide states for iOS & Android
 
@@ -243,9 +238,9 @@ Configure your Ad Requests during App Startup. You need to pass a single object 
 ```js
 const config = {
   testDeviceIds: ["YOUR_TEST_DEVICE_ID"],
-  maxAdContetRating: 'MA',
+  maxAdContetRating: "MA",
   tagForChildDirectedTreatment: false,
-  tagForUnderAgeConsent: false
+  tagForUnderAgeConsent: false,
 };
 
 AdManager.setRequestConfiguration(config);
@@ -348,15 +343,6 @@ Setting this to true will load a placeholder ad (Not from Admob server) incase y
 | --------- | -------- | -------- |
 | `boolean` | no       | All      |
 
-#
-
-#### `delayAdLoading`
-
-Delay ad loading and rendering by the specified time in milliseconds. This is a workaround to fix rendering of multiple ads in the same screen. For example in a list. So what you should do is incrementally increase the delay from first and to the last. However it is suggested to you should always render only one ad, in one screen at one time.
-
-| Type     | Required | Default | Platform |
-| -------- | -------- | ------- | -------- |
-| `number` | no       | 0 ms    | All      |
 
 #
 

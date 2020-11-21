@@ -18,14 +18,9 @@
 
 RCT_EXPORT_MODULE(RNGADNativeView);
 
-RNGADNativeView *nativeAdView;
-
 -(UIView *)view
 {
-    
-    nativeAdView = [[RNGADNativeView alloc]initWithBridge:self.bridge];
-    
-    return nativeAdView;
+    return [[RNGADNativeView alloc]initWithBridge:self.bridge];
 }
 
 

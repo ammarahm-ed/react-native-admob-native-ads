@@ -47,6 +47,7 @@ export default function StarView({
   fullIcon = 'star',
   halfIcon = 'star-half-full',
   emptyIcon = 'star-outline',
+  passRef,
   ...passThroughProps
 }) {
   let Icon = MaterialCommunityIcons;
@@ -85,7 +86,7 @@ export default function StarView({
   if (stars == null || typeof stars !== 'number') return null;
 
   const icons = renderIcons(stars, size);
-  return <View style={viewStyle} {...passThroughProps}>{icons}</View>;
+  return <View ref={passRef} style={viewStyle} {...passThroughProps}>{icons}</View>;
 }
 
 const styles = StyleSheet.create({
