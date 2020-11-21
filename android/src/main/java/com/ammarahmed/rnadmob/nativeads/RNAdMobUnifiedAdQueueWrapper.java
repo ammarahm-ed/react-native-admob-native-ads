@@ -20,9 +20,10 @@ import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import java.lang.Long;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Stack;
 
-public class RNAdMobUnifiedAdWrapper {
+public class RNAdMobUnifiedAdQueueWrapper {
 
     public String adUnitId;
     public String name;
@@ -35,7 +36,7 @@ public class RNAdMobUnifiedAdWrapper {
     private AdRequest adRequest;
     AdListener attachedAdListener;
     private final onUnifiedNativeAdLoadedListener unifiedNativeAdLoadedListener;
-    public Stack<Pair<Long, UnifiedNativeAd>> nativeAds= new Stack<>(); // every entry is => time of loading => ad loaded
+    public PriorityQueue<RNAdMobUnifiedAdContainer> nativeAds;
     Context mContext;
 
     public void attachAdListener(AdListener listener) {
@@ -46,7 +47,7 @@ public class RNAdMobUnifiedAdWrapper {
         attachedAdListener = null;
     }
 
-    public RNAdMobUnifiedAdWrapper(Context context, ReadableMap config, String repo){
+    public RNAdMobUnifiedAdQueueWrapper(Context context, ReadableMap config, String repo){
         mContext = context;
         adUnitId = config.getString("adUnitId");
         name = repo;
@@ -54,6 +55,7 @@ public class RNAdMobUnifiedAdWrapper {
         if (config.hasKey("numOfAds")){
             totalAds = config.getInt("numOfAds");
         }
+        nativeAds= new PriorityQueue<RNAdMobUnifiedAdContainer>(totalAds, new RNAdMobUnifiedAdComparator());
         if (config.hasKey("mute")){
             muted = config.getBoolean("mute");
         }
@@ -71,7 +73,7 @@ public class RNAdMobUnifiedAdWrapper {
         } else {
             adRequest = new AdRequest.Builder().build();
         }
-        unifiedNativeAdLoadedListener = new onUnifiedNativeAdLoadedListener(repo, nativeAds, context);
+        unifiedNativeAdLoadedListener = new onUnifiedNativeAdLoadedListener(repo, nativeAds, totalAds, context);
         AdLoader.Builder builder = new AdLoader.Builder(context, adUnitId);
         builder.forUnifiedNativeAd(unifiedNativeAdLoadedListener);
         VideoOptions videoOptions = new VideoOptions.Builder()
@@ -188,31 +190,38 @@ public class RNAdMobUnifiedAdWrapper {
 
     public void fillAd(){
         if (!isLoading()){
-            if (mediation){
-                for (int i = 0; i<(totalAds-nativeAds.size()); i++){
-                    adLoader.loadAd(adRequest);
+            if (totalAds>nativeAds.size()){
+                if (mediation){
+                    for (int i = 0; i<(totalAds-nativeAds.size()); i++){
+                        adLoader.loadAd(adRequest);
+                    }
+                } else {
+                    adLoader.loadAds(adRequest, totalAds-nativeAds.size());
                 }
-            } else {
-                adLoader.loadAds(adRequest, totalAds-nativeAds.size());
+            }else{
+                adLoader.loadAd(adRequest);
             }
         }
     }
 
     public UnifiedNativeAd getAd(){
         long now = System.currentTimeMillis();
-        Pair<Long, UnifiedNativeAd> ad;
+        RNAdMobUnifiedAdContainer ad;
         while (true){
-            if (nativeAds.size() > 0){
-                ad = nativeAds.pop();
-                if ((ad.first - now) < expirationInterval){
+            if (!nativeAds.isEmpty()){
+                ad = nativeAds.peek();
+                if (ad != null && (ad.loadTime - now) < expirationInterval) {
                     break;
+                } else {
+                    nativeAds.remove(ad);
                 }
             }else{
                 return null;
             }
         }
         fillAd();
-        return ad.second;
+        ad.showCount += 1;
+        return ad.unifiedNativeAd;
     }
 
     public Boolean isLoading(){

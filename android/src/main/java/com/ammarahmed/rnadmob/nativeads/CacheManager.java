@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class CacheManager {
 
-    Map<String, RNAdMobUnifiedAdWrapper> repositoriesMap = new HashMap<>();
+    Map<String, RNAdMobUnifiedAdQueueWrapper> repositoriesMap = new HashMap<>();
 
     public boolean isLoading(String id) {
         if (repositoriesMap.get(id) != null) {
@@ -61,7 +61,7 @@ public class CacheManager {
             }
             if (repo != null){
                 if (!repositoriesMap.containsKey(repo)){
-                    repositoriesMap.put(repo, new RNAdMobUnifiedAdWrapper(context, config, repo));
+                    repositoriesMap.put(repo, new RNAdMobUnifiedAdQueueWrapper(context, config, repo));
                     args.putBoolean("success", true);
                     args.putString("repo", repo);
                 } else {
