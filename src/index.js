@@ -14,17 +14,8 @@ const testNativeAd = {
   rating: 4.5,
   price: "$ 1",
   icon: "https://dummyimage.com/300.png/09f/fff",
-  images: [{url:"https://dummyimage.com/qvga"}],
+  images: [{ url: "https://dummyimage.com/qvga" }],
 };
-
-const waitAsync = (ms) =>
-  new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(true);
-    }, ms);
-  });
-
-
 
 export class NativeAdView extends Component {
   constructor(props) {
@@ -32,15 +23,15 @@ export class NativeAdView extends Component {
     this.state = {
       nativeAd: null,
       nativeAdView: null,
-      delayRender: true,
     };
     this.nativeAdRef;
     this.currentId = 0;
     this.delayDuration = 0;
     this.componentMounted = false;
+    this.ad = null;
   }
 
-  messagingModuleName = `NativeAdMessageHandler${(Date.now() + Math.random())}`;
+  messagingModuleName = `NativeAdMessageHandler${Date.now() + Math.random()}`;
 
   _onAdFailedToLoad = (event) => {
     if (this.props.onAdFailedToLoad) {
@@ -69,12 +60,15 @@ export class NativeAdView extends Component {
   };
 
   onUnifiedNativeAdLoaded = (event) => {
-    this.updateAd(event.nativeEvent);
-
-    if (this.props.onUnifiedNativeAdLoaded) {
-      let ad = { ...event.nativeEvent };
-      ad.aspectRatio = parseFloat(ad.aspectRatio);
-      this.props.onUnifiedNativeAdLoaded(ad);
+    this.ad = event.nativeEvent;
+    if (this.ad.aspectRatio) {
+      this.ad.aspectRatio = parseFloat(this.ad.aspectRatio);  
+    }
+    if (this.componentMounted) {
+      this.updateAd();
+      if (this.props.onUnifiedNativeAdLoaded) {
+        this.props.onUnifiedNativeAdLoaded(this.ad);
+      }
     }
   };
 
@@ -83,10 +77,10 @@ export class NativeAdView extends Component {
       this.props.onAdLeftApplication(event.nativeEvent);
   };
 
-  updateAd(ad) {
+  updateAd() {
     if (this.componentMounted) {
       this.setState({
-        nativeAd: ad,
+        nativeAd: this.ad,
       });
     }
   }
@@ -96,18 +90,9 @@ export class NativeAdView extends Component {
     if (this.props.enableTestMode) {
       this.updateAd(testNativeAd);
     } else {
-      this.updateAd(null);
+      this.updateAd(this.ad);
     }
     BatchedBridge.registerCallableModule(this.messagingModuleName, this);
-
-    if (this.props.delayAdLoading) {
-      this.delayDuration = this.props.delayAdLoading;
-    }
-    waitAsync(this.delayDuration).then(() => {
-      this.setState({
-        delayRender: false,
-      });
-    });
   }
 
   componentWillUnmount() {
@@ -117,8 +102,7 @@ export class NativeAdView extends Component {
   render() {
     const { nativeAd, nativeAdView, delayRender } = this.state;
 
-    return delayRender ? null : (
-      <NativeAdContext.Provider value={{ nativeAd, nativeAdView }}>
+    return <NativeAdContext.Provider value={{ nativeAd, nativeAdView }}>
         <UnifiedNativeAdView
           ref={(ref) => {
             this.nativeAdRef = ref;
@@ -134,7 +118,12 @@ export class NativeAdView extends Component {
           onAdOpened={this._onAdOpened}
           onAdClosed={this._onAdClosed}
           onAdImpression={this._onAdImpression}
-          style={[this.props.style, Platform.OS === "ios" ?  { display: this.state.nativeAd ? "flex" : "none" } : { height: this.state.nativeAd ? null : 0 }  ]}
+          style={[
+            this.props.style,
+            Platform.OS === "ios"
+              ? { display: this.state.nativeAd ? "flex" : "none" }
+              : { height: this.state.nativeAd ? null : 0 },
+          ]}
           onUnifiedNativeAdLoaded={this.onUnifiedNativeAdLoaded}
           refreshInterval={
             this.props.refreshInterval ? this.props.refreshInterval : 60000
@@ -160,7 +149,6 @@ export class NativeAdView extends Component {
           </Wrapper>
         </UnifiedNativeAdView>
       </NativeAdContext.Provider>
-    );
   }
 }
 

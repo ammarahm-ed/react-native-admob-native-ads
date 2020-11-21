@@ -28,7 +28,7 @@ BOOL *nonPersonalizedAds;
 
 - (instancetype)initWithBridge:(RCTBridge *)_bridge
 {
-    delay = @1000;
+    delay = @1;
     refreshingInterval = @60000;
     if (self = [super init]) {
         bridge = _bridge;
@@ -48,12 +48,12 @@ BOOL *nonPersonalizedAds;
 
 - (void)setDelayAdLoad:(NSNumber *)delayAdLoad
 {
-    delay = delayAdLoad;
+    
 }
 
 - (void)setTestDevices:(NSArray *)testDevices
 {
-   // _testDevices = RNAdMobProcessTestDevices(testDevices, kDFPSimulatorID);
+    // _testDevices = RNAdMobProcessTestDevices(testDevices, kDFPSimulatorID);
 }
 
 - (void)setRefreshInterval:(NSNumber *)refreshInterval
@@ -250,7 +250,7 @@ BOOL *nonPersonalizedAds;
         [adViewOptions setPreferredAdChoicesPosition:GADAdChoicesPositionBottomLeftCorner];
     } else {
         [adViewOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
-       
+        
     }
     
     
@@ -282,11 +282,11 @@ BOOL *nonPersonalizedAds;
     if (self.onAdFailedToLoad) {
         self.onAdFailedToLoad(@{ @"error": @{ @"message": [error localizedDescription] } });
         
-         double delayInSeconds = refreshingInterval.intValue/1000;
-               dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-               dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                   [self loadAd:adUnitId];
-         });
+        double delayInSeconds = refreshingInterval.intValue/1000;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [self loadAd:adUnitId];
+        });
         
     }
     
@@ -339,22 +339,26 @@ BOOL *nonPersonalizedAds;
             
             
             [dic setObject:images forKey:@"images"];
+            
             if (nativeAd.icon != nil) {
-                     [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
+                [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
             } else {
-                
-                NSString * someString = nativeAd.responseInfo.adNetworkClassName;
-                NSLog(@"%@", someString);
-                
-                if ([nativeAd.responseInfo.adNetworkClassName isEqualToString:@"GADMAdapterGoogleAdMobAds"]) {
-                             [dic setValue:@"noicon" forKey:@"icon"];
+                if (nativeAd.responseInfo != nil && nativeAd.responseInfo.adNetworkClassName != nil) {
+                    
+                    if ([nativeAd.responseInfo.adNetworkClassName isEqualToString:@"GADMAdapterGoogleAdMobAds"]) {
+                        
+                        [dic setValue:@"noicon" forKey:@"icon"];
+                        
+                    } else {
+                        [dic setValue:@"empty" forKey:@"icon"];
+                    }
+                    
                 } else {
-                      [dic setValue:@"empty" forKey:@"icon"];
+                    [dic setValue:@"noicon" forKey:@"icon"];
                 }
-            
-            
+                
             }
-           
+            
             
             [dic setValue:nativeAd.starRating forKey:@"rating"];
             

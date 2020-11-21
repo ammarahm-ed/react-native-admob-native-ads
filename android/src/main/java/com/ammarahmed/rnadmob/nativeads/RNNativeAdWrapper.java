@@ -238,7 +238,7 @@ public class RNNativeAdWrapper extends LinearLayout {
                         args.putString("icon", "empty");
                     }
                 } else {
-                    args.putString("icon", "empty");
+                    args.putString("icon", "noicon");
                 }
             }
 
