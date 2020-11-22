@@ -9,12 +9,14 @@ import javax.annotation.Nullable;
 public class RNAdMobUnifiedAdContainer {
     public Long loadTime;
     public Integer showCount;
+    public Integer references;
     UnifiedNativeAd unifiedNativeAd;
 
     RNAdMobUnifiedAdContainer(UnifiedNativeAd nativeAd, Long t, @Nullable Integer n){
         unifiedNativeAd = nativeAd;
         showCount = n != null ? n : 0;
         loadTime = t;
+        references = 0;
     }
 }
 

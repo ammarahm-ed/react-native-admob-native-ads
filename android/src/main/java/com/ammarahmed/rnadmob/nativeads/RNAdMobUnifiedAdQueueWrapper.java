@@ -204,7 +204,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
         }
     }
 
-    public UnifiedNativeAd getAd(){
+    public RNAdMobUnifiedAdContainer getAd(){
         long now = System.currentTimeMillis();
         RNAdMobUnifiedAdContainer ad;
         while (true){
@@ -213,7 +213,10 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 if (ad != null && (ad.loadTime - now) < expirationInterval) {
                     break;
                 } else {
-                    nativeAds.remove(ad);
+                    if (ad.references <=0){
+                        ad.unifiedNativeAd.destroy();
+                        nativeAds.remove(ad);
+                    }
                 }
             }else{
                 return null;
@@ -221,7 +224,8 @@ public class RNAdMobUnifiedAdQueueWrapper {
         }
         fillAd();
         ad.showCount += 1;
-        return (new RNAdMobUnifiedAdContainer (ad.unifiedNativeAd, ad.loadTime, ad.showCount)).unifiedNativeAd;
+        ad.references += 1;
+        return ad;
     }
 
     public Boolean isLoading(){
