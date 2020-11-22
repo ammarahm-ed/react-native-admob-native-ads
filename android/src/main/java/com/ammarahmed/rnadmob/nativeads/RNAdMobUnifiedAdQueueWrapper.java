@@ -221,7 +221,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
         }
         fillAd();
         ad.showCount += 1;
-        return ad.unifiedNativeAd;
+        return (new RNAdMobUnifiedAdContainer (ad.unifiedNativeAd, ad.loadTime, ad.showCount)).unifiedNativeAd;
     }
 
     public Boolean isLoading(){
