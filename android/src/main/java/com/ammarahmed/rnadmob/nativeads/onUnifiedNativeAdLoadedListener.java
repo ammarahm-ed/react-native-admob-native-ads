@@ -32,12 +32,13 @@ public class onUnifiedNativeAdLoadedListener implements UnifiedNativeAd.OnUnifie
             RNAdMobUnifiedAdContainer toBeRemoved = null;
             Long time = System.currentTimeMillis();
             for (RNAdMobUnifiedAdContainer ad: this.nativeAds){
-                if (ad.loadTime < time){
+                if (ad.loadTime < time && ad.references <=0){
                     time = ad.loadTime;
                     toBeRemoved = ad;
                 }
             }
             if (toBeRemoved !=  null){
+                toBeRemoved.unifiedNativeAd.destroy();
                 this.nativeAds.remove(toBeRemoved);
             }
         }

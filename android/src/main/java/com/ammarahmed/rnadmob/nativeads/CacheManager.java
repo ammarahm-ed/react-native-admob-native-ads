@@ -101,7 +101,7 @@ public class CacheManager {
         return repositoriesMap.containsKey(repo);
     }
 
-    public UnifiedNativeAd getNativeAd(String repo) {
+    public RNAdMobUnifiedAdContainer getNativeAd(String repo) {
 
         if (repositoriesMap.containsKey(repo)) {
             return repositoriesMap.get(repo).getAd();

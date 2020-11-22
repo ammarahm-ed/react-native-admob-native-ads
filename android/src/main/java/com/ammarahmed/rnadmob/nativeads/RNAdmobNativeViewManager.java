@@ -17,8 +17,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-
-public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView> {
+public class RNAdmobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper> {
 
 
     public static final String REACT_CLASS = "RNGADNativeView";
@@ -30,7 +29,7 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     public static final String EVENT_AD_IMPRESSION = "onAdImpression";
     public static final String EVENT_AD_LOADED = "onAdLoaded";
     public static final String EVENT_AD_LEFT_APPLICATION = "onAdLeftApplication";
-    public static final String EVENT_NATIVE_AD_LOADED = "onNativeAdLoaded";
+    public static final String EVENT_UNIFIED_NATIVE_AD_LOADED = "onUnifiedNativeAdLoaded";
     public static final String PROP_DELAY_AD_LOAD = "delayAdLoad";
     public static final String PROP_TEST_DEVICES = "testDevices";
     public static final String PROP_AD_UNIT_ID = "adUnitID";
@@ -70,7 +69,7 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
                 EVENT_AD_IMPRESSION,
                 EVENT_AD_LOADED,
                 EVENT_AD_LEFT_APPLICATION,
-                EVENT_NATIVE_AD_LOADED,
+                EVENT_UNIFIED_NATIVE_AD_LOADED,
         };
         for (String event : events) {
             builder.put(event, MapBuilder.of("registrationName", event));
@@ -84,14 +83,14 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     }
 
     @Override
-    protected RNAdmobNativeView createViewInstance(ThemedReactContext reactContext) {
+    protected RNNativeAdWrapper createViewInstance(ThemedReactContext reactContext) {
 
-        return new RNAdmobNativeView(reactContext);
+        return new RNNativeAdWrapper(reactContext);
 
     }
 
     @ReactProp(name = "messagingModuleName")
-    public void setMessagingModuleName(RNAdmobNativeView nativeAdWrapper, String moduleName) {
+    public void setMessagingModuleName(RNNativeAdWrapper nativeAdWrapper, String moduleName) {
         nativeAdWrapper.setMessagingModuleName(moduleName);
     }
 
@@ -100,7 +99,7 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
 
 
     @Override
-    public void addView(RNAdmobNativeView parent, View child, int index) {
+    public void addView(RNNativeAdWrapper parent, View child, int index) {
         //super.addView(parent, child, index);
 
         nativeAdView.addNewView(child, index);
@@ -221,12 +220,11 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     }
 
     @ReactProp(name = PROP_CALL_TO_ACTION_VIEW)
-    public void setPropCallToActionView(final RNAdmobNativeView nativeAdWrapper, final int id) {
+    public void setPropCallToActionView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
 
             View view = nativeAdWrapper.findViewById(id);
             nativeAdWrapper.nativeAdView.setCallToActionView(view);
             nativeAdWrapper.setNativeAd();
-
 
     }
 
@@ -249,7 +247,7 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
         }
     }
     @ReactProp(name = PROP_TEST_DEVICES)
-    public void setPropTestDevices(final RNNativeAdWrapper view, final ReadableArray testDevices) {
+    public void setPropTestDevices(final RNNativeAdWrapper nativeAdWrapper, final ReadableArray testDevices) {
       //  ReadableNativeArray nativeArray = (ReadableNativeArray) testDevices;
       //  ArrayList<Object> list = nativeArray.toArrayList();
 
@@ -261,15 +259,15 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
 
 
     @ReactProp(name = PROP_AD_UNIT_ID)
-    public void setPropAdUnitId(final RNAdmobNativeView nativeAdWrapper, final String adUnitId) {
+    public void setPropAdUnitId(final RNNativeAdWrapper nativeAdWrapper, final String adUnitId) {
         if (adUnitId == null) return;
         nativeAdWrapper.setAdUnitId(adUnitId);
     }
 
     @ReactProp(name = PROP_AD_REPOSITORY)
-    public void setPropAdRepository(final RNNativeAdWrapper view, final String repo) {
+    public void setPropAdRepository(final RNNativeAdWrapper nativeAdWrapper, final String repo) {
         if (repo == null) return;
-        view.setAdRepository(repo);
+        nativeAdWrapper.setAdRepository(repo);
     }
 
     @ReactProp(name = PROP_MUTE_ADS, defaultBoolean = true)
@@ -278,11 +276,11 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     }
 
     @Override
-    public void onDropViewInstance(@NonNull RNAdmobNativeView nativeAdWrapper) {
+    public void onDropViewInstance(@NonNull RNNativeAdWrapper nativeAdWrapper) {
         super.onDropViewInstance(nativeAdWrapper);
         nativeAdWrapper.removeHandler();
-        if (nativeAdWrapper.nativeAd != null){
-            nativeAdWrapper.nativeAd.destroy();
+        if (nativeAdWrapper.unifiedNativeAd != null){
+            nativeAdWrapper.unifiedNativeAd.destroy();
         }
 	if (nativeAdWrapper.nativeAdView != null){
             nativeAdWrapper.nativeAdView.destroy();

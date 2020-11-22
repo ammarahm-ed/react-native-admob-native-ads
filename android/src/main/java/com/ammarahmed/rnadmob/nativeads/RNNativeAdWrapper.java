@@ -46,6 +46,7 @@ public class RNNativeAdWrapper extends LinearLayout {
     ReactContext mContext;
     UnifiedNativeAdView nativeAdView;
     UnifiedNativeAd unifiedNativeAd;
+    RNAdMobUnifiedAdContainer unifiedNativeAdContainer;
     MediaView mediaView;
 
     protected @Nullable
@@ -81,7 +82,7 @@ public class RNNativeAdWrapper extends LinearLayout {
             error.putInt("code", adError.getCode());
             error.putString("responseInfo", adError.getResponseInfo() != null ? adError.getResponseInfo().toString() : "");
             event.putMap("error", error);
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
 
             if (handler != null) {
                 runnable = new Runnable() {
@@ -97,19 +98,19 @@ public class RNNativeAdWrapper extends LinearLayout {
         @Override
         public void onAdClosed() {
             super.onAdClosed();
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_CLOSED, null);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_CLOSED, null);
         }
 
         @Override
         public void onAdOpened() {
             super.onAdOpened();
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_OPENED, null);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_OPENED, null);
         }
 
         @Override
         public void onAdClicked() {
             super.onAdClicked();
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_CLICKED, null);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_CLICKED, null);
 
         }
 
@@ -120,19 +121,19 @@ public class RNNativeAdWrapper extends LinearLayout {
                 Constants.cacheManager.detachAdListener(adRepo);
                 loadAd();
             }
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_LOADED, null);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_LOADED, null);
         }
 
         @Override
         public void onAdImpression() {
             super.onAdImpression();
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_IMPRESSION, null);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_IMPRESSION, null);
         }
 
         @Override
         public void onAdLeftApplication() {
             super.onAdLeftApplication();
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_LEFT_APPLICATION, null);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_LEFT_APPLICATION, null);
         }
     };
     private int loadWithDelay = 1000;
@@ -243,7 +244,7 @@ public class RNNativeAdWrapper extends LinearLayout {
             }
 
             if (messagingModuleName == null){
-                sendEvent(RNAdMobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
+                sendEvent(RNAdmobNativeViewManager.EVENT_UNIFIED_NATIVE_AD_LOADED, args);
             } else {
                 sendDirectMessage(args);
             }
@@ -323,22 +324,21 @@ public class RNNativeAdWrapper extends LinearLayout {
                     adListener.onAdFailedToLoad(new LoadAdError(3, "The requested repo is not registered", "", null, null));
             } else {
                 if (Constants.cacheManager.numberOfAds(adRepo) != 0) {
-                    UnifiedNativeAd nativeAd = Constants.cacheManager.getNativeAd(adRepo);
+                    unifiedNativeAdContainer = Constants.cacheManager.getNativeAd(adRepo);
 
                     // todo :: check if this is required
 //                if (unifiedNativeAd != null) {
 //                    unifiedNativeAd.destroy();
 //                }
-                    if (nativeAd != null) {
-                        unifiedNativeAd = nativeAd;
+                    if (unifiedNativeAdContainer != null) {
+                        unifiedNativeAd = unifiedNativeAdContainer.unifiedNativeAd;
                         nativeAdView.setNativeAd(unifiedNativeAd);
                         if (mediaView != null) {
                             nativeAdView.setMediaView(mediaView);
                             mediaView.requestLayout();
                         }
-
+                        setNativeAdToJS(unifiedNativeAd);
                     }
-                    setNativeAdToJS(nativeAd);
                 } else {
                     if (!Constants.cacheManager.isLoading(adRepo)){
                         Constants.cacheManager.attachAdListener(adRepo, adListener);
