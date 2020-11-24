@@ -24,13 +24,13 @@ public class RNAdMobPreloader {
     private VideoOptions videoOptions;
     private NativeAdOptions adOptions;
     AdListener adListener;
-    private String adUnitID;
+    public String adUnitID;
     private ReactContext mContext;
     private int numberOfAdsToLoad = 2;
-    private boolean requestNonPersonalizedAdsOnly = false;
-    private int mediaAspectRatio = 1;
-    private int adChoicesPlacement = 1;
-    private boolean videosStartMuted = true;
+    public boolean requestNonPersonalizedAdsOnly = false;
+    public int mediaAspectRatio = 1;
+    public int adChoicesPlacement = 1;
+    public boolean videosStartMuted = true;
 
     public void setMediaAspectRatio(int aspectRatio) {
         mediaAspectRatio = aspectRatio;
@@ -57,6 +57,15 @@ public class RNAdMobPreloader {
     }
 
 
+    public int numberOfAds() {
+        if (nativeAds == null) {
+            return 0;
+
+        }
+        return nativeAds.size();
+    }
+
+
     public void attachAdListener(AdListener listener) {
         adListener = listener;
     }
@@ -69,6 +78,13 @@ public class RNAdMobPreloader {
 
         }
     };
+
+    /**
+     * Since we will preload the ads, AdMob has no
+     * way to attach separate listeners to each Ad View after,
+     * the AdRequest has returned an Ad so we will use a single
+     * AdListener that will send events to JS using the AdManager.
+     */
 
     AdListener adListen = new AdListener() {
 
@@ -180,11 +196,10 @@ public class RNAdMobPreloader {
     /**
      * This method is used to get a random ad from the list of ads.
      *
-     * @param index Index of the ad to load.
      * @return UnifiedNativeAd
      */
 
-    public UnifiedNativeAd getNativeAd(int index) {
+    public UnifiedNativeAd getNativeAd() {
         if ((nativeAds == null) || (nativeAds.size() == 0)) return null;
         Random random = new Random();
         int randomNumber = random.nextInt(nativeAds.size() - 0) + 0;
