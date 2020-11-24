@@ -191,6 +191,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNAdMobNativeView
         super.onDropViewInstance(nativeAdWrapper);
         nativeAdWrapper.removeHandler();
 
+        // Never destroy the preloaded ads because they are to be reused.
         if (nativeAdWrapper.unifiedNativeAd != null && !nativeAdWrapper.usingPreloadedAd) {
             nativeAdWrapper.unifiedNativeAd.destroy();
         }

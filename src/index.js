@@ -106,7 +106,6 @@ export class NativeAdView extends Component {
     }
     BatchedBridge.registerCallableModule(this.messagingModuleName, this);
     if (!this.ad) {
-      await waitAsync(100);
       if (this.props.usePreloadedAds) {
         this.loadPreloadedAd();
       } else {
