@@ -24,34 +24,42 @@ public class RNAdMobPreloader {
     private VideoOptions videoOptions;
     private NativeAdOptions adOptions;
     AdListener adListener;
-    private int numAdRequested;
     private String adUnitID;
     private ReactContext mContext;
+    private int numberOfAdsToLoad = 2;
+    private boolean requestNonPersonalizedAdsOnly = false;
+    private int mediaAspectRatio = 1;
+    private int adChoicesPlacement = 1;
+    private boolean videosStartMuted = true;
 
-
-    public boolean isLoading() {
-
-        if (adLoader == null) {
-            return false;
-        }
-
-        return adLoader.isLoading();
-
+    public void setMediaAspectRatio(int aspectRatio) {
+        mediaAspectRatio = aspectRatio;
     }
 
-    public int numberOfAds() {
-        if (nativeAds == null) {
-            return 0;
+    public void setRequestNonPersonalizedAdsOnly(boolean npa) {
+        requestNonPersonalizedAdsOnly = npa;
+    }
 
-        }
-        return nativeAds.size();
+    public void setAdUnitID(String id) {
+        adUnitID = id;
+    }
+
+    public void setNumberOfAdsToLoad(int numberOfAdsToLoad) {
+        this.numberOfAdsToLoad = numberOfAdsToLoad;
+    }
+
+    public void setAdChoicesPlacement(int adChoicesPlacement) {
+        this.adChoicesPlacement = adChoicesPlacement;
+    }
+
+    public void setVideosStartMuted(boolean videosStartMuted) {
+        this.videosStartMuted = videosStartMuted;
     }
 
 
     public void attachAdListener(AdListener listener) {
         adListener = listener;
     }
-
 
     UnifiedNativeAd.OnUnifiedNativeAdLoadedListener onUnifiedNativeAdLoadedListener = new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
         @Override
@@ -61,7 +69,6 @@ public class RNAdMobPreloader {
 
         }
     };
-
 
     AdListener adListen = new AdListener() {
 
@@ -129,27 +136,23 @@ public class RNAdMobPreloader {
 
 
     /**
-     * @param context        The Context in which the ads will be loaded.
-     * @param id             The adUnitID that will be used to request ads.
-     * @param numOfAdsToLoad Number of ads to load (Max:5).
-     * @param npa            Show non-personalized ads
+     * @param context The Context using which the ads will be loaded.
      */
 
-    public void loadNativeAds(ReactContext context, String id, int numOfAdsToLoad, boolean npa) {
+    public void loadNativeAds(ReactContext context) {
 
-        adUnitID = id;
         mContext = context;
-        numAdRequested = numOfAdsToLoad;
         nativeAds.clear();
         try {
-            builder = new AdLoader.Builder(context, adUnitID);
+            builder = new AdLoader.Builder(mContext, adUnitID);
             builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
             videoOptions = new VideoOptions.Builder()
-                    .setStartMuted(true)
+                    .setStartMuted(videosStartMuted)
                     .build();
             adOptions = new NativeAdOptions.Builder()
                     .setVideoOptions(videoOptions)
-                    .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT)
+                    .setAdChoicesPlacement(adChoicesPlacement)
+                    .setMediaAspectRatio(mediaAspectRatio)
                     .build();
 
             builder.withNativeAdOptions(adOptions);
@@ -157,7 +160,7 @@ public class RNAdMobPreloader {
             adLoader = builder.withAdListener(adListen).build();
             AdRequest adRequest;
 
-            if (npa) {
+            if (requestNonPersonalizedAdsOnly) {
                 Bundle extras = new Bundle();
                 extras.putString("npa", "1");
                 adRequest = new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
@@ -166,7 +169,7 @@ public class RNAdMobPreloader {
                 adRequest = new AdRequest.Builder().build();
             }
 
-            adLoader.loadAds(adRequest, numOfAdsToLoad);
+            adLoader.loadAds(adRequest, numberOfAdsToLoad);
 
 
         } catch (Exception e) {

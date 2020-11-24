@@ -25,9 +25,6 @@ import java.util.List;
 public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
 
     private ReactApplicationContext reactContext;
-    private int numberOfAdsToLoad = 2;
-    private String adUnitId = null;
-    private boolean requestNonPersonalizedAdsOnly = false;
 
     public RNAdmobNativeAdsManager(ReactApplicationContext context) {
         super(context);
@@ -92,28 +89,41 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setNumberOfAdsToLoad(int numOfAdsToLoad) {
-        numberOfAdsToLoad = numOfAdsToLoad;
+        RNAdMobGlobals.preloader.setNumberOfAdsToLoad(numOfAdsToLoad);
     }
 
     @ReactMethod
     public void setAdUnitId(String id) {
-        adUnitId = id;
+        RNAdMobGlobals.preloader.setAdUnitID(id);
     }
 
     @ReactMethod
     public void setRequestNonPersonalizedAdsOnly(boolean npa) {
-        requestNonPersonalizedAdsOnly = npa;
+        RNAdMobGlobals.preloader.setRequestNonPersonalizedAdsOnly(npa);
+    }
+
+    @ReactMethod
+    public void setMediaAspectRatio(int i) {
+        RNAdMobGlobals.preloader.setMediaAspectRatio(i);
+    }
+
+    @ReactMethod
+    public void setAdChoicesPlacement(int i) {
+        RNAdMobGlobals.preloader.setAdChoicesPlacement(i);
+    }
+
+    @ReactMethod
+    public void setVideosStartMuted(boolean muted) {
+        RNAdMobGlobals.preloader.setVideosStartMuted(muted);
     }
 
     @ReactMethod
     public void preload(Callback callback) {
-        if (adUnitId != null) {
-            RNAdMobGlobals.preloader.attachAdListener(adListener);
-            RNAdMobGlobals.preloader.loadNativeAds(reactContext, adUnitId, numberOfAdsToLoad, requestNonPersonalizedAdsOnly);
-        } else {
-            callback.invoke("Error: adUnitID is not set.");
-        }
+        RNAdMobGlobals.preloader.attachAdListener(adListener);
+        RNAdMobGlobals.preloader.loadNativeAds(reactContext);
+
     }
+
 
     AdListener adListener = new AdListener() {
         @Override
