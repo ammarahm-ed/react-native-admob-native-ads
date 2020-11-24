@@ -45,6 +45,6 @@ public class onUnifiedNativeAdLoadedListener implements UnifiedNativeAd.OnUnifie
         this.nativeAds.add(new RNAdMobUnifiedAdContainer(nativeAd, System.currentTimeMillis(), 0));
         WritableMap args = Arguments.createMap();
         args.putInt(this.repo, this.nativeAds.size());
-        EventEmitter.sendEvent((ReactContext) this.mContext, Constants.EVENT_AD_PRELOAD_LOADED, args);
+        EventEmitter.sendEvent((ReactContext) this.mContext, CacheManager.EVENT_AD_PRELOAD_LOADED, args);
     }
 }

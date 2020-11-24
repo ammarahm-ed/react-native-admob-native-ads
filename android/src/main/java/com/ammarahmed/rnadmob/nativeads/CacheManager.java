@@ -15,6 +15,10 @@ public class CacheManager {
 
     Map<String, RNAdMobUnifiedAdQueueWrapper> repositoriesMap = new HashMap<>();
 
+    public static CacheManager instance = new CacheManager();
+    public static final String EVENT_AD_PRELOAD_LOADED = "onAdPreloadLoaded";
+    public static final String EVENT_AD_PRELOAD_ERROR = "onAdPreloadError";
+
     public boolean isLoading(String id) {
         if (repositoriesMap.get(id) != null) {
             return repositoriesMap.get(id).isLoading();

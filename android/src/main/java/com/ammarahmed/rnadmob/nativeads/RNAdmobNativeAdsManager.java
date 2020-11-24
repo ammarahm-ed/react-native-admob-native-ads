@@ -78,26 +78,26 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void registerRepository(ReadableMap config, Promise promise){
-        WritableMap result = Constants.cacheManager.registerRepo(mContext, config);
+        WritableMap result = CacheManager.instance.registerRepo(mContext, config);
         if (result.hasKey("success") && result.getBoolean("success")){
-            Constants.cacheManager.requestAds(result.getString("repo"));
+            CacheManager.instance.requestAds(result.getString("repo"));
         }
         promise.resolve(result);
     }
 
     @ReactMethod
     public void unRegisterRepository(String id){
-        Constants.cacheManager.unRegisterRepo(id);
+        CacheManager.instance.unRegisterRepo(id);
     }
 
     @ReactMethod
     public void resetCache(){
-        Constants.cacheManager.resetCache();
+        CacheManager.instance.resetCache();
     }
 
     @ReactMethod
     public void hasAd(String repo, Promise promise) {
-        promise.resolve(Constants.cacheManager.hasAd(repo));
+        promise.resolve(CacheManager.instance.hasAd(repo));
     }
 
 }
