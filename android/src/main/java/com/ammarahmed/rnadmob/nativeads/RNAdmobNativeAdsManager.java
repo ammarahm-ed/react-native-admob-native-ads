@@ -90,4 +90,119 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
     }
 
 
+    @ReactMethod
+    public void setNumberOfAdsToLoad(int numOfAdsToLoad) {
+        numberOfAdsToLoad = numOfAdsToLoad;
+    }
+
+    @ReactMethod
+    public void setAdUnitId(String id) {
+        adUnitId = id;
+    }
+
+    @ReactMethod
+    public void setRequestNonPersonalizedAdsOnly(boolean npa) {
+        requestNonPersonalizedAdsOnly = npa;
+    }
+
+    @ReactMethod
+    public void preload(Callback callback) {
+        if (adUnitId != null) {
+            RNAdMobGlobals.preloader.attachAdListener(adListener);
+            RNAdMobGlobals.preloader.loadNativeAds(reactContext, adUnitId, numberOfAdsToLoad, requestNonPersonalizedAdsOnly);
+        } else {
+            callback.invoke("Error: adUnitID is not set.");
+        }
+    }
+
+       AdListener adListener = new AdListener() {
+        @Override
+        public void onAdFailedToLoad(LoadAdError loadAdError) {
+            super.onAdFailedToLoad(loadAdError);
+
+            WritableMap event = Arguments.createMap();
+            WritableMap error = Arguments.createMap();
+            if (loadAdError.getMessage() != null) {
+                error.putString("message", loadAdError.getMessage());
+            } else {
+                error.putString("message", "unknown error occurred.");
+            }
+            event.putMap("error", error);
+            sendEvent(RNAdMobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
+
+        }
+        @Override
+        public void onAdFailedToLoad(int i) {
+            super.onAdFailedToLoad(i);
+
+            String errorMessage = "Unknown error";
+            switch (i) {
+                case AdRequest.ERROR_CODE_INTERNAL_ERROR:
+                    errorMessage = "Internal error, an invalid response was received from the ad server.";
+                    break;
+                case AdRequest.ERROR_CODE_INVALID_REQUEST:
+                    errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
+                    break;
+                case AdRequest.ERROR_CODE_NETWORK_ERROR:
+                    errorMessage = "The ad request was unsuccessful due to network connectivity.";
+                    break;
+                case AdRequest.ERROR_CODE_NO_FILL:
+                    errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
+                    break;
+            }
+            WritableMap event = Arguments.createMap();
+            WritableMap error = Arguments.createMap();
+            error.putString("message", errorMessage);
+            event.putMap("error", error);
+
+            sendEvent(RNAdMobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
+        }
+
+        @Override
+        public void onAdClosed() {
+            super.onAdClosed();
+            sendEvent(RNAdMobGlobals.EVENT_AD_CLOSED, null);
+        }
+
+        @Override
+        public void onAdOpened() {
+            super.onAdOpened();
+            sendEvent(RNAdMobGlobals.EVENT_AD_OPENED, null);
+        }
+
+        @Override
+        public void onAdClicked() {
+            super.onAdClicked();
+            sendEvent(RNAdMobGlobals.EVENT_AD_CLICKED, null);
+
+        }
+
+        @Override
+        public void onAdLoaded() {
+            super.onAdLoaded();
+            sendEvent(RNAdMobGlobals.EVENT_AD_LOADED, null);
+
+        }
+
+        @Override
+        public void onAdImpression() {
+            super.onAdImpression();
+            sendEvent(RNAdMobGlobals.EVENT_AD_IMPRESSION, null);
+        }
+
+        @Override
+        public void onAdLeftApplication() {
+            super.onAdLeftApplication();
+            sendEvent(RNAdMobGlobals.EVENT_AD_LEFT_APPLICATION, null);
+        }
+    };
+
+
+    public void sendEvent(String eventName, WritableMap params) {
+        this.reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, params);
+    }
+
+
 }
