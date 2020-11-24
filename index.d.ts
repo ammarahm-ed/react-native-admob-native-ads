@@ -96,7 +96,7 @@ type options = {
 | UNSPECIFIED | Set default value to ""|
  */
 type MAX_AD_CONTENT_RATING = 'G' | 'MA' | 'PG' | 'T' | 'UNSPECIFIED';
-
+type Events = 'onAdFailedToLoad' | 'onAdClicked' | 'onAdClosed' | 'onAdOpened' | 'onAdImpression' | "onAdLoaded" | "onAdLeftApplication";
 type AdManagerConfiguration = {
   maxAdContentRating: MAX_AD_CONTENT_RATING,
   tagForChildDirectedTreatment: boolean,
@@ -301,7 +301,10 @@ declare module "react-native-admob-native-ads" {
      * Preload native video ads. You should call this function in 
      * index.js or App.js when the app starts.
      */
-    preloadNativeVideoAds:() => {}
+    preloadNativeVideoAds:() => {},
+
+    addListener:(type:Events,listener:()=>{}) => {},
+    removeListener:(type:Events,listener:()=>{}) => {},
   }
 
   export const AdOptions: options;

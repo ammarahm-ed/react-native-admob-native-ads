@@ -1,4 +1,4 @@
-import {NativeModules} from 'react-native';
+import {DeviceEventEmitter, NativeModules} from 'react-native';
 
 const RNAdmobNativeAdsManager = NativeModules.RNAdmobNativeAdsManager;
 
@@ -47,6 +47,14 @@ function preloadNativeVideoAds() {
   return RNAdmobNativeAdsManager.preloadNativeVideoAds();
 }
 
+function addListener(type,listener) {
+  DeviceEventEmitter.addListener(type,listener)
+}
+
+function removeListener(type,listener) {
+  DeviceEventEmitter.removeListener(type,listener)
+}
+
 export default {
   setRequestConfiguration,
   isTestDevice,
@@ -58,4 +66,6 @@ export default {
   setAdChoicesPlacement,
   setMediaAspectRatio,
   setRequestNonPersonalizedAdsOnly,
+  removeListener,
+  addListener
 };
