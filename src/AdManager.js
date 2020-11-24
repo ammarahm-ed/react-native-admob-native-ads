@@ -14,10 +14,10 @@ function setAdUnitIds(adUnitId, videoAdUnitId) {
   return RNAdmobNativeAdsManager.setAdUnitIds(adUnitId, videoAdUnitId);
 }
 
-function setNumberOfAdsToLoad(nativeAdsToLoad, nativeVideoAdsToLoad) {
+function setNumberOfAdsToLoad(imageAdsToLoad, videoAdsToLoad) {
   return RNAdmobNativeAdsManager.setNumberOfAdsToLoad(
-    nativeAdsToLoad,
-    nativeVideoAdsToLoad,
+    imageAdsToLoad,
+    videoAdsToLoad,
   );
 }
 

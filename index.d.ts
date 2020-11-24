@@ -125,7 +125,17 @@ type NativeAdViewProps = {
    * requested from the server. Default is 1 minute (60000 ms);
    */
   refreshInterval?: number;
-  
+
+  /**
+   * Set the type of Ad this AdView should load.
+   */
+  type?: "image" | "video";
+
+  /**
+   * Ad preloading is enabled by default. You can set this to false
+   * if you want to request a new Ad everytime the NativeAdView loads.
+   */
+  usePreloadedAds?:boolean;
   onAdOpened?: Function<void>;
   onAdClosed?: Function<void>;
   onAdLeftApplication?: Function<void>;
@@ -219,7 +229,8 @@ declare module "react-native-admob-native-ads" {
     isTestDevice: async () => {},
 
     /**
-     * 
+     * Setup adUnitIDs for your ads. You should call this function in 
+     * index.js or App.js when the app starts.
      * 
      * In debug mode always use test ad unit ids. You can get 
      * the latest test ad unit ids from here:
@@ -229,12 +240,19 @@ declare module "react-native-admob-native-ads" {
      * registering your device as a testDevice using `setRequestConfiguration` 
      * function of AdManager in debug mode.
      * 
-     * @param {string} adUnitId adUnitID for simple image ads. 
-     * @param {string} videoAdUnitId adUnitID for video ads. 
+     * @param {string} adUnitId adUnitID for native advanced image ads. 
+     * @param {string} videoAdUnitId adUnitID for native advanced video ads. 
      */
     setAdUnitIds: (adUnitId?:string,videoAdUnitId?:string) => {},
 
-    setNumberOfAdsToLoad: (nativeAdsToLoad?:number,nativeVideoAdsToLoad?:number) => {},
+    /**
+     * Set number of ads to preload. Max is 5 for each.
+     * 
+     * @param {number} imageAdsToLoad Number of native advanced image ads to load. Max is 5.
+     * @param {number} videoAdsToLoad Number of native advanced image ads to load. Max is 5.
+     */
+
+    setNumberOfAdsToLoad: (imageAdsToLoad?:number, videoAdsToLoad?:number) => {},
 
      /**
    * Under the Google EU User Consent Policy, you must make certain disclosures
@@ -251,16 +269,38 @@ declare module "react-native-admob-native-ads" {
    */
     setRequestNonPersonalizedAdsOnly: (requestNonPersonalizedAdsOnly:boolean)=> {},
 
+    /**
+   * Set Media Aspect Ratio for the ads. Ads can be Landscape, Portrait, Square or Any type.
+   *
+   * import `AdOptions` then pass parameter from there: `AdOptions.mediaAspectRatio`
+   * 
+   */
+
+
     setMediaAspectRatio:(aspectRatio:number) => {},
 
     /**
    * Placement of AdChoicesView in any of the 4 corners of the ad
    *
-   * import AdOptions then pass the value from there. AdOptions.adChoicesPlacement
+   * import AdOptions then pass parameter from there: AdOptions.adChoicesPlacement
    */
     setAdChoicesPlacement:(placement:number) => {},
+
+    /**
+     * Video should start muted or with sound.
+     */
     setVideosStartMuted:(muted:boolean) => {},
+
+    /**
+     * Preload native image ads. You should call this function in 
+     * index.js or App.js when the app starts.
+     */
     preloadNativeAds:() => {},
+
+    /**
+     * Preload native video ads. You should call this function in 
+     * index.js or App.js when the app starts.
+     */
     preloadNativeVideoAds:() => {}
   }
 
