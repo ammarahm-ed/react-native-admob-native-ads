@@ -42,6 +42,7 @@ public class RNAdMobNativeView extends LinearLayout {
         }
     };
     public int adRefreshInterval = 60000;
+    public boolean usingPreloadedAd = false;
     ReactContext mContext;
     UnifiedNativeAdView nativeAdView;
     UnifiedNativeAd unifiedNativeAd;
@@ -146,6 +147,7 @@ public class RNAdMobNativeView extends LinearLayout {
         @Override
         public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
 
+            if (usingPreloadedAd) return;
             if (unifiedNativeAd != null) {
                 unifiedNativeAd.destroy();
             }
@@ -336,6 +338,7 @@ public class RNAdMobNativeView extends LinearLayout {
             unifiedNativeAd = nativeAd;
             nativeAdView.setNativeAd(unifiedNativeAd);
             setNativeAdToJS(unifiedNativeAd);
+            usingPreloadedAd = true;
         } else {
             loadAd();
         }
