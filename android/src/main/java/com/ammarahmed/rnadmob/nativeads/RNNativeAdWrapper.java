@@ -118,7 +118,7 @@ public class RNNativeAdWrapper extends LinearLayout {
         public void onAdLoaded() {
             super.onAdLoaded();
             if (adRepo != null){
-                Constants.cacheManager.detachAdListener(adRepo);
+                CacheManager.instance.detachAdListener(adRepo);
                 loadAd();
             }
             sendEvent(RNAdmobNativeViewManager.EVENT_AD_LOADED, null);
@@ -319,12 +319,12 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     private void getAdFromRepository() {
         try {
-            if (!Constants.cacheManager.isRegistered(adRepo)) {
+            if (!CacheManager.instance.isRegistered(adRepo)) {
                 if (adListener != null)
                     adListener.onAdFailedToLoad(new LoadAdError(3, "The requested repo is not registered", "", null, null));
             } else {
-                if (Constants.cacheManager.numberOfAds(adRepo) != 0) {
-                    unifiedNativeAdContainer = Constants.cacheManager.getNativeAd(adRepo);
+                if (CacheManager.instance.numberOfAds(adRepo) != 0) {
+                    unifiedNativeAdContainer = CacheManager.instance.getNativeAd(adRepo);
 
                     // todo :: check if this is required
 //                if (unifiedNativeAd != null) {
@@ -340,11 +340,11 @@ public class RNNativeAdWrapper extends LinearLayout {
                         setNativeAdToJS(unifiedNativeAd);
                     }
                 } else {
-                    if (!Constants.cacheManager.isLoading(adRepo)){
-                        Constants.cacheManager.attachAdListener(adRepo, adListener);
-                        Constants.cacheManager.requestAd(adRepo);
+                    if (!CacheManager.instance.isLoading(adRepo)){
+                        CacheManager.instance.attachAdListener(adRepo, adListener);
+                        CacheManager.instance.requestAd(adRepo);
                     }else{
-                        Constants.cacheManager.attachAdListener(adRepo, adListener);
+                        CacheManager.instance.attachAdListener(adRepo, adListener);
                     }
                 }
             }
