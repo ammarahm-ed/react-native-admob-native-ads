@@ -38,7 +38,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNAdMobNativeView
     public static final String PROP_PRICE_VIEW = "price";
     public static final String PROP_ICON_VIEW = "icon";
     public static final String PROP_STAR_RATING_VIEW = "starrating";
-
+    public static final String PROP_AD_TYPE = "type";
 
     @javax.annotation.Nullable
     @Override
@@ -78,7 +78,6 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNAdMobNativeView
     }
 
 
-
     @Override
     public void addView(RNAdMobNativeView parent, View child, int index) {
         //super.addView(parent, child, index);
@@ -90,6 +89,13 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNAdMobNativeView
     public void setRefreshInterval(final RNAdMobNativeView nativeAdWrapper, final int interval) {
 
         nativeAdWrapper.setAdRefreshInterval(interval);
+
+    }
+
+    @ReactProp(name = PROP_AD_TYPE)
+    public void setPropAdType(final RNAdMobNativeView nativeAdWrapper, final String type) {
+
+        nativeAdWrapper.setAdType(type);
 
     }
 
@@ -177,14 +183,14 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNAdMobNativeView
 
     //@ReactProp(name = PROP_TEST_DEVICES)
     //public void setPropTestDevices(final RNAdMobNativeView nativeAdWrapper, final ReadableArray testDevices) {
-        //  ReadableNativeArray nativeArray = (ReadableNativeArray) testDevices;
-        //  ArrayList<Object> list = nativeArray.toArrayList();
+    //  ReadableNativeArray nativeArray = (ReadableNativeArray) testDevices;
+    //  ArrayList<Object> list = nativeArray.toArrayList();
 
-        //  List<String> testDeviceIds = Arrays.asList(list.toArray(new String[list.size()]));
-        //  RequestConfiguration configuration =
-        //          new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-        //   MobileAds.setRequestConfiguration(configuration);
-   // }
+    //  List<String> testDeviceIds = Arrays.asList(list.toArray(new String[list.size()]));
+    //  RequestConfiguration configuration =
+    //          new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+    //   MobileAds.setRequestConfiguration(configuration);
+    // }
 
     @Override
     public void onDropViewInstance(@NonNull RNAdMobNativeView nativeAdWrapper) {
@@ -202,7 +208,10 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNAdMobNativeView
     }
 
     public static final int COMMAND_LOAD_NATIVE_AD = 1;
-    public static final int COMMAND_LOAD_PRELOADED_NATIVE_AD = 2;
+    public static final int COMMAND_LOAD_NATIVE_VIDEO_AD = 2;
+    public static final int COMMAND_LOAD_PRELOADED_NATIVE_AD = 3;
+    public static final int COMMAND_LOAD_PRELOADED_VIDEO_AD = 4;
+
 
     @Nullable
     @Override
@@ -223,10 +232,20 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNAdMobNativeView
         // This will be called whenever a command is sent from react-native.
         switch (commandId) {
             case COMMAND_LOAD_NATIVE_AD:
-                view.loadAd();
+                view.loadAd(RNAdMobGlobals.preloader.adUnitID);
+                view.setPreloadingMode(false);
+                break;
+            case COMMAND_LOAD_NATIVE_VIDEO_AD:
+                view.loadAd(RNAdMobGlobals.preloader.videoAdUnitID);
+                view.setPreloadingMode(false);
                 break;
             case COMMAND_LOAD_PRELOADED_NATIVE_AD:
                 view.loadPreloadedAd();
+                view.setPreloadingMode(true);
+                break;
+            case COMMAND_LOAD_PRELOADED_VIDEO_AD:
+                view.loadPreloadedVideoAd();
+                view.setPreloadingMode(true);
         }
     }
 

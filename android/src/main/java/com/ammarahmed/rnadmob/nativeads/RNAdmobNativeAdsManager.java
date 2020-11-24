@@ -4,7 +4,6 @@ package com.ammarahmed.rnadmob.nativeads;
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -29,6 +28,7 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
     public RNAdmobNativeAdsManager(ReactApplicationContext context) {
         super(context);
         reactContext = context;
+        RNAdMobGlobals.preloader.attachAdListener(adListener);
     }
 
     @NonNull
@@ -88,13 +88,13 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
 
 
     @ReactMethod
-    public void setNumberOfAdsToLoad(int numOfAdsToLoad) {
-        RNAdMobGlobals.preloader.setNumberOfAdsToLoad(numOfAdsToLoad);
+    public void setNumberOfAdsToLoad(int numOfAdsToLoad, int numOfVideoAdsToLoad) {
+        RNAdMobGlobals.preloader.setNumberOfAdsToLoad(numOfAdsToLoad, numOfVideoAdsToLoad);
     }
 
     @ReactMethod
-    public void setAdUnitId(String id) {
-        RNAdMobGlobals.preloader.setAdUnitID(id);
+    public void setAdUnitIds(String id, String vid) {
+        RNAdMobGlobals.preloader.setAdUnitIDs(id, vid);
     }
 
     @ReactMethod
@@ -118,9 +118,14 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void preload() {
-        RNAdMobGlobals.preloader.attachAdListener(adListener);
+    public void preloadNativeAds() {
         RNAdMobGlobals.preloader.loadNativeAds(reactContext);
+
+    }
+
+    @ReactMethod
+    public void preloadNativeVideoAds() {
+        RNAdMobGlobals.preloader.loadNativeVideoAds(reactContext);
 
     }
 

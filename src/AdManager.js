@@ -10,17 +10,27 @@ function isTestDevice() {
   return RNAdmobNativeAdsManager.isTestDevice();
 }
 
-function setAdUnitId(id) {
-  return RNAdmobNativeAdsManager.setAdUnitId(id);
+function setAdUnitIds(nativeAdId,nativeVideoAdId) {
+  return RNAdmobNativeAdsManager.setAdUnitIds(nativeAdId,nativeVideoAdId);
 }
 
-function preload() {
-  return RNAdmobNativeAdsManager.preload();
+function setNumberOfAdsToLoad(nativeAdsToLoad,nativeVideoAdsToLoad) {
+  return RNAdmobNativeAdsManager.setNumberOfAdsToLoad(nativeAdsToLoad,nativeVideoAdsToLoad);
+}
+
+function preloadNativeAds() {
+  return RNAdmobNativeAdsManager.preloadNativeAds();
+}
+
+function preloadNativeVideoAds() {
+  return RNAdmobNativeAdsManager.preloadNativeVideoAds();
 }
 
 export default {
   setRequestConfiguration,
   isTestDevice,
-  setAdUnitId,
-  preload
+  setAdUnitIds,
+  preloadNativeAds,
+  preloadNativeVideoAds,
+  setNumberOfAdsToLoad
 }

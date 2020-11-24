@@ -18,6 +18,7 @@ import java.util.Random;
 public class RNAdMobPreloader {
 
     private ArrayList<UnifiedNativeAd> nativeAds = new ArrayList<>();
+    private ArrayList<UnifiedNativeAd> nativeVideoAds = new ArrayList<>();
 
     private AdLoader adLoader;
     private AdLoader.Builder builder;
@@ -25,8 +26,11 @@ public class RNAdMobPreloader {
     private NativeAdOptions adOptions;
     AdListener adListener;
     public String adUnitID;
+    public String videoAdUnitID;
+
     private ReactContext mContext;
     private int numberOfAdsToLoad = 2;
+    private int numberOfVideoAdsToLoad = 0;
     public boolean requestNonPersonalizedAdsOnly = false;
     public int mediaAspectRatio = 1;
     public int adChoicesPlacement = 1;
@@ -40,12 +44,14 @@ public class RNAdMobPreloader {
         requestNonPersonalizedAdsOnly = npa;
     }
 
-    public void setAdUnitID(String id) {
+    public void setAdUnitIDs(String id, String vId) {
         adUnitID = id;
+        videoAdUnitID = vId;
     }
 
-    public void setNumberOfAdsToLoad(int numberOfAdsToLoad) {
+    public void setNumberOfAdsToLoad(int numberOfAdsToLoad, int numberOfVideoAdsToLoad) {
         this.numberOfAdsToLoad = numberOfAdsToLoad;
+        this.numberOfVideoAdsToLoad = numberOfVideoAdsToLoad;
     }
 
     public void setAdChoicesPlacement(int adChoicesPlacement) {
@@ -73,9 +79,11 @@ public class RNAdMobPreloader {
     UnifiedNativeAd.OnUnifiedNativeAdLoadedListener onUnifiedNativeAdLoadedListener = new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
         @Override
         public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
-
-            nativeAds.add(nativeAd);
-
+            if (nativeAd.getMediaContent().hasVideoContent()) {
+                nativeVideoAds.add(nativeAd);
+            } else {
+                nativeAds.add(nativeAd);
+            }
         }
     };
 
@@ -156,11 +164,16 @@ public class RNAdMobPreloader {
      */
 
     public void loadNativeAds(ReactContext context) {
+        if (adUnitID != null && numberOfAdsToLoad > 0) {
+            mContext = context;
+            nativeAds.clear();
+            preloadAds(adUnitID);
+        }
+    }
 
-        mContext = context;
-        nativeAds.clear();
+    private void preloadAds(String adId) {
         try {
-            builder = new AdLoader.Builder(mContext, adUnitID);
+            builder = new AdLoader.Builder(mContext, adId);
             builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
             videoOptions = new VideoOptions.Builder()
                     .setStartMuted(videosStartMuted)
@@ -192,6 +205,14 @@ public class RNAdMobPreloader {
         }
     }
 
+    public void loadNativeVideoAds(ReactContext context) {
+        if (videoAdUnitID != null && numberOfVideoAdsToLoad > 0) {
+            mContext = context;
+            nativeVideoAds.clear();
+            preloadAds(videoAdUnitID);
+        }
+    }
+
 
     /**
      * This method is used to get a random ad from the list of ads.
@@ -204,5 +225,18 @@ public class RNAdMobPreloader {
         Random random = new Random();
         int randomNumber = random.nextInt(nativeAds.size() - 0) + 0;
         return nativeAds.get(randomNumber);
+    }
+
+    /**
+     * This method is used to get a random ad from the list of ads.
+     *
+     * @return UnifiedNativeAd
+     */
+
+    public UnifiedNativeAd getNativeVideoAds() {
+        if ((nativeVideoAds == null) || (nativeVideoAds.size() == 0)) return null;
+        Random random = new Random();
+        int randomNumber = random.nextInt(nativeVideoAds.size() - 0) + 0;
+        return nativeVideoAds.get(randomNumber);
     }
 }

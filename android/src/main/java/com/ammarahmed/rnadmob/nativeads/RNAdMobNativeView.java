@@ -43,10 +43,13 @@ public class RNAdMobNativeView extends LinearLayout {
     };
     public int adRefreshInterval = 60000;
     public boolean usingPreloadedAd = false;
+
     ReactContext mContext;
     UnifiedNativeAdView nativeAdView;
     UnifiedNativeAd unifiedNativeAd;
     MediaView mediaView;
+    String adType = "simple";
+    boolean preloadingAds = true;
 
     protected @Nullable
     String messagingModuleName;
@@ -81,7 +84,7 @@ public class RNAdMobNativeView extends LinearLayout {
                 runnable = new Runnable() {
                     @Override
                     public void run() {
-                        loadAd();
+                        reloadAd();
                     }
                 };
                 handler.postDelayed(runnable, adRefreshInterval);
@@ -198,7 +201,7 @@ public class RNAdMobNativeView extends LinearLayout {
 
     private Runnable runnable;
 
-    private void setNativeAdToJS(UnifiedNativeAd nativeAd) {
+    private void setNativeAdToJS(final UnifiedNativeAd nativeAd) {
 
         try {
             WritableMap args = Arguments.createMap();
@@ -273,15 +276,34 @@ public class RNAdMobNativeView extends LinearLayout {
 
             sendDirectMessage(args);
 
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         if (handler != null) {
             runnable = new Runnable() {
                 @Override
                 public void run() {
-                    loadAd();
+
                 }
             };
             handler.postDelayed(runnable, adRefreshInterval);
+        }
+    }
+
+    private void reloadAd() {
+
+        if (adType == "video") {
+            if (preloadingAds) {
+                loadPreloadedVideoAd();
+            } else {
+                loadAd(RNAdMobGlobals.preloader.videoAdUnitID);
+            }
+        } else {
+            if (preloadingAds) {
+                loadPreloadedAd();
+            } else {
+                loadAd(RNAdMobGlobals.preloader.adUnitID);
+            }
+
         }
     }
 
@@ -333,6 +355,7 @@ public class RNAdMobNativeView extends LinearLayout {
 
     public void loadPreloadedAd() {
 
+
         UnifiedNativeAd nativeAd = RNAdMobGlobals.preloader.getNativeAd();
         if (nativeAd != null) {
             unifiedNativeAd = nativeAd;
@@ -340,17 +363,35 @@ public class RNAdMobNativeView extends LinearLayout {
             setNativeAdToJS(unifiedNativeAd);
             usingPreloadedAd = true;
         } else {
-            loadAd();
+            loadAd(RNAdMobGlobals.preloader.adUnitID);
         }
     }
+
+    /**
+     * Load a preloaded Video Ad if present, or request for a new video ad from server if the preloader is empty.
+     */
+
+    public void loadPreloadedVideoAd() {
+
+        UnifiedNativeAd nativeAd = RNAdMobGlobals.preloader.getNativeVideoAds();
+        if (nativeAd != null) {
+            unifiedNativeAd = nativeAd;
+            nativeAdView.setNativeAd(unifiedNativeAd);
+            setNativeAdToJS(unifiedNativeAd);
+            usingPreloadedAd = true;
+        } else {
+            loadAd(RNAdMobGlobals.preloader.videoAdUnitID);
+        }
+    }
+
 
     /**
      * Request a new Ad from server. All the configuration for the Ad is taken from the RNAdMobPreloader class.
      */
 
-    public void loadAd() {
+    public void loadAd(String adId) {
         try {
-            AdLoader.Builder builder = new AdLoader.Builder(mContext, RNAdMobGlobals.preloader.adUnitID);
+            AdLoader.Builder builder = new AdLoader.Builder(mContext, adId);
             builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
 
             VideoOptions videoOptions = new VideoOptions.Builder()
@@ -381,7 +422,6 @@ public class RNAdMobNativeView extends LinearLayout {
     }
 
 
-
     public void addNewView(View child, int index) {
         try {
             nativeAdView.addView(child, index);
@@ -398,6 +438,15 @@ public class RNAdMobNativeView extends LinearLayout {
         super.addView(child);
         requestLayout();
     }
+
+    public void setAdType(String type) {
+        adType = type;
+    }
+
+    public void setPreloadingMode(boolean preloading) {
+        preloadingAds = preloading;
+    }
+
 
     public void setAdRefreshInterval(int interval) {
         adRefreshInterval = interval;
