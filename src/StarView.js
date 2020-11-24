@@ -45,7 +45,7 @@ export default function StarView({
   size = 15,
   iconSet = 'MaterialCommunityIcons',
   fullIcon = 'star',
-  halfIcon = 'star-half-full',
+  halfIcon = 'star-half',
   emptyIcon = 'star-outline',
   passRef,
   ...passThroughProps
