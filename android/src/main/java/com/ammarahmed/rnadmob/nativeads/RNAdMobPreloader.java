@@ -168,6 +168,8 @@ public class RNAdMobPreloader {
             mContext = context;
             nativeAds.clear();
             preloadAds(adUnitID);
+        } else {
+            nativeAds.clear();
         }
     }
 
@@ -210,6 +212,8 @@ public class RNAdMobPreloader {
             mContext = context;
             nativeVideoAds.clear();
             preloadAds(videoAdUnitID);
+        } else {
+            nativeVideoAds.clear();
         }
     }
 
