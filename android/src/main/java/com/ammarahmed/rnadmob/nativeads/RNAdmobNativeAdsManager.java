@@ -115,7 +115,7 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
         }
     }
 
-       AdListener adListener = new AdListener() {
+    AdListener adListener = new AdListener() {
         @Override
         public void onAdFailedToLoad(LoadAdError loadAdError) {
             super.onAdFailedToLoad(loadAdError);
@@ -131,6 +131,7 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
             sendEvent(RNAdMobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
 
         }
+
         @Override
         public void onAdFailedToLoad(int i) {
             super.onAdFailedToLoad(i);

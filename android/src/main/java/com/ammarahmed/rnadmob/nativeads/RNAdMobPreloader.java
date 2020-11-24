@@ -48,7 +48,6 @@ public class RNAdMobPreloader {
     }
 
 
-
     public void attachAdListener(AdListener listener) {
         adListener = listener;
     }
@@ -72,6 +71,7 @@ public class RNAdMobPreloader {
             if (adListener == null) return;
             adListener.onAdFailedToLoad(i);
         }
+
         @Override
         public void onAdFailedToLoad(LoadAdError loadAdError) {
             super.onAdFailedToLoad(loadAdError);
@@ -169,7 +169,8 @@ public class RNAdMobPreloader {
             adLoader.loadAds(adRequest, numOfAdsToLoad);
 
 
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
 
