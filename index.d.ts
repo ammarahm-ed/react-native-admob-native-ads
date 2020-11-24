@@ -270,13 +270,13 @@ declare module "react-native-admob-native-ads" {
     setRequestNonPersonalizedAdsOnly: (requestNonPersonalizedAdsOnly:boolean)=> {},
 
     /**
-   * Set Media Aspect Ratio for the ads. Ads can be Landscape, Portrait, Square or Any type.
+   * Set Media Aspect Ratio for the ads. Ads can be Landscape, Portrait, 
+   * Square or Any type. This is an App Wide setting which means all ads 
+   * returned will be of this aspect ratio type.
    *
    * import `AdOptions` then pass parameter from there: `AdOptions.mediaAspectRatio`
    * 
    */
-
-
     setMediaAspectRatio:(aspectRatio:number) => {},
 
     /**
@@ -287,7 +287,7 @@ declare module "react-native-admob-native-ads" {
     setAdChoicesPlacement:(placement:number) => {},
 
     /**
-     * Video should start muted or with sound.
+     * Set this to true if you want video ads to have sound.
      */
     setVideosStartMuted:(muted:boolean) => {},
 
