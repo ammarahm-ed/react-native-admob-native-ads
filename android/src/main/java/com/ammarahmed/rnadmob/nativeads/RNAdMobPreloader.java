@@ -29,7 +29,7 @@ public class RNAdMobPreloader {
     public String videoAdUnitID;
 
     private ReactContext mContext;
-    private int numberOfAdsToLoad = 2;
+    private int numberOfAdsToLoad = 0;
     private int numberOfVideoAdsToLoad = 0;
     public boolean requestNonPersonalizedAdsOnly = false;
     public int mediaAspectRatio = 1;

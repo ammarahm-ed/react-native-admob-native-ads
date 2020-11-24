@@ -222,8 +222,12 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNAdMobNativeView
         return MapBuilder.of(
                 "loadAd",
                 COMMAND_LOAD_NATIVE_AD,
+                  "loadVideoAd",
+                COMMAND_LOAD_NATIVE_VIDEO_AD,
                 "loadPreloadedAd",
-                COMMAND_LOAD_PRELOADED_NATIVE_AD
+                COMMAND_LOAD_PRELOADED_NATIVE_AD,
+                "loadPreloadedVideoAd",
+                COMMAND_LOAD_PRELOADED_VIDEO_AD
         );
     }
 
