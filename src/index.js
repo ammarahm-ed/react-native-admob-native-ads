@@ -107,9 +107,17 @@ export class NativeAdView extends Component {
     BatchedBridge.registerCallableModule(this.messagingModuleName, this);
     if (!this.ad) {
       if (this.props.usePreloadedAds) {
-        this.loadPreloadedAd();
+        if (this.props.type === 'video') {
+          this.loadPreloadedVideoAd();
+        } else {
+          this.loadPreloadedAd();
+        }
       } else {
-        this.loadAd();
+        if (this.props.type === 'video') {
+          this.loadVideoAd();
+        } else {
+          this.loadAd();
+        }
       }
     }
   }
@@ -126,10 +134,26 @@ export class NativeAdView extends Component {
     );
   };
 
+  loadVideoAd = function () {
+    UIManager.dispatchViewManagerCommand(
+      findNodeHandle(this.nativeAdRef),
+      UIManager.RNGADNativeView.Commands.loadVideoAd,
+      [],
+    );
+  };
+
   loadPreloadedAd = function () {
     UIManager.dispatchViewManagerCommand(
       findNodeHandle(this.nativeAdRef),
       UIManager.RNGADNativeView.Commands.loadPreloadedAd,
+      [],
+    );
+  };
+
+  loadPreloadedVideoAd = function () {
+    UIManager.dispatchViewManagerCommand(
+      findNodeHandle(this.nativeAdRef),
+      UIManager.RNGADNativeView.Commands.loadPreloadedVideoAd,
       [],
     );
   };
@@ -144,6 +168,7 @@ export class NativeAdView extends Component {
             this.nativeAdRef = ref;
             return this.nativeAdRef;
           }}
+          type={this.props.type}
           adUnitID={this.props.adUnitID}
           onAdLoaded={this._onAdLoaded}
           onAdFailedToLoad={this._onAdFailedToLoad}
