@@ -10,12 +10,33 @@ function isTestDevice() {
   return RNAdmobNativeAdsManager.isTestDevice();
 }
 
-function setAdUnitIds(nativeAdId,nativeVideoAdId) {
-  return RNAdmobNativeAdsManager.setAdUnitIds(nativeAdId,nativeVideoAdId);
+function setAdUnitIds(nativeAdId, nativeVideoAdId) {
+  return RNAdmobNativeAdsManager.setAdUnitIds(nativeAdId, nativeVideoAdId);
 }
 
-function setNumberOfAdsToLoad(nativeAdsToLoad,nativeVideoAdsToLoad) {
-  return RNAdmobNativeAdsManager.setNumberOfAdsToLoad(nativeAdsToLoad,nativeVideoAdsToLoad);
+function setNumberOfAdsToLoad(nativeAdsToLoad, nativeVideoAdsToLoad) {
+  return RNAdmobNativeAdsManager.setNumberOfAdsToLoad(
+    nativeAdsToLoad,
+    nativeVideoAdsToLoad,
+  );
+}
+
+function setRequestNonPersonalizedAdsOnly(requestNonPersonalizedAdsOnly) {
+  RNAdmobNativeAdsManager.setRequestNonPersonalizedAdsOnly(
+    requestNonPersonalizedAdsOnly,
+  );
+}
+
+function setMediaAspectRatio(aspectRatio) {
+  RNAdmobNativeAdsManager.setMediaAspectRatio(aspectRatio);
+}
+
+function setAdChoicesPlacement(placement) {
+  RNAdmobNativeAdsManager.setAdChoicesPlacement(placement);
+}
+
+function setVideosStartMuted(muted) {
+  RNAdmobNativeAdsManager.setVideosStartMuted(muted);
 }
 
 function preloadNativeAds() {
@@ -32,5 +53,9 @@ export default {
   setAdUnitIds,
   preloadNativeAds,
   preloadNativeVideoAds,
-  setNumberOfAdsToLoad
-}
+  setNumberOfAdsToLoad,
+  setVideosStartMuted,
+  setAdChoicesPlacement,
+  setMediaAspectRatio,
+  setRequestNonPersonalizedAdsOnly,
+};
