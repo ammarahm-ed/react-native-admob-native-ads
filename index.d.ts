@@ -75,8 +75,17 @@ type options = {
     TOP_RIGHT: number,
     BOTTOM_RIGHT: number,
     BOTTOM_LEFT: number
+  },
+  mediaAspectRatio:{
+    ANY:number,
+    LANDSCAPE:number,
+    PORTRAIT:number,
+    SQUARE:number,
+    UNKNOWN:number
   }
 }
+
+
 /**
  * | Name      | Description |
 | --------- | -------- |
@@ -112,60 +121,11 @@ type NativeAdViewProps = {
   style?: StyleProp<ViewStyle>;
 
   /**
-   * Ad Unit ID for Native ads. Remember to use only test-ids during
-   * development mode or add your device to testDevices.
-   */
-
-  adUnitID: string;
-
-  /**
    * Time after which a new ad should be
    * requested from the server. Default is 1 minute (60000 ms);
    */
   refreshInterval?: number;
-
-  /**
-   * Time in milliseconds to delay ad rendering.
-   * Use this if you are rendering multiple ads
-   * in your screen such as in a list. Default is 0ms.
-   * This is usually done so that ad request is done
-   * after the views are attached.
-   */
-
-  delayAdLoading?: number;
-
-  /**
-   * Placement of AdChoicesView in any of the 4 corners of the ad
-   *
-   * import AdOptions then pass the value from there. AdOptions.adChoicesPlacement
-   */
-
-  adChoicesPlacement?: {
-    TOP_LEFT: number,
-    TOP_RIGHT: number,
-    BOTTOM_RIGHT: number,
-    BOTTOM_LEFT: number
-  }
-
-  /**
-   * Under the Google EU User Consent Policy, you must make certain disclosures
-   * to your users in the European Economic Area (EEA) and obtain their consent
-   * to use cookies or other local storage, where legally required, and to use
-   * personal data (such as AdID) to serve ads. This policy reflects the requirements
-   * of the EU ePrivacy Directive and the General Data Protection Regulation (GDPR).
-   *
-   * You can use library such as: https://github.com/birgernass/react-native-ad-consent
-   * to obtain the consent or if you are using rn-firebase you can obtain the consent from
-   * there and then pass the consent to this library. If user has selected
-   * non-personalized-ads then pass `true` and non-personalized ads will be shown to the user.
-   *
-   */
-  requestNonPersonalizedAdsOnly: boolean;
-
-  /**
-   * Set testdevices for the ad. (DEPRECATED)
-   */
-  testDevices?: Array<string>;
+  
   onAdOpened?: Function<void>;
   onAdClosed?: Function<void>;
   onAdLeftApplication?: Function<void>;
@@ -246,7 +206,7 @@ declare module "react-native-admob-native-ads" {
     *
     */
 
-    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => { },
+    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => {},
 
     /**
      * Check if the current device is registered as a test device to show test ads.
@@ -256,9 +216,53 @@ declare module "react-native-admob-native-ads" {
   ```
   return: `boolean`
      */
-    isTestDevice: async () => { },
-  }
+    isTestDevice: async () => {},
 
+    /**
+     * 
+     * 
+     * In debug mode always use test ad unit ids. You can get 
+     * the latest test ad unit ids from here:
+     * https://developers.google.com/admob/android/test-ads#sample_ad_units
+     * 
+     * Use your AdMob account adUnitIDs only in release builds or after 
+     * registering your device as a testDevice using `setRequestConfiguration` 
+     * function of AdManager in debug mode.
+     * 
+     * @param {string} adUnitId adUnitID for simple image ads. 
+     * @param {string} videoAdUnitId adUnitID for video ads. 
+     */
+    setAdUnitIds: (adUnitId?:string,videoAdUnitId?:string) => {},
+
+    setNumberOfAdsToLoad: (nativeAdsToLoad?:number,nativeVideoAdsToLoad?:number) => {},
+
+     /**
+   * Under the Google EU User Consent Policy, you must make certain disclosures
+   * to your users in the European Economic Area (EEA) and obtain their consent
+   * to use cookies or other local storage, where legally required, and to use
+   * personal data (such as AdID) to serve ads. This policy reflects the requirements
+   * of the EU ePrivacy Directive and the General Data Protection Regulation (GDPR).
+   *
+   * You can use library such as: https://github.com/birgernass/react-native-ad-consent
+   * to obtain the consent or if you are using rn-firebase you can obtain the consent from
+   * there and then pass the consent to this library. If user has selected
+   * non-personalized-ads then pass `true` and non-personalized ads will be shown to the user.
+   *
+   */
+    setRequestNonPersonalizedAdsOnly: (requestNonPersonalizedAdsOnly:boolean)=> {},
+
+    setMediaAspectRatio:(aspectRatio:number) => {},
+
+    /**
+   * Placement of AdChoicesView in any of the 4 corners of the ad
+   *
+   * import AdOptions then pass the value from there. AdOptions.adChoicesPlacement
+   */
+    setAdChoicesPlacement:(placement:number) => {},
+    setVideosStartMuted:(muted:boolean) => {},
+    preloadNativeAds:() => {},
+    preloadNativeVideoAds:() => {}
+  }
 
   export const AdOptions: options;
 
