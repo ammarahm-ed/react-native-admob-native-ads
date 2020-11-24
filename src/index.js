@@ -1,21 +1,33 @@
-import React, { Component } from "react";
-import { Platform, requireNativeComponent } from "react-native";
-import BatchedBridge from "react-native/Libraries/BatchedBridge/BatchedBridge";
-import { NativeAdContext } from "./context";
-import Wrapper from "./Wrapper";
+import React, {Component} from 'react';
+import {
+  findNodeHandle,
+  Platform,
+  requireNativeComponent,
+  UIManager,
+} from 'react-native';
+import BatchedBridge from 'react-native/Libraries/BatchedBridge/BatchedBridge';
+import {NativeAdContext} from './context';
+import Wrapper from './Wrapper';
 
 const testNativeAd = {
-  headline: "Test Ad: Lorem ipsum dolor ",
+  headline: 'Test Ad: Lorem ipsum dolor ',
   tagline:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
-  advertiser: "Laboris Nisi",
-  store: Platform.OS === "ios" ? "AppStore" : "Google Play",
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+  advertiser: 'Laboris Nisi',
+  store: Platform.OS === 'ios' ? 'AppStore' : 'Google Play',
   video: false,
   rating: 4.5,
-  price: "$ 1",
-  icon: "https://dummyimage.com/300.png/09f/fff",
-  images: [{ url: "https://dummyimage.com/qvga" }],
+  price: '$ 1',
+  icon: 'https://dummyimage.com/300.png/09f/fff',
+  images: [{url: 'https://dummyimage.com/qvga'}],
 };
+
+const waitAsync = (ms) =>
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(true);
+    }, ms);
+  });
 
 export class NativeAdView extends Component {
   constructor(props) {
@@ -62,7 +74,7 @@ export class NativeAdView extends Component {
   onUnifiedNativeAdLoaded = (event) => {
     this.ad = event.nativeEvent;
     if (this.ad.aspectRatio) {
-      this.ad.aspectRatio = parseFloat(this.ad.aspectRatio);  
+      this.ad.aspectRatio = parseFloat(this.ad.aspectRatio);
     }
     if (this.componentMounted) {
       this.updateAd();
@@ -85,7 +97,7 @@ export class NativeAdView extends Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.componentMounted = true;
     if (this.props.enableTestMode) {
       this.updateAd(testNativeAd);
@@ -93,16 +105,41 @@ export class NativeAdView extends Component {
       this.updateAd(this.ad);
     }
     BatchedBridge.registerCallableModule(this.messagingModuleName, this);
+    if (!this.ad) {
+      await waitAsync(100);
+      if (this.props.usePreloadedAds) {
+        this.loadPreloadedAd();
+      } else {
+        this.loadAd();
+      }
+    }
   }
 
   componentWillUnmount() {
     this.componentMounted = false;
   }
 
-  render() {
-    const { nativeAd, nativeAdView, delayRender } = this.state;
+  loadAd = function () {
+    UIManager.dispatchViewManagerCommand(
+      findNodeHandle(this.nativeAdRef),
+      UIManager.RNGADNativeView.Commands.loadAd,
+      [],
+    );
+  };
 
-    return <NativeAdContext.Provider value={{ nativeAd, nativeAdView }}>
+  loadPreloadedAd = function () {
+    UIManager.dispatchViewManagerCommand(
+      findNodeHandle(this.nativeAdRef),
+      UIManager.RNGADNativeView.Commands.loadPreloadedAd,
+      [],
+    );
+  };
+
+  render() {
+    const {nativeAd, nativeAdView} = this.state;
+
+    return (
+      <NativeAdContext.Provider value={{nativeAd, nativeAdView}}>
         <UnifiedNativeAdView
           ref={(ref) => {
             this.nativeAdRef = ref;
@@ -118,9 +155,9 @@ export class NativeAdView extends Component {
           onAdImpression={this._onAdImpression}
           style={[
             this.props.style,
-            Platform.OS === "ios"
-              ? { display: this.state.nativeAd ? "flex" : "none" }
-              : { height: this.state.nativeAd ? null : 0 },
+            Platform.OS === 'ios'
+              ? {display: this.state.nativeAd ? 'flex' : 'none'}
+              : {height: this.state.nativeAd ? null : 0},
           ]}
           onUnifiedNativeAdLoaded={this.onUnifiedNativeAdLoaded}
           refreshInterval={
@@ -134,27 +171,26 @@ export class NativeAdView extends Component {
             this.props.adChoicesPlacement > -1
               ? this.props.adChoicesPlacement
               : 1
-          }
-        >
+          }>
           <Wrapper
-            onLayout={(event) => {
+            onLayout={() => {
               this.setState({
                 nativeAdView: this.nativeAdRef,
               });
-            }}
-          >
+            }}>
             {this.props.children}
           </Wrapper>
         </UnifiedNativeAdView>
       </NativeAdContext.Provider>
+    );
   }
 }
 
-NativeAdView.simulatorId = "SIMULATOR";
+NativeAdView.simulatorId = 'SIMULATOR';
 
 const UnifiedNativeAdView = requireNativeComponent(
-  "RNGADNativeView",
-  NativeAdView
+  'RNGADNativeView',
+  NativeAdView,
 );
 
 export default NativeAdView;

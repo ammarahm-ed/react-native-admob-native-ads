@@ -118,7 +118,7 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void preload(Callback callback) {
+    public void preload() {
         RNAdMobGlobals.preloader.attachAdListener(adListener);
         RNAdMobGlobals.preloader.loadNativeAds(reactContext);
 

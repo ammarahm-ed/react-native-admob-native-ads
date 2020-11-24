@@ -222,6 +222,8 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNAdMobNativeView
             case COMMAND_LOAD_NATIVE_AD:
                 view.loadAd();
                 break;
+            case COMMAND_LOAD_PRELOADED_NATIVE_AD:
+                view.loadPreloadedAd();
         }
     }
 

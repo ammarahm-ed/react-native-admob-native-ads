@@ -10,7 +10,17 @@ function isTestDevice() {
   return RNAdmobNativeAdsManager.isTestDevice();
 }
 
+function setAdUnitId(id) {
+  return RNAdmobNativeAdsManager.setAdUnitId(id);
+}
+
+function preload() {
+  return RNAdmobNativeAdsManager.preload();
+}
+
 export default {
   setRequestConfiguration,
-  isTestDevice
+  isTestDevice,
+  setAdUnitId,
+  preload
 }
