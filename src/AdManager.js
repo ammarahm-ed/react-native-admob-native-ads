@@ -10,8 +10,8 @@ function isTestDevice() {
   return RNAdmobNativeAdsManager.isTestDevice();
 }
 
-function setAdUnitIds(nativeAdId, nativeVideoAdId) {
-  return RNAdmobNativeAdsManager.setAdUnitIds(nativeAdId, nativeVideoAdId);
+function setAdUnitIds(adUnitId, videoAdUnitId) {
+  return RNAdmobNativeAdsManager.setAdUnitIds(adUnitId, videoAdUnitId);
 }
 
 function setNumberOfAdsToLoad(nativeAdsToLoad, nativeVideoAdsToLoad) {
