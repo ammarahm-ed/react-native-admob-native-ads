@@ -3,6 +3,7 @@ package com.ammarahmed.rnadmob.nativeads;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
@@ -194,6 +195,33 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNAdMobNativeView
         }
         if (nativeAdWrapper.nativeAdView != null) {
             nativeAdWrapper.nativeAdView.destroy();
+        }
+    }
+
+    public static final int COMMAND_LOAD_NATIVE_AD = 1;
+    public static final int COMMAND_LOAD_PRELOADED_NATIVE_AD = 2;
+
+    @Nullable
+    @Override
+    public Map<String, Integer> getCommandsMap() {
+        // You need to implement this method and return a map with the readable
+        // name and constant for each of your commands. The name you specify
+        // here is what you'll later use to access it in react-native.
+        return MapBuilder.of(
+                "loadAd",
+                COMMAND_LOAD_NATIVE_AD,
+                "loadPreloadedAd",
+                COMMAND_LOAD_PRELOADED_NATIVE_AD
+        );
+    }
+
+    @Override
+    public void receiveCommand(final RNAdMobNativeView view, int commandId, @Nullable ReadableArray args) {
+        // This will be called whenever a command is sent from react-native.
+        switch (commandId) {
+            case COMMAND_LOAD_NATIVE_AD:
+                view.loadAd();
+                break;
         }
     }
 
