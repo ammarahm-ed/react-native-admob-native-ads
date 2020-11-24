@@ -27,7 +27,7 @@ public class onUnifiedNativeAdLoadedListener implements UnifiedNativeAd.OnUnifie
 
     @Override
     public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
-        if (this.nativeAds.size() >= totalAds){
+        if (this.nativeAds.size() > totalAds){
             // remove oldest ad if it is full
             RNAdMobUnifiedAdContainer toBeRemoved = null;
             Long time = System.currentTimeMillis();
