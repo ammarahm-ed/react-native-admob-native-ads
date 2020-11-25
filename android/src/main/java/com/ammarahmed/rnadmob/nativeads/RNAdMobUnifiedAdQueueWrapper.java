@@ -190,17 +190,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
 
     public void fillAd(){
         if (!isLoading()){
-            if (totalAds>nativeAds.size()){
-                if (mediation){
-                    for (int i = 0; i<(totalAds-nativeAds.size()); i++){
-                        adLoader.loadAd(adRequest);
-                    }
-                } else {
-                    adLoader.loadAds(adRequest, totalAds-nativeAds.size());
-                }
-            }else{
-                adLoader.loadAd(adRequest);
-            }
+            adLoader.loadAd(adRequest);
         }
     }
 
