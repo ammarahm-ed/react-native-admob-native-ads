@@ -62,7 +62,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
         if (config.hasKey("expirationPeriod")){
             expirationInterval = config.getInt("expirationPeriod");
         }
-        if (config.hasKey("expirationPeriod")){
+        if (config.hasKey("mediationEnabled")){
             mediation = config.getBoolean("mediationEnabled");
         }
         if (config.hasKey("nonPersonalizedAdsOnly")) {
