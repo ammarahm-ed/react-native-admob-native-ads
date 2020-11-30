@@ -72,6 +72,8 @@ width="33%"
 5.  No need to manage any .xml or .xib layout files!
 6.  AutoRefresh ad at specific intervals
 7.  **Support for Video Ads**
+8.  **Ads Preloading** (Coming soon)
+9.  **Ads Mediation Support** (Coming soon)
 
 </p>
 
