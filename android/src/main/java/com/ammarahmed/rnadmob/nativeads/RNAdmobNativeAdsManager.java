@@ -8,6 +8,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableNativeArray;
+import com.facebook.react.bridge.WritableMap;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
@@ -16,8 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
+    public ReactApplicationContext mContext;
     public RNAdmobNativeAdsManager(ReactApplicationContext context) {
         super(context);
+        mContext = context;
         MobileAds.initialize(context);
     }
 
@@ -72,4 +75,29 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
         AdRequest builder = new AdRequest.Builder().build();
         promise.resolve(builder.isTestDevice(getReactApplicationContext()));
     }
+
+    @ReactMethod
+    public void registerRepository(ReadableMap config, Promise promise){
+        WritableMap result = CacheManager.instance.registerRepo(mContext, config);
+        if (result.hasKey("success") && result.getBoolean("success")){
+            CacheManager.instance.requestAds(result.getString("repo"));
+        }
+        promise.resolve(result);
+    }
+
+    @ReactMethod
+    public void unRegisterRepository(String id){
+        CacheManager.instance.unRegisterRepo(id);
+    }
+
+    @ReactMethod
+    public void resetCache(){
+        CacheManager.instance.resetCache();
+    }
+
+    @ReactMethod
+    public void hasAd(String repo, Promise promise) {
+        promise.resolve(CacheManager.instance.hasAd(repo));
+    }
+
 }

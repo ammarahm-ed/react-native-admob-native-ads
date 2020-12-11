@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   FlatList,
   Image,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  DeviceEventEmitter,
 } from 'react-native';
 import {AdView} from './AdView';
 
@@ -32,6 +33,17 @@ const App = () => {
   });
   const [selected, setSelected] = useState('image');
 
+  useEffect(() => {
+    const eventEmitter = DeviceEventEmitter.addListener(
+      'onAdPreloadError',
+      (value) => {
+        console.log('ad preload error', value);
+      },
+    );
+    return () => {
+      eventEmitter.remove();
+    };
+  }, []);
   return (
     <View
       style={{

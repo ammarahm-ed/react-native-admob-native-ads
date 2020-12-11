@@ -38,6 +38,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String PROP_DELAY_AD_LOAD = "delayAdLoad";
     public static final String PROP_TEST_DEVICES = "testDevices";
     public static final String PROP_AD_UNIT_ID = "adUnitID";
+    public static final String PROP_AD_REPOSITORY = "repository";
     public static final String PROP_MEDIA_VIEW = "mediaview";
     public static final String PROP_REFRESH_INTERVAL = "refreshInterval";
     public static final String PROP_HEADLINE_VIEW = "headline";
@@ -51,6 +52,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String PROP_STAR_RATING_VIEW = "starrating";
     public static final String PROP_AD_CHOICES_PLACEMENT = "adChoicesPlacement";
     public static final String PROP_NON_PERSONALIZED_ADS = "requestNonPersonalizedAdsOnly";
+    public static final String PROP_MUTE_ADS = "requestMuteAds";
 
 
     @javax.annotation.Nullable
@@ -90,7 +92,6 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
         nativeAdWrapper.setMessagingModuleName(moduleName);
     }
 
-
     @Override
     public void addView(RNNativeAdWrapper parent, View child, int index) {
         //super.addView(parent, child, index);
@@ -107,7 +108,6 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
     @ReactProp(name = PROP_NON_PERSONALIZED_ADS, defaultBoolean = false)
     public void setPropNonPersonalizedAds(final RNNativeAdWrapper nativeAdWrapper, final boolean npa) {
-
         nativeAdWrapper.setRequestNonPersonalizedAdsOnly(npa);
     }
 
@@ -224,7 +224,17 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public void setPropAdUnitId(final RNNativeAdWrapper nativeAdWrapper, final String adUnitId) {
         if (adUnitId == null) return;
         nativeAdWrapper.setAdUnitId(adUnitId);
+    }
 
+    @ReactProp(name = PROP_AD_REPOSITORY)
+    public void setPropAdRepository(final RNNativeAdWrapper nativeAdWrapper, final String repo) {
+        if (repo == null) return;
+        nativeAdWrapper.setAdRepository(repo);
+    }
+
+    @ReactProp(name = PROP_MUTE_ADS, defaultBoolean = true)
+    public void setPropMuteAds(final RNNativeAdWrapper view, final Boolean mute) {
+        view.setMute(mute);
     }
 
     @Override
@@ -232,9 +242,13 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
         super.onDropViewInstance(nativeAdWrapper);
         nativeAdWrapper.removeHandler();
         if (nativeAdWrapper.unifiedNativeAd != null){
-            nativeAdWrapper.unifiedNativeAd.destroy();
+            if (nativeAdWrapper.unifiedNativeAdContainer != null){
+                nativeAdWrapper.unifiedNativeAdContainer.references -= 1;
+            } else{
+                nativeAdWrapper.unifiedNativeAd.destroy();
+            }
         }
-	if (nativeAdWrapper.nativeAdView != null){
+	    if (nativeAdWrapper.nativeAdView != null){
             nativeAdWrapper.nativeAdView.destroy();
         }
     }
