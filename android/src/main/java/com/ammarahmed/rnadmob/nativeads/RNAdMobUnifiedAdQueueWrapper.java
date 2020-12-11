@@ -115,7 +115,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
                         error.putString("errorMessage", adError.getMessage());
                         error.putString("message", errorMessage);
                         error.putInt("code", adError.getCode());
-                        error.putString("responseInfo", adError.getResponseInfo() != null ? adError.getResponseInfo().toString() : "");
+//                        error.putString("responseInfo", adError.getResponseInfo() != null ? adError.getResponseInfo().toString() : "");
                         event.putMap("error", error);
                         EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
                     }
