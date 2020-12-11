@@ -80,7 +80,7 @@ public class RNNativeAdWrapper extends LinearLayout {
             error.putString("errorMessage", adError.getMessage());
             error.putString("message", errorMessage);
             error.putInt("code", adError.getCode());
-            error.putString("responseInfo", adError.getResponseInfo() != null ? adError.getResponseInfo().toString() : "");
+//            error.putString("responseInfo", adError.getResponseInfo() != null ? adError.getResponseInfo().toString() : "");
             event.putMap("error", error);
             sendEvent(RNAdMobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
 
