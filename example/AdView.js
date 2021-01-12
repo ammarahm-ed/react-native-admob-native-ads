@@ -9,6 +9,8 @@ import NativeAdView, {
   TaglineView,
   MediaView,
   StoreView,
+  AdOptions,
+  AdManager,
 } from 'react-native-admob-native-ads';
 
 const NATIVE_AD_ID =
@@ -21,7 +23,7 @@ const NATIVE_AD_VIDEO_ID =
     ? 'ca-app-pub-3940256099942544/2521693316'
     : 'ca-app-pub-3940256099942544/1044960115';
 
-export const AdView = ({media, type,delay=0}) => {
+export const AdView = ({media}) => {
   const [aspectRatio, setAspectRatio] = useState(1);
   const [adLoaded, setAdLoaded] = useState(false);
   const _onAdFailedToLoad = (event) => {
@@ -35,6 +37,7 @@ export const AdView = ({media, type,delay=0}) => {
 
   const _onAdClicked = () => {
     console.log('User has clicked the ad');
+    addEventListener("abort",)
   };
 
   const _onAdImpression = () => {
@@ -43,6 +46,7 @@ export const AdView = ({media, type,delay=0}) => {
 
   const _onUnifiedNativeAdLoaded = (event) => {
     console.log(event);
+    
     console.log('Views have populated with the Ad');
     console.log(event.aspectRatio);
     setAdLoaded(true);
@@ -56,6 +60,7 @@ export const AdView = ({media, type,delay=0}) => {
       onAdLeftApplication={() => {
         console.log('ad has left the application');
       }}
+      
       onAdClicked={_onAdClicked}
       onAdImpression={_onAdImpression}
       onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
@@ -65,7 +70,6 @@ export const AdView = ({media, type,delay=0}) => {
         alignSelf: 'center',
         marginVertical: 10,
       }}
-      adUnitID={type === 'image' ? NATIVE_AD_ID : NATIVE_AD_VIDEO_ID} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
     >
       <View
         style={{
