@@ -75,8 +75,17 @@ type options = {
     TOP_RIGHT: number,
     BOTTOM_RIGHT: number,
     BOTTOM_LEFT: number
+  },
+  mediaAspectRatio:{
+    ANY:number,
+    LANDSCAPE:number,
+    PORTRAIT:number,
+    SQUARE:number,
+    UNKNOWN:number
   }
 }
+
+
 /**
  * | Name      | Description |
 | --------- | -------- |
@@ -87,7 +96,7 @@ type options = {
 | UNSPECIFIED | Set default value to ""|
  */
 type MAX_AD_CONTENT_RATING = 'G' | 'MA' | 'PG' | 'T' | 'UNSPECIFIED';
-
+type Events = 'onAdFailedToLoad' | 'onAdClicked' | 'onAdClosed' | 'onAdOpened' | 'onAdImpression' | "onAdLoaded" | "onAdLeftApplication";
 type AdManagerConfiguration = {
   maxAdContentRating: MAX_AD_CONTENT_RATING,
   tagForChildDirectedTreatment: boolean,
@@ -112,60 +121,21 @@ type NativeAdViewProps = {
   style?: StyleProp<ViewStyle>;
 
   /**
-   * Ad Unit ID for Native ads. Remember to use only test-ids during
-   * development mode or add your device to testDevices.
-   */
-
-  adUnitID: string;
-
-  /**
    * Time after which a new ad should be
    * requested from the server. Default is 1 minute (60000 ms);
    */
   refreshInterval?: number;
 
   /**
-   * Time in milliseconds to delay ad rendering.
-   * Use this if you are rendering multiple ads
-   * in your screen such as in a list. Default is 0ms.
-   * This is usually done so that ad request is done
-   * after the views are attached.
+   * Set the type of Ad this AdView should load.
    */
-
-  delayAdLoading?: number;
+  type?: "image" | "video";
 
   /**
-   * Placement of AdChoicesView in any of the 4 corners of the ad
-   *
-   * import AdOptions then pass the value from there. AdOptions.adChoicesPlacement
+   * Ad preloading is enabled by default. You can set this to false
+   * if you want to request a new Ad everytime the NativeAdView loads.
    */
-
-  adChoicesPlacement?: {
-    TOP_LEFT: number,
-    TOP_RIGHT: number,
-    BOTTOM_RIGHT: number,
-    BOTTOM_LEFT: number
-  }
-
-  /**
-   * Under the Google EU User Consent Policy, you must make certain disclosures
-   * to your users in the European Economic Area (EEA) and obtain their consent
-   * to use cookies or other local storage, where legally required, and to use
-   * personal data (such as AdID) to serve ads. This policy reflects the requirements
-   * of the EU ePrivacy Directive and the General Data Protection Regulation (GDPR).
-   *
-   * You can use library such as: https://github.com/birgernass/react-native-ad-consent
-   * to obtain the consent or if you are using rn-firebase you can obtain the consent from
-   * there and then pass the consent to this library. If user has selected
-   * non-personalized-ads then pass `true` and non-personalized ads will be shown to the user.
-   *
-   */
-  requestNonPersonalizedAdsOnly: boolean;
-
-  /**
-   * Set testdevices for the ad. (DEPRECATED)
-   */
-  testDevices?: Array<string>;
+  usePreloadedAds?:boolean;
   onAdOpened?: Function<void>;
   onAdClosed?: Function<void>;
   onAdLeftApplication?: Function<void>;
@@ -246,7 +216,7 @@ declare module "react-native-admob-native-ads" {
     *
     */
 
-    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => { },
+    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => {},
 
     /**
      * Check if the current device is registered as a test device to show test ads.
@@ -256,9 +226,86 @@ declare module "react-native-admob-native-ads" {
   ```
   return: `boolean`
      */
-    isTestDevice: async () => { },
-  }
+    isTestDevice: async () => {},
 
+    /**
+     * Setup adUnitIDs for your ads. You should call this function in 
+     * index.js or App.js when the app starts.
+     * 
+     * In debug mode always use test ad unit ids. You can get 
+     * the latest test ad unit ids from here:
+     * https://developers.google.com/admob/android/test-ads#sample_ad_units
+     * 
+     * Use your AdMob account adUnitIDs only in release builds or after 
+     * registering your device as a testDevice using `setRequestConfiguration` 
+     * function of AdManager in debug mode.
+     * 
+     * @param {string} adUnitId adUnitID for native advanced image ads. 
+     * @param {string} videoAdUnitId adUnitID for native advanced video ads. 
+     */
+    setAdUnitIds: (adUnitId?:string,videoAdUnitId?:string) => {},
+
+    /**
+     * Set number of ads to preload. Max is 5 for each.
+     * 
+     * @param {number} imageAdsToLoad Number of native advanced image ads to load. Max is 5.
+     * @param {number} videoAdsToLoad Number of native advanced image ads to load. Max is 5.
+     */
+
+    setNumberOfAdsToLoad: (imageAdsToLoad?:number, videoAdsToLoad?:number) => {},
+
+     /**
+   * Under the Google EU User Consent Policy, you must make certain disclosures
+   * to your users in the European Economic Area (EEA) and obtain their consent
+   * to use cookies or other local storage, where legally required, and to use
+   * personal data (such as AdID) to serve ads. This policy reflects the requirements
+   * of the EU ePrivacy Directive and the General Data Protection Regulation (GDPR).
+   *
+   * You can use library such as: https://github.com/birgernass/react-native-ad-consent
+   * to obtain the consent or if you are using rn-firebase you can obtain the consent from
+   * there and then pass the consent to this library. If user has selected
+   * non-personalized-ads then pass `true` and non-personalized ads will be shown to the user.
+   *
+   */
+    setRequestNonPersonalizedAdsOnly: (requestNonPersonalizedAdsOnly:boolean)=> {},
+
+    /**
+   * Set Media Aspect Ratio for the ads. Ads can be Landscape, Portrait, 
+   * Square or Any type. This is an App Wide setting which means all ads 
+   * returned will be of this aspect ratio type.
+   *
+   * import `AdOptions` then pass parameter from there: `AdOptions.mediaAspectRatio`
+   * 
+   */
+    setMediaAspectRatio:(aspectRatio:number) => {},
+
+    /**
+   * Placement of AdChoicesView in any of the 4 corners of the ad
+   *
+   * import AdOptions then pass parameter from there: AdOptions.adChoicesPlacement
+   */
+    setAdChoicesPlacement:(placement:number) => {},
+
+    /**
+     * Set this to true if you want video ads to have sound.
+     */
+    setVideosStartMuted:(muted:boolean) => {},
+
+    /**
+     * Preload native image ads. You should call this function in 
+     * index.js or App.js when the app starts.
+     */
+    preloadNativeAds:() => {},
+
+    /**
+     * Preload native video ads. You should call this function in 
+     * index.js or App.js when the app starts.
+     */
+    preloadNativeVideoAds:() => {},
+
+    addListener:(type:Events,listener:()=>{}) => {},
+    removeListener:(type:Events,listener:()=>{}) => {},
+  }
 
   export const AdOptions: options;
 

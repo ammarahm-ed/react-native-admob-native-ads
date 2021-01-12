@@ -5,4 +5,11 @@ export const AdOptions = Object.freeze({
     BOTTOM_RIGHT: 2,
     BOTTOM_LEFT: 3,
   },
+  mediaAspectRatio: {
+    ANY: 1,
+    LANDSCAPE: 2,
+    PORTRAIT: 3,
+    SQUARE: 4,
+    UNKNOWN: 0,
+  },
 });
