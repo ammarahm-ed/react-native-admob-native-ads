@@ -3,7 +3,6 @@ package com.ammarahmed.rnadmob.nativeads;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -188,9 +187,9 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     private Runnable runnable;
 
-   private Method getDeclaredMethod(Object obj, String name, Class<?>... parameterTypes) {
+    private Method getDeclaredMethod(Object obj, String name) {
         try {
-            return obj.getClass().getDeclaredMethod(name, parameterTypes);
+            return obj.getClass().getDeclaredMethod(name);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (SecurityException e) {
@@ -226,9 +225,9 @@ public class RNNativeAdWrapper extends LinearLayout {
 
             float aspectRatio = 1.0f;
 
-            MediaContent mediaContent =  nativeAd.getMediaContent();
+            MediaContent mediaContent = nativeAd.getMediaContent();
 
-            if (mediaContent != null && null != getDeclaredMethod(mediaContent,"getAspectRatio",null)) {
+            if (mediaContent != null && null != getDeclaredMethod(mediaContent, "getAspectRatio")) {
                 aspectRatio = nativeAd.getMediaContent().getAspectRatio();
                 if (aspectRatio > 0) {
                     args.putString("aspectRatio", String.valueOf(aspectRatio));
