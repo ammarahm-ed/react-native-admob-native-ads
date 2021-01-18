@@ -21,14 +21,14 @@ export class NativeAdView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nativeAd: null,
+      nativeAd: defaultAd,
       nativeAdView: null,
     };
     this.nativeAdRef;
     this.currentId = 0;
     this.delayDuration = 0;
     this.componentMounted = false;
-    this.ad = null;
+    this.ad = defaultAd;
   }
 
   messagingModuleName = `NativeAdMessageHandler${Date.now() + Math.random()}`;
@@ -62,7 +62,7 @@ export class NativeAdView extends Component {
   onUnifiedNativeAdLoaded = (event) => {
     this.ad = event.nativeEvent;
     if (this.ad.aspectRatio) {
-      this.ad.aspectRatio = parseFloat(this.ad.aspectRatio);  
+      this.ad.aspectRatio = parseFloat(this.ad.aspectRatio);
     }
     if (this.componentMounted) {
       this.updateAd();
@@ -86,13 +86,17 @@ export class NativeAdView extends Component {
   }
 
   componentDidMount() {
-    this.componentMounted = true;
-    if (this.props.enableTestMode) {
-      this.updateAd(testNativeAd);
-    } else {
-      this.updateAd(this.ad);
+    try {
+      this.componentMounted = true;
+      if (this.props.enableTestMode) {
+        this.updateAd(testNativeAd);
+      } else {
+        this.updateAd(this.ad);
+      }
+      BatchedBridge.registerCallableModule(this.messagingModuleName, this);
+    } catch (e) {
+      console.log(e);
     }
-    BatchedBridge.registerCallableModule(this.messagingModuleName, this);
   }
 
   componentWillUnmount() {
@@ -102,7 +106,8 @@ export class NativeAdView extends Component {
   render() {
     const { nativeAd, nativeAdView, delayRender } = this.state;
 
-    return <NativeAdContext.Provider value={{ nativeAd, nativeAdView }}>
+    return (
+      <NativeAdContext.Provider value={{ nativeAd, nativeAdView }}>
         <UnifiedNativeAdView
           ref={(ref) => {
             this.nativeAdRef = ref;
@@ -147,6 +152,7 @@ export class NativeAdView extends Component {
           </Wrapper>
         </UnifiedNativeAdView>
       </NativeAdContext.Provider>
+    );
   }
 }
 
