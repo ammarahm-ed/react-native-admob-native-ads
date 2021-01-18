@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Platform, requireNativeComponent } from "react-native";
 import BatchedBridge from "react-native/Libraries/BatchedBridge/BatchedBridge";
-import { NativeAdContext } from "./context";
+import { defaultAd, NativeAdContext } from "./context";
 import Wrapper from "./Wrapper";
 
 const testNativeAd = {
