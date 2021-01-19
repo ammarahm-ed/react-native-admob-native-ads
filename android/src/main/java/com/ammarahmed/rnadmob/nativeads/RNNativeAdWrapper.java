@@ -30,7 +30,6 @@ import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class RNNativeAdWrapper extends LinearLayout {
@@ -44,7 +43,11 @@ public class RNNativeAdWrapper extends LinearLayout {
             layout(getLeft(), getTop(), getRight(), getBottom());
         }
     };
-    public int adRefreshInterval = 60000;
+    private int adRefreshInterval = 60000;
+    private int mediaAspectRatio = 1;
+    public  boolean pauseAdLoading = false;
+    private boolean muted = true;
+
     ReactContext mContext;
     UnifiedNativeAdView nativeAdView;
     UnifiedNativeAd unifiedNativeAd;
@@ -335,12 +338,13 @@ public class RNNativeAdWrapper extends LinearLayout {
             builder.forUnifiedNativeAd(onUnifiedNativeAdLoadedListener);
 
             VideoOptions videoOptions = new VideoOptions.Builder()
-                    .setStartMuted(true)
+                    .setStartMuted(muted)
                     .build();
 
             NativeAdOptions adOptions = new NativeAdOptions.Builder()
                     .setVideoOptions(videoOptions)
                     .setAdChoicesPlacement(adChoicesPlacement)
+                    .setMediaAspectRatio(mediaAspectRatio)
                     .build();
             builder.withNativeAdOptions(adOptions);
 
@@ -403,6 +407,37 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     public void setRequestNonPersonalizedAdsOnly(boolean npa) {
         requestNonPersonalizedAdsOnly = npa;
+    }
+
+    public void setMediaAspectRatio(int type) {
+        mediaAspectRatio = type;
+    }
+
+
+    public void setPauseAdPreload(boolean pause) {
+        pauseAdLoading = pause;
+
+        if (pauseAdLoading) {
+            if (handler != null) {
+                handler.removeCallbacks(runnable);
+                handler = null;
+            }
+        } else {
+            if (handler != null) {
+                runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        loadAd();
+                    }
+                };
+                handler.postDelayed(runnable, adRefreshInterval);
+            }
+        }
+
+    }
+
+    public void setMuted(boolean muted) {
+        muted = muted;
     }
 
     @Override

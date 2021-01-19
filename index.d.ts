@@ -125,6 +125,16 @@ type NativeAdViewProps = {
   refreshInterval?: number;
 
   /**
+   * Ads returned will be of the desired aspectRatio
+   */
+  mediaAspectRatio?: 'any' | 'landscape' | 'portrait' | 'square' | 'unknown'
+
+  /**
+   * Mute or unmute a video.
+   */
+  muted?:boolean
+
+  /**
    * Time in milliseconds to delay ad rendering.
    * Use this if you are rendering multiple ads
    * in your screen such as in a list. Default is 0ms.

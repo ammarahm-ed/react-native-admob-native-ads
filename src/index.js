@@ -3,6 +3,7 @@ import { Platform, requireNativeComponent } from "react-native";
 import BatchedBridge from "react-native/Libraries/BatchedBridge/BatchedBridge";
 import { defaultAd, NativeAdContext } from "./context";
 import Wrapper from "./Wrapper";
+import { AdOptions } from "./utils";
 
 const testNativeAd = {
   headline: "Test Ad: Lorem ipsum dolor ",
@@ -103,16 +104,40 @@ export class NativeAdView extends Component {
     this.componentMounted = false;
   }
 
+  _getRef = (ref) => {
+    this.nativeAdRef = ref;
+    return this.nativeAdRef;
+  };
+
+  pauseAdLoading = () => {
+    try {
+      this.nativeAdRef.setNativeProps({
+        pauseAdLoading: true,
+      });
+    } catch(e) {
+
+    }
+  
+  };
+
+  resumeAdLoading = () => {
+    try {
+      this.nativeAdRef.setNativeProps({
+        pauseAdLoading: false,
+      });
+    } catch(e) {
+
+    }
+
+  };
+
   render() {
     const { nativeAd, nativeAdView, delayRender } = this.state;
 
     return (
       <NativeAdContext.Provider value={{ nativeAd, nativeAdView }}>
         <UnifiedNativeAdView
-          ref={(ref) => {
-            this.nativeAdRef = ref;
-            return this.nativeAdRef;
-          }}
+          ref={this._getRef}
           adUnitID={this.props.adUnitID}
           onAdLoaded={this._onAdLoaded}
           onAdFailedToLoad={this._onAdFailedToLoad}
@@ -127,19 +152,17 @@ export class NativeAdView extends Component {
               ? { display: this.state.nativeAd ? "flex" : "none" }
               : { height: this.state.nativeAd ? null : 0 },
           ]}
-          onUnifiedNativeAdLoaded={this.onUnifiedNativeAdLoaded}
-          refreshInterval={
-            this.props.refreshInterval ? this.props.refreshInterval : 60000
+          mediaAspectRatio={
+            AdOptions.mediaAspectRatio[this.props.mediaAspectRatio]
           }
+          onUnifiedNativeAdLoaded={this.onUnifiedNativeAdLoaded}
+          refreshInterval={this.props.refreshInterval}
           messagingModuleName={this.messagingModuleName}
           requestNonPersonalizedAdsOnly={
-            this.props.requestNonPersonalizedAdsOnly ? true : false
+            this.props.requestNonPersonalizedAdsOnly
           }
-          adChoicesPlacement={
-            this.props.adChoicesPlacement > -1
-              ? this.props.adChoicesPlacement
-              : 1
-          }
+          muted={this.props.muted}
+          adChoicesPlacement={this.props.adChoicesPlacement}
         >
           <Wrapper
             onLayout={(event) => {
@@ -155,6 +178,14 @@ export class NativeAdView extends Component {
     );
   }
 }
+
+NativeAdView.defaultProps = {
+  mediaAspectRatio: "any",
+  adChoicesPlacement: 1,
+  requestNonPersonalizedAdsOnly: false,
+  refreshInterval: 60000,
+  muted:true
+};
 
 NativeAdView.simulatorId = "SIMULATOR";
 

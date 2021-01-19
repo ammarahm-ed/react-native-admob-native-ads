@@ -4,21 +4,12 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.facebook.react.bridge.CatalystInstance;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableNativeArray;
-import com.facebook.react.bridge.WritableNativeArray;
-import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.RequestConfiguration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 
@@ -51,7 +42,9 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String PROP_STAR_RATING_VIEW = "starrating";
     public static final String PROP_AD_CHOICES_PLACEMENT = "adChoicesPlacement";
     public static final String PROP_NON_PERSONALIZED_ADS = "requestNonPersonalizedAdsOnly";
-
+    public static final String PROP_PAUSE_AD_RELOAD = "pauseAdReload";
+    public static final String PROP_MEDIA_ASPECT_RATIO = "mediaAspectRatio";
+    public static final String PROP_MUTED = "muted";
 
     @javax.annotation.Nullable
     @Override
@@ -126,6 +119,21 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
     }
 
+    @ReactProp(name = PROP_MEDIA_ASPECT_RATIO)
+    public void setMediaAspectRatio(final RNNativeAdWrapper nativeAdWrapper, final int type) {
+        nativeAdWrapper.setMediaAspectRatio(type);
+    }
+
+    @ReactProp(name = PROP_PAUSE_AD_RELOAD)
+    public void setPauseAdPreload(final RNNativeAdWrapper nativeAdWrapper, final boolean pause) {
+        nativeAdWrapper.setPauseAdPreload(pause);
+    }
+
+    @ReactProp(name = PROP_MUTED)
+    public void setMuted(final RNNativeAdWrapper nativeAdWrapper, final boolean muted) {
+        nativeAdWrapper.setMuted(muted);
+    }
+
     @ReactProp(name = PROP_MEDIA_VIEW)
     public void setMediaView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
 
@@ -138,10 +146,12 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
         View view = nativeAdWrapper.findViewById(id);
         nativeAdWrapper.nativeAdView.setHeadlineView(view);
-
-
-
     }
+
+
+
+
+
 
     @ReactProp(name = PROP_TAGLINE_VIEW)
     public void setPropTaglineView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
