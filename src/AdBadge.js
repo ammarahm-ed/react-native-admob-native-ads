@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const AdBadge = (props) => {
+const AdBadge = ({allCaps}) => {
   return (
     <View
       style={[
@@ -15,7 +15,7 @@ const AdBadge = (props) => {
           props.textStyle,
         ]}
       >
-        {props.allCaps ? 'AD' : 'Ad'}
+        {allCaps ? 'AD' : 'Ad'}
       </Text>
     </View>
   );
