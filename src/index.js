@@ -161,6 +161,7 @@ export class NativeAdView extends Component {
           requestNonPersonalizedAdsOnly={
             this.props.requestNonPersonalizedAdsOnly
           }
+          facebookNativeBanner={this.props.facebookNativeBanner}
           muted={this.props.muted}
           adChoicesPlacement={this.props.adChoicesPlacement}
         >
@@ -184,7 +185,8 @@ NativeAdView.defaultProps = {
   adChoicesPlacement: 1,
   requestNonPersonalizedAdsOnly: false,
   refreshInterval: 60000,
-  muted:true
+  muted:true,
+  facebookNativeBanner:false
 };
 
 NativeAdView.simulatorId = "SIMULATOR";
