@@ -1,18 +1,18 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const AdBadge = ({allCaps}) => {
+const AdBadge = ({allCaps,textStyle,style}) => {
   return (
     <View
       style={[
         styles.container,
-        props.style,
+       style,
       ]}
     >
       <Text
         style={[
           styles.text,
-          props.textStyle,
+          textStyle,
         ]}
       >
         {allCaps ? 'AD' : 'Ad'}
