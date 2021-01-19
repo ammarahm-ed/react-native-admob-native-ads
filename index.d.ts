@@ -134,6 +134,11 @@ type NativeAdViewProps = {
    */
   muted?:boolean
 
+   /**
+   * Specify if this ad should be a Facebook Native Banner Ad
+   */
+  facebookNativeBanner?:boolean
+
   /**
    * Time in milliseconds to delay ad rendering.
    * Use this if you are rendering multiple ads

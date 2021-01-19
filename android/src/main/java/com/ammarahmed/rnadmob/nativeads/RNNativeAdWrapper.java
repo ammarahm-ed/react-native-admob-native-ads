@@ -3,6 +3,7 @@ package com.ammarahmed.rnadmob.nativeads;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,6 +20,8 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.ads.mediation.facebook.FacebookAdapter;
+import com.google.ads.mediation.facebook.FacebookExtras;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
@@ -47,7 +50,7 @@ public class RNNativeAdWrapper extends LinearLayout {
     private int mediaAspectRatio = 1;
     public  boolean pauseAdLoading = false;
     private boolean muted = true;
-
+    private Runnable runnableForMount = null;
     ReactContext mContext;
     UnifiedNativeAdView nativeAdView;
     UnifiedNativeAd unifiedNativeAd;
@@ -58,7 +61,7 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     private int adChoicesPlacement = 1;
     private boolean requestNonPersonalizedAdsOnly = false;
-
+    private boolean facebookNativeBanner = false;
 
     AdListener adListener = new AdListener() {
         @Override
@@ -143,14 +146,11 @@ public class RNNativeAdWrapper extends LinearLayout {
             if (unifiedNativeAd != null) {
                 unifiedNativeAd.destroy();
             }
+
             if (nativeAd != null) {
 
                 unifiedNativeAd = nativeAd;
-                nativeAdView.setNativeAd(unifiedNativeAd);
-                if (mediaView != null) {
-                    nativeAdView.setMediaView(mediaView);
-                    mediaView.requestLayout();
-                }
+                setNativeAd();
 
             }
 
@@ -279,6 +279,10 @@ public class RNNativeAdWrapper extends LinearLayout {
         } catch (Exception e) {}
 
         if (handler != null) {
+            if (runnable != null) {
+                handler.removeCallbacks(runnable);
+                runnable = null;
+            }
             runnable = new Runnable() {
                 @Override
                 public void run() {
@@ -352,20 +356,30 @@ public class RNNativeAdWrapper extends LinearLayout {
             AdLoader adLoader = builder.withAdListener(adListener)
                     .build();
 
-            AdRequest adRequest;
+            AdRequest.Builder adRequest;
 
             if (requestNonPersonalizedAdsOnly) {
                 Bundle extras = new Bundle();
                 extras.putString("npa", "1");
-                adRequest = new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
+                adRequest = new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras);
+
             } else {
-                adRequest = new AdRequest.Builder().build();
+                adRequest = new AdRequest.Builder();
             }
 
-            adLoader.loadAd(adRequest);
+            if (facebookNativeBanner) {
+                Bundle fbExtras = new FacebookExtras()
+                    .setNativeBanner(true)
+                    .build();
+                adRequest.addNetworkExtrasBundle(FacebookAdapter.class, fbExtras);
+            }
+            
+
+            adLoader.loadAd(adRequest.build());
 
         } catch (Exception e) {
         }
+
     }
 
     public void setLoadWithDelay(int delay) {
@@ -436,8 +450,32 @@ public class RNNativeAdWrapper extends LinearLayout {
 
     }
 
+    public void setNativeAd() {
+        if (unifiedNativeAd != null) {
+            if (runnableForMount != null) {
+                handler.removeCallbacks(runnableForMount);
+                runnableForMount = null;
+            }
+            runnableForMount = new Runnable() {
+                @Override
+                public void run() {
+                    if (mediaView != null) {
+                        nativeAdView.setMediaView(mediaView);
+                        mediaView.requestLayout();
+                    }
+                    nativeAdView.setNativeAd(unifiedNativeAd);
+                }
+            };
+            handler.postDelayed(runnableForMount, 1000);
+        }
+    }
+
     public void setMuted(boolean muted) {
         muted = muted;
+    }
+
+    public void setFacebookNativeBanner(boolean nativeBanner) {
+        facebookNativeBanner = nativeBanner;
     }
 
     @Override
@@ -449,6 +487,9 @@ public class RNNativeAdWrapper extends LinearLayout {
     public void removeHandler() {
         if (handler != null) {
             handler.removeCallbacks(runnable);
+            handler.removeCallbacks(runnableForMount);
+            runnable = null;
+            runnableForMount = null;
             handler = null;
         }
     }
