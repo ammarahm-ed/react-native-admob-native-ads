@@ -1,9 +1,14 @@
-import React, { useContext, useEffect,useRef, useCallback } from "react";
+import React, { useContext, useEffect, useRef, useCallback } from "react";
 import { findNodeHandle, Text, View } from "react-native";
 import { NativeAdContext } from "./context";
 
-const CallToActionView = (props) => {
-  const {nativeAd, nativeAdView} = useContext(NativeAdContext);
+const CallToActionView = ({
+  style,
+  allowFontScaling = true,
+  textStyle,
+  allCaps,
+}) => {
+  const { nativeAd, nativeAdView } = useContext(NativeAdContext);
   const callToActionRef = useRef();
 
   const _onLayout = useCallback(() => {
@@ -20,23 +25,19 @@ const CallToActionView = (props) => {
   }, [_onLayout]);
 
   return (
-      <View
-        style={props.style}
-        onLayout={_onLayout}>
-        <Text
-          ref={callToActionRef}
-          allowFontScaling={
-            props.allowFontScaling ? props.allowFontScaling : false
-          }
-          style={props.textStyle}
-        >
-          {nativeAd
-            ? props.allCaps
-              ? nativeAd.callToAction?.toUpperCase()
-              : nativeAd.callToAction
-            : null}
-        </Text>
-      </View>
+    <View style={style} onLayout={_onLayout}>
+      <Text
+        ref={callToActionRef}
+        allowFontScaling={allowFontScaling}
+        style={textStyle}
+      >
+        {nativeAd
+          ? allCaps
+            ? nativeAd.callToAction?.toUpperCase()
+            : nativeAd.callToAction
+          : null}
+      </Text>
+    </View>
   );
 };
 
