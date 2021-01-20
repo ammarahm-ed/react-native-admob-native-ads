@@ -303,15 +303,28 @@ BOOL *nonPersonalizedAds;
         nativeAd.delegate = self;
         [self setNativeAd:nativeAd];
         
-        if (nativeAd != NULL) {
+         if (nativeAd != NULL) {
             NSMutableDictionary *dic = [NSMutableDictionary dictionary];
             
             [dic setValue:nativeAd.headline forKey:@"headline"];
             [dic setValue:nativeAd.body forKey:@"tagline"];
             [dic setValue:nativeAd.advertiser forKey:@"advertiser"];
-            [dic setValue:nativeAd.store forKey:@"store"];
-            [dic setValue:nativeAd.price forKey:@"price"];
+         
             [dic setValue:nativeAd.callToAction forKey:@"callToAction"];
+            
+            
+            if (nativeAd.store != nil) {
+                [dic setValue:nativeAd.store forKey:@"store"];
+               
+            }
+            
+            if (nativeAd.price != nil) {
+             [dic setValue:nativeAd.price forKey:@"price"];
+            }
+            
+            if (nativeAd.starRating != nil) {
+                [dic setValue:nativeAd.starRating forKey:@"rating"];
+            }
             
             if (nativeAd.mediaContent.hasVideoContent) {
                 [dic setValue:@YES forKey:@"video"];
@@ -333,7 +346,6 @@ BOOL *nonPersonalizedAds;
                 NSInteger val2 = @(image.image.size.height).integerValue;
                 [imageDic setValue: [NSNumber numberWithInteger:val2] forKey:@"height"];
                 [images addObject:imageDic];
-                
             }
             
             
@@ -341,26 +353,18 @@ BOOL *nonPersonalizedAds;
             [dic setObject:images forKey:@"images"];
             
             if (nativeAd.icon != nil) {
-                [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
-            } else {
-                if (nativeAd.responseInfo != nil && nativeAd.responseInfo.adNetworkClassName != nil) {
-                    
-                    if ([nativeAd.responseInfo.adNetworkClassName isEqualToString:@"GADMAdapterGoogleAdMobAds"]) {
-                        
-                        [dic setValue:@"noicon" forKey:@"icon"];
-                        
-                    } else {
-                        [dic setValue:@"empty" forKey:@"icon"];
-                    }
-                    
+                if (nativeAd.icon.imageURL != nil) {
+                    [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
                 } else {
-                    [dic setValue:@"noicon" forKey:@"icon"];
+                    [dic setValue:@"empty" forKey:@"icon"];
                 }
-                
+                    
+            } else {
+                [dic setValue:@"noicon" forKey:@"icon"];
+            
             }
             
-            
-            [dic setValue:nativeAd.starRating forKey:@"rating"];
+           
             
             self.onUnifiedNativeAdLoaded(dic);
         }
