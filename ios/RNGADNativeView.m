@@ -14,7 +14,7 @@
 @import GoogleMobileAds;
 
 @implementation RNGADNativeView : GADUnifiedNativeAdView
-
+ 
 RCTBridge *bridge;
 
 
@@ -23,6 +23,7 @@ NSNumber *refreshingInterval;
 NSNumber *delay;
 NSNumber *adChoicesPlace;
 BOOL *nonPersonalizedAds;
+BOOL cancelDispatchRequest;
 
 
 
@@ -30,13 +31,19 @@ BOOL *nonPersonalizedAds;
 {
     delay = @1;
     refreshingInterval = @60000;
+    cancelDispatchRequest = NO;
     if (self = [super init]) {
         bridge = _bridge;
     }
     return self;
 }
 
+- (void)dealloc {
+    cancelDispatchRequest = YES;
+}
+
 - (void)setAdChoicesPlacement:(NSNumber *)adChoicesPlacement {
+    
     
     adChoicesPlace = adChoicesPlacement;
 }
@@ -89,7 +96,7 @@ BOOL *nonPersonalizedAds;
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
             
-            UIView *iconView = viewRegistry[icon];
+            UIImageView *iconView = (UIImageView *) viewRegistry[icon];
             if (iconView != nil) {
                 iconView.userInteractionEnabled = NO;
                 [self setIconView:iconView];
@@ -106,7 +113,7 @@ BOOL *nonPersonalizedAds;
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
             
-            UIView *imageView = viewRegistry[image];
+            UIImageView *imageView = (UIImageView *) viewRegistry[image];
             if (imageView != nil) {
                 imageView.userInteractionEnabled = NO;
                 [self setImageView:imageView];
@@ -215,6 +222,7 @@ BOOL *nonPersonalizedAds;
 - (void)setCallToAction:(NSNumber *)callToAction
 {
     
+    
     dispatch_async(RCTGetUIManagerQueue(),^{
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
@@ -234,6 +242,10 @@ BOOL *nonPersonalizedAds;
 
 - (void)loadAd:(NSString *)adUnitId
 {
+    if (cancelDispatchRequest) {
+        return;
+    }
+    
     UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
     UIViewController *rootViewController = [keyWindow rootViewController];
     
@@ -375,6 +387,8 @@ BOOL *nonPersonalizedAds;
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             [self loadAd:adUnitId];
         });
+        
+        
     });
 }
 
@@ -418,7 +432,3 @@ BOOL *nonPersonalizedAds;
 
 
 @end
-
-
-
-
