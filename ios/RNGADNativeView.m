@@ -10,7 +10,7 @@
 #import <React/RCTUIManager.h>
 #import <React/RCTBridgeModule.h>
 #import "RCTUIManagerUtils.h"
-
+#import <React/RCTImageView.h>
 @import GoogleMobileAds;
 
 @implementation RNGADNativeView : GADUnifiedNativeAdView
@@ -366,8 +366,16 @@ BOOL cancelDispatchRequest;
             
             if (nativeAd.icon != nil) {
                 if (nativeAd.icon.imageURL != nil) {
+                    
+                    UIImageView *imageV = (UIImageView *) self.iconView;
+                    [imageV setImage:nativeAd.icon.image];
+                    
                     [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
                 } else {
+                    if (nativeAd.icon.image != nil) {
+                        UIImageView *imageV = (UIImageView *) self.iconView;
+                        [imageV setImage:nativeAd.icon.image];
+                    }
                     [dic setValue:@"empty" forKey:@"icon"];
                 }
                     
@@ -432,3 +440,7 @@ BOOL cancelDispatchRequest;
 
 
 @end
+
+
+
+
