@@ -1,5 +1,5 @@
 import React, { useRef, useContext, useEffect } from "react";
-import { findNodeHandle, Image } from "react-native";
+import { findNodeHandle, Image, requireNativeComponent } from "react-native";
 import { NativeAdContext } from "./context";
 
 const IconView = (props) => {
@@ -20,10 +20,10 @@ const IconView = (props) => {
 
 
   if (nativeAd && nativeAd.icon === "empty") {
+
     return (
-      <Image
-        {...props}
-        resizeMode="cover"
+      <GADImageView
+        style={props.style}
         ref={iconViewRef}
         onLayout={_onLayout}
       />
@@ -32,15 +32,17 @@ const IconView = (props) => {
 
   return (
     nativeAd?.icon !== "noicon" && (
-      <Image
+      <GADImageView
         {...props}
         resizeMode="cover"
         ref={iconViewRef}
         onLayout={_onLayout}
-        source={{ uri: nativeAd.icon }}
+        //source={{ uri: nativeAd.icon }}
       />
     )
   );
 };
+
+const GADImageView = requireNativeComponent("RNGADImageView");
 
 export default IconView;
