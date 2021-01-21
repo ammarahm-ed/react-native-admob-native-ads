@@ -25,10 +25,9 @@
 
 RCT_EXPORT_MODULE(RNGADMediaView);
 
--(UIView *)view
+-(GADMediaView *)view
 {
-    
-    
+
  return [[GADMediaView alloc] init];
     
 }
