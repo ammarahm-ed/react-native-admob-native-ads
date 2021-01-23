@@ -129,15 +129,6 @@ type NativeAdViewProps = {
    */
   mediaAspectRatio?: 'any' | 'landscape' | 'portrait' | 'square' | 'unknown'
 
-  /**
-   * Mute or unmute a video.
-   */
-  muted?:boolean
-
-   /**
-   * Specify if this ad should be a Facebook Native Banner Ad
-   */
-  facebookNativeBanner?:boolean
 
   /**
    * Time in milliseconds to delay ad rendering.
@@ -175,20 +166,39 @@ type NativeAdViewProps = {
    * non-personalized-ads then pass `true` and non-personalized ads will be shown to the user.
    *
    */
-  requestNonPersonalizedAdsOnly: boolean;
+  requestNonPersonalizedAdsOnly?: boolean;
 
   /**
    * Set testdevices for the ad. (DEPRECATED)
    */
+  videoOptions: {
+    muted?: boolean,
+    clickToExpand?: boolean,
+    customControlsRequested?: boolean
+  };
+
+  mediationOptions: {
+    nativeBanner?: boolean,
+  };
+  targetingOptions: {
+    targets?: Array<{ key: boolean, value: string | Array<string> }>,
+    categoryExclusions?: Array<string>,
+    publisherId?: string,
+    requestAgent?: string,
+    location?: string
+    keyword?: string,
+    contentUrl?: string,
+    neighboringContentUrls?: Array<string>
+  };
   testDevices?: Array<string>;
-  onAdOpened?: Function<void>;
-  onAdClosed?: Function<void>;
-  onAdLeftApplication?: Function<void>;
-  onAdImpression?: Function<void>;
-  onAdClicked?: Function<void>;
-  onAdLoaded?: Function<void>;
+  onAdOpened?: () => {};
+  onAdClosed?: () => {};
+  onAdLeftApplication?: () => {};
+  onAdImpression?: () => {};
+  onAdClicked?: () => {};
+  onAdLoaded?: () => {};
   onUnifiedNativeAdLoaded?: (event: NativeAd) => {};
-  onAdFailedToLoad?: Function<void>;
+  onAdFailedToLoad?: () => {};
 };
 
 type SimpleViewProps = {
@@ -205,11 +215,11 @@ type NestedTextProps = {
 type StarViewProps = {
   style?: StyleProp<ViewStyle>,
   size?: number,
-  iconSet?: 'Entypo' | 'EvilIcons' | 'Feather' | 'FontAwesome' | 'Foundation' | 'Ionicons' | 'MaterialIcons' | 'MaterialCommunityIcons' | 'Octicons' | 'Zocial' | 'SimpleLineIcons',
+  iconSet?: 'Entypo' | 'EvilIcons' | 'Feather' | 'FontAwesome' | 'Foundation' | 'Ionicons' | 'MaterialIcons' | 'MaterialCommunityIcons' | 'Octicons' | 'Zocial' | 'SimpleLineIcons',
   fullIcon?: string,
   halfIcon?: string,
   emptyIcon?: string,
-}
+};
 
 
 declare module "react-native-admob-native-ads" {
@@ -232,7 +242,7 @@ declare module "react-native-admob-native-ads" {
    *
    */
 
-  export const AdManager = {
+  export const AdManager: {
 
     /**
     * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
@@ -261,7 +271,7 @@ declare module "react-native-admob-native-ads" {
     *
     */
 
-    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => { },
+    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => {},
 
     /**
      * Check if the current device is registered as a test device to show test ads.
@@ -271,7 +281,7 @@ declare module "react-native-admob-native-ads" {
   ```
   return: `boolean`
      */
-    isTestDevice: async () => { },
+    isTestDevice: () => Promise<boolean>,
   }
 
 
@@ -325,7 +335,17 @@ declare module "react-native-admob-native-ads" {
   /**
    * If the ad has images or video content. It will be loaded inside the MediaView.
    */
-  export function MediaView(props: SimpleViewProps): JSX.Element;
+  export function MediaView(props: {
+    style?: StyleProp<ViewStyle>,
+    onVideoStart?: () => {},
+    onVideoEnd?: () => {},
+    onVideoPause?: () => {},
+    onVideoPlay?: () => {},
+    onVideoMute?: (muted: boolean) => {},
+    paused: boolean,
+    muted: boolean
+
+  }): JSX.Element;
 
   /**
    * A simple button to open the adveriser website or store page etc. It is a simple
