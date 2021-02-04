@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "react": "16.13.1",
-    "react-native": "0.63.0",
-    "react-native-admob-native-ads": "^0.3.9",
+    "react-native": "0.63.4",
+    "react-native-admob-native-ads": "../",
     "react-native-vector-icons": "^7.0.0"
   },
   "devDependencies": {
