@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Platform, View, Dimensions} from 'react-native';
 import NativeAdView, {
   AdvertiserView,
@@ -21,11 +21,11 @@ const NATIVE_AD_VIDEO_ID =
     ? 'ca-app-pub-3940256099942544/2521693316'
     : 'ca-app-pub-3940256099942544/1044960115';
 
-export const AdView = ({media, type,delay=0}) => {
+export const AdView = ({media, type, delay = 0}) => {
   const [aspectRatio, setAspectRatio] = useState(1);
   const [adLoaded, setAdLoaded] = useState(false);
+  const nativeAdRef = useRef();
   const _onAdFailedToLoad = (event) => {
-    console.log(event.nativeEvent);
     setAdLoaded(false);
   };
 
@@ -42,15 +42,19 @@ export const AdView = ({media, type,delay=0}) => {
   };
 
   const _onUnifiedNativeAdLoaded = (event) => {
-    console.log(event);
     console.log('Views have populated with the Ad');
     console.log(event.aspectRatio);
     setAdLoaded(true);
     setAspectRatio(event.aspectRatio);
   };
 
+  useEffect(() => {
+    nativeAdRef.current?.loadAd();
+  }, []);
+
   return (
     <NativeAdView
+      ref={nativeAdRef}
       onAdLoaded={_onAdLoaded}
       onAdFailedToLoad={_onAdFailedToLoad}
       onAdLeftApplication={() => {
@@ -117,19 +121,17 @@ export const AdView = ({media, type,delay=0}) => {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
+              <StoreView
+                style={{
+                  fontSize: 12,
+                }}
+              />
               <StarRatingView
                 starSize={12}
                 fullStarColor="orange"
                 emptyStarColor="gray"
                 containerStyle={{
                   width: 65,
-                  marginTop: 4,
-                }}
-              />
-
-              <StoreView
-                style={{
-                  fontSize: 12,
                   marginLeft: 10,
                 }}
               />
@@ -144,10 +146,15 @@ export const AdView = ({media, type,delay=0}) => {
               alignItems: 'center',
               borderRadius: 5,
               elevation: 10,
-              maxWidth:100,
+              maxWidth: 100,
             }}
             allCaps
-            textStyle={{color: 'white', fontSize: 13,flexWrap:'wrap',textAlign:'center'}}
+            textStyle={{
+              color: 'white',
+              fontSize: 13,
+              flexWrap: 'wrap',
+              textAlign: 'center',
+            }}
           />
         </View>
 
@@ -157,6 +164,12 @@ export const AdView = ({media, type,delay=0}) => {
               width: Dimensions.get('window').width - 20,
               height: Dimensions.get('window').width / aspectRatio,
               backgroundColor: 'white',
+            }}
+            onVideoPlay={e => {
+              console.log('video is playing now');
+            }}
+            onVideoProgress={e => {
+              console.log(e.nativeEvent);
             }}
           />
         ) : null}
