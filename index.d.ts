@@ -181,11 +181,10 @@ type NativeAdViewProps = {
     nativeBanner?: boolean,
   };
   targetingOptions: {
-    targets?: Array<{ key: boolean, value: string | Array<string> }>,
+    targets?: Array<{ key: string, value: string | Array<string> }>,
     categoryExclusions?: Array<string>,
     publisherId?: string,
     requestAgent?: string,
-    location?: string
     keyword?: string,
     contentUrl?: string,
     neighboringContentUrls?: Array<string>
