@@ -2,6 +2,7 @@ package com.ammarahmed.rnadmob.nativeads;
 
 import androidx.annotation.NonNull;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -16,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
+
     public RNAdmobNativeAdsManager(ReactApplicationContext context) {
         super(context);
-        MobileAds.initialize(context);
     }
 
     @NonNull
@@ -51,19 +52,10 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
             configuration.setTagForUnderAgeOfConsent(tagForUnderAgeOfConsent ? 1 : 0);
         }
         if (config.hasKey("testDeviceIds")) {
-            ReadableNativeArray nativeArray = (ReadableNativeArray) config.getArray("testDeviceIds");
-            if (nativeArray != null) {
-                ArrayList<Object> list = nativeArray.toArrayList();
-                List<String> testDeviceIds = new ArrayList<>(list.size());
-                for (Object object : list) {
-                    testDeviceIds.add(object != null ? object.toString() : null);
-                }
-                configuration.setTestDeviceIds(testDeviceIds);
-            }
+             configuration.setTestDeviceIds(Arguments.toList(config.getArray("testDeviceIds")));
         }
 
         MobileAds.setRequestConfiguration(configuration.build());
-        // TODO: Is it a problem that I'm calling initialize twice?
         MobileAds.initialize(getReactApplicationContext());
     }
 
