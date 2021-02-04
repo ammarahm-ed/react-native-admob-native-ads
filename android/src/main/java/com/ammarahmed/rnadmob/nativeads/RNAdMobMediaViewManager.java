@@ -3,9 +3,11 @@ package com.ammarahmed.rnadmob.nativeads;
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.util.Map;
 
@@ -15,13 +17,16 @@ public class RNAdMobMediaViewManager extends ViewGroupManager<RNMediaView> {
     private static final String REACT_CLASS = "RNGADMediaView";
 
 
-
     public static final String EVENT_ON_VIDEO_START = "onVideoStart";
     public static final String EVENT_ON_VIDEO_END = "onVideoEnd";
     public static final String EVENT_ON_VIDEO_PAUSE = "onVideoPause";
     public static final String EVENT_ON_VIDEO_PLAY = "onVideoPlay";
     public static final String EVENT_ON_VIDEO_MUTE = "onVideoMute";
     public static final String EVENT_ON_VIDEO_PROGRESS = "onVideoProgress";
+
+    public static final String PROP_PAUSE = "muted";
+    public static final String PROP_MUTE = "pause";
+
     public static final int COMMAND_GET_PROGRESS = 1;
 
 
@@ -52,6 +57,15 @@ public class RNAdMobMediaViewManager extends ViewGroupManager<RNMediaView> {
                 .build();
     }
 
+    @ReactProp(name = PROP_PAUSE)
+    public void setPropPause(final RNMediaView mediaView, boolean pause) {
+        mediaView.setPause(pause);
+    }
+
+    @ReactProp(name = PROP_MUTE)
+    public void setPropMute(final RNMediaView mediaView, boolean mute) {
+        mediaView.setMuted(mute);
+    }
 
 
     @Override
@@ -62,7 +76,6 @@ public class RNAdMobMediaViewManager extends ViewGroupManager<RNMediaView> {
                 break;
         }
     }
-
 
 
     @Override

@@ -28,10 +28,9 @@ public class RNMediaView extends MediaView {
     };
 
 
-
     public void setVideoController(VideoController videoController) {
-         vc = videoController;
-         
+        vc = videoController;
+
     }
 
     public void getCurrentProgress() {
@@ -39,8 +38,8 @@ public class RNMediaView extends MediaView {
         WritableMap progress = Arguments.createMap();
         progress.putString("currentTime", String.valueOf(vc.getVideoCurrentTime()));
         progress.putString("duration", String.valueOf(vc.getVideoDuration()));
-        Log.d("RNGADMediaView","PROGRESS UPDATE");
-        sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_PROGRESS,progress);
+        Log.d("RNGADMediaView", "PROGRESS UPDATE");
+        sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_PROGRESS, progress);
 
     }
 
@@ -66,30 +65,29 @@ public class RNMediaView extends MediaView {
     }
 
 
-
     public VideoController.VideoLifecycleCallbacks videoLifecycleCallbacks = new VideoController.VideoLifecycleCallbacks() {
         @Override
         public void onVideoStart() {
             super.onVideoStart();
-                sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_START,null);
+            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_START, null);
         }
 
         @Override
         public void onVideoPlay() {
             super.onVideoPlay();
-                sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_PLAY,null);
+            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_PLAY, null);
         }
 
         @Override
         public void onVideoPause() {
             super.onVideoPause();
-                sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_PAUSE,null);
+            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_PAUSE, null);
         }
 
         @Override
         public void onVideoEnd() {
             super.onVideoEnd();
-            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_END,null);
+            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_END, null);
         }
 
         @Override
@@ -97,13 +95,26 @@ public class RNMediaView extends MediaView {
             super.onVideoMute(b);
 
             WritableMap event = Arguments.createMap();
-            event.putBoolean("muted",b);
+            event.putBoolean("muted", b);
             sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_MUTE, event);
 
         }
     };
 
+    public void setPause(boolean pause) {
+        if (vc == null) return;
+        if (pause) {
+            vc.pause();
+        } else {
+            vc.play();
+        }
+    }
 
+    public void setMuted(boolean muted) {
+        if (vc == null) return;
+        vc.mute(muted);
+
+    }
 
 
     @Override
@@ -113,13 +124,13 @@ public class RNMediaView extends MediaView {
     }
 
 
-     public void sendEvent(String name, @Nullable WritableMap event) {
+    public void sendEvent(String name, @Nullable WritableMap event) {
 
-            ReactContext reactContext = (ReactContext) mContext;
-            reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                    getId(),
-                    name,
-                    event);
-}
+        ReactContext reactContext = (ReactContext) mContext;
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
+                getId(),
+                name,
+                event);
+    }
 
 }
