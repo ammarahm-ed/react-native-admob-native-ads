@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Platform, requireNativeComponent } from "react-native";
+import { ActivityIndicator, findNodeHandle, Platform, requireNativeComponent, Text, UIManager, View } from "react-native";
 import BatchedBridge from "react-native/Libraries/BatchedBridge/BatchedBridge";
 import { defaultAd, NativeAdContext } from "./context";
 import Wrapper from "./Wrapper";
@@ -24,6 +24,7 @@ export class NativeAdView extends Component {
     this.state = {
       nativeAd: defaultAd,
       nativeAdView: null,
+    
     };
     this.nativeAdRef;
     this.currentId = 0;
@@ -35,6 +36,7 @@ export class NativeAdView extends Component {
   messagingModuleName = `NativeAdMessageHandler${Date.now() + Math.random()}`;
 
   _onAdFailedToLoad = (event) => {
+   
     if (this.props.onAdFailedToLoad) {
       this.props.onAdFailedToLoad(event);
     }
@@ -117,7 +119,6 @@ export class NativeAdView extends Component {
     } catch(e) {
 
     }
-  
   };
 
   resumeAdLoading = () => {
@@ -128,12 +129,18 @@ export class NativeAdView extends Component {
     } catch(e) {
 
     }
+  };
 
+  loadAd = () => {
+    UIManager.dispatchViewManagerCommand(
+      findNodeHandle(this.nativeAdRef),
+      UIManager.getViewManagerConfig("RNGADNativeView").Commands.loadAd,
+      undefined
+    );
   };
 
   render() {
     const { nativeAd, nativeAdView, delayRender } = this.state;
-
     return (
       <NativeAdContext.Provider value={{ nativeAd, nativeAdView }}>
         <UnifiedNativeAdView
@@ -147,22 +154,25 @@ export class NativeAdView extends Component {
           onAdClosed={this._onAdClosed}
           onAdImpression={this._onAdImpression}
           style={[
-            this.props.style,
-            Platform.OS === "ios"
-              ? { display: this.state.nativeAd ? "flex" : "none" }
-              : { height: this.state.nativeAd ? null : 0 },
+            this.props.style
           ]}
           mediaAspectRatio={
             AdOptions.mediaAspectRatio[this.props.mediaAspectRatio]
           }
           onUnifiedNativeAdLoaded={this.onUnifiedNativeAdLoaded}
-          refreshInterval={this.props.refreshInterval}
           messagingModuleName={this.messagingModuleName}
           requestNonPersonalizedAdsOnly={
             this.props.requestNonPersonalizedAdsOnly
           }
-          facebookNativeBanner={this.props.facebookNativeBanner}
-          muted={this.props.muted}
+          videoOptions={
+            this.props.videoOptions
+          }
+          mediationOptions={
+            this.props.mediationOptions
+          }
+          targetingOptions={
+            this.props.mediationOptions
+          }
           adChoicesPlacement={this.props.adChoicesPlacement}
         >
           <Wrapper
@@ -184,9 +194,14 @@ NativeAdView.defaultProps = {
   mediaAspectRatio: "any",
   adChoicesPlacement: 1,
   requestNonPersonalizedAdsOnly: false,
-  refreshInterval: 60000,
-  muted:true,
-  facebookNativeBanner:false
+  videoOptions:{
+    muted:false,
+    clickToExpand:false,
+    clickToExpand:false
+  },
+  mediationOptions:{
+    nativeBanner:false,
+  }
 };
 
 NativeAdView.simulatorId = "SIMULATOR";
