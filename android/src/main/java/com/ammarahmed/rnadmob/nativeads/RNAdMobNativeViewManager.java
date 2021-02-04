@@ -8,12 +8,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 
 public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper> {
@@ -47,8 +50,9 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String PROP_NON_PERSONALIZED_ADS = "requestNonPersonalizedAdsOnly";
     public static final String PROP_PAUSE_AD_RELOAD = "pauseAdReload";
     public static final String PROP_MEDIA_ASPECT_RATIO = "mediaAspectRatio";
-    public static final String PROP_MUTED = "muted";
-    public static final String PROP_FACEBOOK_NATIVE_BANNER = "facebookNativeBanner";
+    public static final String PROP_VIDEO_OPTIONS = "videoOptions";
+    public static final String PROP_MEDIATION_OPTIONS = "mediationOptions";
+    public static final String PROP_TARGETING_OPTIONS = "targetingOptions";
 
     @javax.annotation.Nullable
     @Override
@@ -95,11 +99,20 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
     }
 
-    @ReactProp(name = PROP_REFRESH_INTERVAL)
-    public void setRefreshInterval(final RNNativeAdWrapper nativeAdWrapper, final int interval) {
 
-        nativeAdWrapper.setAdRefreshInterval(interval);
+    @ReactProp(name = PROP_TARGETING_OPTIONS)
+    public void setPropTargetingOptions(final RNNativeAdWrapper nativeAdWrapper, final ReadableMap options) {
+        nativeAdWrapper.setTargetingOptions(options);
+    }
 
+    @ReactProp(name = PROP_VIDEO_OPTIONS)
+    public void setVideoOptions(final RNNativeAdWrapper nativeAdWrapper, final ReadableMap options) {
+        nativeAdWrapper.setVideoOptions(options);
+    }
+
+    @ReactProp(name = PROP_MEDIATION_OPTIONS)
+    public void setMediationOptions(final RNNativeAdWrapper nativeAdWrapper, final ReadableMap options) {
+        nativeAdWrapper.setMediationOptions(options);
     }
 
     @ReactProp(name = PROP_NON_PERSONALIZED_ADS, defaultBoolean = false)
@@ -108,11 +121,6 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
         nativeAdWrapper.setRequestNonPersonalizedAdsOnly(npa);
     }
 
-     @ReactProp(name = PROP_FACEBOOK_NATIVE_BANNER, defaultBoolean = false)
-    public void setFacebookNativeBanner(final RNNativeAdWrapper nativeAdWrapper, final boolean nativeBanner) {
-
-        nativeAdWrapper.setFacebookNativeBanner(nativeBanner);
-    }
 
 
     @ReactProp(name = PROP_AD_CHOICES_PLACEMENT)
@@ -123,28 +131,15 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
 
-    @ReactProp(name = PROP_DELAY_AD_LOAD)
-    public void setPropDelayAdLoad(final RNNativeAdWrapper nativeAdWrapper, final int delay) {
 
-        nativeAdWrapper.setLoadWithDelay(delay);
-
-    }
 
     @ReactProp(name = PROP_MEDIA_ASPECT_RATIO)
     public void setMediaAspectRatio(final RNNativeAdWrapper nativeAdWrapper, final int type) {
         nativeAdWrapper.setMediaAspectRatio(type);
     }
 
-    @ReactProp(name = PROP_PAUSE_AD_RELOAD)
-    public void setPauseAdPreload(final RNNativeAdWrapper nativeAdWrapper, final boolean pause) {
-        nativeAdWrapper.setPauseAdPreload(pause);
-    }
 
-    @ReactProp(name = PROP_MUTED)
-    public void setMuted(final RNNativeAdWrapper nativeAdWrapper, final boolean muted) {
-        nativeAdWrapper.setMuted(muted);
 
-    }
 
     @ReactProp(name = PROP_MEDIA_VIEW)
     public void setMediaView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
@@ -228,16 +223,24 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
     }
 
+    public static final int COMMAND_LOAD_AD = 1;
 
-    @ReactProp(name = PROP_TEST_DEVICES)
-    public void setPropTestDevices(final RNNativeAdWrapper nativeAdWrapper, final ReadableArray testDevices) {
-      //  ReadableNativeArray nativeArray = (ReadableNativeArray) testDevices;
-      //  ArrayList<Object> list = nativeArray.toArrayList();
+    @Override
+    public @Nullable
+    Map<String, Integer> getCommandsMap() {
+        return MapBuilder.<String, Integer>builder()
+                .put("loadAd", COMMAND_LOAD_AD)
+                .build();
+    }
 
-      //  List<String> testDeviceIds = Arrays.asList(list.toArray(new String[list.size()]));
-      //  RequestConfiguration configuration =
-      //          new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-     //   MobileAds.setRequestConfiguration(configuration);
+
+    @Override
+    public void receiveCommand(RNNativeAdWrapper nativeAdWrapper, int commandId, @Nullable ReadableArray args) {
+        switch (commandId) {
+            case COMMAND_LOAD_AD:
+                nativeAdWrapper.loadAd();
+                break;
+        }
     }
 
 
