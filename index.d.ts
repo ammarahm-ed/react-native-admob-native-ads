@@ -181,7 +181,7 @@ type NativeAdViewProps = {
     nativeBanner?: boolean,
   };
   targetingOptions: {
-    targets?: Array<{ key: string, value: string | Array<string> }>,
+    targets?: Array<{ key: boolean, value: string | Array<string> }>,
     categoryExclusions?: Array<string>,
     publisherId?: string,
     requestAgent?: string,
@@ -190,14 +190,14 @@ type NativeAdViewProps = {
     neighboringContentUrls?: Array<string>
   };
   testDevices?: Array<string>;
-  onAdOpened?: () => {};
-  onAdClosed?: () => {};
-  onAdLeftApplication?: () => {};
-  onAdImpression?: () => {};
-  onAdClicked?: () => {};
-  onAdLoaded?: () => {};
+  onAdOpened?: Function<void>;
+  onAdClosed?: Function<void>;
+  onAdLeftApplication?: Function<void>;
+  onAdImpression?: Function<void>;
+  onAdClicked?: Function<void>;
+  onAdLoaded?: Function<void>;
   onUnifiedNativeAdLoaded?: (event: NativeAd) => {};
-  onAdFailedToLoad?: () => {};
+  onAdFailedToLoad?: Function<void>;
 };
 
 type SimpleViewProps = {
@@ -241,7 +241,7 @@ declare module "react-native-admob-native-ads" {
    *
    */
 
-  export const AdManager: {
+  export const AdManager = {
 
     /**
     * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
@@ -270,7 +270,7 @@ declare module "react-native-admob-native-ads" {
     *
     */
 
-    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => {},
+    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => { },
 
     /**
      * Check if the current device is registered as a test device to show test ads.
@@ -280,7 +280,7 @@ declare module "react-native-admob-native-ads" {
   ```
   return: `boolean`
      */
-    isTestDevice: () => Promise<boolean>,
+    isTestDevice: async () => { },
   }
 
 
@@ -336,10 +336,11 @@ declare module "react-native-admob-native-ads" {
    */
   export function MediaView(props: {
     style?: StyleProp<ViewStyle>,
-    onVideoStart?: () => {},
-    onVideoEnd?: () => {},
-    onVideoPause?: () => {},
-    onVideoPlay?: () => {},
+    onVideoStart?: Function<void>,
+    onVideoEnd?: Function<void>,
+    onVideoPause?: Function<void>,
+    onVideoPlay?: Function<void>,
+    onVideoProgress?: Function<void>,
     onVideoMute?: (muted: boolean) => {},
     paused: boolean,
     muted: boolean
