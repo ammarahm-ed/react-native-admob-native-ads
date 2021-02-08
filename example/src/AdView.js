@@ -7,9 +7,9 @@ import NativeAdView, {
   IconView,
   StarRatingView,
   TaglineView,
-  MediaView,
   StoreView,
 } from 'react-native-admob-native-ads';
+import {MediaView} from './MediaView';
 
 const NATIVE_AD_ID =
   Platform.OS === 'ios'
@@ -42,8 +42,7 @@ export const AdView = ({media, type, delay = 0}) => {
   };
 
   const _onUnifiedNativeAdLoaded = (event) => {
-    console.log('Views have populated with the Ad');
-    console.log(event.aspectRatio);
+    console.log('Views have populated with the Ad', event);
     setAdLoaded(true);
     setAspectRatio(event.aspectRatio);
   };
@@ -158,21 +157,7 @@ export const AdView = ({media, type, delay = 0}) => {
           />
         </View>
 
-        {media ? (
-          <MediaView
-            style={{
-              width: Dimensions.get('window').width - 20,
-              height: Dimensions.get('window').width / aspectRatio,
-              backgroundColor: 'white',
-            }}
-            onVideoPlay={e => {
-              console.log('video is playing now');
-            }}
-            onVideoProgress={e => {
-              console.log(e.nativeEvent);
-            }}
-          />
-        ) : null}
+        {media ? <MediaView /> : null}
       </View>
     </NativeAdView>
   );

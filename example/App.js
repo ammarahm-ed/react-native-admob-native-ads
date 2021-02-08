@@ -8,7 +8,7 @@ import {
   View,
   ScrollView,
 } from 'react-native';
-import {AdView} from './AdView';
+import { AdView } from './src/AdView';
 
 function listItemsGenerator(num) {
   let list = [];
