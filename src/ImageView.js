@@ -1,16 +1,15 @@
 import React, { useRef, useContext, useEffect } from "react";
-import { findNodeHandle, Image, Platform, requireNativeComponent } from "react-native";
+import { findNodeHandle, Image } from "react-native";
 import { NativeAdContext } from "./context";
 
-const IconView = (props) => {
+const ImageView = (props) => {
   const { nativeAd, nativeAdView } = useContext(NativeAdContext);
-  const iconViewRef = useRef();
-
+  const imageViewRef = useRef();
   const _onLayout = () => {
     if (!nativeAdView) return;
-    let handle = findNodeHandle(iconViewRef.current);
+    let handle = findNodeHandle(imageViewRef.current);
     nativeAdView.setNativeProps({
-      icon: handle,
+      image: handle,
     });
   };
 
@@ -18,31 +17,14 @@ const IconView = (props) => {
     _onLayout();
   }, [nativeAd, nativeAdView]);
 
-
-  if (nativeAd && nativeAd.icon === "empty") {
-
-    return (
-      <GADImageView
-        style={props.style}
-        ref={iconViewRef}
-        onLayout={_onLayout}
-      />
-    );
-  }
-
-  return (
-    nativeAd?.icon !== "noicon" && (
-      <GADImageView
-        {...props}
-        resizeMode="cover"
-        ref={iconViewRef}
-        onLayout={_onLayout}
-        source={Platform.OS === "ios" ? null : { uri: nativeAd.icon }}
-      />
-    )
-  );
+  return nativeAd?.images[0] ? (
+    <Image
+      {...props}
+      ref={imageViewRef}
+      onLayout={_onLayout}
+      source={{ uri: nativeAd.images[0].url }}
+    />
+  ) : null;
 };
 
-const GADImageView = Platform.OS === "ios" ? requireNativeComponent("RNGADImageView") : Image;
-
-export default IconView;
+export default ImageView;
