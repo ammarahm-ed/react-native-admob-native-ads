@@ -42,9 +42,7 @@ const NativeMediaView = (props) => {
 
   const _clearInterval = () => {
     clearInterval(timers[nodeHandle]);
-    console.log(nodeHandle)
     timers[nodeHandle] = null;
-    console.log(timers);
   }
 
   const onVideoPlay = () => {
