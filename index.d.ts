@@ -334,14 +334,14 @@ declare module "react-native-admob-native-ads" {
   /**
    * If the ad has images or video content. It will be loaded inside the MediaView.
    */
-  export function MediaView(props: {
+  export function NativeMediaView(props: {
     style?: StyleProp<ViewStyle>,
     onVideoStart?: Function<void>,
     onVideoEnd?: Function<void>,
     onVideoPause?: Function<void>,
     onVideoPlay?: Function<void>,
-    onVideoProgress?: Function<void>,
-    onVideoMute?: (muted: boolean) => {},
+    onVideoProgress?: ({nativeEvent:{duration:string,currentTime:string}}) => {},
+    onVideoMute?: ({nativeEvent:{muted:boolean}}) => {},
     paused: boolean,
     muted: boolean
 
