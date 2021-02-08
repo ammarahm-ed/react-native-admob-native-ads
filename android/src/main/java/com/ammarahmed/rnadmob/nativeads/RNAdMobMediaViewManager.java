@@ -1,9 +1,6 @@
 package com.ammarahmed.rnadmob.nativeads;
 
-import androidx.annotation.NonNull;
-
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -13,7 +10,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-public class RNAdMobMediaViewManager extends ViewGroupManager<RNMediaView> {
+public class RNAdmobMediaViewManager extends ViewGroupManager<RNAdmobMediaView> {
     private static final String REACT_CLASS = "RNGADMediaView";
 
 
@@ -58,18 +55,18 @@ public class RNAdMobMediaViewManager extends ViewGroupManager<RNMediaView> {
     }
 
     @ReactProp(name = PROP_PAUSE)
-    public void setPropPause(final RNMediaView mediaView, boolean pause) {
+    public void setPropPause(final RNAdmobMediaView mediaView, boolean pause) {
         mediaView.setPause(pause);
     }
 
     @ReactProp(name = PROP_MUTE)
-    public void setPropMute(final RNMediaView mediaView, boolean mute) {
+    public void setPropMute(final RNAdmobMediaView mediaView, boolean mute) {
         mediaView.setMuted(mute);
     }
 
 
     @Override
-    public void receiveCommand(RNMediaView root, int commandId, @Nullable ReadableArray args) {
+    public void receiveCommand(RNAdmobMediaView root, int commandId, @Nullable ReadableArray args) {
         switch (commandId) {
             case COMMAND_GET_PROGRESS:
                 root.getCurrentProgress();
@@ -84,8 +81,8 @@ public class RNAdMobMediaViewManager extends ViewGroupManager<RNMediaView> {
     }
 
     @Override
-    protected RNMediaView createViewInstance(ThemedReactContext reactContext) {
-        return new RNMediaView(reactContext);
+    protected RNAdmobMediaView createViewInstance(ThemedReactContext reactContext) {
+        return new RNAdmobMediaView(reactContext);
     }
 
 }

@@ -16,9 +16,9 @@ import com.google.android.gms.ads.RequestConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
+public class RNAdmobNativeAdManager extends ReactContextBaseJavaModule {
 
-    public RNAdmobNativeAdsManager(ReactApplicationContext context) {
+    public RNAdmobNativeAdManager(ReactApplicationContext context) {
         super(context);
     }
 

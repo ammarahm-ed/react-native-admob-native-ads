@@ -3,7 +3,7 @@ package com.ammarahmed.rnadmob.nativeads;
 import android.content.Context;
 import android.widget.LinearLayout;
 
-public class RNAdComponentsWrapper extends LinearLayout {
+public class RNAdmobComponentsWrapper extends LinearLayout {
     Context mContext;
 
     private final Runnable measureAndLayout = new Runnable() {
@@ -16,7 +16,7 @@ public class RNAdComponentsWrapper extends LinearLayout {
         }
     };
 
-    public RNAdComponentsWrapper(Context context) {
+    public RNAdmobComponentsWrapper(Context context) {
         super(context);
         mContext = context;
     }

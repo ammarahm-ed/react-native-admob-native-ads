@@ -1,6 +1,5 @@
 package com.ammarahmed.rnadmob.nativeads;
 
-import android.media.Image;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,7 +18,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 
-public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper> {
+public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView> {
 
 
     public static final String REACT_CLASS = "RNGADNativeView";
@@ -80,20 +79,20 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
     @Override
-    protected RNNativeAdWrapper createViewInstance(ThemedReactContext reactContext) {
+    protected RNAdmobNativeView createViewInstance(ThemedReactContext reactContext) {
        
-        return new RNNativeAdWrapper(reactContext);
+        return new RNAdmobNativeView(reactContext);
 
     }
 
     @ReactProp(name = "messagingModuleName")
-    public void setMessagingModuleName(RNNativeAdWrapper nativeAdWrapper, String moduleName) {
+    public void setMessagingModuleName(RNAdmobNativeView nativeAdWrapper, String moduleName) {
         nativeAdWrapper.setMessagingModuleName(moduleName);
     }
 
 
     @Override
-    public void addView(RNNativeAdWrapper parent, View child, int index) {
+    public void addView(RNAdmobNativeView parent, View child, int index) {
         //super.addView(parent, child, index);
         parent.addNewView(child, index);
 
@@ -101,22 +100,22 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
 
     @ReactProp(name = PROP_TARGETING_OPTIONS)
-    public void setPropTargetingOptions(final RNNativeAdWrapper nativeAdWrapper, final ReadableMap options) {
+    public void setPropTargetingOptions(final RNAdmobNativeView nativeAdWrapper, final ReadableMap options) {
         nativeAdWrapper.setTargetingOptions(options);
     }
 
     @ReactProp(name = PROP_VIDEO_OPTIONS)
-    public void setVideoOptions(final RNNativeAdWrapper nativeAdWrapper, final ReadableMap options) {
+    public void setVideoOptions(final RNAdmobNativeView nativeAdWrapper, final ReadableMap options) {
         nativeAdWrapper.setVideoOptions(options);
     }
 
     @ReactProp(name = PROP_MEDIATION_OPTIONS)
-    public void setMediationOptions(final RNNativeAdWrapper nativeAdWrapper, final ReadableMap options) {
+    public void setMediationOptions(final RNAdmobNativeView nativeAdWrapper, final ReadableMap options) {
         nativeAdWrapper.setMediationOptions(options);
     }
 
     @ReactProp(name = PROP_NON_PERSONALIZED_ADS, defaultBoolean = false)
-    public void setPropNonPersonalizedAds(final RNNativeAdWrapper nativeAdWrapper, final boolean npa) {
+    public void setPropNonPersonalizedAds(final RNAdmobNativeView nativeAdWrapper, final boolean npa) {
 
         nativeAdWrapper.setRequestNonPersonalizedAdsOnly(npa);
     }
@@ -124,7 +123,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
 
     @ReactProp(name = PROP_AD_CHOICES_PLACEMENT)
-    public void setPropAdChoicesPlacement(final RNNativeAdWrapper nativeAdWrapper, final int location) {
+    public void setPropAdChoicesPlacement(final RNAdmobNativeView nativeAdWrapper, final int location) {
 
         nativeAdWrapper.setAdChoicesPlacement(location);
 
@@ -134,7 +133,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
 
     @ReactProp(name = PROP_MEDIA_ASPECT_RATIO)
-    public void setMediaAspectRatio(final RNNativeAdWrapper nativeAdWrapper, final int type) {
+    public void setMediaAspectRatio(final RNAdmobNativeView nativeAdWrapper, final int type) {
         nativeAdWrapper.setMediaAspectRatio(type);
     }
 
@@ -142,14 +141,14 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
 
     @ReactProp(name = PROP_MEDIA_VIEW)
-    public void setMediaView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
+    public void setMediaView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
         nativeAdWrapper.addMediaView(id);
         nativeAdWrapper.setNativeAd();
     }
 
     @ReactProp(name = PROP_HEADLINE_VIEW)
-    public void setHeadlineView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
+    public void setHeadlineView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
         TextView view = (TextView)nativeAdWrapper.findViewById(id);
         nativeAdWrapper.nativeAdView.setHeadlineView(view);
@@ -157,7 +156,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
     @ReactProp(name = PROP_TAGLINE_VIEW)
-    public void setPropTaglineView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
+    public void setPropTaglineView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
         TextView view = (TextView)nativeAdWrapper.findViewById(id);
         nativeAdWrapper.nativeAdView.setBodyView(view);
@@ -165,7 +164,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
     @ReactProp(name = PROP_ADVERTISER_VIEW)
-    public void setPropAdvertiserView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
+    public void setPropAdvertiserView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
         TextView view = (TextView)nativeAdWrapper.findViewById(id);
         nativeAdWrapper.nativeAdView.setAdvertiserView(view);
@@ -173,7 +172,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
     @ReactProp(name = PROP_IMAGE_VIEW)
-    public void setPropImageView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
+    public void setPropImageView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
         ImageView view = (ImageView) nativeAdWrapper.findViewById(id);
         nativeAdWrapper.nativeAdView.setImageView(view);
@@ -181,7 +180,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
     @ReactProp(name = PROP_ICON_VIEW)
-    public void setPropIconView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
+    public void setPropIconView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
         ImageView view = (ImageView) nativeAdWrapper.findViewById(id);
         nativeAdWrapper.nativeAdView.setIconView(view);
@@ -189,7 +188,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
     @ReactProp(name = PROP_STORE_VIEW)
-    public void setPropStoreView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
+    public void setPropStoreView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
         TextView view = (TextView) nativeAdWrapper.findViewById(id);
         nativeAdWrapper.nativeAdView.setStoreView(view);
@@ -197,7 +196,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
     @ReactProp(name = PROP_PRICE_VIEW)
-    public void setPropPriceView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
+    public void setPropPriceView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
         TextView view = (TextView) nativeAdWrapper.findViewById(id);
         nativeAdWrapper.nativeAdView.setPriceView(view);
@@ -205,7 +204,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
     @ReactProp(name = PROP_STAR_RATING_VIEW)
-    public void setPropStarRatingView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
+    public void setPropStarRatingView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
         View view = nativeAdWrapper.findViewById(id);
         nativeAdWrapper.nativeAdView.setStarRatingView(view);
@@ -214,7 +213,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
     @ReactProp(name = PROP_CALL_TO_ACTION_VIEW)
-    public void setPropCallToActionView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
+    public void setPropCallToActionView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
             View view = nativeAdWrapper.findViewById(id);
             nativeAdWrapper.nativeAdView.setCallToActionView(view);
@@ -235,7 +234,7 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
 
     @Override
-    public void receiveCommand(RNNativeAdWrapper nativeAdWrapper, int commandId, @Nullable ReadableArray args) {
+    public void receiveCommand(RNAdmobNativeView nativeAdWrapper, int commandId, @Nullable ReadableArray args) {
         switch (commandId) {
             case COMMAND_LOAD_AD:
                 nativeAdWrapper.loadAd();
@@ -245,14 +244,14 @@ public class RNAdMobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
 
 
     @ReactProp(name = PROP_AD_UNIT_ID)
-    public void setPropAdUnitId(final RNNativeAdWrapper nativeAdWrapper, final String adUnitId) {
+    public void setPropAdUnitId(final RNAdmobNativeView nativeAdWrapper, final String adUnitId) {
         if (adUnitId == null) return;
         nativeAdWrapper.setAdUnitId(adUnitId);
 
     }
 
     @Override
-    public void onDropViewInstance(@NonNull RNNativeAdWrapper nativeAdWrapper) {
+    public void onDropViewInstance(@NonNull RNAdmobNativeView nativeAdWrapper) {
         super.onDropViewInstance(nativeAdWrapper);
         nativeAdWrapper.removeHandler();
         if (nativeAdWrapper.unifiedNativeAd != null){

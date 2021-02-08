@@ -1,10 +1,8 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -32,18 +30,16 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.MediaContent;
-import com.google.android.gms.ads.mediation.NetworkExtras;
 import com.google.android.gms.ads.nativead.MediaView;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.android.gms.ads.nativead.NativeAdView;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class RNNativeAdWrapper extends LinearLayout {
+public class RNAdmobNativeView extends LinearLayout {
 
     private final Runnable measureAndLayout = new Runnable() {
         @Override
@@ -65,7 +61,7 @@ public class RNNativeAdWrapper extends LinearLayout {
     NativeAdOptions.Builder adOptions;
     AdLoader.Builder builder;
     AdLoader adLoader;
-    RNMediaView mediaView;
+    RNAdmobMediaView mediaView;
     protected @Nullable
     String messagingModuleName;
 
@@ -95,44 +91,44 @@ public class RNNativeAdWrapper extends LinearLayout {
             WritableMap error = Arguments.createMap();
             error.putString("message", errorMessage);
             event.putMap("error", error);
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
         }
 
         @Override
         public void onAdClosed() {
             super.onAdClosed();
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_CLOSED, null);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_CLOSED, null);
         }
 
         @Override
         public void onAdOpened() {
             super.onAdOpened();
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_OPENED, null);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_OPENED, null);
         }
 
         @Override
         public void onAdClicked() {
             super.onAdClicked();
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_CLICKED, null);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_CLICKED, null);
 
         }
 
         @Override
         public void onAdLoaded() {
             super.onAdLoaded();
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_LOADED, null);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_LOADED, null);
         }
 
         @Override
         public void onAdImpression() {
             super.onAdImpression();
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_IMPRESSION, null);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_IMPRESSION, null);
         }
 
         @Override
         public void onAdLeftApplication() {
             super.onAdLeftApplication();
-            sendEvent(RNAdMobNativeViewManager.EVENT_AD_LEFT_APPLICATION, null);
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_LEFT_APPLICATION, null);
         }
     };
     private String admobAdUnitId = "";
@@ -154,7 +150,7 @@ public class RNNativeAdWrapper extends LinearLayout {
     };
 
 
-    public RNNativeAdWrapper(ReactContext context) {
+    public RNAdmobNativeView(ReactContext context) {
         super(context);
         mContext = context;
         createView(context);
@@ -177,7 +173,7 @@ public class RNNativeAdWrapper extends LinearLayout {
     public void addMediaView(int id) {
 
         try {
-            mediaView = (RNMediaView) nativeAdView.findViewById(id);
+            mediaView = (RNAdmobMediaView) nativeAdView.findViewById(id);
             if (mediaView != null) {
                 unifiedNativeAd.getMediaContent().getVideoController().setVideoLifecycleCallbacks(mediaView.videoLifecycleCallbacks);
                 nativeAdView.setMediaView((MediaView) nativeAdView.findViewById(id));
@@ -424,11 +420,11 @@ public class RNNativeAdWrapper extends LinearLayout {
         }
 
         if (options.hasKey("clickToExpand")) {
-            builder.setStartMuted(options.getBoolean("clickToExpand"));
+            builder.setClickToExpandRequested(options.getBoolean("clickToExpand"));
         }
 
         if (options.hasKey("clickToExpand")) {
-            builder.setStartMuted(options.getBoolean("clickToExpand"));
+            builder.setCustomControlsRequested(options.getBoolean("clickToExpand"));
         }
         videoOptions = builder.build();
 
@@ -463,8 +459,11 @@ public class RNNativeAdWrapper extends LinearLayout {
         if (options.hasKey("requestAgent")) {
             adRequest.setRequestAgent(options.getString("requestAgent"));
         }
-        if (options.hasKey("keyword")) {
-            adRequest.addKeyword(options.getString("keyword"));
+        if (options.hasKey("keywords")) {
+            ReadableArray keywords = options.getArray("keywords");
+            for (int i = 0; i < keywords.size(); i++) {
+                adRequest.addKeyword(keywords.getString(i));
+            }
         }
         if (options.hasKey("contentUrl")) {
             adRequest.setContentUrl(options.getString("contentUrl"));

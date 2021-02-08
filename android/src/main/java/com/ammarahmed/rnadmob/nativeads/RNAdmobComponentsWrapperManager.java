@@ -5,9 +5,9 @@ import android.view.View;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 
-public class RNAdComponentsWrapperManager extends ViewGroupManager<RNAdComponentsWrapper> {
+public class RNAdmobComponentsWrapperManager extends ViewGroupManager<RNAdmobComponentsWrapper> {
 
-    public RNAdComponentsWrapper wrapper;
+    public RNAdmobComponentsWrapper wrapper;
     public ThemedReactContext mContext;
 
     public static final String REACT_CLASS = "RNAdComponentWrapper";
@@ -18,14 +18,14 @@ public class RNAdComponentsWrapperManager extends ViewGroupManager<RNAdComponent
 
 
     @Override
-    public void addView(RNAdComponentsWrapper parent, View child, int index) {
+    public void addView(RNAdmobComponentsWrapper parent, View child, int index) {
         super.addView(parent, child, index);
     }
 
     @Override
-    protected RNAdComponentsWrapper createViewInstance(ThemedReactContext reactContext) {
+    protected RNAdmobComponentsWrapper createViewInstance(ThemedReactContext reactContext) {
         mContext = reactContext;
-        wrapper = new RNAdComponentsWrapper(reactContext);
+        wrapper = new RNAdmobComponentsWrapper(reactContext);
         return wrapper;
     }
 
