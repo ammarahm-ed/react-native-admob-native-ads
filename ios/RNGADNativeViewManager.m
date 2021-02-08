@@ -24,6 +24,20 @@ RCT_EXPORT_MODULE(RNGADNativeView);
 }
 
 
+
+RCT_EXPORT_METHOD(loadAd:(nonnull NSNumber *)reactTag)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, RNGADNativeView *> *viewRegistry) {
+      RNGADNativeView *view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[RNGADNativeView class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting RNGADNativeView, got: %@", view);
+    } else {
+      [view loadAd];
+    }
+  }];
+}
+
+
 RCT_EXPORT_VIEW_PROPERTY(adSize, NSString)
 RCT_EXPORT_VIEW_PROPERTY(testDevices, NSArray)
 RCT_EXPORT_VIEW_PROPERTY(refreshInterval, NSNumber)
@@ -41,9 +55,6 @@ RCT_EXPORT_VIEW_PROPERTY(starrating, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(callToAction, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(requestNonPersonalizedAdsOnly, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(adChoicesPlacement, NSNumber)
-
-
-//RCT_EXPORT_VIEW_PROPERTY(ratingStarsColor, NSString)
 
 RCT_EXPORT_VIEW_PROPERTY(onSizeChange, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAppEvent, RCTBubblingEventBlock)

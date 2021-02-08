@@ -185,7 +185,7 @@ type NativeAdViewProps = {
     categoryExclusions?: Array<string>,
     publisherId?: string,
     requestAgent?: string,
-    keyword?: string,
+    keywords?: Array<string>,
     contentUrl?: string,
     neighboringContentUrls?: Array<string>
   };

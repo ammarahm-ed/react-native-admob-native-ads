@@ -37,7 +37,7 @@ const IconView = (props) => {
         resizeMode="cover"
         ref={iconViewRef}
         onLayout={_onLayout}
-        source={{ uri: nativeAd.icon }}
+        source={Platform.OS === "ios" ? null : { uri: nativeAd.icon }}
       />
     )
   );

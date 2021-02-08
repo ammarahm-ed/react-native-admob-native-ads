@@ -1,5 +1,6 @@
 #import <React/RCTView.h>
 #import <React/RCTBridge.h>
+#import <React/RCTComponent.h>
 
 @import GoogleMobileAds;
 
@@ -8,6 +9,8 @@
 
 @property(nonatomic, strong) GADUnifiedNativeAd *nativeAdView;
 @property(nonatomic, strong) GADAdLoader *adLoader;
+
+
 
 @property (nonatomic, copy) NSArray *testDevices;
 @property (nonatomic, copy) NSNumber *refreshInterval;
@@ -24,9 +27,17 @@
 @property (nonatomic, copy) NSNumber *starrating;
 @property (nonatomic, copy) NSNumber *callToAction;
 @property (nonatomic, copy) NSNumber *adChoicesPlacement;
-@property (nonatomic) BOOL *requestNonPersonalizedAdsOnly; 
+@property (nonatomic) BOOL *requestNonPersonalizedAdsOnly;
+
+
+@property (nonatomic, copy) NSNumber *mediaAspectRatio;
+@property (nonatomic, copy) NSDictionary *mediationOptions;
+@property (nonatomic, copy) NSDictionary *targetingOptions;
+@property (nonatomic, copy) NSDictionary *videoOptions;
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge;
+
+- (void)loadAd;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onAdLoaded;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdFailedToLoad;

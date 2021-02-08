@@ -14,10 +14,11 @@
 
 #import "RCTViewManager.h"
 
+@import GoogleMobileAds;
 
-@interface RNGADMediaViewManager : RCTViewManager
+@interface RNGADMediaViewManager : RCTViewManager <GADVideoControllerDelegate>
 
-
+@property (nonatomic, copy) RCTBubblingEventBlock onVideoPlay;
 
 @end
 
