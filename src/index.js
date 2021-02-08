@@ -112,22 +112,6 @@ export class NativeAdView extends Component {
     return this.nativeAdRef;
   };
 
-  pauseAdLoading = () => {
-    try {
-      this.nativeAdRef.setNativeProps({
-        pauseAdLoading: true,
-      });
-    } catch (e) {}
-  };
-
-  resumeAdLoading = () => {
-    try {
-      this.nativeAdRef.setNativeProps({
-        pauseAdLoading: false,
-      });
-    } catch (e) {}
-  };
-
   loadAd = () => {
     UIManager.dispatchViewManagerCommand(
       findNodeHandle(this.nativeAdRef),
