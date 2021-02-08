@@ -1,5 +1,5 @@
 #import "RNGADNativeView.h"
-#import "RNAdMobUtils.h"
+#import "RNNativeAdMobUtils.h"
 #import <React/RCTRootView.h>
 #import <React/RCTRootViewDelegate.h>
 #import <React/RCTViewManager.h>

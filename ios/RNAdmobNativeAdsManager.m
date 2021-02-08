@@ -1,5 +1,5 @@
 #import "RNAdmobNativeAdsManager.h"
-#import "RNAdMobUtils.h"
+#import "RNNativeAdMobUtils.h"
 @import GoogleMobileAds;
 
 @implementation RNAdmobNativeAdsManager

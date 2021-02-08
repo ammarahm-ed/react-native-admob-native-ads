@@ -40,6 +40,12 @@ RCT_EXPORT_METHOD(loadAd:(nonnull NSNumber *)reactTag)
 
 RCT_EXPORT_VIEW_PROPERTY(adSize, NSString)
 RCT_EXPORT_VIEW_PROPERTY(testDevices, NSArray)
+
+RCT_EXPORT_VIEW_PROPERTY(targetingOptions, NSDictionary)
+RCT_EXPORT_VIEW_PROPERTY(mediationOptions, NSDictionary)
+RCT_EXPORT_VIEW_PROPERTY(videoOptions, NSDictionary)
+RCT_EXPORT_VIEW_PROPERTY(mediaAspectRatio, NSNumber)
+
 RCT_EXPORT_VIEW_PROPERTY(refreshInterval, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(adUnitID, NSString)
 RCT_EXPORT_VIEW_PROPERTY(delayAdLoad, NSNumber)
