@@ -12,7 +12,7 @@ import java.util.List;
 
 public class RNAdmobNativePackage implements ReactPackage {
 
-    @Override
+    @Override 
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Arrays.<NativeModule>asList(
                 new RNAdmobNativeAdManager(reactContext)

@@ -5,7 +5,7 @@ import android.widget.LinearLayout;
 
 public class RNAdmobComponentsWrapper extends LinearLayout {
     Context mContext;
-
+ 
     private final Runnable measureAndLayout = new Runnable() {
         @Override
         public void run() {

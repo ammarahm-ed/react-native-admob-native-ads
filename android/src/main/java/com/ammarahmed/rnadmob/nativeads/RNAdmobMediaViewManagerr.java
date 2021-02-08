@@ -9,7 +9,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import java.util.Map;
 
 import javax.annotation.Nullable;
-
+ 
 public class RNAdmobMediaViewManager extends ViewGroupManager<RNAdmobMediaView> {
     private static final String REACT_CLASS = "RNGADMediaView";
 

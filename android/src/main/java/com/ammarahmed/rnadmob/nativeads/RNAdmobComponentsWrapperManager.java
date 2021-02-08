@@ -13,7 +13,7 @@ public class RNAdmobComponentsWrapperManager extends ViewGroupManager<RNAdmobCom
     public static final String REACT_CLASS = "RNAdComponentWrapper";
     @Override
     public String getName() {
-        return REACT_CLASS;
+        return REACT_CLASS; 
     }
 
 
