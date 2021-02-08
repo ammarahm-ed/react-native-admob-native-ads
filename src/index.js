@@ -18,7 +18,7 @@ const testNativeAd = {
   store: Platform.OS === "ios" ? "AppStore" : "Google Play",
   video: false,
   rating: 4.5,
-  price: "$ 1",
+  price: "$1",
   icon: "https://dummyimage.com/300.png/09f/fff",
   images: [{ url: "https://dummyimage.com/qvga" }],
 };
