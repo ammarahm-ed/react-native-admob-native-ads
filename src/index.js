@@ -1,9 +1,14 @@
 import React, { Component } from "react";
-import { ActivityIndicator, findNodeHandle, Platform, requireNativeComponent, Text, UIManager, View } from "react-native";
+import {
+  findNodeHandle,
+  Platform,
+  requireNativeComponent,
+  UIManager
+} from "react-native";
 import BatchedBridge from "react-native/Libraries/BatchedBridge/BatchedBridge";
 import { defaultAd, NativeAdContext } from "./context";
-import Wrapper from "./Wrapper";
 import { AdOptions } from "./utils";
+import Wrapper from "./Wrapper";
 
 const testNativeAd = {
   headline: "Test Ad: Lorem ipsum dolor ",
@@ -24,7 +29,6 @@ export class NativeAdView extends Component {
     this.state = {
       nativeAd: defaultAd,
       nativeAdView: null,
-    
     };
     this.nativeAdRef;
     this.currentId = 0;
@@ -36,7 +40,6 @@ export class NativeAdView extends Component {
   messagingModuleName = `NativeAdMessageHandler${Date.now() + Math.random()}`;
 
   _onAdFailedToLoad = (event) => {
-   
     if (this.props.onAdFailedToLoad) {
       this.props.onAdFailedToLoad(event);
     }
@@ -97,9 +100,7 @@ export class NativeAdView extends Component {
         this.updateAd(this.ad);
       }
       BatchedBridge.registerCallableModule(this.messagingModuleName, this);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   }
 
   componentWillUnmount() {
@@ -116,9 +117,7 @@ export class NativeAdView extends Component {
       this.nativeAdRef.setNativeProps({
         pauseAdLoading: true,
       });
-    } catch(e) {
-
-    }
+    } catch (e) {}
   };
 
   resumeAdLoading = () => {
@@ -126,9 +125,7 @@ export class NativeAdView extends Component {
       this.nativeAdRef.setNativeProps({
         pauseAdLoading: false,
       });
-    } catch(e) {
-
-    }
+    } catch (e) {}
   };
 
   loadAd = () => {
@@ -140,7 +137,7 @@ export class NativeAdView extends Component {
   };
 
   render() {
-    const { nativeAd, nativeAdView, delayRender } = this.state;
+    const { nativeAd, nativeAdView } = this.state;
     return (
       <NativeAdContext.Provider value={{ nativeAd, nativeAdView }}>
         <UnifiedNativeAdView
@@ -153,9 +150,7 @@ export class NativeAdView extends Component {
           onAdOpened={this._onAdOpened}
           onAdClosed={this._onAdClosed}
           onAdImpression={this._onAdImpression}
-          style={[
-            this.props.style
-          ]}
+          style={this.props.style}
           mediaAspectRatio={
             AdOptions.mediaAspectRatio[this.props.mediaAspectRatio]
           }
@@ -164,15 +159,9 @@ export class NativeAdView extends Component {
           requestNonPersonalizedAdsOnly={
             this.props.requestNonPersonalizedAdsOnly
           }
-          videoOptions={
-            this.props.videoOptions
-          }
-          mediationOptions={
-            this.props.mediationOptions
-          }
-          targetingOptions={
-            this.props.mediationOptions
-          }
+          videoOptions={this.props.videoOptions}
+          mediationOptions={this.props.mediationOptions}
+          targetingOptions={this.props.targetingOptions}
           adChoicesPlacement={this.props.adChoicesPlacement}
         >
           <Wrapper
@@ -194,14 +183,14 @@ NativeAdView.defaultProps = {
   mediaAspectRatio: "any",
   adChoicesPlacement: 1,
   requestNonPersonalizedAdsOnly: false,
-  videoOptions:{
-    muted:false,
-    clickToExpand:false,
-    clickToExpand:false
+  videoOptions: {
+    muted: false,
+    clickToExpand: false,
+    clickToExpand: false,
   },
-  mediationOptions:{
-    nativeBanner:false,
-  }
+  mediationOptions: {
+    nativeBanner: false,
+  },
 };
 
 NativeAdView.simulatorId = "SIMULATOR";
