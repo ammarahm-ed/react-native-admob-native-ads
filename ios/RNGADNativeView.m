@@ -26,7 +26,7 @@ NSNumber *refreshingInterval;
 NSNumber *delay;
 NSNumber *adChoicesPlace;
 NSNumber *mediaViewId;
-
+dispatch_block_t block;
 
 GADNativeAdViewAdOptions *adPlacementOptions;
 GADNativeAdMediaAdLoaderOptions *adMediaOptions;
@@ -184,6 +184,41 @@ BOOL *nonPersonalizedAds;
     adUnitId = adUnitID;
 }
 
+- (void) reloadAdInView:(GADUnifiedNativeAd *)nativeAd {
+    if (block != nil) {
+        dispatch_block_cancel(block);
+    }
+   
+    block = dispatch_block_create(DISPATCH_BLOCK_NO_QOS_CLASS, ^{
+        if (nativeAd != nil) {
+            [self setNativeAd:nativeAd];
+            
+            if (nativeAd != nil &&  nativeAd.icon.image != nil) {
+                UIImageView *imageV = (UIImageView *) self.iconView;
+                [imageV setImage:nativeAd.icon.image];
+            }
+            
+            if (nativeAd.mediaContent.hasVideoContent && nativeAd.mediaContent.duration > 0) {
+            dispatch_async(RCTGetUIManagerQueue(),^{
+                [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+                    RNGADMediaView *mediaView = (RNGADMediaView *) viewRegistry[mediaViewId];
+                    if (mediaView != nil) {
+                            nativeAd.mediaContent.videoController.delegate = mediaView.self;
+                            [mediaView setVideoController:nativeAd.mediaContent.videoController];
+                            [mediaView setNativeAd:nativeAd];
+                    }
+                }];
+            });
+            }
+            
+        }
+    });
+    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC);
+    dispatch_after(time, dispatch_get_main_queue(),block);
+    
+   
+}
+
 - (void)setHeadline:(NSNumber *)headline {
     
     dispatch_async(RCTGetUIManagerQueue(),^{
@@ -195,6 +230,10 @@ BOOL *nonPersonalizedAds;
             if (headlineView != nil) {
                 headlineView.userInteractionEnabled = NO;
                 [self setHeadlineView:headlineView];
+                if (self.nativeAd != nil) {
+                    [self reloadAdInView:self.nativeAd];
+                }
+                
             }
         }];
     });
@@ -210,10 +249,10 @@ BOOL *nonPersonalizedAds;
             if (iconView != nil) {
                 iconView.userInteractionEnabled = NO;
                 [self setIconView:iconView];
-                if (self.nativeAd != nil &&  self.nativeAd.icon.image != nil) {
-                    UIImageView *imageV = (UIImageView *) self.iconView;
-                    [imageV setImage:self.nativeAd.icon.image];
+                if (self.nativeAd != nil) {
+                    [self reloadAdInView:self.nativeAd];
                 }
+               
             }
         }];
     });
@@ -231,6 +270,9 @@ BOOL *nonPersonalizedAds;
             if (imageView != nil) {
                 imageView.userInteractionEnabled = NO;
                 [self setImageView:imageView];
+                if (self.nativeAd != nil) {
+                    [self reloadAdInView:self.nativeAd];
+                }
             }
         }];
     });
@@ -247,8 +289,10 @@ BOOL *nonPersonalizedAds;
             
             GADMediaView *mediaView = (GADMediaView *) viewRegistry[mediaview];
             if (mediaView != nil) {
-                
                 [self setMediaView:mediaView];
+                if (self.nativeAd != nil) {
+                    [self reloadAdInView:self.nativeAd];
+                }
             }
         }];
     });
@@ -265,6 +309,9 @@ BOOL *nonPersonalizedAds;
             if (taglineView != nil) {
                 taglineView.userInteractionEnabled = NO;
                 [self setPriceView:taglineView];
+                if (self.nativeAd != nil) {
+                    [self reloadAdInView:self.nativeAd];
+                }
             }
         }];
     });
@@ -281,6 +328,9 @@ BOOL *nonPersonalizedAds;
             if (advertiserView != nil) {
                 advertiserView.userInteractionEnabled = NO;
                 [self setAdvertiserView:advertiserView];
+                if (self.nativeAd != nil) {
+                    [self reloadAdInView:self.nativeAd];
+                }
             }
         }];
     });
@@ -297,6 +347,9 @@ BOOL *nonPersonalizedAds;
             if (priceView != nil) {
                 priceView.userInteractionEnabled = NO;
                 [self setPriceView:priceView];
+                if (self.nativeAd != nil) {
+                    [self reloadAdInView:self.nativeAd];
+                }
             }
         }];
     });
@@ -314,6 +367,9 @@ BOOL *nonPersonalizedAds;
             if (storeView != nil) {
                 storeView.userInteractionEnabled = NO;
                 [self setStoreView:storeView];
+                if (self.nativeAd != nil) {
+                    [self reloadAdInView:self.nativeAd];
+                }
             }
         }];
     });
@@ -330,6 +386,10 @@ BOOL *nonPersonalizedAds;
             if (starratingView != nil) {
                 starratingView.userInteractionEnabled = NO;
                 [self setStarRatingView:starratingView];
+                if (self.nativeAd != nil) {
+                    
+                    [self reloadAdInView:self.nativeAd];
+                }
             }
         }];
     });
@@ -348,6 +408,9 @@ BOOL *nonPersonalizedAds;
             
             if (callToActionView != nil){
                 [self setCallToActionView:callToActionView];
+                if (self.nativeAd != nil) {
+                    [self reloadAdInView:self.nativeAd];
+                }
             }
             
         }];
@@ -382,6 +445,8 @@ BOOL *nonPersonalizedAds;
 
 
 - (void)adLoader:(GADAdLoader *)adLoader didReceiveUnifiedNativeAd:(GADUnifiedNativeAd *)nativeAd {
+    
+    
     dispatch_after((int64_t)((delay.intValue/1000) * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void){
         
         if (self.onAdLoaded) {
