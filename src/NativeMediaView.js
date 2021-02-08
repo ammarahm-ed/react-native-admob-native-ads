@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useContext } from "react";
 import { findNodeHandle, requireNativeComponent } from "react-native";
 import { NativeAdContext } from "./context";
 
-const MediaView = (props) => {
+const NativeMediaView = (props) => {
   const { nativeAd, nativeAdView } = useContext(NativeAdContext);
   const adMediaView = useRef();
 
@@ -25,4 +25,4 @@ const MediaView = (props) => {
 
 const AdMediaView = requireNativeComponent("RNGADMediaView", MediaView);
 
-export default MediaView;
+export default NativeMediaView;
