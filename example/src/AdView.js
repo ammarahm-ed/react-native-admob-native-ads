@@ -99,7 +99,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
       onAdClicked={onAdClicked}
       onAdImpression={onAdImpression}
       onUnifiedNativeAdLoaded={onUnifiedNativeAdLoaded}
-      refreshInterval={60000 * 2}
+      
       style={{
         width: '98%',
         alignSelf: 'center',
