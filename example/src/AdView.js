@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {ActivityIndicator, Text, View} from 'react-native';
+import {ActivityIndicator, DeviceEventEmitter, Text, View} from 'react-native';
 import NativeAdView, {
   AdvertiserView,
   CallToActionView,
@@ -10,11 +10,12 @@ import NativeAdView, {
   TaglineView,
 } from 'react-native-admob-native-ads';
 import {MediaView} from './MediaView';
-import {adUnitIDs, Logger} from './utils';
+import {adUnitIDs, Events, Logger} from './utils';
 
-export const AdView = ({media, type}) => {
+export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
   const [aspectRatio, setAspectRatio] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   const nativeAdRef = useRef();
 
@@ -39,6 +40,7 @@ export const AdView = ({media, type}) => {
   const onUnifiedNativeAdLoaded = (event) => {
     Logger('AD', 'RECIEVED', 'Ad impression recorded', event);
     setLoading(false);
+    setLoaded(true);
     setAspectRatio(event.aspectRatio);
   };
 
@@ -46,9 +48,46 @@ export const AdView = ({media, type}) => {
     Logger('AD', 'LEFT', 'Ad left application');
   };
 
+  const onViewableItemsChanged = (event) => {
+    let adsInView = event.viewableItems.filter(
+      (i) => i.key.indexOf('ad') !== -1,
+    );
+    adsInView.forEach((view) => {
+      if (view.index === index && !loaded) {
+        setLoading(true);
+        Logger('AD', 'IN VIEW', 'Loading ' + index);
+        nativeAdRef.current?.loadAd();
+      } else {
+        if (loaded) {
+          Logger('AD', 'IN VIEW', 'Loaded ' + index);
+        } else {
+          Logger('AD', 'NOT IN VIEW', index);
+        }
+      }
+    });
+  };
+
   useEffect(() => {
-    setLoading(true);
-    nativeAdRef.current?.loadAd();
+    DeviceEventEmitter.addListener(
+      Events.onViewableItemsChanged,
+      onViewableItemsChanged,
+    );
+    return () => {
+      DeviceEventEmitter.removeListener(
+        Events.onViewableItemsChanged,
+        onViewableItemsChanged,
+      );
+    };
+  }, [loaded]);
+
+  useEffect(() => {
+    if (loadOnMount) {
+      setLoading(true);
+      nativeAdRef.current?.loadAd();
+    }
+    return () => {
+      setLoaded(false);
+    };
   }, [type]);
 
   return (
@@ -70,16 +109,17 @@ export const AdView = ({media, type}) => {
       <View
         style={{
           width: '100%',
+          alignItems: 'center',
         }}>
         <View
           style={{
             width: '100%',
-            height: 90,
+            height: 100,
             backgroundColor: '#f0f0f0',
             position: 'absolute',
             justifyContent: 'center',
             alignItems: 'center',
-            opacity: !loading && !error ? 0 : 1,
+            opacity: !loading && !error && loaded ? 0 : 1,
           }}>
           {loading && <ActivityIndicator size={16} color="#a9a9a9" />}
           {error && <Text style={{color: '#a9a9a9'}}>:-(</Text>}
@@ -93,7 +133,7 @@ export const AdView = ({media, type}) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             paddingHorizontal: 10,
-            opacity: loading || error ? 0 : 1,
+            opacity: loading || error || !loaded ? 0 : 1,
           }}>
           <IconView
             style={{
@@ -174,4 +214,4 @@ export const AdView = ({media, type}) => {
       </View>
     </NativeAdView>
   );
-};
+});
