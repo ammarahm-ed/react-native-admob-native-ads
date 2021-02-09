@@ -146,12 +146,7 @@ type NativeAdViewProps = {
    * import AdOptions then pass the value from there. AdOptions.adChoicesPlacement
    */
 
-  adChoicesPlacement?: {
-    TOP_LEFT: number,
-    TOP_RIGHT: number,
-    BOTTOM_RIGHT: number,
-    BOTTOM_LEFT: number
-  }
+  adChoicesPlacement?: "topLeft" | "topRight" | "bottomLeft" | "bottomRight"
 
   /**
    * Under the Google EU User Consent Policy, you must make certain disclosures

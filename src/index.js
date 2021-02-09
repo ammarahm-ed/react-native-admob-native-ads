@@ -146,7 +146,7 @@ export class NativeAdView extends Component {
           videoOptions={this.props.videoOptions}
           mediationOptions={this.props.mediationOptions}
           targetingOptions={this.props.targetingOptions}
-          adChoicesPlacement={this.props.adChoicesPlacement}
+          adChoicesPlacement={AdOptions.adChoicesPlacement[this.props.adChoicesPlacement]}
         >
           <Wrapper
             onLayout={(event) => {
