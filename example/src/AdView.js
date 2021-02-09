@@ -1,76 +1,90 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Platform, View } from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {ActivityIndicator, Text, View} from 'react-native';
 import NativeAdView, {
   AdvertiserView,
   CallToActionView,
   HeadlineView,
   IconView,
   StarRatingView,
-
-  StoreView, TaglineView
+  StoreView,
+  TaglineView,
 } from 'react-native-admob-native-ads';
-import { MediaView } from './MediaView';
+import {MediaView} from './MediaView';
+import {adUnitIDs, Logger} from './utils';
 
-const NATIVE_AD_ID =
-  Platform.OS === 'ios'
-    ? 'ca-app-pub-3940256099942544/3986624511'
-    : 'ca-app-pub-3940256099942544/2247696110';
-
-const NATIVE_AD_VIDEO_ID =
-  Platform.OS === 'ios'
-    ? 'ca-app-pub-3940256099942544/2521693316'
-    : 'ca-app-pub-3940256099942544/1044960115';
-
-export const AdView = ({media, type, delay = 0}) => {
+export const AdView = ({media, type}) => {
   const [aspectRatio, setAspectRatio] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const nativeAdRef = useRef();
-  const _onAdFailedToLoad = (event) => {
-    console.log(event.nativeEvent);
+
+  const onAdFailedToLoad = (event) => {
+    setError(true);
+    setLoading(false);
+    Logger('AD', 'FAILED', event.error.message);
   };
 
-  const _onAdLoaded = () => {
-    console.log('Ad has loaded successfully');
+  const onAdLoaded = () => {
+    Logger('AD', 'LOADED', 'Ad has loaded successfully');
   };
 
-  const _onAdClicked = () => {
-    console.log('User has clicked the ad');
+  const onAdClicked = () => {
+    Logger('AD', 'CLICK', 'User has clicked the Ad');
   };
 
-  const _onAdImpression = () => {
-    console.log('Ad impressionr recorded');
+  const onAdImpression = () => {
+    Logger('AD', 'IMPRESSION', 'Ad impression recorded');
   };
 
-  const _onUnifiedNativeAdLoaded = (event) => {
-    console.log('Views have populated with the Ad', event);
+  const onUnifiedNativeAdLoaded = (event) => {
+    Logger('AD', 'RECIEVED', 'Ad impression recorded', event);
+    setLoading(false);
     setAspectRatio(event.aspectRatio);
   };
 
+  const onAdLeftApplication = () => {
+    Logger('AD', 'LEFT', 'Ad left application');
+  };
+
   useEffect(() => {
+    setLoading(true);
     nativeAdRef.current?.loadAd();
-  }, []);
+  }, [type]);
 
   return (
     <NativeAdView
       ref={nativeAdRef}
-      onAdLoaded={_onAdLoaded}
-      onAdFailedToLoad={_onAdFailedToLoad}
-      onAdLeftApplication={() => {
-        console.log('ad has left the application');
-      }}
-      onAdClicked={_onAdClicked}
-      onAdImpression={_onAdImpression}
-      onUnifiedNativeAdLoaded={_onUnifiedNativeAdLoaded}
+      onAdLoaded={onAdLoaded}
+      onAdFailedToLoad={onAdFailedToLoad}
+      onAdLeftApplication={onAdLeftApplication}
+      onAdClicked={onAdClicked}
+      onAdImpression={onAdImpression}
+      onUnifiedNativeAdLoaded={onUnifiedNativeAdLoaded}
       refreshInterval={60000 * 2}
       style={{
         width: '98%',
         alignSelf: 'center',
       }}
-      adUnitID={type === 'image' ? NATIVE_AD_ID : NATIVE_AD_VIDEO_ID} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
+      adUnitID={type === 'image' ? adUnitIDs.image : adUnitIDs.video} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
     >
       <View
         style={{
           width: '100%',
         }}>
+        <View
+          style={{
+            width: '100%',
+            height: 90,
+            backgroundColor: '#f0f0f0',
+            position: 'absolute',
+            justifyContent: 'center',
+            alignItems: 'center',
+            opacity: !loading && !error ? 0 : 1,
+          }}>
+          {loading && <ActivityIndicator size={16} color="#a9a9a9" />}
+          {error && <Text style={{color: '#a9a9a9'}}>:-(</Text>}
+        </View>
+
         <View
           style={{
             height: 100,
@@ -79,6 +93,7 @@ export const AdView = ({media, type, delay = 0}) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             paddingHorizontal: 10,
+            opacity: loading || error ? 0 : 1,
           }}>
           <IconView
             style={{
@@ -133,6 +148,7 @@ export const AdView = ({media, type, delay = 0}) => {
               />
             </View>
           </View>
+
           <CallToActionView
             style={{
               minHeight: 45,
