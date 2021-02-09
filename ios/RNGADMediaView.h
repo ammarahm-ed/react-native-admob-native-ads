@@ -7,9 +7,6 @@
 @interface RNGADMediaView: GADMediaView <GADVideoControllerDelegate>
 
 
-@property(nonatomic, strong) GADVideoController *videoController;
-@property(nonatomic, strong) GADUnifiedNativeAd *nativeAd;
-
 @property (nonatomic) BOOL *pause;
 @property (nonatomic) BOOL *muted;
 
@@ -20,6 +17,8 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onVideoEnd;
 @property (nonatomic, copy) RCTBubblingEventBlock onVideoProgress;
 
+- (void)setVideoController:( GADVideoController * _Nullable)vc;
+- (void)setNativeAd:(GADNativeAd * _Nullable)ad;
 - (void)getCurrentProgress;
 
 @end

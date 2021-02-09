@@ -15,43 +15,56 @@
 
 @implementation RNGADMediaView
 
+GADVideoController *videoController;
+GADNativeAd *nativeAd;
+
 - (void)setPause:(BOOL *)pause {
     if (pause) {
-        if (self.videoController) {
-            [self.videoController pause];
+        
+        if (videoController) {
+            [videoController pause];
         }
     } else {
-        if (self.videoController) {
-            [self.videoController play];
+        if (videoController) {
+            [videoController play];
         }
     }
 }
 
 - (void)setMuted:(BOOL *)muted {
-    if (self.videoController) {
-        [self.videoController setMute:muted? TRUE : FALSE];
+    if (videoController) {
+        [videoController setMute:muted? true : false];
+       
     }
 
 }
 
 
-- (void)setVideoController:(GADVideoController *)videoController {
-    self.videoController = videoController;
+
+- (void)setVideoController:( GADVideoController * _Nullable)vc {
+    if (vc != nil) {
+        videoController = vc;
+    }
+    
 }
 
-- (void)setNativeAd:(GADUnifiedNativeAd *)nativeAd {
-    self.nativeAd = nativeAd;
+- (void)setNativeAd:(GADNativeAd * _Nullable)ad {
+    if (ad != nil) {
+        nativeAd = ad;
+    }
+  
 }
 
 - (void)videoControllerDidPlayVideo:(GADVideoController *)videoController {
     if (self.onVideoPlay) {
-        self.onVideoPlay(nil);
+        self.onVideoPlay(@{});
     }
 }
 
+
 - (void)videoControllerDidPauseVideo:(GADVideoController *)videoController {
     if (self.onVideoPause) {
-        self.onVideoPause(nil);
+        self.onVideoPause(@{});
     }
 }
 
@@ -69,17 +82,18 @@
 
 - (void)videoControllerDidEndVideoPlayback:(GADVideoController *)videoController {
     if (self.onVideoEnd) {
-        self.onVideoEnd(nil);
+        self.onVideoEnd(@{});
     }
 }
 
 - (void)getCurrentProgress
 {
     if (self.onVideoProgress) {
-        if (self.nativeAd != nil && self.nativeAd.mediaContent.hasVideoContent && self.nativeAd.mediaContent.duration > 0  ) {
+        if (nativeAd != nil && nativeAd.mediaContent.hasVideoContent && nativeAd.mediaContent.duration > 0  ) {
+            
             self.onVideoProgress(@{
-                @"duration":[NSString stringWithFormat: @"%f", self.nativeAd.mediaContent.duration],
-                @"currentTime":[NSString stringWithFormat: @"%f", self.nativeAd.mediaContent.currentTime]
+                @"duration":[NSString stringWithFormat: @"%f", nativeAd.mediaContent.duration],
+                @"currentTime":[NSString stringWithFormat: @"%f", nativeAd.mediaContent.currentTime]
          });
         }
     

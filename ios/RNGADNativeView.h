@@ -4,10 +4,10 @@
 
 @import GoogleMobileAds;
 
-@interface RNGADNativeView : GADUnifiedNativeAdView <GADUnifiedNativeAdLoaderDelegate,
-    GADUnifiedNativeAdDelegate>
+@interface RNGADNativeView : GADNativeAdView <GADNativeAdLoaderDelegate,
+    GADNativeAdDelegate>
 
-@property(nonatomic, strong) GADUnifiedNativeAd *nativeAdView;
+@property(nonatomic, strong) GADNativeAd *nativeAdView;
 @property(nonatomic, strong) GADAdLoader *adLoader;
 
 

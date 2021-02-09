@@ -16,9 +16,7 @@
 
 @import GoogleMobileAds;
 
-@interface RNGADMediaViewManager : RCTViewManager <GADVideoControllerDelegate>
-
-@property (nonatomic, copy) RCTBubblingEventBlock onVideoPlay;
+@interface RNGADMediaViewManager : RCTViewManager
 
 @end
 

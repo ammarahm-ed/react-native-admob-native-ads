@@ -34,7 +34,7 @@ RCT_EXPORT_METHOD(setRequestConfiguration:(NSDictionary *)config)
     };
 
     if ([[config allKeys] containsObject:@"testDeviceIds"]) {
-        NSArray *testDevices = RNAdMobProcessTestDevices([config valueForKey:@"testDeviceIds"], kDFPSimulatorID);
+        NSArray *testDevices = RNAdMobProcessTestDevices([config valueForKey:@"testDeviceIds"], kGAMSimulatorID);
         [[[GADMobileAds sharedInstance] requestConfiguration] setTestDeviceIdentifiers:testDevices];
     };
 }

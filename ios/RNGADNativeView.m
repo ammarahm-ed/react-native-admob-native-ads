@@ -12,11 +12,11 @@
 #import <React/RCTUIManagerUtils.h>
 #import <React/RCTImageView.h>
 #import "RNGADMediaView.h"
-#import <FacebookAdapter/FacebookAdapter.h>
 
 @import GoogleMobileAds;
+@import FacebookAdapter;
 
-@implementation RNGADNativeView : GADUnifiedNativeAdView
+@implementation RNGADNativeView : GADNativeAdView
  
 RCTBridge *bridge;
 
@@ -27,10 +27,12 @@ NSNumber *delay;
 NSNumber *adChoicesPlace;
 NSNumber *mediaViewId;
 dispatch_block_t block;
+RNGADMediaView *rnMediaView;
 
 GADNativeAdViewAdOptions *adPlacementOptions;
 GADNativeAdMediaAdLoaderOptions *adMediaOptions;
-DFPRequest *adRequest;
+
+GAMRequest *adRequest;
 GADVideoOptions *adVideoOptions;
 
 BOOL *nonPersonalizedAds;
@@ -42,11 +44,10 @@ BOOL *nonPersonalizedAds;
     delay = @1;
     refreshingInterval = @60000;
     
-    adRequest = [DFPRequest request];
-    adPlacementOptions = [GADNativeAdViewAdOptions new];
-    adVideoOptions = [GADVideoOptions new];
-    adMediaOptions = [GADNativeAdMediaAdLoaderOptions new];
-    self.adLoader = [GADAdLoader alloc];
+    adRequest = [GAMRequest request];
+    adPlacementOptions = [[GADNativeAdViewAdOptions alloc] init];
+    adVideoOptions = [[GADVideoOptions alloc] init];
+    adMediaOptions = [[GADNativeAdMediaAdLoaderOptions alloc] init];
     
     if (self = [super init]) {
         bridge = _bridge;
@@ -184,7 +185,7 @@ BOOL *nonPersonalizedAds;
     adUnitId = adUnitID;
 }
 
-- (void) reloadAdInView:(GADUnifiedNativeAd *)nativeAd {
+- (void) reloadAdInView:(GADNativeAd *)nativeAd isMedia:(BOOL )media {
     if (block != nil) {
         dispatch_block_cancel(block);
     }
@@ -197,20 +198,7 @@ BOOL *nonPersonalizedAds;
                 UIImageView *imageV = (UIImageView *) self.iconView;
                 [imageV setImage:nativeAd.icon.image];
             }
-            
-            if (nativeAd.mediaContent.hasVideoContent && nativeAd.mediaContent.duration > 0) {
-            dispatch_async(RCTGetUIManagerQueue(),^{
-                [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-                    RNGADMediaView *mediaView = (RNGADMediaView *) viewRegistry[mediaViewId];
-                    if (mediaView != nil) {
-                            nativeAd.mediaContent.videoController.delegate = mediaView.self;
-                            [mediaView setVideoController:nativeAd.mediaContent.videoController];
-                            [mediaView setNativeAd:nativeAd];
-                    }
-                }];
-            });
-            }
-            
+        
         }
     });
     dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC);
@@ -231,7 +219,7 @@ BOOL *nonPersonalizedAds;
                 headlineView.userInteractionEnabled = NO;
                 [self setHeadlineView:headlineView];
                 if (self.nativeAd != nil) {
-                    [self reloadAdInView:self.nativeAd];
+                    [self reloadAdInView:self.nativeAd isMedia:NO];
                 }
                 
             }
@@ -250,7 +238,7 @@ BOOL *nonPersonalizedAds;
                 iconView.userInteractionEnabled = NO;
                 [self setIconView:iconView];
                 if (self.nativeAd != nil) {
-                    [self reloadAdInView:self.nativeAd];
+                    [self reloadAdInView:self.nativeAd isMedia:NO];
                 }
                
             }
@@ -271,7 +259,7 @@ BOOL *nonPersonalizedAds;
                 imageView.userInteractionEnabled = NO;
                 [self setImageView:imageView];
                 if (self.nativeAd != nil) {
-                    [self reloadAdInView:self.nativeAd];
+                    [self reloadAdInView:self.nativeAd isMedia:NO];
                 }
             }
         }];
@@ -288,10 +276,21 @@ BOOL *nonPersonalizedAds;
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
             
             GADMediaView *mediaView = (GADMediaView *) viewRegistry[mediaview];
+            rnMediaView = (RNGADMediaView *) viewRegistry[mediaview];
+            
+            if (rnMediaView != nil) {
+                        if (self.nativeAd.mediaContent.videoController != nil) {
+                            self.nativeAd.mediaContent.videoController.delegate = rnMediaView.self;
+                            [rnMediaView setVideoController:self.nativeAd.mediaContent.videoController];
+                            [rnMediaView setNativeAd:self.nativeAd];
+                        }
+            }
+            
             if (mediaView != nil) {
                 [self setMediaView:mediaView];
+            
                 if (self.nativeAd != nil) {
-                    [self reloadAdInView:self.nativeAd];
+                    [self reloadAdInView:self.nativeAd isMedia:YES];
                 }
             }
         }];
@@ -310,7 +309,7 @@ BOOL *nonPersonalizedAds;
                 taglineView.userInteractionEnabled = NO;
                 [self setPriceView:taglineView];
                 if (self.nativeAd != nil) {
-                    [self reloadAdInView:self.nativeAd];
+                    [self reloadAdInView:self.nativeAd isMedia:NO];
                 }
             }
         }];
@@ -329,7 +328,7 @@ BOOL *nonPersonalizedAds;
                 advertiserView.userInteractionEnabled = NO;
                 [self setAdvertiserView:advertiserView];
                 if (self.nativeAd != nil) {
-                    [self reloadAdInView:self.nativeAd];
+                    [self reloadAdInView:self.nativeAd isMedia:NO];
                 }
             }
         }];
@@ -348,7 +347,7 @@ BOOL *nonPersonalizedAds;
                 priceView.userInteractionEnabled = NO;
                 [self setPriceView:priceView];
                 if (self.nativeAd != nil) {
-                    [self reloadAdInView:self.nativeAd];
+                    [self reloadAdInView:self.nativeAd isMedia:NO];
                 }
             }
         }];
@@ -368,7 +367,7 @@ BOOL *nonPersonalizedAds;
                 storeView.userInteractionEnabled = NO;
                 [self setStoreView:storeView];
                 if (self.nativeAd != nil) {
-                    [self reloadAdInView:self.nativeAd];
+                    [self reloadAdInView:self.nativeAd isMedia:NO];
                 }
             }
         }];
@@ -388,7 +387,7 @@ BOOL *nonPersonalizedAds;
                 [self setStarRatingView:starratingView];
                 if (self.nativeAd != nil) {
                     
-                    [self reloadAdInView:self.nativeAd];
+                    [self reloadAdInView:self.nativeAd isMedia:NO];
                 }
             }
         }];
@@ -409,7 +408,7 @@ BOOL *nonPersonalizedAds;
             if (callToActionView != nil){
                 [self setCallToActionView:callToActionView];
                 if (self.nativeAd != nil) {
-                    [self reloadAdInView:self.nativeAd];
+                    [self reloadAdInView:self.nativeAd isMedia:NO];
                 }
             }
             
@@ -425,26 +424,25 @@ BOOL *nonPersonalizedAds;
     
     UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
     UIViewController *rootViewController = [keyWindow rootViewController];
-    self.adLoader = [self.adLoader initWithAdUnitID:adUnitId
+    self.adLoader = [[GADAdLoader alloc] initWithAdUnitID:adUnitId
                rootViewController:rootViewController
-               adTypes:@[ kGADAdLoaderAdTypeUnifiedNative ]
+               adTypes:@[ kGADAdLoaderAdTypeNative ]
             options:@[adMediaOptions,adPlacementOptions,adVideoOptions]];
- 
 
     self.adLoader.delegate = self;
    
     [self.adLoader loadRequest:adRequest];
+    
 }
 
-
-- (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(GADRequestError *)error {
+- (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(NSError *)error {
     if (self.onAdFailedToLoad) {
         self.onAdFailedToLoad(@{ @"error": @{ @"message": [error localizedDescription] } });
     }
 }
 
 
-- (void)adLoader:(GADAdLoader *)adLoader didReceiveUnifiedNativeAd:(GADUnifiedNativeAd *)nativeAd {
+- (void)adLoader:(GADAdLoader *)adLoader didReceiveNativeAd:(GADNativeAd *)nativeAd {
     
     
     dispatch_after((int64_t)((delay.intValue/1000) * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void){
@@ -455,19 +453,13 @@ BOOL *nonPersonalizedAds;
         
         nativeAd.delegate = self;
         [self setNativeAd:nativeAd];
-        
-        
-        if (nativeAd.mediaContent.hasVideoContent && nativeAd.mediaContent.duration > 0) {
-        dispatch_async(RCTGetUIManagerQueue(),^{
-            [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-                RNGADMediaView *mediaView = (RNGADMediaView *) viewRegistry[mediaViewId];
-                if (mediaView != nil) {
-                        nativeAd.mediaContent.videoController.delegate = mediaView.self;
-                        [mediaView setVideoController:nativeAd.mediaContent.videoController];
-                        [mediaView setNativeAd:nativeAd];
-                }
-            }];
-        });
+                
+        if (rnMediaView != nil) {
+                    if (self.nativeAd.mediaContent.videoController != nil) {
+                        self.nativeAd.mediaContent.videoController.delegate = rnMediaView.self;
+                        [rnMediaView setVideoController:self.nativeAd.mediaContent.videoController];
+                        [rnMediaView setNativeAd:self.nativeAd];
+                    }
         }
         
          if (nativeAd != NULL) {
@@ -544,7 +536,7 @@ BOOL *nonPersonalizedAds;
 }
 
 
-- (void)nativeAdDidRecordImpression:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdDidRecordImpression:(nonnull GADNativeAd *)nativeAd
 {
     if (self.onAdImpression) {
         self.onAdImpression(@{});
@@ -552,28 +544,28 @@ BOOL *nonPersonalizedAds;
     }
 }
 
-- (void)nativeAdDidRecordClick:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdDidRecordClick:(nonnull GADNativeAd *)nativeAd
 {
     if (self.onAdClicked) {
         self.onAdClicked(@{});
     }
 }
 
-- (void)nativeAdWillPresentScreen:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdWillPresentScreen:(nonnull GADNativeAd *)nativeAd
 {
     if (self.onAdOpened) {
         self.onAdOpened(@{});
     }
 }
 
-- (void)nativeAdWillDismissScreen:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdWillDismissScreen:(nonnull GADNativeAd *)nativeAd
 {
     if (self.onAdClosed) {
         self.onAdClosed(@{});
     }
 }
 
-- (void)nativeAdWillLeaveApplication:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdWillLeaveApplication:(nonnull GADNativeAd *)nativeAd
 {
     if(self.onAdLeftApplication) {
         self.onAdLeftApplication(@{});

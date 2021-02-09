@@ -45,7 +45,7 @@ RCT_EXPORT_VIEW_PROPERTY(onVideoProgress, RCTBubblingEventBlock)
 
 
 
-RCT_EXPORT_METHOD(loadAd:(nonnull NSNumber *)reactTag)
+RCT_EXPORT_METHOD(getProgress:(nonnull NSNumber *)reactTag)
 {
   [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, RNGADMediaView *> *viewRegistry) {
       RNGADMediaView *view = viewRegistry[reactTag];
