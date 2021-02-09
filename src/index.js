@@ -41,7 +41,7 @@ export class NativeAdView extends Component {
 
   _onAdFailedToLoad = (event) => {
     if (this.props.onAdFailedToLoad) {
-      this.props.onAdFailedToLoad(event);
+      this.props.onAdFailedToLoad(event.nativeEvent);
     }
   };
 

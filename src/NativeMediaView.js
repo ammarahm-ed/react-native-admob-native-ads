@@ -59,7 +59,13 @@ const NativeMediaView = (props) => {
     props.onVideoEnd && props.onVideoEnd()
   }
 
+  const onVideoProgress= (event) => {
+    props.onVideoProgress && props.onVideoProgress(event.nativeEvent)
+  }
 
+  const onVideoMute = (event) => {
+    props.onVideoMute && props.onVideoMute(event.nativeEvent?.muted)
+  }
 
   return (
     <AdMediaView 
@@ -67,6 +73,8 @@ const NativeMediaView = (props) => {
     onVideoPlay={onVideoPlay}
     onVideoPause={onVideoPause}
     onVideoEnd={onVideoEnd}
+    onVideoProgress={onVideoProgress}
+    onVideoMute={onVideoMute}
     ref={adMediaView} 
     onLayout={_onLayout} 
     />

@@ -192,7 +192,7 @@ type NativeAdViewProps = {
   onAdClicked?: Function<void>;
   onAdLoaded?: Function<void>;
   onUnifiedNativeAdLoaded?: (event: NativeAd) => {};
-  onAdFailedToLoad?: Function<void>;
+  onAdFailedToLoad?: (error: { message: string }) => {};
 };
 
 type SimpleViewProps = {
@@ -335,8 +335,8 @@ declare module "react-native-admob-native-ads" {
     onVideoEnd?: Function<void>,
     onVideoPause?: Function<void>,
     onVideoPlay?: Function<void>,
-    onVideoProgress?: ({nativeEvent:{duration:string,currentTime:string}}) => {},
-    onVideoMute?: ({nativeEvent:{muted:boolean}}) => {},
+    onVideoProgress?: ({ duration: string, currentTime: string }) => {},
+    onVideoMute?: (muted: boolean) => {},
     paused: boolean,
     muted: boolean
 
