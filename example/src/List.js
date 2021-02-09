@@ -16,6 +16,10 @@ const List = () => {
   const renderItem = React.useCallback(
     ({item, index}) =>
       item.includes('ad') ? (
+        /**
+         * loadOnMount -> We are telling the AdView to not load the ad when
+         * it is mounted.
+         */
         <AdView loadOnMount={false} index={index} type="image" media={false} />
       ) : (
         <View
@@ -38,6 +42,14 @@ const List = () => {
     [],
   );
 
+  /**
+   * [STEP II] We only want to know about the viewable
+   * items when user stops scrolling. So as soon as the
+   * scrolling ends we will send an event to all Ad Items
+   * in the list to check which item is visible currently.
+   *
+   * Go to AdView.js for next steps.
+   */
   const onScrollEnd = React.useCallback(() => {
     DeviceEventEmitter.emit(
       Events.onViewableItemsChanged,
@@ -45,6 +57,11 @@ const List = () => {
     );
   }, []);
 
+  /**
+   * [STEP I] When viewable items change in the list
+   * we want to know what items are visible and store them
+   * in a variable for later us.
+   */
   const onViewableItemsChanged = React.useCallback((e) => {
     viewableItemsChanged = e;
   }, []);

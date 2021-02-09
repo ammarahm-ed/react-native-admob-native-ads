@@ -30,7 +30,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
      * This error is not a bug or issue with our Library.
      * Just remove the app from your phone & clean your build
      * folders by running ./gradlew clean in /android folder
-     * and for iOS clean the project. Hopefully the error will
+     * and for iOS clean the project in xcode. Hopefully the error will
      * be gone.
      *
      * [iOS] If you get this error: "Cannot find an ad network adapter with
@@ -67,15 +67,30 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
   };
 
   const onViewableItemsChanged = (event) => {
-    let adsInView = event.viewableItems.filter(
+    /**
+     * [STEP IV] We check if any AdViews are currently viewable.
+     */
+    let viewableAds = event.viewableItems.filter(
       (i) => i.key.indexOf('ad') !== -1,
     );
-    adsInView.forEach((view) => {
-      if (view.index === index && !loaded) {
+
+    viewableAds.forEach((adView) => {
+      if (adView.index === index && !loaded) {
+        /**
+         * [STEP V] If the ad is viewable and not loaded
+         * already, we will load the ad.
+         */
         setLoading(true);
+        setLoaded(false)
         Logger('AD', 'IN VIEW', 'Loading ' + index);
         nativeAdRef.current?.loadAd();
       } else {
+        /**
+         * We will not reload ads or load
+         * ads that are not viewable currently
+         * to save bandwidth and requests sent
+         * to server.
+         */
         if (loaded) {
           Logger('AD', 'IN VIEW', 'Loaded ' + index);
         } else {
@@ -86,21 +101,32 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
   };
 
   useEffect(() => {
-    DeviceEventEmitter.addListener(
-      Events.onViewableItemsChanged,
-      onViewableItemsChanged,
-    );
-    return () => {
-      DeviceEventEmitter.removeListener(
+    /**
+     * for previous steps go to List.js file.
+     *
+     * [STEP III] We will subscribe to onViewableItemsChanged event in all AdViews in the List.
+     */
+    if (!loadOnMount) {
+      DeviceEventEmitter.addListener(
         Events.onViewableItemsChanged,
         onViewableItemsChanged,
       );
+    }
+
+    return () => {
+      if (!loadOnMount) {
+        DeviceEventEmitter.removeListener(
+          Events.onViewableItemsChanged,
+          onViewableItemsChanged,
+        );
+      }
     };
   }, [loaded]);
 
   useEffect(() => {
     if (loadOnMount) {
       setLoading(true);
+      setLoaded(false);
       nativeAdRef.current?.loadAd();
     }
     return () => {
