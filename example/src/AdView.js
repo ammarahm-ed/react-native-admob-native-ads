@@ -22,6 +22,24 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
   const onAdFailedToLoad = (event) => {
     setError(true);
     setLoading(false);
+    /**
+     * Sometimes when you try to load an Ad, it will keep failing
+     * and you will recieve this error: "The ad request was successful,
+     * but no ad was returned due to lack of ad inventory."
+     *
+     * This error is not a bug or issue with our Library.
+     * Just remove the app from your phone & clean your build
+     * folders by running ./gradlew clean in /android folder
+     * and for iOS clean the project. Hopefully the error will
+     * be gone.
+     *
+     * [iOS] If you get this error: "Cannot find an ad network adapter with
+     * the name(s): com.google.DummyAdapter". The ad inventory is empty in your
+     * location. Try using a vpn to get ads in a different location.
+     *
+     * If you have recently created AdMob IDs for your ads, it might take
+     * a few days until the ads will start showing.
+     */
     Logger('AD', 'FAILED', event.error.message);
   };
 
@@ -99,7 +117,6 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
       onAdClicked={onAdClicked}
       onAdImpression={onAdImpression}
       onUnifiedNativeAdLoaded={onUnifiedNativeAdLoaded}
-      
       style={{
         width: '98%',
         alignSelf: 'center',
