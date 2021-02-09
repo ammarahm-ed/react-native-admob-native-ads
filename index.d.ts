@@ -185,12 +185,12 @@ type NativeAdViewProps = {
     neighboringContentUrls?: Array<string>
   };
   testDevices?: Array<string>;
-  onAdOpened?: Function<void>;
-  onAdClosed?: Function<void>;
-  onAdLeftApplication?: Function<void>;
-  onAdImpression?: Function<void>;
-  onAdClicked?: Function<void>;
-  onAdLoaded?: Function<void>;
+  onAdOpened?: () => void;
+  onAdClosed?: () => void;
+  onAdLeftApplication?: () => void;
+  onAdImpression?: () => void;
+  onAdClicked?: () => void;
+  onAdLoaded?: () => void;
   onUnifiedNativeAdLoaded?: (event: NativeAd) => {};
   onAdFailedToLoad?: (error: { message: string }) => {};
 };
@@ -236,7 +236,7 @@ declare module "react-native-admob-native-ads" {
    *
    */
 
-  export const AdManager = {
+  export const AdManager: {
 
     /**
     * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
@@ -265,7 +265,7 @@ declare module "react-native-admob-native-ads" {
     *
     */
 
-    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => { },
+    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => {},
 
     /**
      * Check if the current device is registered as a test device to show test ads.
@@ -275,7 +275,7 @@ declare module "react-native-admob-native-ads" {
   ```
   return: `boolean`
      */
-    isTestDevice: async () => { },
+    isTestDevice: () => Promise<boolean>,
   }
 
 
@@ -331,14 +331,14 @@ declare module "react-native-admob-native-ads" {
    */
   export function NativeMediaView(props: {
     style?: StyleProp<ViewStyle>,
-    onVideoStart?: Function<void>,
-    onVideoEnd?: Function<void>,
-    onVideoPause?: Function<void>,
-    onVideoPlay?: Function<void>,
-    onVideoProgress?: ({ duration: string, currentTime: string }) => {},
+    onVideoStart?: () => void,
+    onVideoEnd?: () => void,
+    onVideoPause?: () => void,
+    onVideoPlay?: () => void,
+    onVideoProgress?: (progress: { duration: string, currentTime: string }) => {},
     onVideoMute?: (muted: boolean) => {},
-    paused: boolean,
-    muted: boolean
+    paused?: boolean,
+    muted?: boolean
 
   }): JSX.Element;
 
