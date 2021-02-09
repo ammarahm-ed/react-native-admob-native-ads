@@ -1,15 +1,15 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Platform, View, Dimensions} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Platform, View } from 'react-native';
 import NativeAdView, {
   AdvertiserView,
   CallToActionView,
   HeadlineView,
   IconView,
   StarRatingView,
-  TaglineView,
-  StoreView,
+
+  StoreView, TaglineView
 } from 'react-native-admob-native-ads';
-import {MediaView} from './MediaView';
+import { MediaView } from './MediaView';
 
 const NATIVE_AD_ID =
   Platform.OS === 'ios'
@@ -23,10 +23,9 @@ const NATIVE_AD_VIDEO_ID =
 
 export const AdView = ({media, type, delay = 0}) => {
   const [aspectRatio, setAspectRatio] = useState(1);
-  const [adLoaded, setAdLoaded] = useState(false);
   const nativeAdRef = useRef();
   const _onAdFailedToLoad = (event) => {
-    setAdLoaded(false);
+    console.log(event.nativeEvent);
   };
 
   const _onAdLoaded = () => {
@@ -43,7 +42,6 @@ export const AdView = ({media, type, delay = 0}) => {
 
   const _onUnifiedNativeAdLoaded = (event) => {
     console.log('Views have populated with the Ad', event);
-    setAdLoaded(true);
     setAspectRatio(event.aspectRatio);
   };
 
@@ -66,7 +64,6 @@ export const AdView = ({media, type, delay = 0}) => {
       style={{
         width: '98%',
         alignSelf: 'center',
-        marginVertical: 10,
       }}
       adUnitID={type === 'image' ? NATIVE_AD_ID : NATIVE_AD_VIDEO_ID} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
     >
@@ -157,7 +154,7 @@ export const AdView = ({media, type, delay = 0}) => {
           />
         </View>
 
-        {media ? <MediaView /> : null}
+        {media ? <MediaView aspectRatio={aspectRatio} /> : null}
       </View>
     </NativeAdView>
   );
