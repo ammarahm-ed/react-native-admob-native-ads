@@ -165,7 +165,7 @@ export class NativeAdView extends Component {
 
 NativeAdView.defaultProps = {
   mediaAspectRatio: "any",
-  adChoicesPlacement: 1,
+  adChoicesPlacement: "topRight",
   requestNonPersonalizedAdsOnly: false,
   videoOptions: {
     muted: false,
