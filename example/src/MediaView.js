@@ -4,10 +4,11 @@ import {NativeMediaView} from 'react-native-admob-native-ads';
 import {Logger} from './utils';
 
 export const MediaView = ({aspectRatio = 1.5}) => {
-  
+
   const onVideoPlay = () => {
     Logger('VIDEO', 'PLAY', 'Video is now playing');
   };
+  
   const onVideoPause = () => {
     Logger('VIDEO', 'PAUSED', 'Video is now paused');
   };

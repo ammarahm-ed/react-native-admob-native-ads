@@ -13,7 +13,7 @@ import {MediaView} from './MediaView';
 import {adUnitIDs, Events, Logger} from './utils';
 
 export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
-  const [aspectRatio, setAspectRatio] = useState(1);
+  const [aspectRatio, setAspectRatio] = useState(1.5);
   const [loading, setLoading] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
@@ -59,6 +59,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
     Logger('AD', 'RECIEVED', 'Ad impression recorded', event);
     setLoading(false);
     setLoaded(true);
+    setError(false);
     setAspectRatio(event.aspectRatio);
   };
 
@@ -81,7 +82,8 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
          * already, we will load the ad.
          */
         setLoading(true);
-        setLoaded(false)
+        setLoaded(false);
+        setError(false);
         Logger('AD', 'IN VIEW', 'Loading ' + index);
         nativeAdRef.current?.loadAd();
       } else {
@@ -127,6 +129,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
     if (loadOnMount) {
       setLoading(true);
       setLoaded(false);
+      setError(false)
       nativeAdRef.current?.loadAd();
     }
     return () => {
@@ -157,14 +160,15 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
         <View
           style={{
             width: '100%',
-            height: 100,
+            height: "100%",
             backgroundColor: '#f0f0f0',
             position: 'absolute',
             justifyContent: 'center',
             alignItems: 'center',
             opacity: !loading && !error && loaded ? 0 : 1,
+            zIndex:!loading && !error && loaded ? 0 : 10
           }}>
-          {loading && <ActivityIndicator size={16} color="#a9a9a9" />}
+          {loading && <ActivityIndicator size={28} color="#a9a9a9" />}
           {error && <Text style={{color: '#a9a9a9'}}>:-(</Text>}
         </View>
 
