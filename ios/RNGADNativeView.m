@@ -25,9 +25,22 @@ NSString *adUnitId;
 NSNumber *refreshingInterval;
 NSNumber *delay;
 NSNumber *adChoicesPlace;
+
 NSNumber *mediaViewId;
+NSNumber *iconViewId;
+NSNumber *imageViewId;
+NSNumber *callToActionViewId;
+NSNumber *headlineViewId;
+NSNumber *priceViewId;
+NSNumber *starViewId;
+NSNumber *advertiserViewId;
+NSNumber *taglineViewId;
+NSNumber *storeViewId;
+
 dispatch_block_t block;
 RNGADMediaView *rnMediaView;
+GADMediaView *mediaView;
+BOOL isLoading = FALSE;
 
 GADNativeAdViewAdOptions *adPlacementOptions;
 GADNativeAdMediaAdLoaderOptions *adMediaOptions;
@@ -209,6 +222,9 @@ BOOL *nonPersonalizedAds;
 
 - (void)setHeadline:(NSNumber *)headline {
     
+    if (headlineViewId == headline) return;
+    headlineViewId = headline;
+    
     dispatch_async(RCTGetUIManagerQueue(),^{
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
@@ -228,6 +244,9 @@ BOOL *nonPersonalizedAds;
 }
 
 - (void)setIcon:(NSNumber *)icon {
+    
+    if (iconViewId == icon) return;
+    iconViewId = icon;
     
     dispatch_async(RCTGetUIManagerQueue(),^{
         
@@ -250,6 +269,10 @@ BOOL *nonPersonalizedAds;
 
 - (void)setImage:(NSNumber *)image {
     
+    if (imageViewId == image) return;
+    imageViewId = image;
+    
+    
     dispatch_async(RCTGetUIManagerQueue(),^{
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
@@ -269,15 +292,28 @@ BOOL *nonPersonalizedAds;
 
 - (void)setMediaview:(NSNumber *)mediaview
 {
+    if (mediaViewId == mediaview) {
+        return;
+    }
     mediaViewId = mediaview;
     
     dispatch_async(RCTGetUIManagerQueue(),^{
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
             
-            GADMediaView *mediaView = (GADMediaView *) viewRegistry[mediaview];
-            rnMediaView = (RNGADMediaView *) viewRegistry[mediaview];
+            mediaView = (GADMediaView *) viewRegistry[mediaview];
             
+            if (mediaView != nil) {
+                [self setMediaView:mediaView];
+                if (self.nativeAd != nil) {
+                    [self reloadAdInView:self.nativeAd isMedia:YES];
+                }
+            }
+           
+        }];
+        
+        [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+            rnMediaView = (RNGADMediaView *) viewRegistry[mediaview];
             if (rnMediaView != nil) {
                         if (self.nativeAd.mediaContent.videoController != nil) {
                             self.nativeAd.mediaContent.videoController.delegate = rnMediaView.self;
@@ -285,20 +321,14 @@ BOOL *nonPersonalizedAds;
                             [rnMediaView setNativeAd:self.nativeAd];
                         }
             }
-            
-            if (mediaView != nil) {
-                [self setMediaView:mediaView];
-            
-                if (self.nativeAd != nil) {
-                    [self reloadAdInView:self.nativeAd isMedia:YES];
-                }
-            }
         }];
     });
 }
 
 - (void)setTagline:(NSNumber *)tagline
 {
+    if (taglineViewId == tagline) return;
+    taglineViewId = tagline;
     
     dispatch_async(RCTGetUIManagerQueue(),^{
         
@@ -319,6 +349,10 @@ BOOL *nonPersonalizedAds;
 
 - (void)setAdvertiser:(NSNumber *)advertiser
 {
+    
+    if (taglineViewId == advertiser) return;
+    taglineViewId = advertiser;
+    
     dispatch_async(RCTGetUIManagerQueue(),^{
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
@@ -337,6 +371,9 @@ BOOL *nonPersonalizedAds;
 }
 - (void)setPrice:(NSNumber *)price
 {
+    if (priceViewId == price) return;
+    priceViewId = price;
+    
     
     dispatch_async(RCTGetUIManagerQueue(),^{
         
@@ -357,6 +394,9 @@ BOOL *nonPersonalizedAds;
 
 - (void)setStore:(NSNumber *)store
 {
+    if (storeViewId == store) return;
+    storeViewId = store;
+    
     
     dispatch_async(RCTGetUIManagerQueue(),^{
         
@@ -376,6 +416,9 @@ BOOL *nonPersonalizedAds;
 
 - (void)setStarrating:(NSNumber *)starrating
 {
+    if (starViewId == starrating) return;
+    starViewId = starrating;
+    
     
     dispatch_async(RCTGetUIManagerQueue(),^{
         
@@ -397,6 +440,8 @@ BOOL *nonPersonalizedAds;
 
 - (void)setCallToAction:(NSNumber *)callToAction
 {
+    if (callToActionViewId == callToAction) return;
+    callToActionViewId = callToAction;
     
     
     dispatch_async(RCTGetUIManagerQueue(),^{
@@ -421,7 +466,8 @@ BOOL *nonPersonalizedAds;
 
 - (void)loadAd
 {
-    
+    if (isLoading == TRUE) return;
+    isLoading = TRUE;
     UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
     UIViewController *rootViewController = [keyWindow rootViewController];
     self.adLoader = [[GADAdLoader alloc] initWithAdUnitID:adUnitId
@@ -436,18 +482,20 @@ BOOL *nonPersonalizedAds;
 }
 
 - (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(NSError *)error {
+    isLoading = FALSE;
     if (self.onAdFailedToLoad) {
         self.onAdFailedToLoad(@{ @"error": @{ @"message": [error localizedDescription] } });
     }
 }
 
+- (void)adLoaderDidFinishLoading:(GADAdLoader *)adLoader {
+    isLoading = FALSE;
+}
+
 
 - (void)adLoader:(GADAdLoader *)adLoader didReceiveNativeAd:(GADNativeAd *)nativeAd {
-    
-    
-    dispatch_after((int64_t)((delay.intValue/1000) * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void){
-        
-        if (self.onAdLoaded) {
+    isLoading = FALSE;
+    if (self.onAdLoaded) {
             self.onAdLoaded(@{});
         }
         
@@ -532,7 +580,6 @@ BOOL *nonPersonalizedAds;
              
         }
      
-    });
 }
 
 
