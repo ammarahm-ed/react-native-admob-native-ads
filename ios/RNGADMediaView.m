@@ -13,46 +13,27 @@
 #import <React/RCTImageView.h>
 @import GoogleMobileAds;
 
-@implementation RNGADMediaView
-
-GADVideoController *videoController;
-GADNativeAd *nativeAd;
+@implementation RNGADMediaView : GADMediaView
 
 - (void)setPause:(BOOL *)pause {
     if (pause) {
-        
-        if (videoController) {
-            [videoController pause];
+        if (self.mediaContent.videoController) {
+            [self.mediaContent.videoController pause];
         }
     } else {
-        if (videoController) {
-            [videoController play];
+        if (self.mediaContent.videoController) {
+            [self.mediaContent.videoController play];
         }
     }
 }
 
+
+
 - (void)setMuted:(BOOL *)muted {
-    if (videoController) {
-        [videoController setMute:muted? true : false];
-       
-    }
-
-}
-
-
-
-- (void)setVideoController:( GADVideoController * _Nullable)vc {
-    if (vc != nil) {
-        videoController = vc;
+    if (self.mediaContent.videoController) {
+        [self.mediaContent.videoController setMute:muted? true : false];
     }
     
-}
-
-- (void)setNativeAd:(GADNativeAd * _Nullable)ad {
-    if (ad != nil) {
-        nativeAd = ad;
-    }
-  
 }
 
 - (void)videoControllerDidPlayVideo:(GADVideoController *)videoController {
@@ -89,14 +70,12 @@ GADNativeAd *nativeAd;
 - (void)getCurrentProgress
 {
     if (self.onVideoProgress) {
-        if (nativeAd != nil && nativeAd.mediaContent.hasVideoContent && nativeAd.mediaContent.duration > 0  ) {
-            
+        if (self.mediaContent != nil && self.mediaContent.hasVideoContent && self.mediaContent.duration > 0  ) {
             self.onVideoProgress(@{
-                @"duration":[NSString stringWithFormat: @"%f", nativeAd.mediaContent.duration],
-                @"currentTime":[NSString stringWithFormat: @"%f", nativeAd.mediaContent.currentTime]
-         });
+                @"duration":[NSString stringWithFormat: @"%f", self.mediaContent.duration],
+                @"currentTime":[NSString stringWithFormat: @"%f", self.mediaContent.currentTime]
+                                 });
         }
-    
     }
 }
 

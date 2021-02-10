@@ -17,8 +17,6 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onVideoEnd;
 @property (nonatomic, copy) RCTBubblingEventBlock onVideoProgress;
 
-- (void)setVideoController:( GADVideoController * _Nullable)vc;
-- (void)setNativeAd:(GADNativeAd * _Nullable)ad;
 - (void)getCurrentProgress;
 
 @end

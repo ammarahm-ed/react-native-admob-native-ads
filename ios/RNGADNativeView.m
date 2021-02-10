@@ -17,7 +17,7 @@
 @import FacebookAdapter;
 
 @implementation RNGADNativeView : GADNativeAdView
- 
+
 RCTBridge *bridge;
 
 
@@ -106,15 +106,15 @@ BOOL *nonPersonalizedAds;
     }
     
     if ([allKeys containsObject:@"neighboringContentUrls"]) {
-      // Do Nothing
+        // Do Nothing
     }
     
 }
 
 - (void)setVideoOptions:(NSDictionary *)videoOptions {
-        
+    
     NSArray *allKeys = [videoOptions allKeys];
-
+    
     if ([allKeys containsObject:@"muted"]) {
         [adVideoOptions setStartMuted:(BOOL)[videoOptions valueForKey:@"muted"]];
     }
@@ -202,7 +202,7 @@ BOOL *nonPersonalizedAds;
     if (block != nil) {
         dispatch_block_cancel(block);
     }
-   
+    
     block = dispatch_block_create(DISPATCH_BLOCK_NO_QOS_CLASS, ^{
         if (nativeAd != nil) {
             [self setNativeAd:nativeAd];
@@ -211,13 +211,13 @@ BOOL *nonPersonalizedAds;
                 UIImageView *imageV = (UIImageView *) self.iconView;
                 [imageV setImage:nativeAd.icon.image];
             }
-        
+            
         }
     });
     dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC);
     dispatch_after(time, dispatch_get_main_queue(),block);
     
-   
+    
 }
 
 - (void)setHeadline:(NSNumber *)headline {
@@ -259,7 +259,7 @@ BOOL *nonPersonalizedAds;
                 if (self.nativeAd != nil) {
                     [self reloadAdInView:self.nativeAd isMedia:NO];
                 }
-               
+                
             }
         }];
     });
@@ -309,17 +309,16 @@ BOOL *nonPersonalizedAds;
                     [self reloadAdInView:self.nativeAd isMedia:YES];
                 }
             }
-           
+            
         }];
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
             rnMediaView = (RNGADMediaView *) viewRegistry[mediaview];
             if (rnMediaView != nil) {
-                        if (self.nativeAd.mediaContent.videoController != nil) {
-                            self.nativeAd.mediaContent.videoController.delegate = rnMediaView.self;
-                            [rnMediaView setVideoController:self.nativeAd.mediaContent.videoController];
-                            [rnMediaView setNativeAd:self.nativeAd];
-                        }
+                if (self.nativeAd.mediaContent.videoController != nil) {
+                    self.nativeAd.mediaContent.videoController.delegate = rnMediaView.self;
+                    
+                }
             }
         }];
     });
@@ -471,12 +470,12 @@ BOOL *nonPersonalizedAds;
     UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
     UIViewController *rootViewController = [keyWindow rootViewController];
     self.adLoader = [[GADAdLoader alloc] initWithAdUnitID:adUnitId
-               rootViewController:rootViewController
-               adTypes:@[ kGADAdLoaderAdTypeNative ]
-            options:@[adMediaOptions,adPlacementOptions,adVideoOptions]];
-
+                                       rootViewController:rootViewController
+                                                  adTypes:@[ kGADAdLoaderAdTypeNative ]
+                                                  options:@[adMediaOptions,adPlacementOptions,adVideoOptions]];
+    
     self.adLoader.delegate = self;
-   
+    
     [self.adLoader loadRequest:adRequest];
     
 }
@@ -496,90 +495,95 @@ BOOL *nonPersonalizedAds;
 - (void)adLoader:(GADAdLoader *)adLoader didReceiveNativeAd:(GADNativeAd *)nativeAd {
     isLoading = FALSE;
     if (self.onAdLoaded) {
-            self.onAdLoaded(@{});
+        self.onAdLoaded(@{});
+    }
+    
+    nativeAd.delegate = self;
+    
+    if (mediaView != nil) {
+        [self setMediaView:mediaView];
+    }
+    
+    if (rnMediaView != nil) {
+        if (nativeAd.mediaContent.videoController != nil) {
+            nativeAd.mediaContent.videoController.delegate = rnMediaView.self;
+            
+        }
+    }
+    
+    
+    [self setNativeAd:nativeAd];
+    
+    if (nativeAd != NULL) {
+        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+        
+        [dic setValue:nativeAd.headline forKey:@"headline"];
+        [dic setValue:nativeAd.body forKey:@"tagline"];
+        [dic setValue:nativeAd.advertiser forKey:@"advertiser"];
+        
+        [dic setValue:nativeAd.callToAction forKey:@"callToAction"];
+        
+        
+        if (nativeAd.store != nil) {
+            [dic setValue:nativeAd.store forKey:@"store"];
         }
         
-        nativeAd.delegate = self;
-        [self setNativeAd:nativeAd];
+        if (nativeAd.price != nil) {
+            [dic setValue:nativeAd.price forKey:@"price"];
+        }
+        
+        if (nativeAd.starRating != nil) {
+            [dic setValue:nativeAd.starRating forKey:@"rating"];
+        }
+        
+        if (nativeAd.mediaContent.hasVideoContent) {
+            [dic setValue:@YES forKey:@"video"];
+        } else {
+            [dic setValue:@NO forKey:@"video"];
+        }
+        NSString *aspectRatio = @(nativeAd.mediaContent.aspectRatio).stringValue;
+        
+        [dic setValue:aspectRatio forKey:@"aspectRatio"];
+        NSMutableArray *images = [NSMutableArray array];
+        
+        for (int i=0;i < nativeAd.images.count;i++) {
+            NSMutableDictionary *imageDic = [NSMutableDictionary dictionary];
+            GADNativeAdImage *image = [nativeAd.images objectAtIndex:i];
+            NSString *url = [image.imageURL absoluteString];
+            [imageDic setValue:url forKey:@"url"];
+            NSInteger val = @(image.image.size.width).integerValue;
+            [imageDic setValue: [NSNumber numberWithInteger:val]  forKey:@"width"];
+            NSInteger val2 = @(image.image.size.height).integerValue;
+            [imageDic setValue: [NSNumber numberWithInteger:val2] forKey:@"height"];
+            [images addObject:imageDic];
+        }
+        
+        [dic setObject:images forKey:@"images"];
+        
+        if (nativeAd.icon != nil) {
+            if (nativeAd.icon.imageURL != nil) {
                 
-        if (rnMediaView != nil) {
-                    if (self.nativeAd.mediaContent.videoController != nil) {
-                        self.nativeAd.mediaContent.videoController.delegate = rnMediaView.self;
-                        [rnMediaView setVideoController:self.nativeAd.mediaContent.videoController];
-                        [rnMediaView setNativeAd:self.nativeAd];
-                    }
-        }
-        
-         if (nativeAd != NULL) {
-            NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-            
-            [dic setValue:nativeAd.headline forKey:@"headline"];
-            [dic setValue:nativeAd.body forKey:@"tagline"];
-            [dic setValue:nativeAd.advertiser forKey:@"advertiser"];
-         
-            [dic setValue:nativeAd.callToAction forKey:@"callToAction"];
-            
-            
-            if (nativeAd.store != nil) {
-                [dic setValue:nativeAd.store forKey:@"store"];
-            }
-            
-            if (nativeAd.price != nil) {
-             [dic setValue:nativeAd.price forKey:@"price"];
-            }
-            
-            if (nativeAd.starRating != nil) {
-                [dic setValue:nativeAd.starRating forKey:@"rating"];
-            }
-            
-            if (nativeAd.mediaContent.hasVideoContent) {
-                [dic setValue:@YES forKey:@"video"];
+                UIImageView *imageV = (UIImageView *) self.iconView;
+                [imageV setImage:nativeAd.icon.image];
+                
+                [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
             } else {
-                [dic setValue:@NO forKey:@"video"];
-            }
-            NSString *aspectRatio = @(nativeAd.mediaContent.aspectRatio).stringValue;
-            
-            [dic setValue:aspectRatio forKey:@"aspectRatio"];
-            NSMutableArray *images = [NSMutableArray array];
-            
-            for (int i=0;i < nativeAd.images.count;i++) {
-                NSMutableDictionary *imageDic = [NSMutableDictionary dictionary];
-                GADNativeAdImage *image = [nativeAd.images objectAtIndex:i];
-                NSString *url = [image.imageURL absoluteString];
-                [imageDic setValue:url forKey:@"url"];
-                NSInteger val = @(image.image.size.width).integerValue;
-                [imageDic setValue: [NSNumber numberWithInteger:val]  forKey:@"width"];
-                NSInteger val2 = @(image.image.size.height).integerValue;
-                [imageDic setValue: [NSNumber numberWithInteger:val2] forKey:@"height"];
-                [images addObject:imageDic];
-            }
-            
-            [dic setObject:images forKey:@"images"];
-            
-            if (nativeAd.icon != nil) {
-                if (nativeAd.icon.imageURL != nil) {
-                    
+                if (nativeAd.icon.image != nil) {
                     UIImageView *imageV = (UIImageView *) self.iconView;
                     [imageV setImage:nativeAd.icon.image];
-                    
-                    [dic setValue:[nativeAd.icon.imageURL absoluteString] forKey:@"icon"];
-                } else {
-                    if (nativeAd.icon.image != nil) {
-                        UIImageView *imageV = (UIImageView *) self.iconView;
-                        [imageV setImage:nativeAd.icon.image];
-                    }
-                    [dic setValue:@"empty" forKey:@"icon"];
                 }
-                    
-            } else {
-                [dic setValue:@"noicon" forKey:@"icon"];
-            
+                [dic setValue:@"empty" forKey:@"icon"];
             }
-             
-          self.onUnifiedNativeAdLoaded(dic);
-             
+            
+        } else {
+            [dic setValue:@"noicon" forKey:@"icon"];
+            
         }
-     
+        
+        self.onUnifiedNativeAdLoaded(dic);
+        
+    }
+    
 }
 
 
