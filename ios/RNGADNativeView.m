@@ -344,8 +344,8 @@ BOOL *nonPersonalizedAds;
 - (void)setAdvertiser:(NSNumber *)advertiser
 {
     
-    if (taglineViewId == advertiser) return;
-    taglineViewId = advertiser;
+    if (advertiserViewId == advertiser) return;
+    advertiserViewId = advertiser;
     
     dispatch_async(RCTGetUIManagerQueue(),^{
         
@@ -619,3 +619,7 @@ BOOL *nonPersonalizedAds;
 }
 
 @end
+
+
+
+
