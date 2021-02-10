@@ -4,7 +4,7 @@
 
 @import GoogleMobileAds;
 
-@interface RNGADMediaView: GADMediaView <GADVideoControllerDelegate>
+@interface RNGADMediaView: UIView <GADVideoControllerDelegate>
 
 
 @property (nonatomic) BOOL *pause;
