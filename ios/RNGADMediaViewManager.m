@@ -1,10 +1,3 @@
-//
-//  RCTViewManager+RNGADMediaViewManager.m
-//  DoubleConversion
-//
-//  Created by Ammar Ahmed on 1/29/1399 AP.
-//
-
 #import "RCTViewManager.h"
 
 #if __has_include(<React/RCTBridge.h>)
@@ -26,7 +19,7 @@
 
 RCT_EXPORT_MODULE(RNGADMediaView);
 
--(GADMediaView *)view
+-(UIView *)view
 {
 
  return [[RNGADMediaView alloc] init];

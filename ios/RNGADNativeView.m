@@ -299,22 +299,17 @@ BOOL *nonPersonalizedAds;
     
     dispatch_async(RCTGetUIManagerQueue(),^{
         
+        
+        
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-            
-            mediaView = (GADMediaView *) viewRegistry[mediaview];
-            
-            if (mediaView != nil) {
+            rnMediaView = (RNGADMediaView *) viewRegistry[mediaview];
+    
+            if (rnMediaView != nil) {
+                mediaView = (GADMediaView *) rnMediaView.subviews.firstObject;
                 [self setMediaView:mediaView];
                 if (self.nativeAd != nil) {
                     [self reloadAdInView:self.nativeAd isMedia:YES];
                 }
-            }
-            
-        }];
-        
-        [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-            rnMediaView = (RNGADMediaView *) viewRegistry[mediaview];
-            if (rnMediaView != nil) {
                 if (self.nativeAd.mediaContent.videoController != nil) {
                     self.nativeAd.mediaContent.videoController.delegate = rnMediaView.self;
                     
@@ -624,7 +619,3 @@ BOOL *nonPersonalizedAds;
 }
 
 @end
-
-
-
-

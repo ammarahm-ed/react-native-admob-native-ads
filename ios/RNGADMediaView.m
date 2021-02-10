@@ -1,82 +1,22 @@
-#import "RNGADMediaView.h"
-#import "RNNativeAdMobUtils.h"
-#import <React/RCTRootView.h>
-#import <React/RCTRootViewDelegate.h>
-#import <React/RCTViewManager.h>
-#import <React/RCTUtils.h>
-#import <React/RCTAssert.h>
+#import <React/RCTView.h>
 #import <React/RCTBridge.h>
-#import <React/RCTConvert.h>
-#import <React/RCTUIManager.h>
-#import <React/RCTBridgeModule.h>
-#import "RCTUIManagerUtils.h"
-#import <React/RCTImageView.h>
+#import <React/RCTComponent.h>
+
 @import GoogleMobileAds;
 
-@implementation RNGADMediaView : GADMediaView
-
-- (void)setPause:(BOOL *)pause {
-    if (pause) {
-        if (self.mediaContent.videoController) {
-            [self.mediaContent.videoController pause];
-        }
-    } else {
-        if (self.mediaContent.videoController) {
-            [self.mediaContent.videoController play];
-        }
-    }
-}
+@interface RNGADMediaView: UIView <GADVideoControllerDelegate>
 
 
+@property (nonatomic) BOOL *pause;
+@property (nonatomic) BOOL *muted;
 
-- (void)setMuted:(BOOL *)muted {
-    if (self.mediaContent.videoController) {
-        [self.mediaContent.videoController setMute:muted? true : false];
-    }
-    
-}
+@property (nonatomic, copy) RCTBubblingEventBlock onVideoPlay;
+@property (nonatomic, copy) RCTBubblingEventBlock onVideoPause;
+@property (nonatomic, copy) RCTBubblingEventBlock onVideoMute;
+@property (nonatomic, copy) RCTBubblingEventBlock onVideoStart;
+@property (nonatomic, copy) RCTBubblingEventBlock onVideoEnd;
+@property (nonatomic, copy) RCTBubblingEventBlock onVideoProgress;
 
-- (void)videoControllerDidPlayVideo:(GADVideoController *)videoController {
-    if (self.onVideoPlay) {
-        self.onVideoPlay(@{});
-    }
-}
-
-
-- (void)videoControllerDidPauseVideo:(GADVideoController *)videoController {
-    if (self.onVideoPause) {
-        self.onVideoPause(@{});
-    }
-}
-
-- (void)videoControllerDidMuteVideo:(GADVideoController *)videoController {
-    if (self.onVideoMute) {
-        self.onVideoMute(@{@"muted":@YES});
-    }
-}
-
-- (void)videoControllerDidUnmuteVideo:(GADVideoController *)videoController {
-    if (self.onVideoMute) {
-        self.onVideoMute(@{@"muted":@NO});
-    }
-}
-
-- (void)videoControllerDidEndVideoPlayback:(GADVideoController *)videoController {
-    if (self.onVideoEnd) {
-        self.onVideoEnd(@{});
-    }
-}
-
-- (void)getCurrentProgress
-{
-    if (self.onVideoProgress) {
-        if (self.mediaContent != nil && self.mediaContent.hasVideoContent && self.mediaContent.duration > 0  ) {
-            self.onVideoProgress(@{
-                @"duration":[NSString stringWithFormat: @"%f", self.mediaContent.duration],
-                @"currentTime":[NSString stringWithFormat: @"%f", self.mediaContent.currentTime]
-                                 });
-        }
-    }
-}
+- (void)getCurrentProgress;
 
 @end
