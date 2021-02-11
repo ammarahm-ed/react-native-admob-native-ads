@@ -39,7 +39,6 @@ NSNumber *storeViewId;
 
 dispatch_block_t block;
 RNGADMediaView *rnMediaView;
-GADMediaView *mediaView;
 BOOL isLoading = FALSE;
 
 GADNativeAdViewAdOptions *adPlacementOptions;
@@ -232,7 +231,6 @@ BOOL *nonPersonalizedAds;
             UIView *headlineView = viewRegistry[headline];
             
             if (headlineView != nil) {
-                headlineView.userInteractionEnabled = NO;
                 [self setHeadlineView:headlineView];
                 if (self.nativeAd != nil) {
                     [self reloadAdInView:self.nativeAd isMedia:NO];
@@ -254,7 +252,6 @@ BOOL *nonPersonalizedAds;
             
             UIImageView *iconView = (UIImageView *) viewRegistry[icon];
             if (iconView != nil) {
-                iconView.userInteractionEnabled = NO;
                 [self setIconView:iconView];
                 if (self.nativeAd != nil) {
                     [self reloadAdInView:self.nativeAd isMedia:NO];
@@ -269,9 +266,7 @@ BOOL *nonPersonalizedAds;
 
 - (void)setImage:(NSNumber *)image {
     
-    if (imageViewId == image) return;
     imageViewId = image;
-    
     
     dispatch_async(RCTGetUIManagerQueue(),^{
         
@@ -279,7 +274,6 @@ BOOL *nonPersonalizedAds;
             
             UIImageView *imageView = (UIImageView *) viewRegistry[image];
             if (imageView != nil) {
-                imageView.userInteractionEnabled = NO;
                 [self setImageView:imageView];
                 if (self.nativeAd != nil) {
                     [self reloadAdInView:self.nativeAd isMedia:NO];
@@ -292,22 +286,17 @@ BOOL *nonPersonalizedAds;
 
 - (void)setMediaview:(NSNumber *)mediaview
 {
-    if (mediaViewId == mediaview) {
-        return;
-    }
     mediaViewId = mediaview;
     
     dispatch_async(RCTGetUIManagerQueue(),^{
-        
-        
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
             rnMediaView = (RNGADMediaView *) viewRegistry[mediaview];
     
             if (rnMediaView != nil) {
-                mediaView = (GADMediaView *) rnMediaView.subviews.firstObject;
-                [self setMediaView:mediaView];
+                [self setMediaView:(GADMediaView *) rnMediaView.subviews.firstObject];
                 if (self.nativeAd != nil) {
+                    [self.mediaView setMediaContent:self.nativeAd.mediaContent];
                     [self reloadAdInView:self.nativeAd isMedia:YES];
                 }
                 if (self.nativeAd.mediaContent.videoController != nil) {
@@ -321,7 +310,7 @@ BOOL *nonPersonalizedAds;
 
 - (void)setTagline:(NSNumber *)tagline
 {
-    if (taglineViewId == tagline) return;
+   
     taglineViewId = tagline;
     
     dispatch_async(RCTGetUIManagerQueue(),^{
@@ -330,7 +319,6 @@ BOOL *nonPersonalizedAds;
             
             UIView *taglineView = viewRegistry[tagline];
             if (taglineView != nil) {
-                taglineView.userInteractionEnabled = NO;
                 [self setPriceView:taglineView];
                 if (self.nativeAd != nil) {
                     [self reloadAdInView:self.nativeAd isMedia:NO];
@@ -344,7 +332,7 @@ BOOL *nonPersonalizedAds;
 - (void)setAdvertiser:(NSNumber *)advertiser
 {
     
-    if (advertiserViewId == advertiser) return;
+   
     advertiserViewId = advertiser;
     
     dispatch_async(RCTGetUIManagerQueue(),^{
@@ -353,7 +341,6 @@ BOOL *nonPersonalizedAds;
             
             UIView *advertiserView = viewRegistry[advertiser];
             if (advertiserView != nil) {
-                advertiserView.userInteractionEnabled = NO;
                 [self setAdvertiserView:advertiserView];
                 if (self.nativeAd != nil) {
                     [self reloadAdInView:self.nativeAd isMedia:NO];
@@ -365,7 +352,7 @@ BOOL *nonPersonalizedAds;
 }
 - (void)setPrice:(NSNumber *)price
 {
-    if (priceViewId == price) return;
+  
     priceViewId = price;
     
     
@@ -375,7 +362,6 @@ BOOL *nonPersonalizedAds;
             
             UIView *priceView = viewRegistry[price];
             if (priceView != nil) {
-                priceView.userInteractionEnabled = NO;
                 [self setPriceView:priceView];
                 if (self.nativeAd != nil) {
                     [self reloadAdInView:self.nativeAd isMedia:NO];
@@ -388,7 +374,7 @@ BOOL *nonPersonalizedAds;
 
 - (void)setStore:(NSNumber *)store
 {
-    if (storeViewId == store) return;
+    
     storeViewId = store;
     
     
@@ -398,7 +384,6 @@ BOOL *nonPersonalizedAds;
             
             UIView *storeView = viewRegistry[store];
             if (storeView != nil) {
-                storeView.userInteractionEnabled = NO;
                 [self setStoreView:storeView];
                 if (self.nativeAd != nil) {
                     [self reloadAdInView:self.nativeAd isMedia:NO];
@@ -410,7 +395,7 @@ BOOL *nonPersonalizedAds;
 
 - (void)setStarrating:(NSNumber *)starrating
 {
-    if (starViewId == starrating) return;
+  
     starViewId = starrating;
     
     
@@ -420,7 +405,6 @@ BOOL *nonPersonalizedAds;
             
             UIView *starratingView = viewRegistry[starrating];
             if (starratingView != nil) {
-                starratingView.userInteractionEnabled = NO;
                 [self setStarRatingView:starratingView];
                 if (self.nativeAd != nil) {
                     
@@ -434,18 +418,17 @@ BOOL *nonPersonalizedAds;
 
 - (void)setCallToAction:(NSNumber *)callToAction
 {
-    if (callToActionViewId == callToAction) return;
     callToActionViewId = callToAction;
-    
     
     dispatch_async(RCTGetUIManagerQueue(),^{
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
             
-            UIView *callToActionView = viewRegistry[callToAction];
-            
-            if (callToActionView != nil){
-                [self setCallToActionView:callToActionView];
+            UIView *cAv = viewRegistry[callToAction];
+            cAv.userInteractionEnabled = NO;
+            if (cAv != nil){
+                [self setCallToActionView:cAv];
+                self.callToActionView.userInteractionEnabled = NO;
                 if (self.nativeAd != nil) {
                     [self reloadAdInView:self.nativeAd isMedia:NO];
                 }
@@ -491,23 +474,23 @@ BOOL *nonPersonalizedAds;
     isLoading = FALSE;
     if (self.onAdLoaded) {
         self.onAdLoaded(@{});
+        
     }
     
     nativeAd.delegate = self;
     
-    if (mediaView != nil) {
-        [self setMediaView:mediaView];
-    }
-    
     if (rnMediaView != nil) {
+        [self setMediaView:rnMediaView.subviews.firstObject];
         if (nativeAd.mediaContent.videoController != nil) {
             nativeAd.mediaContent.videoController.delegate = rnMediaView.self;
-            
         }
     }
     
     
+    
+    
     [self setNativeAd:nativeAd];
+    [self.mediaView setMediaContent:nativeAd.mediaContent];
     
     if (nativeAd != NULL) {
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
