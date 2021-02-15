@@ -1,5 +1,6 @@
 #import "RNAdmobNativeAdsManager.h"
 #import "RNNativeAdMobUtils.h"
+
 @import GoogleMobileAds;
 
 @implementation RNAdmobNativeAdsManager
@@ -22,25 +23,25 @@ RCT_EXPORT_METHOD(setRequestConfiguration:(NSDictionary *)config)
             [[[GADMobileAds sharedInstance] requestConfiguration] setMaxAdContentRating:NULL];
         }
     };
-
+    
     if ([[config allKeys] containsObject:@"tagForChildDirectedTreatment"]) {
         NSNumber *tag = [config valueForKey:@"tagForChildDirectedTreatment"];
-		[[[GADMobileAds sharedInstance] requestConfiguration] tagForChildDirectedTreatment:tag.boolValue];
+        [[[GADMobileAds sharedInstance] requestConfiguration] tagForChildDirectedTreatment:tag.boolValue];
     };
-
+    
     if ([[config allKeys] containsObject:@"tagForUnderAgeConsent"]) {
         NSNumber *tagC = [config valueForKey:@"tagForUnderAgeConsent"];
-		[[[GADMobileAds sharedInstance] requestConfiguration] tagForUnderAgeOfConsent:tagC.boolValue];
+        [[[GADMobileAds sharedInstance] requestConfiguration] tagForUnderAgeOfConsent:tagC.boolValue];
     };
-
+    
     if ([[config allKeys] containsObject:@"testDeviceIds"]) {
-        NSArray *testDevices = RNAdMobProcessTestDevices([config valueForKey:@"testDeviceIds"], kGAMSimulatorID);
+        NSArray *testDevices = RNAdMobProcessTestDevices([config valueForKey:@"testDeviceIds"], kDFPSimulatorID);
         [[[GADMobileAds sharedInstance] requestConfiguration] setTestDeviceIdentifiers:testDevices];
     };
 }
 
 RCT_EXPORT_METHOD(isTestDevice:(RCTPromiseResolveBlock)resolve
-rejecter:(RCTPromiseRejectBlock)reject) {
+                  rejecter:(RCTPromiseRejectBlock)reject) {
     resolve(@TRUE);
 }
 
