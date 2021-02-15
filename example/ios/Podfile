@@ -8,7 +8,8 @@ target 'example' do
 
   use_react_native!(:path => config["reactNativePath"])
 
-  pod 'Google-Mobile-Ads-SDK'
+  pod 'Google-Mobile-Ads-SDK', '7.69.0'
+  pod 'GoogleMobileAdsMediationFacebook', '6.2.1.0'
 
   target 'exampleTests' do
     inherit! :complete
