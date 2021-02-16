@@ -12,12 +12,11 @@
 #import <React/RCTUIManagerUtils.h>
 #import <React/RCTImageView.h>
 #import "RNGADMediaView.h"
-#import <FacebookAdapter/FacebookAdapter.h>
 
 @import GoogleMobileAds;
+@import FacebookAdapter;
 
-
-@implementation RNGADNativeView : GADUnifiedNativeAdView
+@implementation RNGADNativeView : GADNativeAdView
 
 RCTBridge *bridge;
 
@@ -45,7 +44,7 @@ BOOL isLoading = FALSE;
 GADNativeAdViewAdOptions *adPlacementOptions;
 GADNativeAdMediaAdLoaderOptions *adMediaOptions;
 
-DFPRequest *adRequest;
+GAMRequest *adRequest;
 GADVideoOptions *adVideoOptions;
 
 BOOL *nonPersonalizedAds;
@@ -57,7 +56,7 @@ BOOL *nonPersonalizedAds;
     delay = @1;
     refreshingInterval = @60000;
     
-    adRequest = [DFPRequest request];
+    adRequest = [GAMRequest request];
     adPlacementOptions = [[GADNativeAdViewAdOptions alloc] init];
     adVideoOptions = [[GADVideoOptions alloc] init];
     adMediaOptions = [[GADNativeAdMediaAdLoaderOptions alloc] init];
@@ -76,12 +75,16 @@ BOOL *nonPersonalizedAds;
         /**
          The following code adds support for Native Banner for Facebook Mediation Ads.
          */
+        
         GADFBNetworkExtras * extras = [[GADFBNetworkExtras alloc] init];
+        
         if ([[mediationOptions valueForKey:@"nativeBanner"] isEqual:[NSNumber numberWithBool:NO]]) {
             extras.nativeAdFormat = GADFBAdFormatNative;
         } else {
             extras.nativeAdFormat = GADFBAdFormatNativeBanner;
         }
+       
+        
         [adRequest registerAdNetworkExtras:extras];
     }
     
@@ -202,7 +205,7 @@ BOOL *nonPersonalizedAds;
     adUnitId = adUnitID;
 }
 
-- (void) reloadAdInView:(GADUnifiedNativeAd *)nativeAd isMedia:(BOOL )media {
+- (void) reloadAdInView:(GADNativeAd *)nativeAd isMedia:(BOOL )media {
     if (block != nil) {
         dispatch_block_cancel(block);
     }
@@ -430,10 +433,8 @@ BOOL *nonPersonalizedAds;
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
             
             UIView *cAv = viewRegistry[callToAction];
-            cAv.userInteractionEnabled = NO;
             if (cAv != nil){
                 [self setCallToActionView:cAv];
-                self.callToActionView.userInteractionEnabled = NO;
                 if (self.nativeAd != nil) {
                     [self reloadAdInView:self.nativeAd isMedia:NO];
                 }
@@ -450,11 +451,10 @@ BOOL *nonPersonalizedAds;
 {
     if (isLoading == TRUE) return;
     isLoading = TRUE;
-    UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
-    UIViewController *rootViewController = [keyWindow rootViewController];
+    
     self.adLoader = [[GADAdLoader alloc] initWithAdUnitID:adUnitId
-                                       rootViewController:rootViewController
-                                                  adTypes:@[ kGADAdLoaderAdTypeUnifiedNative ]
+                                       rootViewController:self.reactViewController
+                                                  adTypes:@[ kGADAdLoaderAdTypeNative ]
                                                   options:@[adMediaOptions,adPlacementOptions,adVideoOptions]];
     
     self.adLoader.delegate = self;
@@ -463,7 +463,9 @@ BOOL *nonPersonalizedAds;
     
 }
 
-- (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(GADRequestError *)error {
+
+
+- (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(NSError *)error {
     isLoading = FALSE;
     if (self.onAdFailedToLoad) {
         self.onAdFailedToLoad(@{ @"error": @{ @"message": [error localizedDescription] } });
@@ -475,7 +477,8 @@ BOOL *nonPersonalizedAds;
 }
 
 
-- (void)adLoader:(GADAdLoader *)adLoader didReceiveUnifiedNativeAd:(GADUnifiedNativeAd *)nativeAd {
+
+- (void)adLoader:(GADAdLoader *)adLoader didReceiveNativeAd:(GADNativeAd *)nativeAd {
     isLoading = FALSE;
     if (self.onAdLoaded) {
         self.onAdLoaded(@{});
@@ -570,7 +573,7 @@ BOOL *nonPersonalizedAds;
 }
 
 
-- (void)nativeAdDidRecordImpression:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdDidRecordImpression:(nonnull GADNativeAd *)nativeAd
 {
     if (self.onAdImpression) {
         self.onAdImpression(@{});
@@ -578,28 +581,28 @@ BOOL *nonPersonalizedAds;
     }
 }
 
-- (void)nativeAdDidRecordClick:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdDidRecordClick:(nonnull GADNativeAd *)nativeAd
 {
     if (self.onAdClicked) {
         self.onAdClicked(@{});
     }
 }
 
-- (void)nativeAdWillPresentScreen:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdWillPresentScreen:(nonnull GADNativeAd *)nativeAd
 {
     if (self.onAdOpened) {
         self.onAdOpened(@{});
     }
 }
 
-- (void)nativeAdWillDismissScreen:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdWillDismissScreen:(nonnull GADNativeAd *)nativeAd
 {
     if (self.onAdClosed) {
         self.onAdClosed(@{});
     }
 }
 
-- (void)nativeAdWillLeaveApplication:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdWillLeaveApplication:(nonnull GADNativeAd *)nativeAd
 {
     if(self.onAdLeftApplication) {
         self.onAdLeftApplication(@{});
