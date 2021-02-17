@@ -29,7 +29,6 @@ public class RNAdmobButton extends AppCompatButton {
     public RNAdmobButton(ReactContext context) {
         super(context);
         requestLayout();
-        setText("CLICK ME");
     }
 
 

@@ -3,6 +3,7 @@ import {
   findNodeHandle,
   Platform,
   requireNativeComponent,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -29,13 +30,18 @@ const CallToActionView = ({
     _onLayout();
   }, [nativeAd, nativeAdView]);
 
+  const renderText = (
+    <Text allowFontScaling={allowFontScaling} style={textStyle}>
+      {nativeAd
+        ? allCaps
+          ? nativeAd.callToAction?.toUpperCase()
+          : nativeAd.callToAction
+        : null}
+    </Text>
+  );
+
   return (
-    <View
-      style={{
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <View style={styles.container}>
       <ButtonView
         style={style}
         activeOpacity={0.85}
@@ -45,38 +51,36 @@ const CallToActionView = ({
         ref={callToActionRef}
         onLayout={_onLayout}
       >
-        {Platform.OS !== "android" && (
-          <Text allowFontScaling={allowFontScaling} style={textStyle}>
-            {nativeAd
-              ? allCaps
-                ? nativeAd.callToAction?.toUpperCase()
-                : nativeAd.callToAction
-              : null}
-          </Text>
-        )}
+        {Platform.OS !== "android" && renderText}
       </ButtonView>
 
       {Platform.OS === "android" && (
         <View
-          style={{
-            position: "absolute",
-            zIndex: 10,
-            elevation: style.elevation ? style.elevation + 10 : 2,
-          }}
+          style={[
+            styles.textwrapper,
+            {
+              elevation: style.elevation ? style.elevation + 10 : 10,
+            },
+          ]}
           pointerEvents="none"
         >
-          <Text allowFontScaling={allowFontScaling} style={textStyle}>
-            {nativeAd
-              ? allCaps
-                ? nativeAd.callToAction?.toUpperCase()
-                : nativeAd.callToAction
-              : null}
-          </Text>
+          {renderText}
         </View>
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textwrapper: {
+    position: "absolute",
+    zIndex: 10,
+  },
+});
 
 const ButtonView =
   Platform.OS === "android"
