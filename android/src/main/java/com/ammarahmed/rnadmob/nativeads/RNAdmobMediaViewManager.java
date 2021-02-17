@@ -21,8 +21,8 @@ public class RNAdmobMediaViewManager extends ViewGroupManager<RNAdmobMediaView> 
     public static final String EVENT_ON_VIDEO_MUTE = "onVideoMute";
     public static final String EVENT_ON_VIDEO_PROGRESS = "onVideoProgress";
 
-    public static final String PROP_PAUSE = "muted";
-    public static final String PROP_MUTE = "pause";
+    public static final String PROP_PAUSE = "pause";
+    public static final String PROP_MUTE = "muted" ;
 
     public static final int COMMAND_GET_PROGRESS = 1;
 
