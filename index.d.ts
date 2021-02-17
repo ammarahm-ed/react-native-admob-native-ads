@@ -204,6 +204,22 @@ type NestedTextProps = {
   textStyle?: TextStyle;
   allCaps?: boolean;
   allowFontScaling?: boolean;
+  buttonAndroidStyle?: {
+    /**
+  * Only 6 digit hex colors are supported. Example: #f0f0f0
+  */
+    color: string,
+    /**
+* Only 6 digit hex colors are supported. Example: #f0f0f0
+*/
+    backgroundColor: string,
+    /**
+* Only 6 digit hex colors are supported. Example: #f0f0f0
+*/
+    borderColor: string,
+    borderWidth: number,
+    borderRadius: number
+  }
 };
 
 type StarViewProps = {
