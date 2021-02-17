@@ -206,10 +206,6 @@ type NestedTextProps = {
   allowFontScaling?: boolean;
   buttonAndroidStyle?: {
     /**
-  * Only 6 digit hex colors are supported. Example: #f0f0f0
-  */
-    color?: string,
-    /**
 * Only 6 digit hex colors are supported. Example: #f0f0f0
 */
     backgroundColor?: string,
@@ -219,7 +215,6 @@ type NestedTextProps = {
     borderColor?: string,
     borderWidth?: number,
     borderRadius?: number,
-    fontSize?: number
   }
 };
 

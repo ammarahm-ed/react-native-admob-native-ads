@@ -30,35 +30,51 @@ const CallToActionView = ({
   }, [nativeAd, nativeAdView]);
 
   return (
-    <ButtonView
-      style={style}
-      title={
-        nativeAd && Platform.OS === "android"
-          ? allCaps
-            ? nativeAd.callToAction?.toUpperCase()
-            : nativeAd.callToAction
-          : null
-      }
-      activeOpacity={0.85}
-      buttonAndroidStyle={Platform.OS === "android" ? buttonAndroidStyle : null}
-      ref={callToActionRef}
-      onLayout={_onLayout}
+    <View
+      style={{
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
-      {Platform.OS !== "android" && (
-        <Text
-          onLayout={_onLayout}
-          ref={callToActionRef}
-          allowFontScaling={allowFontScaling}
-          style={textStyle}
+      <ButtonView
+        style={style}
+        activeOpacity={0.85}
+        buttonAndroidStyle={
+          Platform.OS === "android" ? buttonAndroidStyle : null
+        }
+        ref={callToActionRef}
+        onLayout={_onLayout}
+      >
+        {Platform.OS !== "android" && (
+          <Text allowFontScaling={allowFontScaling} style={textStyle}>
+            {nativeAd
+              ? allCaps
+                ? nativeAd.callToAction?.toUpperCase()
+                : nativeAd.callToAction
+              : null}
+          </Text>
+        )}
+      </ButtonView>
+
+      {Platform.OS === "android" && (
+        <View
+          style={{
+            position: "absolute",
+            zIndex: 10,
+            elevation: style.elevation ? style.elevation + 10 : 2,
+          }}
+          pointerEvents="none"
         >
-          {nativeAd
-            ? allCaps
-              ? nativeAd.callToAction?.toUpperCase()
-              : nativeAd.callToAction
-            : null}
-        </Text>
+          <Text allowFontScaling={allowFontScaling} style={textStyle}>
+            {nativeAd
+              ? allCaps
+                ? nativeAd.callToAction?.toUpperCase()
+                : nativeAd.callToAction
+              : null}
+          </Text>
+        </View>
       )}
-    </ButtonView>
+    </View>
   );
 };
 
