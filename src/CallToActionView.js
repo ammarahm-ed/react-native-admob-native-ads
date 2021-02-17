@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useRef, useCallback } from "react";
-import { findNodeHandle, Text, View } from "react-native";
+import React, { useCallback, useContext, useRef } from "react";
+import { findNodeHandle, Text,View } from "react-native";
 import { NativeAdContext } from "./context";
-
 const CallToActionView = ({
   style,
   allowFontScaling = true,
@@ -10,23 +9,22 @@ const CallToActionView = ({
 }) => {
   const { nativeAd, nativeAdView } = useContext(NativeAdContext);
   const callToActionRef = useRef();
-
+  let nativeTag = null;
   const _onLayout = useCallback(() => {
-    if (!nativeAdView) {
+    if (!nativeAdView) return;
+    if (nativeAdView._nativeTag === nativeTag) {
       return;
     }
+    nativeTag = nativeAdView._nativeTag
     nativeAdView.setNativeProps({
       callToAction: findNodeHandle(callToActionRef.current),
     });
-  }, [nativeAdView]);
-
-  useEffect(() => {
-    _onLayout();
-  }, [_onLayout]);
+  }, [nativeAdView,callToActionRef]);
 
   return (
-    <View style={style} onLayout={_onLayout}>
+    <View style={style} >
       <Text
+        onLayout={_onLayout}
         ref={callToActionRef}
         allowFontScaling={allowFontScaling}
         style={textStyle}

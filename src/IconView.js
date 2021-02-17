@@ -1,22 +1,23 @@
-import React, { useRef, useContext, useEffect } from "react";
+import React, { useCallback, useContext, useRef } from "react";
 import { findNodeHandle, Image, Platform, requireNativeComponent } from "react-native";
 import { NativeAdContext } from "./context";
 
 const IconView = (props) => {
   const { nativeAd, nativeAdView } = useContext(NativeAdContext);
   const iconViewRef = useRef();
-
-  const _onLayout = () => {
+  let nativeTag = null;
+  const _onLayout = useCallback(() => {
     if (!nativeAdView) return;
+    if (nativeAdView._nativeTag === nativeTag) {
+      return;
+    }
+    nativeTag = nativeAdView._nativeTag
     let handle = findNodeHandle(iconViewRef.current);
     nativeAdView.setNativeProps({
       icon: handle,
     });
-  };
+  },[nativeAdView,iconViewRef])
 
-  useEffect(() => {
-    _onLayout();
-  }, [nativeAd, nativeAdView]);
 
 
   if (nativeAd && nativeAd.icon === "empty") {

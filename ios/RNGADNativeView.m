@@ -229,15 +229,14 @@ BOOL *nonPersonalizedAds;
 
 - (void)setHeadline:(NSNumber *)headline {
     
-    if (headlineViewId == headline) return;
-    headlineViewId = headline;
+   headlineViewId = headline;
     
     dispatch_async(RCTGetUIManagerQueue(),^{
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
             
             UIView *headlineView = viewRegistry[headline];
-            
+        
             if (headlineView != nil) {
                 [self setHeadlineView:headlineView];
                 if (self.nativeAd != nil) {
@@ -251,7 +250,6 @@ BOOL *nonPersonalizedAds;
 
 - (void)setIcon:(NSNumber *)icon {
     
-    if (iconViewId == icon) return;
     iconViewId = icon;
     
     dispatch_async(RCTGetUIManagerQueue(),^{

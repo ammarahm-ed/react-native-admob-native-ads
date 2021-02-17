@@ -1,29 +1,33 @@
-import React, { useRef, useEffect, useContext } from "react";
+import React, { useRef, useEffect, useContext, useCallback } from "react";
 import { findNodeHandle, requireNativeComponent, UIManager } from "react-native";
 import { NativeAdContext } from "./context";
 
 let timers = {};
 
 const NativeMediaView = (props) => {
-  const { nativeAd, nativeAdView } = useContext(NativeAdContext);
+  const { nativeAdView } = useContext(NativeAdContext);
   const adMediaView = useRef();
   let nodeHandle = null;
-
-  const _onLayout = () => {
+  let nativeTag = null;
+  const _onLayout = useCallback(() => {
     if (!nativeAdView) return;
+    if (nativeAdView._nativeTag === nativeTag) {
+      return;
+    }
+    nativeTag = nativeAdView._nativeTag
     _clearInterval();
     nodeHandle = findNodeHandle(adMediaView.current);
     nativeAdView.setNativeProps({
       mediaview: nodeHandle,
     });
-  };
+  },[nativeAdView])
 
   useEffect(() => {
-    _onLayout();
+    //_onLayout();
     return () => {
       _clearInterval();
     }
-  }, [nativeAd, nativeAdView]);
+  }, []);
 
   const _setInterval = () => {
     _clearInterval();

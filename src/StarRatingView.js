@@ -1,21 +1,25 @@
-import React, { useContext, useRef, useEffect } from "react";
+import React, { useCallback, useContext, useRef } from "react";
 import { findNodeHandle } from "react-native";
-import StarView from "./StarView";
 import { NativeAdContext } from "./context";
+import StarView from "./StarView";
 
 const StarRatingView = (props) => {
   const { nativeAd, nativeAdView } = useContext(NativeAdContext);
   const starRatingRef = useRef();
-  const _onLayout = () => {
+  let nativeTag = null;
+  const _onLayout = useCallback(() => {
     if (!nativeAdView) return;
+    if (nativeAdView._nativeTag === nativeTag) {
+      return;
+    }
+    nativeTag = nativeAdView._nativeTag
     let handle = findNodeHandle(starRatingRef.current);
     nativeAdView.setNativeProps({
       starrating: handle,
     });
-  };
-  useEffect(() => {
-    _onLayout();
-  }, [nativeAd, nativeAdView]);
+  },[nativeAdView,starRatingRef])
+
+ 
 
   return nativeAd && nativeAd.rating && nativeAd.rating > 0 ? (
     <StarView
