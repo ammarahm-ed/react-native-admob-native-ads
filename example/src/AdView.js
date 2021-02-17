@@ -56,7 +56,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
   };
 
   const onUnifiedNativeAdLoaded = (event) => {
-    Logger('AD', 'RECIEVED', 'Ad impression recorded', event);
+    Logger('AD', 'RECIEVED', 'Unified ad  Recieved', event);
     setLoading(false);
     setLoaded(true);
     setError(false);
@@ -240,16 +240,20 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
             style={{
               minHeight: 45,
               paddingHorizontal: 12,
-              backgroundColor: 'purple',
               justifyContent: 'center',
               alignItems: 'center',
-              borderRadius: 5,
               elevation: 10,
               maxWidth: 100,
+              width:80
+            }}
+            buttonAndroidStyle={{
+              backgroundColor: '#00ff00',
+              borderRadius: 5,
+              fontSize: 13,
+              color: '#f0f0f0',
             }}
             allCaps
             textStyle={{
-              color: 'white',
               fontSize: 13,
               flexWrap: 'wrap',
               textAlign: 'center',
