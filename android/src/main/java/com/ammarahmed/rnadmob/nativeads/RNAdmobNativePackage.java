@@ -30,7 +30,8 @@ public class RNAdmobNativePackage implements ReactPackage {
                 new RNAdmobNativeViewManager(),
                 new RNAdmobMediaViewManager(),
                 new RNAdmobComponentsWrapperManager(),
-                new RNAdmobAdChoicesManager()
+                new RNAdmobAdChoicesManager(),
+                new RNAdmobButtonManager()
         );
     }
 }
