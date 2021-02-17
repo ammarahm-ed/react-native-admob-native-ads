@@ -208,18 +208,18 @@ type NestedTextProps = {
     /**
   * Only 6 digit hex colors are supported. Example: #f0f0f0
   */
-    color: string,
+    color?: string,
     /**
 * Only 6 digit hex colors are supported. Example: #f0f0f0
 */
-    backgroundColor: string,
+    backgroundColor?: string,
     /**
 * Only 6 digit hex colors are supported. Example: #f0f0f0
 */
-    borderColor: string,
-    borderWidth: number,
-    borderRadius: number,
-    fontSize: number
+    borderColor?: string,
+    borderWidth?: number,
+    borderRadius?: number,
+    fontSize?: number
   }
 };
 
