@@ -33,14 +33,14 @@ const CallToActionView = ({
     <ButtonView
       style={style}
       title={
-        nativeAd && Platform === "android"
+        nativeAd && Platform.OS === "android"
           ? allCaps
             ? nativeAd.callToAction?.toUpperCase()
             : nativeAd.callToAction
           : null
       }
       activeOpacity={0.85}
-      buttonAndroidStyle={Platform === "android" && buttonAndroidStyle}
+      buttonAndroidStyle={Platform.OS === "android" ? buttonAndroidStyle : null}
       ref={callToActionRef}
       onLayout={_onLayout}
     >

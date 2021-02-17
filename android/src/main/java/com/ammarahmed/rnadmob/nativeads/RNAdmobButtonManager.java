@@ -1,6 +1,7 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
@@ -27,7 +28,8 @@ public class RNAdmobButtonManager extends SimpleViewManager<RNAdmobButton> {
 
 
     @ReactProp(name = PROP_BUTTON_ANDROID_STYLE)
-    public void setButtonAndroidStyle(RNAdmobButton button, ReadableMap style) {
+    public void setButtonAndroidStyle(RNAdmobButton button, @Nullable ReadableMap style) {
+        if (style == null) return;
         String color = null;
         String backgroundColor = null;
         String borderColor = null;
