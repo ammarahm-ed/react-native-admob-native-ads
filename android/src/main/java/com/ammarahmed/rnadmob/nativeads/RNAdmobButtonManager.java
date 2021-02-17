@@ -35,6 +35,8 @@ public class RNAdmobButtonManager extends SimpleViewManager<RNAdmobButton> {
         String borderColor = null;
         int borderWidth = 0;
         int borderRadius= 0;
+        int fontSize=16;
+
         if (style.hasKey("color")) {
             color  =  style.getString("color");
         }
@@ -60,6 +62,15 @@ public class RNAdmobButtonManager extends SimpleViewManager<RNAdmobButton> {
             }
 
         }
+
+        if (style.hasKey("fontSize")) {
+            if (style.getType("fontSize") == ReadableType.Number) {
+                fontSize  =  style.getInt("fontSize");
+                button.setTextSize(fontSize);
+            }
+
+        }
+
 
 
         button.setButtonStyle(color,backgroundColor,borderColor,borderWidth,borderRadius);

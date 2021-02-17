@@ -218,7 +218,8 @@ type NestedTextProps = {
 */
     borderColor: string,
     borderWidth: number,
-    borderRadius: number
+    borderRadius: number,
+    fontSize: number
   }
 };
 
