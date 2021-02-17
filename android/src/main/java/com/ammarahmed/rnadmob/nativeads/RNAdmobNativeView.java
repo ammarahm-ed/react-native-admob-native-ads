@@ -224,6 +224,10 @@ public class RNAdmobNativeView extends LinearLayout {
             float aspectRatio = 1.0f;
 
             MediaContent mediaContent = nativeAd.getMediaContent();
+            if (nativeAdView.getMediaView() != null) {
+                nativeAdView.getMediaView().setMediaContent(unifiedNativeAd.getMediaContent());
+            }
+
 
             if (mediaContent != null && null != getDeclaredMethod(mediaContent, "getAspectRatio")) {
                 aspectRatio = nativeAd.getMediaContent().getAspectRatio();
@@ -395,7 +399,9 @@ public class RNAdmobNativeView extends LinearLayout {
                 public void run() {
                     if (nativeAdView != null && unifiedNativeAd != null) {
                         nativeAdView.setNativeAd(unifiedNativeAd);
+
                         if (mediaView != null) {
+                            nativeAdView.getMediaView().setMediaContent(unifiedNativeAd.getMediaContent());
                             if (unifiedNativeAd.getMediaContent().hasVideoContent()) {
                                 mediaView.setVideoController(unifiedNativeAd.getMediaContent().getVideoController());
                             }
