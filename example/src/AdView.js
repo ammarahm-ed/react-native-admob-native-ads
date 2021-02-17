@@ -249,8 +249,6 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
             buttonAndroidStyle={{
               backgroundColor: '#00ff00',
               borderRadius: 5,
-              fontSize: 13,
-              color: '#f0f0f0',
             }}
             allCaps
             textStyle={{
