@@ -370,6 +370,7 @@ DEPENDENCIES:
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Mobile-Ads-SDK
+  - GoogleMobileAdsMediationFacebook
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -529,6 +530,6 @@ SPEC CHECKSUMS:
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: c46ae2ea232395a52dfeb90357026fbd0f303e7f
+PODFILE CHECKSUM: 60209b1e66261bc8f3729a1e1b3783f66629e2b5
 
 COCOAPODS: 1.10.1
