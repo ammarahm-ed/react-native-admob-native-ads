@@ -1,7 +1,7 @@
 module.exports = {
   title: "React Native Admob Native Ads",
   tagline: "Admob Native Advanced Ads for React Native",
-  url: "https://ammarahm-ed.github.io/",
+  url: "https://ammarahm-ed.github.io/index.html",
   baseUrl: "/react-native-admob-native-ads/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
