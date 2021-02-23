@@ -4,6 +4,9 @@
 # Node Module
 node_modules/
 
+#docs
+docs/
+
 # Example
 example/
 
