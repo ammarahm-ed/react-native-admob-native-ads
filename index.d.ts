@@ -119,31 +119,13 @@ type NativeAdViewProps = {
   adUnitID: string;
 
   /**
-   * Time after which a new ad should be
-   * requested from the server. Default is 1 minute (60000 ms);
-   */
-  refreshInterval?: number;
-
-  /**
    * Ads returned will be of the desired aspectRatio
    */
   mediaAspectRatio?: 'any' | 'landscape' | 'portrait' | 'square' | 'unknown'
 
-
-  /**
-   * Time in milliseconds to delay ad rendering.
-   * Use this if you are rendering multiple ads
-   * in your screen such as in a list. Default is 0ms.
-   * This is usually done so that ad request is done
-   * after the views are attached.
-   */
-
-  delayAdLoading?: number;
-
   /**
    * Placement of AdChoicesView in any of the 4 corners of the ad
    *
-   * import AdOptions then pass the value from there. AdOptions.adChoicesPlacement
    */
 
   adChoicesPlacement?: "topLeft" | "topRight" | "bottomLeft" | "bottomRight"
