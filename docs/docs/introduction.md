@@ -25,6 +25,7 @@ Yes absolutely you can! There are no limiations. You can design ads that look ju
 7.  **Support for Video Ads**
 8.  Ad Mediation (Especially Facebook Ads)
 9.  Ad Targeting
+10. Typescript definations
 
 ## Benefits
 
