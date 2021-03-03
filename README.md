@@ -49,7 +49,7 @@ Yes absolutely you can! There are no limiations. You can design ads that look ju
 5.  No need to manage any .xml or .xib layout files!
 6.  AutoRefresh ad at specific intervals
 7.  **Support for Video Ads**
-8.  Ad Mediation (Especially Facebook Ads)
+8.  Ad Mediation (**Especially Facebook Ads Mediation(Video & Banners)**)
 9.  Ad Targeting
 10. Typescript definations
 
@@ -59,11 +59,14 @@ Yes absolutely you can! There are no limiations. You can design ads that look ju
 ## Links
 - [Documentation](https://ammarahm-ed.github.io/react-native-admob-native-ads/docs/introduction/)
 
-## Buy me a coffee
+## Old documentation
+If you are looking for the documentation for version `0.3.9` and below, head [here](https://github.com/ammarahm-ed/react-native-admob-native-ads/tree/v0.3.9)
 
-It costs me alot of time to keep the library updated and address all the bugs & issues. If this library has helped you [buy me a coffee](https://www.patreon.com/streetwriters).
+## Sponsor this project
 
-## Contact & Support
+It costs me alot of time to keep the library updated and address all the bugs & issues. If this library has helped you [support me on patreon](https://www.patreon.com/streetwriters).
+
+## Contact & support
 
 - Add a ⭐️ [star on GitHub](https://github.com/ammarahm-ed/react-native-admob-native-ads) to support the project!
 - Create a GitHub issue for bug reports, feature requests, or questions
