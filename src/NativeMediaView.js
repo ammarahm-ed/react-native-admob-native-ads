@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useContext, useCallback } from "react";
 import {
   findNodeHandle,
+  Platform,
   requireNativeComponent,
   UIManager,
 } from "react-native";
@@ -64,6 +65,14 @@ const NativeMediaView = (props) => {
   };
 
   const onVideoProgress = (event) => {
+    if (Platform.OS === "android") {
+      let progress = event.nativeEvent;
+      let duration = parseFloat(progress.duration);
+      let current = parseFloat(progress.currentTime);
+      if (current + 4 > duration) {
+        _clearInterval();
+      }
+    }
     props.onVideoProgress && props.onVideoProgress(event.nativeEvent);
   };
 
