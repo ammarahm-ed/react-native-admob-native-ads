@@ -1,7 +1,7 @@
 ---
 id: migrating
-title: Migrating
-sidebar_label: Migrating
+title: Migrating Guide
+sidebar_label: Migrating Guide
 ---
 
 ## From 0.3.9
@@ -30,3 +30,9 @@ const AdView = () => {
   );
 };
 ```
+
+### Rename `MediaView` to `NativeMediaView`
+`MediaView` has been renamed to `NativeMediaView` to avoid conflicts with other libraries
+
+### Use `buttonAndroidStyle` for `CallToActionView`
+To style the `CallToAction` button on Android, you should use `buttonAndroidStyle` Prop.
