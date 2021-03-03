@@ -1,6 +1,6 @@
 module.exports = {
   someSidebar: {
-    "Getting Started": ["introduction", "examples-2", "installation-3"],
+    "Getting Started": ["introduction", "examples-2", "installation-3","migrating"],
     NativeAdView: [
       "nativeadview/nativeadview-2",
       "nativeadview/props-3",
