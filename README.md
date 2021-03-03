@@ -72,7 +72,7 @@ It costs me alot of time to keep the library updated and address all the bugs & 
 - Create a GitHub issue for bug reports, feature requests, or questions
 - Follow [@ammarahm-ed](https://github.com/ammarahm-ed) for announcements
 
-## I want to contribute
+## Contribute
 
 That is awesome news! There is alot happening at a very fast pace in this library right now. Every little help is precious. You can contribute in many ways:
 

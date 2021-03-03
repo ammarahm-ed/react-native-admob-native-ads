@@ -31,9 +31,27 @@ Yes absolutely you can! There are no limiations. You can design ads that look ju
 
 Ads that look just like your App's design will result in better conversions and revenue for you as compared to other ad formats which look out of place and interrupt the user experience.
 
-## How can I support the project?
+## Sponsor this project
 
-- It costs me alot of time to keep the library updated and address all the bugs & issues. If this library has helped you [buy me a coffee](https://ko-fi.com/ammarahmed).
+It costs me alot of time to keep the library updated and address all the bugs & issues. If this library has helped you [support me on patreon](https://www.patreon.com/streetwriters).
+
+## Contact & support
+
 - Add a ⭐️ [star on GitHub](https://github.com/ammarahm-ed/react-native-admob-native-ads) to support the project!
 - Create a GitHub issue for bug reports, feature requests, or questions
 - Follow [@ammarahm-ed](https://github.com/ammarahm-ed) for announcements
+
+## Contribute
+
+That is awesome news! There is alot happening at a very fast pace in this library right now. Every little help is precious. You can contribute in many ways:
+
+- Suggest code improvements on native iOS and Android
+- If you have suggestion or idea you want to discuss, open an issue.
+- [Open an issue](https://github.com/ammarahm-ed/react-native-admob-native-ads/issues/) if you want to make a pull request, and tell me what you want to improve or add so we can discuss
+- I am always open to new ideas
+
+## License
+
+This library is licensed under the [MIT license](https://github.com/ammarahm-ed/react-native-admob-native-ads/blob/master/LICENSE).
+
+Copyright © Ammar Ahmed ([@ammarahm-ed](https://github.com/ammarahm-ed))
