@@ -8,6 +8,17 @@ sidebar_label: Migrating Guide
 
 If you are migrating from `v0.3.9` of this library, here a the changes that you will need to make to your code.
 
+### Update Google-Mobile-Ads
+Update your Google Mobile Ads Library to >=8.0.0 in Podfile.
+
+Add these to your Podfile.
+
+```
+pod 'Google-Mobile-Ads-SDK'
+pod 'GoogleMobileAdsMediationFacebook'
+```
+Then run `pod update` & `pod install`
+
 ### Manually load ads
 
 Ads are to be loaded using the `ref` on `NativeAdView`
