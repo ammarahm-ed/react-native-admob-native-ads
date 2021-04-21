@@ -1,6 +1,6 @@
 package com.ammarahmed.rnadmob.nativeads;
 
-import com.google.android.gms.ads.formats.UnifiedNativeAd;
+import com.google.android.gms.ads.nativead.NativeAd;
 
 import java.util.Comparator;
 
@@ -10,9 +10,9 @@ public class RNAdMobUnifiedAdContainer {
     public Long loadTime;
     public Integer showCount;
     public Integer references;
-    UnifiedNativeAd unifiedNativeAd;
+    NativeAd unifiedNativeAd;
 
-    RNAdMobUnifiedAdContainer(UnifiedNativeAd nativeAd, Long t, @Nullable Integer n){
+    RNAdMobUnifiedAdContainer(NativeAd nativeAd, Long t, @Nullable Integer n){
         unifiedNativeAd = nativeAd;
         showCount = n != null ? n : 0;
         loadTime = t;

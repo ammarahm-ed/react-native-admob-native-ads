@@ -1,18 +1,17 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
-import android.util.Pair;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
-import com.google.android.gms.ads.formats.UnifiedNativeAd;
+import com.google.android.gms.ads.nativead.NativeAd;
+import com.google.android.gms.ads.nativead.NativeAd.OnNativeAdLoadedListener;
 
 import java.lang.Long;
 import java.util.PriorityQueue;
-import java.util.Stack;
 
-public class onUnifiedNativeAdLoadedListener implements UnifiedNativeAd.OnUnifiedNativeAdLoadedListener {
+public class onUnifiedNativeAdLoadedListener implements OnNativeAdLoadedListener {
     String repo;
     PriorityQueue<RNAdMobUnifiedAdContainer> nativeAds;
     Context mContext;
@@ -26,7 +25,7 @@ public class onUnifiedNativeAdLoadedListener implements UnifiedNativeAd.OnUnifie
     }
 
     @Override
-    public void onUnifiedNativeAdLoaded(UnifiedNativeAd nativeAd) {
+    public void onNativeAdLoaded(NativeAd nativeAd) {
         if (this.nativeAds.size() > totalAds){
             // remove oldest ad if it is full
             RNAdMobUnifiedAdContainer toBeRemoved = null;

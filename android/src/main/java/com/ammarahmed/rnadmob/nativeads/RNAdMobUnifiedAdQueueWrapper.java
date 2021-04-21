@@ -2,7 +2,6 @@ package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Pair;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -14,14 +13,9 @@ import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.VideoOptions;
-import com.google.android.gms.ads.formats.NativeAdOptions;
-import com.google.android.gms.ads.formats.UnifiedNativeAd;
+import com.google.android.gms.ads.nativead.NativeAdOptions;
 
-import java.lang.Long;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Stack;
 
 public class RNAdMobUnifiedAdQueueWrapper {
 
@@ -75,7 +69,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
         }
         unifiedNativeAdLoadedListener = new onUnifiedNativeAdLoadedListener(repo, nativeAds, totalAds, context);
         AdLoader.Builder builder = new AdLoader.Builder(context, adUnitId);
-        builder.forUnifiedNativeAd(unifiedNativeAdLoadedListener);
+        builder.forNativeAd(unifiedNativeAdLoadedListener);
         VideoOptions videoOptions = new VideoOptions.Builder()
                 .setStartMuted(muted)
                 .build();
@@ -163,12 +157,13 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 attachedAdListener.onAdImpression();
             }
 
-            @Override
-            public void onAdLeftApplication() {
-                super.onAdLeftApplication();
-                if (attachedAdListener == null) return;
-                attachedAdListener.onAdLeftApplication();
-            }
+            // todo :: if needed put it somewhere else
+//            @Override
+//            public void onAdLeftApplication() {
+//                super.onAdLeftApplication();
+//                if (attachedAdListener == null) return;
+//                attachedAdListener.onAdLeftApplication();
+//            }
         };
         adLoader = builder.withAdListener(adListener).build();
     }
