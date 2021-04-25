@@ -1,8 +1,5 @@
 package com.ammarahmed.rnadmob.nativeads;
 
-import android.content.Context;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
@@ -12,7 +9,6 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableNativeArray;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
@@ -29,7 +25,6 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
     public RNAdmobNativeAdsManager(ReactApplicationContext context) {
         super(context);
         mContext = context;
-        MobileAds.initialize(context);
     }
 
     @NonNull
@@ -40,11 +35,6 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setRequestConfiguration(ReadableMap config, Promise promise) {
-        Context context = getReactApplicationContext().getCurrentActivity();
-        if (context == null) {
-            Log.e("AdmobNativeAds", "setRequestConfiguration() is called outside MainActivity");
-            context = getReactApplicationContext();
-        }
         RequestConfiguration.Builder configuration = new RequestConfiguration.Builder();
 
         if (config.hasKey("maxAdContentRating")) {
