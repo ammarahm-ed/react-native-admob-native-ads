@@ -400,7 +400,7 @@ public class RNAdmobNativeView extends LinearLayout {
                     if (nativeAdView != null && unifiedNativeAd != null) {
                         nativeAdView.setNativeAd(unifiedNativeAd);
 
-                        if (mediaView != null) {
+                        if (mediaView != null && nativeAdView.getMediaView()!=null) {
                             nativeAdView.getMediaView().setMediaContent(unifiedNativeAd.getMediaContent());
                             if (unifiedNativeAd.getMediaContent().hasVideoContent()) {
                                 mediaView.setVideoController(unifiedNativeAd.getMediaContent().getVideoController());
