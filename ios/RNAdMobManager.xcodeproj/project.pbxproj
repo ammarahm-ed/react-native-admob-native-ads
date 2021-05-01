@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		65F7727025E4063E00C04033 /* RNAdmobNativeAdsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F7726225E4063E00C04033 /* RNAdmobNativeAdsManager.m */; };
-		65F7727125E4063E00C04033 /* RNGADNativeViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F7726725E4063E00C04033 /* RNGADNativeViewManager.m */; };
-		65F7727225E4063E00C04033 /* RNGADMediaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F7726825E4063E00C04033 /* RNGADMediaView.m */; };
-		65F7727325E4063E00C04033 /* RNGADMediaViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F7726A25E4063E00C04033 /* RNGADMediaViewManager.m */; };
-		65F7727425E4063E00C04033 /* RNGADImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F7726B25E4063E00C04033 /* RNGADImageView.m */; };
-		65F7727525E4063E00C04033 /* RNGADNativeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F7726E25E4063E00C04033 /* RNGADNativeView.m */; };
-		65F7727625E4063E00C04033 /* RNNativeAdMobUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F7726F25E4063E00C04033 /* RNNativeAdMobUtils.m */; };
+		6513057E263DD92B00ECE0D9 /* RNAdmobNativeAdsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65130570263DD92A00ECE0D9 /* RNAdmobNativeAdsManager.m */; };
+		6513057F263DD92B00ECE0D9 /* RNGADNativeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65130572263DD92B00ECE0D9 /* RNGADNativeView.m */; };
+		65130580263DD92B00ECE0D9 /* RNGADMediaViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65130573263DD92B00ECE0D9 /* RNGADMediaViewManager.m */; };
+		65130581263DD92B00ECE0D9 /* RNGADImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65130575263DD92B00ECE0D9 /* RNGADImageView.m */; };
+		65130583263DD92B00ECE0D9 /* RNNativeAdMobUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 65130579263DD92B00ECE0D9 /* RNNativeAdMobUtils.m */; };
+		6513058F263DD98400ECE0D9 /* RNGADMediaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6513058D263DD98400ECE0D9 /* RNGADMediaView.m */; };
+		F90A723223E90755001A979C /* RNGADNativeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F90A723123E90755001A979C /* RNGADNativeView.m */; };
+		F90A723623E91B31001A979C /* RNGADNativeViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F90A723523E91B31001A979C /* RNGADNativeViewManager.m */; };
 		F9FEA62523E973F700D2A1C7 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FEA62423E973F700D2A1C7 /* GoogleMobileAds.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,21 +31,23 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		65F7726225E4063E00C04033 /* RNAdmobNativeAdsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNAdmobNativeAdsManager.m; sourceTree = SOURCE_ROOT; };
-		65F7726325E4063E00C04033 /* RNGADMediaViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADMediaViewManager.h; sourceTree = SOURCE_ROOT; };
-		65F7726425E4063E00C04033 /* RNGADImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADImageView.h; sourceTree = SOURCE_ROOT; };
-		65F7726525E4063E00C04033 /* RNAdmobNativeAdsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNAdmobNativeAdsManager.h; sourceTree = SOURCE_ROOT; };
-		65F7726625E4063E00C04033 /* RNGADNativeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADNativeView.h; sourceTree = SOURCE_ROOT; };
-		65F7726725E4063E00C04033 /* RNGADNativeViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADNativeViewManager.m; sourceTree = SOURCE_ROOT; };
-		65F7726825E4063E00C04033 /* RNGADMediaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADMediaView.m; sourceTree = SOURCE_ROOT; };
-		65F7726925E4063E00C04033 /* RNNativeAdMobUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNativeAdMobUtils.h; sourceTree = SOURCE_ROOT; };
-		65F7726A25E4063E00C04033 /* RNGADMediaViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADMediaViewManager.m; sourceTree = SOURCE_ROOT; };
-		65F7726B25E4063E00C04033 /* RNGADImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADImageView.m; sourceTree = SOURCE_ROOT; };
-		65F7726C25E4063E00C04033 /* RNGADNativeViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADNativeViewManager.h; sourceTree = SOURCE_ROOT; };
-		65F7726D25E4063E00C04033 /* RNGADMediaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADMediaView.h; sourceTree = SOURCE_ROOT; };
-		65F7726E25E4063E00C04033 /* RNGADNativeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADNativeView.m; sourceTree = SOURCE_ROOT; };
-		65F7726F25E4063E00C04033 /* RNNativeAdMobUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNativeAdMobUtils.m; sourceTree = SOURCE_ROOT; };
+		65130570263DD92A00ECE0D9 /* RNAdmobNativeAdsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNAdmobNativeAdsManager.m; sourceTree = SOURCE_ROOT; };
+		65130571263DD92B00ECE0D9 /* RNGADMediaViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADMediaViewManager.h; sourceTree = SOURCE_ROOT; };
+		65130572263DD92B00ECE0D9 /* RNGADNativeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADNativeView.m; sourceTree = SOURCE_ROOT; };
+		65130573263DD92B00ECE0D9 /* RNGADMediaViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADMediaViewManager.m; sourceTree = SOURCE_ROOT; };
+		65130575263DD92B00ECE0D9 /* RNGADImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADImageView.m; sourceTree = SOURCE_ROOT; };
+		65130577263DD92B00ECE0D9 /* RNGADImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADImageView.h; sourceTree = SOURCE_ROOT; };
+		65130578263DD92B00ECE0D9 /* RNAdmobNativeAdsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNAdmobNativeAdsManager.h; sourceTree = SOURCE_ROOT; };
+		65130579263DD92B00ECE0D9 /* RNNativeAdMobUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNativeAdMobUtils.m; sourceTree = SOURCE_ROOT; };
+		6513057B263DD92B00ECE0D9 /* RNGADNativeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADNativeView.h; sourceTree = SOURCE_ROOT; };
+		6513057D263DD92B00ECE0D9 /* RNNativeAdMobUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNativeAdMobUtils.h; sourceTree = SOURCE_ROOT; };
+		6513058D263DD98400ECE0D9 /* RNGADMediaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADMediaView.m; sourceTree = SOURCE_ROOT; };
+		6513058E263DD98400ECE0D9 /* RNGADMediaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADMediaView.h; sourceTree = SOURCE_ROOT; };
 		A96DA7741C146D7200FC639B /* libRNAdMobManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNAdMobManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F90A723123E90755001A979C /* RNGADNativeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNGADNativeView.m; sourceTree = SOURCE_ROOT; };
+		F90A723323E90762001A979C /* RNGADNativeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNGADNativeView.h; sourceTree = SOURCE_ROOT; };
+		F90A723423E91B19001A979C /* RNGADNativeViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNGADNativeViewManager.h; sourceTree = SOURCE_ROOT; };
+		F90A723523E91B31001A979C /* RNGADNativeViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNGADNativeViewManager.m; sourceTree = SOURCE_ROOT; };
 		F9FEA62423E973F700D2A1C7 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = "../../../../Downloads/GoogleMobileAdsSdkiOS-7.54.0/GoogleMobileAds.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,20 +83,22 @@
 		A96DA7761C146D7200FC639B /* RNAdMobManager */ = {
 			isa = PBXGroup;
 			children = (
-				65F7726525E4063E00C04033 /* RNAdmobNativeAdsManager.h */,
-				65F7726225E4063E00C04033 /* RNAdmobNativeAdsManager.m */,
-				65F7726425E4063E00C04033 /* RNGADImageView.h */,
-				65F7726B25E4063E00C04033 /* RNGADImageView.m */,
-				65F7726D25E4063E00C04033 /* RNGADMediaView.h */,
-				65F7726825E4063E00C04033 /* RNGADMediaView.m */,
-				65F7726325E4063E00C04033 /* RNGADMediaViewManager.h */,
-				65F7726A25E4063E00C04033 /* RNGADMediaViewManager.m */,
-				65F7726625E4063E00C04033 /* RNGADNativeView.h */,
-				65F7726E25E4063E00C04033 /* RNGADNativeView.m */,
-				65F7726C25E4063E00C04033 /* RNGADNativeViewManager.h */,
-				65F7726725E4063E00C04033 /* RNGADNativeViewManager.m */,
-				65F7726925E4063E00C04033 /* RNNativeAdMobUtils.h */,
-				65F7726F25E4063E00C04033 /* RNNativeAdMobUtils.m */,
+				65130578263DD92B00ECE0D9 /* RNAdmobNativeAdsManager.h */,
+				6513058E263DD98400ECE0D9 /* RNGADMediaView.h */,
+				6513058D263DD98400ECE0D9 /* RNGADMediaView.m */,
+				65130570263DD92A00ECE0D9 /* RNAdmobNativeAdsManager.m */,
+				65130577263DD92B00ECE0D9 /* RNGADImageView.h */,
+				65130575263DD92B00ECE0D9 /* RNGADImageView.m */,
+				65130571263DD92B00ECE0D9 /* RNGADMediaViewManager.h */,
+				65130573263DD92B00ECE0D9 /* RNGADMediaViewManager.m */,
+				6513057B263DD92B00ECE0D9 /* RNGADNativeView.h */,
+				65130572263DD92B00ECE0D9 /* RNGADNativeView.m */,
+				6513057D263DD92B00ECE0D9 /* RNNativeAdMobUtils.h */,
+				65130579263DD92B00ECE0D9 /* RNNativeAdMobUtils.m */,
+				F90A723323E90762001A979C /* RNGADNativeView.h */,
+				F90A723123E90755001A979C /* RNGADNativeView.m */,
+				F90A723423E91B19001A979C /* RNGADNativeViewManager.h */,
+				F90A723523E91B31001A979C /* RNGADNativeViewManager.m */,
 			);
 			path = RNAdMobManager;
 			sourceTree = "<group>";
@@ -175,13 +180,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65F7727525E4063E00C04033 /* RNGADNativeView.m in Sources */,
-				65F7727625E4063E00C04033 /* RNNativeAdMobUtils.m in Sources */,
-				65F7727425E4063E00C04033 /* RNGADImageView.m in Sources */,
-				65F7727325E4063E00C04033 /* RNGADMediaViewManager.m in Sources */,
-				65F7727125E4063E00C04033 /* RNGADNativeViewManager.m in Sources */,
-				65F7727025E4063E00C04033 /* RNAdmobNativeAdsManager.m in Sources */,
-				65F7727225E4063E00C04033 /* RNGADMediaView.m in Sources */,
+				6513057E263DD92B00ECE0D9 /* RNAdmobNativeAdsManager.m in Sources */,
+				65130583263DD92B00ECE0D9 /* RNNativeAdMobUtils.m in Sources */,
+				6513058F263DD98400ECE0D9 /* RNGADMediaView.m in Sources */,
+				F90A723223E90755001A979C /* RNGADNativeView.m in Sources */,
+				6513057F263DD92B00ECE0D9 /* RNGADNativeView.m in Sources */,
+				65130581263DD92B00ECE0D9 /* RNGADImageView.m in Sources */,
+				65130580263DD92B00ECE0D9 /* RNGADMediaViewManager.m in Sources */,
+				F90A723623E91B31001A979C /* RNGADNativeViewManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
