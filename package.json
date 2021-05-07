@@ -48,7 +48,7 @@
     "admob-native-advanced-ads"
   ],
   "peerDependencies": {
-    "react-native": "0.61.5",
+    "react-native": "*",
     "prop-types": "15.7.2"
   },
   "private": false,
