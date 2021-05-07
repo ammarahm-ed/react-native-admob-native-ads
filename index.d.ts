@@ -207,6 +207,9 @@ type StarViewProps = {
   fullIcon?: string,
   halfIcon?: string,
   emptyIcon?: string,
+  fullIconColor?: string,
+  halfIconColor?: string,
+  emptyIconColor?: string
 };
 
 

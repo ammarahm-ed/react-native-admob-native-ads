@@ -45,8 +45,11 @@ export default function StarView({
   size = 15,
   iconSet = 'MaterialCommunityIcons',
   fullIcon = 'star',
+  fullIconColor = "#ffd27d",
   halfIcon = 'star-half',
+  halfIconColor = "#ffd27d",
   emptyIcon = 'star-outline',
+  emptyIconColor = "#f0f0f0",
   passRef,
   ...passThroughProps
 }) {
@@ -62,15 +65,15 @@ export default function StarView({
       if (_stars > 5) _stars = 5;
       if (_stars >= 1) {
         // 1 - 5
-        icons.push(<Icon name={fullIcon} size={_size} key={`star-full${_stars}`} color="#ffd27d" />);
+        icons.push(<Icon name={fullIcon} size={_size} key={`star-full${_stars}`} color={fullIconColor} />);
         return renderIcons(_stars - 1, _size, icons, emptyStars - 1);
       } else if (_stars >= 0.5) {
         // 0 - 1
-        icons.push(<Icon name={halfIcon} size={_size} key={`star-half${_stars}`} color="#ffd27d" />);
+        icons.push(<Icon name={halfIcon} size={_size} key={`star-half${_stars}`} color={halfIconColor} />);
         return renderIcons(_stars - 1, _size, icons, emptyStars - 1);
       }
       if (emptyStars > 0) {
-        icons.push(<Icon name={emptyIcon} size={_size} key={`star-empty${emptyStars}`} color="#f0f0f0" />);
+        icons.push(<Icon name={emptyIcon} size={_size} key={`star-empty${emptyStars}`} color={emptyIconColor} />);
         return renderIcons(_stars, _size, icons, emptyStars - 1);
       }
       // 0
