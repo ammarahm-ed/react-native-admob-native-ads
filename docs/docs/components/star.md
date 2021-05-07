@@ -50,6 +50,13 @@ Icon to use for full star rating.
 
 `default: "star-outline"`
 
+### `fullIconColor`
+Color of `fullIcon`
+
+| Type     | Required | Platform |
+| -------- | -------- | -------- |
+| `string` | no       | All      |
+
 ### `halfIcon`
 
 Icon to use for half star rating.
@@ -60,6 +67,13 @@ Icon to use for half star rating.
 
 `default: "star-half"`
 
+### `halfIconColor`
+Color of `halfIcon`
+
+| Type     | Required | Platform |
+| -------- | -------- | -------- |
+| `string` | no       | All      |
+
 ### `emptyIcon`
 
 Icon to use for empty star.
@@ -69,3 +83,10 @@ Icon to use for empty star.
 | `string` | no       | All      |
 
 `default: "star-outline"`
+
+### `emptyIconColor`
+Color of `emptyIcon`
+
+| Type     | Required | Platform |
+| -------- | -------- | -------- |
+| `string` | no       | All      |
