@@ -262,7 +262,7 @@ declare module "react-native-admob-native-ads" {
     *
     */
 
-    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => {},
+    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => Promise<object>;
 
     /**
      * Check if the current device is registered as a test device to show test ads.
