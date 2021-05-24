@@ -2,8 +2,8 @@ import {NativeModules} from 'react-native';
 
 const RNAdmobNativeAdsManager = NativeModules.RNAdmobNativeAdsManager;
 
-function setRequestConfiguration(config) {
-  RNAdmobNativeAdsManager.setRequestConfiguration(config);
+async function setRequestConfiguration(config) {
+  return RNAdmobNativeAdsManager.setRequestConfiguration(config);
 }
 
 function isTestDevice() {

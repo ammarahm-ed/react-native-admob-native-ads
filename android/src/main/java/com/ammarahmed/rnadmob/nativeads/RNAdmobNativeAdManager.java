@@ -1,5 +1,7 @@
 package com.ammarahmed.rnadmob.nativeads;
 
+import android.content.Context;
+import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
@@ -8,13 +10,14 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableNativeArray;
+import com.facebook.react.bridge.WritableMap;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
- 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.android.gms.ads.initialization.AdapterStatus;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+
+import java.util.Map;
 
 public class RNAdmobNativeAdManager extends ReactContextBaseJavaModule {
 
@@ -28,8 +31,12 @@ public class RNAdmobNativeAdManager extends ReactContextBaseJavaModule {
         return "RNAdmobNativeAdsManager";
     }
 
-    @ReactMethod
-    public void setRequestConfiguration(ReadableMap config) {
+    public void setRequestConfiguration(ReadableMap config, Promise promise) {
+        Context context = getReactApplicationContext().getCurrentActivity();
+        if (context == null) {
+            Log.e("AdmobNativeAds", "setRequestConfiguration() is called outside MainActivity");
+            context = getReactApplicationContext();
+        }
         RequestConfiguration.Builder configuration = new RequestConfiguration.Builder();
 
         if (config.hasKey("maxAdContentRating")) {
@@ -56,7 +63,16 @@ public class RNAdmobNativeAdManager extends ReactContextBaseJavaModule {
         }
 
         MobileAds.setRequestConfiguration(configuration.build());
-        MobileAds.initialize(getReactApplicationContext());
+        MobileAds.initialize(context, (InitializationStatus status) -> {
+            WritableMap map = Arguments.createMap();
+            for (Map.Entry<String, AdapterStatus> entry: status.getAdapterStatusMap().entrySet()) {
+                WritableMap info = Arguments.createMap();
+                info.putString("initialization_state", entry.getValue().getInitializationState().toString());
+                info.putString("description", entry.getValue().getDescription());
+                map.putMap(entry.getKey(), info);
+            }
+            promise.resolve(map);
+        });
     }
 
     @ReactMethod
