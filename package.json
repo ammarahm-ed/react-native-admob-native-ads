@@ -16,7 +16,7 @@
   "files": [
     "LICENSE",
     "README.md",
-    "android/src",
+    "android/src/",
     "android/build.gradle",
     "ios/RNAdMobManager.xcodeproj/project.pbxproj",
     "ios/**/*.h",
