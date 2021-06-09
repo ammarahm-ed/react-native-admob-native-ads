@@ -65,7 +65,7 @@ repositories {
 dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'
-    implementation "com.google.android.gms:play-services-ads:${safeExtGet('googlePlayServicesAdsVersion', '20.0.0')}"
+    implementation "com.google.android.gms:play-services-ads:${safeExtGet('googlePlayServicesAdsVersion', '20.+')}"
     implementation 'com.android.support:support-annotations:28.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.android.support.constraint:constraint-layout:2.0.4'
