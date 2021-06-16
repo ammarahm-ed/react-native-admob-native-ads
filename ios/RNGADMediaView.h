@@ -10,12 +10,12 @@
 @property (nonatomic) BOOL *pause;
 @property (nonatomic) BOOL *muted;
 
-@property (nonatomic, copy) RCTBubblingEventBlock onVideoPlay;
-@property (nonatomic, copy) RCTBubblingEventBlock onVideoPause;
-@property (nonatomic, copy) RCTBubblingEventBlock onVideoMute;
-@property (nonatomic, copy) RCTBubblingEventBlock onVideoStart;
-@property (nonatomic, copy) RCTBubblingEventBlock onVideoEnd;
-@property (nonatomic, copy) RCTBubblingEventBlock onVideoProgress;
+@property (nonatomic, copy) RCTDirectEventBlock onVideoPlay;
+@property (nonatomic, copy) RCTDirectEventBlock onVideoPause;
+@property (nonatomic, copy) RCTDirectEventBlock onVideoMute;
+@property (nonatomic, copy) RCTDirectEventBlock onVideoStart;
+@property (nonatomic, copy) RCTDirectEventBlock onVideoEnd;
+@property (nonatomic, copy) RCTDirectEventBlock onVideoProgress;
 
 - (void)getCurrentProgress;
 
