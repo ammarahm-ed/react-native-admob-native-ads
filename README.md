@@ -86,3 +86,8 @@ That is awesome news! There is alot happening at a very fast pace in this librar
 This library is licensed under the [MIT license](https://github.com/ammarahm-ed/react-native-admob-native-ads/blob/master/LICENSE).
 
 Copyright © Ammar Ahmed ([@ammarahm-ed](https://github.com/ammarahm-ed))
+
+#
+<a href="https://notesnook.com" target="_blank">
+<img style="align:center;" src="https://i.imgur.com/EMIqXNc.jpg" href="https://notesnook.com" alt="Notesnook Logo" width="50%" />
+</a>
