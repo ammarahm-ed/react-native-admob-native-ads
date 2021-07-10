@@ -44,6 +44,8 @@ RCT_EXPORT_METHOD(setRequestConfiguration:(NSDictionary *)config)
         NSNumber *trackingAuthorized = [config valueForKey:@"trackingAuthorized"];
         [FBAdSettings setAdvertiserTrackingEnabled:trackingAuthorized];
     };
+
+    [[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
 }
 
 RCT_EXPORT_METHOD(isTestDevice:(RCTPromiseResolveBlock)resolve
