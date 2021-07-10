@@ -2,6 +2,7 @@
 #import "RNNativeAdMobUtils.h"
 
 @import GoogleMobileAds;
+@import FBAudienceNetwork;
 
 @implementation RNAdmobNativeAdsManager
 
@@ -37,6 +38,11 @@ RCT_EXPORT_METHOD(setRequestConfiguration:(NSDictionary *)config)
     if ([[config allKeys] containsObject:@"testDeviceIds"]) {
         NSArray *testDevices = RNAdMobProcessTestDevices([config valueForKey:@"testDeviceIds"],kDFPSimulatorID);
         [[[GADMobileAds sharedInstance] requestConfiguration] setTestDeviceIdentifiers:testDevices];
+    };
+
+    if ([[config allKeys] containsObject:@"trackingAuthorized"]) {
+        NSNumber *trackingAuthorized = [config valueForKey:@"trackingAuthorized"];
+        [FBAdSettings setAdvertiserTrackingEnabled:trackingAuthorized];
     };
 }
 

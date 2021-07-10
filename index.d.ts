@@ -93,7 +93,8 @@ type AdManagerConfiguration = {
   maxAdContentRating: MAX_AD_CONTENT_RATING,
   tagForChildDirectedTreatment: boolean,
   tagForUnderAgeConsent: boolean,
-  testDeviceIds: Array<string>
+  testDeviceIds: Array<string>,
+  trackingAuthorized: boolean
 }
 
 type ImagePropsWithOptionalSource = Omit<ImageProps, 'source'> & Partial<Pick<ImageProps, 'source'>>;
