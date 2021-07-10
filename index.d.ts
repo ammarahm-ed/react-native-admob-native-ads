@@ -1,3 +1,4 @@
+import React from "react";
 import { ViewStyle, TextProps, ImageProps, TextStyle, StyleProp } from "react-native";
 
 type Image = {
@@ -223,9 +224,9 @@ declare module "react-native-admob-native-ads" {
    *
    */
 
-  export default function NativeAdView(
-    props: NativeAdViewProps
-  ): JSX.Element;
+  export default class NativeAdView extends React.Component<NativeAdViewProps> {
+    loadAd: () => void;
+  }
 
 
   /**
