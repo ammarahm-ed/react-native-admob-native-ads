@@ -97,9 +97,9 @@ type AdManagerConfiguration = {
   trackingAuthorized: boolean
 }
 
-enum AdapterState {
-  READY,
-  NOT_READY
+export enum AdapterState {
+  NOT_READY,
+  READY
 }
 
 type MediationAdapterStatus = {
