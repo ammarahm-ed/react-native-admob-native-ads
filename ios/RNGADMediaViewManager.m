@@ -1,6 +1,6 @@
 #import "RNGADMediaViewManager.h"
 #import "RNGADMediaView.h"
-"
+
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTEventDispatcher.h>
