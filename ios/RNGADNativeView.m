@@ -1,4 +1,5 @@
 #import "RNGADNativeView.h"
+#import "RNGADMediaView.h"
 #import "RNNativeAdMobUtils.h"
 #import <React/RCTRootView.h>
 #import <React/RCTRootViewDelegate.h>
@@ -11,12 +12,10 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTUIManagerUtils.h>
 #import <React/RCTImageView.h>
-#import "RNGADMediaView.h"
 
-@import GoogleMobileAds;
 @import FacebookAdapter;
 
-@implementation RNGADNativeView : GADUnifiedNativeAdView
+@implementation RNGADNativeView : GADNativeAdView
 
 RCTBridge *bridge;
 
@@ -208,7 +207,7 @@ BOOL *nonPersonalizedAds;
     adUnitId = adUnitID;
 }
 
-- (void) reloadAdInView:(GADUnifiedNativeAd *)nativeAd isMedia:(BOOL )media {
+- (void) reloadAdInView:(GADNativeAd *)nativeAd isMedia:(BOOL )media {
     if (block != nil) {
         dispatch_block_cancel(block);
     }
@@ -479,7 +478,7 @@ BOOL *nonPersonalizedAds;
 
 
 
-- (void)adLoader:(GADAdLoader *)adLoader didReceiveUnifiedNativeAd:(GADUnifiedNativeAd *)nativeAd {
+- (void)adLoader:(GADAdLoader *)adLoader didReceiveUnifiedNativeAd:(GADNativeAd *)nativeAd {
     isLoading = FALSE;
     if (self.onAdLoaded) {
         self.onAdLoaded(@{});
@@ -574,7 +573,7 @@ BOOL *nonPersonalizedAds;
 }
 
 
-- (void)nativeAdDidRecordImpression:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdDidRecordImpression:(nonnull GADNativeAd *)nativeAd
 {
     if (self.onAdImpression) {
         self.onAdImpression(@{});
@@ -582,28 +581,28 @@ BOOL *nonPersonalizedAds;
     }
 }
 
-- (void)nativeAdDidRecordClick:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdDidRecordClick:(nonnull GADNativeAd *)nativeAd
 {
     if (self.onAdClicked) {
         self.onAdClicked(@{});
     }
 }
 
-- (void)nativeAdWillPresentScreen:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdWillPresentScreen:(nonnull GADNativeAd *)nativeAd
 {
     if (self.onAdOpened) {
         self.onAdOpened(@{});
     }
 }
 
-- (void)nativeAdWillDismissScreen:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdWillDismissScreen:(nonnull GADNativeAd *)nativeAd
 {
     if (self.onAdClosed) {
         self.onAdClosed(@{});
     }
 }
 
-- (void)nativeAdWillLeaveApplication:(nonnull GADUnifiedNativeAd *)nativeAd
+- (void)nativeAdWillLeaveApplication:(nonnull GADNativeAd *)nativeAd
 {
     if(self.onAdLeftApplication) {
         self.onAdLeftApplication(@{});
