@@ -6,7 +6,7 @@ async function setRequestConfiguration(config) {
   return RNAdmobNativeAdsManager.setRequestConfiguration(config);
 }
 
-function isTestDevice() {
+async function isTestDevice() {
   return RNAdmobNativeAdsManager.isTestDevice();
 }
 

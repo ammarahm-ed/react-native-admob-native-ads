@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
@@ -31,6 +32,7 @@ public class RNAdmobNativeAdManager extends ReactContextBaseJavaModule {
         return "RNAdmobNativeAdsManager";
     }
 
+    @ReactMethod
     public void setRequestConfiguration(ReadableMap config, Promise promise) {
         Context context = getReactApplicationContext().getCurrentActivity();
         if (context == null) {
@@ -59,19 +61,20 @@ public class RNAdmobNativeAdManager extends ReactContextBaseJavaModule {
             configuration.setTagForUnderAgeOfConsent(tagForUnderAgeOfConsent ? 1 : 0);
         }
         if (config.hasKey("testDeviceIds")) {
-             configuration.setTestDeviceIds(Arguments.toList(config.getArray("testDeviceIds")));
+            configuration.setTestDeviceIds(Arguments.toList(config.getArray("testDeviceIds")));
         }
 
         MobileAds.setRequestConfiguration(configuration.build());
         MobileAds.initialize(context, (InitializationStatus status) -> {
-            WritableMap map = Arguments.createMap();
+            WritableArray array = Arguments.createArray();
             for (Map.Entry<String, AdapterStatus> entry: status.getAdapterStatusMap().entrySet()) {
                 WritableMap info = Arguments.createMap();
-                info.putString("initialization_state", entry.getValue().getInitializationState().toString());
+                info.putString("name", entry.getKey());
+                info.putInt("state", entry.getValue().getInitializationState().ordinal());
                 info.putString("description", entry.getValue().getDescription());
-                map.putMap(entry.getKey(), info);
+                array.pushMap(info);
             }
-            promise.resolve(map);
+            promise.resolve(array);
         });
     }
 

@@ -8,7 +8,8 @@
 
 RCT_EXPORT_MODULE();
 
-RCT_EXPORT_METHOD(setRequestConfiguration:(NSDictionary *)config)
+RCT_EXPORT_METHOD(setRequestConfiguration:(NSDictionary *)config resolver:(RCTPromiseResolveBlock)resolve
+    rejecter:(RCTPromiseRejectBlock)reject)
 {
     if ([[config allKeys] containsObject:@"maxAdContentRating"]) {
         NSString *rating = [config valueForKey:@"maxAdContentRating"];
@@ -45,7 +46,21 @@ RCT_EXPORT_METHOD(setRequestConfiguration:(NSDictionary *)config)
         [FBAdSettings setAdvertiserTrackingEnabled:trackingAuthorized];
     };
 
-    [[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
+    GADMobileAds *ads = [GADMobileAds sharedInstance];
+    [ads startWithCompletionHandler:^(GADInitializationStatus *status) {
+        NSDictionary *adapterStatuses = [status adapterStatusesByClassName];
+        NSMutableArray *adapters = [NSMutableArray array];
+        for (NSString *adapter in adapterStatuses) {
+            GADAdapterStatus *adapterStatus = adapterStatuses[adapter];
+            NSDictionary *dict = @{
+                @"name":adapter,
+                @"state":@(adapterStatus.state),
+                @"description":adapterStatus.description
+            };
+            [adapters addObject:dict];
+        }
+        resolve(adapters);
+    }];
 }
 
 RCT_EXPORT_METHOD(isTestDevice:(RCTPromiseResolveBlock)resolve

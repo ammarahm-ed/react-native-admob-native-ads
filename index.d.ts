@@ -97,6 +97,17 @@ type AdManagerConfiguration = {
   trackingAuthorized: boolean
 }
 
+enum AdapterState {
+  READY,
+  NOT_READY
+}
+
+type MediationAdapterStatus = {
+  name: string,
+  description: string,
+  state: AdapterState
+}
+
 type ImagePropsWithOptionalSource = Omit<ImageProps, 'source'> & Partial<Pick<ImageProps, 'source'>>;
 
 
@@ -264,7 +275,7 @@ declare module "react-native-admob-native-ads" {
     *
     */
 
-    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => Promise<object>;
+    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => Promise<MediationAdapterStatus[]>;
 
     /**
      * Check if the current device is registered as a test device to show test ads.
