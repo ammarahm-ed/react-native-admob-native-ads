@@ -9,9 +9,8 @@
 #import <React/RCTConvert.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTBridgeModule.h>
-#import "RCTUIManagerUtils.h"
+#import <React/RCTUIManagerUtils.h>
 #import <React/RCTImageView.h>
-@import GoogleMobileAds;
 
 @implementation RNGADMediaView : UIView
 

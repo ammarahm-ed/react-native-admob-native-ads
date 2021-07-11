@@ -1,18 +1,10 @@
 #import "RNGADNativeViewManager.h"
 #import "RNGADNativeView.h"
 
-#if __has_include(<React/RCTBridge.h>)
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTViewManager.h>
-#else
-#import "RCTBridge.h"
-#import "RCTUIManager.h"
-#import "RCTViewManager.h"
-#import "RCTEventDispatcher.h"
-#endif
-
 
 @implementation RNGADNativeViewManager 
 

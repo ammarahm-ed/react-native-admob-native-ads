@@ -1,19 +1,9 @@
-#import "RCTViewManager.h"
-
-#if __has_include(<React/RCTBridge.h>)
-#import <React/RCTBridge.h>
-#import <React/RCTUIManager.h>
-#import <React/RCTEventDispatcher.h>
-#else
-#import "RCTBridge.h"
-#import "RCTUIManager.h"
-#import "RCTEventDispatcher.h"
-#endif
-
 #import "RNGADMediaViewManager.h"
 #import "RNGADMediaView.h"
 
-@import GoogleMobileAds;
+#import <React/RCTBridge.h>
+#import <React/RCTUIManager.h>
+#import <React/RCTEventDispatcher.h>
 
 @implementation RNGADMediaViewManager: RCTViewManager
 
