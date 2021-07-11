@@ -43,7 +43,7 @@ BOOL isLoading = FALSE;
 GADNativeAdViewAdOptions *adPlacementOptions;
 GADNativeAdMediaAdLoaderOptions *adMediaOptions;
 
-DFPRequest *adRequest;
+GAMRequest *adRequest;
 GADVideoOptions *adVideoOptions;
 
 BOOL *nonPersonalizedAds;
@@ -58,7 +58,7 @@ BOOL *nonPersonalizedAds;
     delay = @1;
     refreshingInterval = @60000;
     isLoading = FALSE;
-    adRequest = [DFPRequest request];
+    adRequest = [GAMRequest request];
     adPlacementOptions = [[GADNativeAdViewAdOptions alloc] init];
     adVideoOptions = [[GADVideoOptions alloc] init];
     adMediaOptions = [[GADNativeAdMediaAdLoaderOptions alloc] init];
@@ -454,7 +454,7 @@ BOOL *nonPersonalizedAds;
     
     self.adLoader = [[GADAdLoader alloc] initWithAdUnitID:adUnitId
                                        rootViewController:self.reactViewController
-                                                  adTypes:@[ kGADAdLoaderAdTypeUnifiedNative ]
+                                                  adTypes:@[ kGADAdLoaderAdTypeNative ]
                                                   options:@[adMediaOptions,adPlacementOptions,adVideoOptions]];
     
     
@@ -478,7 +478,7 @@ BOOL *nonPersonalizedAds;
 
 
 
-- (void)adLoader:(GADAdLoader *)adLoader didReceiveUnifiedNativeAd:(GADNativeAd *)nativeAd {
+- (void)adLoader:(GADAdLoader *)adLoader didReceiveNativeAd:(GADNativeAd *)nativeAd {
     isLoading = FALSE;
     if (self.onAdLoaded) {
         self.onAdLoaded(@{});
