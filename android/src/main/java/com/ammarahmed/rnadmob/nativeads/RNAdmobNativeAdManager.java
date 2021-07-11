@@ -12,7 +12,6 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeArray;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
@@ -33,6 +32,7 @@ public class RNAdmobNativeAdManager extends ReactContextBaseJavaModule {
         return "RNAdmobNativeAdsManager";
     }
 
+    @ReactMethod
     public void setRequestConfiguration(ReadableMap config, Promise promise) {
         Context context = getReactApplicationContext().getCurrentActivity();
         if (context == null) {
@@ -61,12 +61,12 @@ public class RNAdmobNativeAdManager extends ReactContextBaseJavaModule {
             configuration.setTagForUnderAgeOfConsent(tagForUnderAgeOfConsent ? 1 : 0);
         }
         if (config.hasKey("testDeviceIds")) {
-             configuration.setTestDeviceIds(Arguments.toList(config.getArray("testDeviceIds")));
+            configuration.setTestDeviceIds(Arguments.toList(config.getArray("testDeviceIds")));
         }
 
         MobileAds.setRequestConfiguration(configuration.build());
         MobileAds.initialize(context, (InitializationStatus status) -> {
-            WritableArray array = new WritableNativeArray();
+            WritableArray array = Arguments.createArray();
             for (Map.Entry<String, AdapterStatus> entry: status.getAdapterStatusMap().entrySet()) {
                 WritableMap info = Arguments.createMap();
                 info.putString("name", entry.getKey());
