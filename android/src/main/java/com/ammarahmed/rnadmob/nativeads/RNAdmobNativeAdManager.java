@@ -10,7 +10,9 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeArray;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
@@ -64,14 +66,15 @@ public class RNAdmobNativeAdManager extends ReactContextBaseJavaModule {
 
         MobileAds.setRequestConfiguration(configuration.build());
         MobileAds.initialize(context, (InitializationStatus status) -> {
-            WritableMap map = Arguments.createMap();
+            WritableArray array = new WritableNativeArray();
             for (Map.Entry<String, AdapterStatus> entry: status.getAdapterStatusMap().entrySet()) {
                 WritableMap info = Arguments.createMap();
-                info.putString("initialization_state", entry.getValue().getInitializationState().toString());
+                info.putString("name", entry.getKey());
+                info.putInt("state", entry.getValue().getInitializationState().ordinal());
                 info.putString("description", entry.getValue().getDescription());
-                map.putMap(entry.getKey(), info);
+                array.pushMap(info);
             }
-            promise.resolve(map);
+            promise.resolve(array);
         });
     }
 
