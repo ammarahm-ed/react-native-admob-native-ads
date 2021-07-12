@@ -390,7 +390,7 @@ public class RNAdmobNativeView extends LinearLayout {
 
     public void setNativeAd() {
         if (unifiedNativeAd != null) {
-            if (runnableForMount != null) {
+            if (handler != null && runnableForMount != null) {
                 handler.removeCallbacks(runnableForMount);
                 runnableForMount = null;
             }
