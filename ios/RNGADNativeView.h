@@ -37,14 +37,14 @@ GADNativeAdDelegate>
 
 - (void)loadAd;
 
-@property (nonatomic, copy) RCTBubblingEventBlock onAdLoaded;
-@property (nonatomic, copy) RCTBubblingEventBlock onAdFailedToLoad;
-@property (nonatomic, copy) RCTBubblingEventBlock onAdOpened;
-@property (nonatomic, copy) RCTBubblingEventBlock onAdClosed;
-@property (nonatomic, copy) RCTBubblingEventBlock onAdLeftApplication;
-@property (nonatomic, copy) RCTBubblingEventBlock onAdClicked;
-@property (nonatomic, copy) RCTBubblingEventBlock onAdImpression;
-@property (nonatomic, copy) RCTBubblingEventBlock onNativeAdLoaded;
+@property (nonatomic, copy) RCTDirectEventBlock onAdLoaded;
+@property (nonatomic, copy) RCTDirectEventBlock onAdFailedToLoad;
+@property (nonatomic, copy) RCTDirectEventBlock onAdOpened;
+@property (nonatomic, copy) RCTDirectEventBlock onAdClosed;
+@property (nonatomic, copy) RCTDirectEventBlock onAdLeftApplication;
+@property (nonatomic, copy) RCTDirectEventBlock onAdClicked;
+@property (nonatomic, copy) RCTDirectEventBlock onAdImpression;
+@property (nonatomic, copy) RCTDirectEventBlock onNativeAdLoaded;
 
 
 @end
