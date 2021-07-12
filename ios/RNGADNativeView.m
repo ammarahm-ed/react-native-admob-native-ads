@@ -566,7 +566,7 @@ BOOL *nonPersonalizedAds;
             
         }
         
-        self.onUnifiedNativeAdLoaded(dic);
+        self.onNativeAdLoaded(dic);
         
     }
     

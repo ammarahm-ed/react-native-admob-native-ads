@@ -65,7 +65,7 @@ export class NativeAdView extends Component {
     if (this.props.onAdOpened) this.props.onAdOpened(event.nativeEvent);
   };
 
-  onUnifiedNativeAdLoaded = (event) => {
+  onNativeAdLoaded = (event) => {
     this.ad = event.nativeEvent;
     if (this.ad.aspectRatio) {
       this.ad.aspectRatio = parseFloat(this.ad.aspectRatio);
@@ -74,6 +74,10 @@ export class NativeAdView extends Component {
       this.updateAd();
       if (this.props.onUnifiedNativeAdLoaded) {
         this.props.onUnifiedNativeAdLoaded(this.ad);
+        console.warn('[DEPRECATED] onUnifiedNativeAdLoaded is deprecated and will be removed in future versions. Use onNativeAdLoaded instead.')
+      }
+      if (this.props.onNativeAdLoaded) {
+        this.props.onNativeAdLoaded(this.ad);
       }
     }
   };
@@ -124,7 +128,7 @@ export class NativeAdView extends Component {
     const { nativeAd, nativeAdView } = this.state;
     return (
       <NativeAdContext.Provider value={{ nativeAd, nativeAdView }}>
-        <UnifiedNativeAdView
+        <RNGADNativeView
           ref={this._getRef}
           adUnitID={this.props.adUnitID}
           onAdLoaded={this._onAdLoaded}
@@ -138,7 +142,7 @@ export class NativeAdView extends Component {
           mediaAspectRatio={
             AdOptions.mediaAspectRatio[this.props.mediaAspectRatio]
           }
-          onUnifiedNativeAdLoaded={this.onUnifiedNativeAdLoaded}
+          onNativeAdLoaded={this.onNativeAdLoaded}
           messagingModuleName={this.messagingModuleName}
           requestNonPersonalizedAdsOnly={
             this.props.requestNonPersonalizedAdsOnly
@@ -157,7 +161,7 @@ export class NativeAdView extends Component {
           >
             {this.props.children}
           </Wrapper>
-        </UnifiedNativeAdView>
+        </RNGADNativeView>
       </NativeAdContext.Provider>
     );
   }
@@ -179,9 +183,8 @@ NativeAdView.defaultProps = {
 
 NativeAdView.simulatorId = "SIMULATOR";
 
-const UnifiedNativeAdView = requireNativeComponent(
-  "RNGADNativeView",
-  NativeAdView
+const RNGADNativeView = requireNativeComponent(
+  "RNGADNativeView"
 );
 
 export default NativeAdView;

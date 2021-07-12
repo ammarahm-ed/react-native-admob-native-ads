@@ -186,8 +186,8 @@ type NativeAdViewProps = {
   onAdImpression?: () => void;
   onAdClicked?: () => void;
   onAdLoaded?: () => void;
-  onUnifiedNativeAdLoaded?: (event: NativeAd) => {};
-  onAdFailedToLoad?: (error: { message: string }) => {};
+  onNativeAdLoaded?: (event: NativeAd) => void;
+  onAdFailedToLoad?: (error: { message: string }) => void;
 };
 
 type SimpleViewProps = {

@@ -44,7 +44,7 @@ GADNativeAdDelegate>
 @property (nonatomic, copy) RCTBubblingEventBlock onAdLeftApplication;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdClicked;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdImpression;
-@property (nonatomic, copy) RCTBubblingEventBlock onUnifiedNativeAdLoaded;
+@property (nonatomic, copy) RCTBubblingEventBlock onNativeAdLoaded;
 
 
 @end
