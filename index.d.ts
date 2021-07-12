@@ -1,3 +1,4 @@
+import React from "react";
 import { ViewStyle, TextProps, ImageProps, TextStyle, StyleProp } from "react-native";
 
 type Image = {
@@ -92,7 +93,19 @@ type AdManagerConfiguration = {
   maxAdContentRating: MAX_AD_CONTENT_RATING,
   tagForChildDirectedTreatment: boolean,
   tagForUnderAgeConsent: boolean,
-  testDeviceIds: Array<string>
+  testDeviceIds: Array<string>,
+  trackingAuthorized: boolean
+}
+
+export enum AdapterState {
+  NOT_READY,
+  READY
+}
+
+type MediationAdapterStatus = {
+  name: string,
+  description: string,
+  state: AdapterState
 }
 
 type ImagePropsWithOptionalSource = Omit<ImageProps, 'source'> & Partial<Pick<ImageProps, 'source'>>;
@@ -173,8 +186,8 @@ type NativeAdViewProps = {
   onAdImpression?: () => void;
   onAdClicked?: () => void;
   onAdLoaded?: () => void;
-  onUnifiedNativeAdLoaded?: (event: NativeAd) => {};
-  onAdFailedToLoad?: (error: { message: string }) => {};
+  onNativeAdLoaded?: (event: NativeAd) => void;
+  onAdFailedToLoad?: (error: { message: string }) => void;
 };
 
 type SimpleViewProps = {
@@ -223,9 +236,9 @@ declare module "react-native-admob-native-ads" {
    *
    */
 
-  export default function NativeAdView(
-    props: NativeAdViewProps
-  ): JSX.Element;
+  export default class NativeAdView extends React.Component<NativeAdViewProps> {
+    loadAd: () => void;
+  }
 
 
   /**
@@ -262,7 +275,7 @@ declare module "react-native-admob-native-ads" {
     *
     */
 
-    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => Promise<object>;
+    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => Promise<MediationAdapterStatus[]>;
 
     /**
      * Check if the current device is registered as a test device to show test ads.

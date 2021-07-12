@@ -4,10 +4,10 @@
 
 @import GoogleMobileAds;
 
-@interface RNGADNativeView : GADUnifiedNativeAdView <GADUnifiedNativeAdLoaderDelegate,
-GADUnifiedNativeAdDelegate>
+@interface RNGADNativeView : GADNativeAdView <GADNativeAdLoaderDelegate,
+GADNativeAdDelegate>
 
-@property(nonatomic, strong) GADUnifiedNativeAdView *nativeAdView;
+@property(nonatomic, strong) GADNativeAdView *nativeAdView;
 @property(nonatomic, strong) GADAdLoader *adLoader;
 
 @property (nonatomic, copy) NSArray *testDevices;
@@ -44,7 +44,7 @@ GADUnifiedNativeAdDelegate>
 @property (nonatomic, copy) RCTBubblingEventBlock onAdLeftApplication;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdClicked;
 @property (nonatomic, copy) RCTBubblingEventBlock onAdImpression;
-@property (nonatomic, copy) RCTBubblingEventBlock onUnifiedNativeAdLoaded;
+@property (nonatomic, copy) RCTBubblingEventBlock onNativeAdLoaded;
 
 
 @end

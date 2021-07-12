@@ -54,7 +54,7 @@ public class RNAdmobNativeView extends LinearLayout {
     private Runnable runnableForMount = null;
     ReactContext mContext;
     NativeAdView nativeAdView;
-    NativeAd unifiedNativeAd;
+    NativeAd nativeAd;
     VideoOptions videoOptions;
     Bundle facebookExtras;
     AdManagerAdRequest.Builder adRequest;
@@ -134,18 +134,18 @@ public class RNAdmobNativeView extends LinearLayout {
     private String admobAdUnitId = "";
     private Handler handler;
 
-    NativeAd.OnNativeAdLoadedListener onUnifiedNativeAdLoadedListener = new NativeAd.OnNativeAdLoadedListener() {
+    NativeAd.OnNativeAdLoadedListener onNativeAdLoadedListener = new NativeAd.OnNativeAdLoadedListener() {
         @Override
-        public void onNativeAdLoaded(NativeAd nativeAd) {
-            if (unifiedNativeAd != null) {
-                unifiedNativeAd.destroy();
+        public void onNativeAdLoaded(NativeAd ad) {
+            if (nativeAd != null) {
+                nativeAd.destroy();
             }
 
-            if (nativeAd != null) {
-                unifiedNativeAd = nativeAd;
+            if (ad != null) {
+                nativeAd = ad;
                 setNativeAd();
             }
-            setNativeAdToJS(nativeAd);
+            setNativeAdToJS(ad);
         }
     };
 
@@ -175,7 +175,7 @@ public class RNAdmobNativeView extends LinearLayout {
         try {
             mediaView = (RNAdmobMediaView) nativeAdView.findViewById(id);
             if (mediaView != null) {
-                unifiedNativeAd.getMediaContent().getVideoController().setVideoLifecycleCallbacks(mediaView.videoLifecycleCallbacks);
+                nativeAd.getMediaContent().getVideoController().setVideoLifecycleCallbacks(mediaView.videoLifecycleCallbacks);
                 nativeAdView.setMediaView((MediaView) nativeAdView.findViewById(id));
                 mediaView.requestLayout();
                 setNativeAd();
@@ -225,7 +225,7 @@ public class RNAdmobNativeView extends LinearLayout {
 
             MediaContent mediaContent = nativeAd.getMediaContent();
             if (nativeAdView.getMediaView() != null) {
-                nativeAdView.getMediaView().setMediaContent(unifiedNativeAd.getMediaContent());
+                nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
             }
 
 
@@ -300,7 +300,7 @@ public class RNAdmobNativeView extends LinearLayout {
         params.pushMap(event);
 
         if (mCatalystInstance != null) {
-            mCatalystInstance.callFunction(messagingModuleName, "onUnifiedNativeAdLoaded", params);
+            mCatalystInstance.callFunction(messagingModuleName, "onNativeAdLoaded", params);
         }
 
     }
@@ -359,7 +359,7 @@ public class RNAdmobNativeView extends LinearLayout {
 
     public void loadAdBuilder() {
         builder = new AdLoader.Builder(mContext, admobAdUnitId);
-        builder.forNativeAd(onUnifiedNativeAdLoadedListener);
+        builder.forNativeAd(onNativeAdLoadedListener);
         builder.withNativeAdOptions(adOptions.build());
         adLoader = builder.withAdListener(adListener)
                 .build();
@@ -389,21 +389,21 @@ public class RNAdmobNativeView extends LinearLayout {
     }
 
     public void setNativeAd() {
-        if (unifiedNativeAd != null) {
-            if (runnableForMount != null) {
+        if (nativeAd != null) {
+            if (handler != null && runnableForMount != null) {
                 handler.removeCallbacks(runnableForMount);
                 runnableForMount = null;
             }
             runnableForMount = new Runnable() {
                 @Override
                 public void run() {
-                    if (nativeAdView != null && unifiedNativeAd != null) {
-                        nativeAdView.setNativeAd(unifiedNativeAd);
+                    if (nativeAdView != null && nativeAd != null) {
+                        nativeAdView.setNativeAd(nativeAd);
 
                         if (mediaView != null && nativeAdView.getMediaView()!=null) {
-                            nativeAdView.getMediaView().setMediaContent(unifiedNativeAd.getMediaContent());
-                            if (unifiedNativeAd.getMediaContent().hasVideoContent()) {
-                                mediaView.setVideoController(unifiedNativeAd.getMediaContent().getVideoController());
+                            nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
+                            if (nativeAd.getMediaContent().hasVideoContent()) {
+                                mediaView.setVideoController(nativeAd.getMediaContent().getVideoController());
                             }
                         }
 

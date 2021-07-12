@@ -2,12 +2,14 @@
 #import "RNNativeAdMobUtils.h"
 
 @import GoogleMobileAds;
+@import FBAudienceNetwork;
 
 @implementation RNAdmobNativeAdsManager
 
 RCT_EXPORT_MODULE();
 
-RCT_EXPORT_METHOD(setRequestConfiguration:(NSDictionary *)config)
+RCT_EXPORT_METHOD(setRequestConfiguration:(NSDictionary *)config resolver:(RCTPromiseResolveBlock)resolve
+    rejecter:(RCTPromiseRejectBlock)reject)
 {
     if ([[config allKeys] containsObject:@"maxAdContentRating"]) {
         NSString *rating = [config valueForKey:@"maxAdContentRating"];
@@ -35,9 +37,30 @@ RCT_EXPORT_METHOD(setRequestConfiguration:(NSDictionary *)config)
     };
     
     if ([[config allKeys] containsObject:@"testDeviceIds"]) {
-        NSArray *testDevices = RNAdMobProcessTestDevices([config valueForKey:@"testDeviceIds"],kDFPSimulatorID);
+        NSArray *testDevices = RNAdMobProcessTestDevices([config valueForKey:@"testDeviceIds"],kGAMSimulatorID);
         [[[GADMobileAds sharedInstance] requestConfiguration] setTestDeviceIdentifiers:testDevices];
     };
+
+    if ([[config allKeys] containsObject:@"trackingAuthorized"]) {
+        NSNumber *trackingAuthorized = [config valueForKey:@"trackingAuthorized"];
+        [FBAdSettings setAdvertiserTrackingEnabled:trackingAuthorized];
+    };
+
+    GADMobileAds *ads = [GADMobileAds sharedInstance];
+    [ads startWithCompletionHandler:^(GADInitializationStatus *status) {
+        NSDictionary *adapterStatuses = [status adapterStatusesByClassName];
+        NSMutableArray *adapters = [NSMutableArray array];
+        for (NSString *adapter in adapterStatuses) {
+            GADAdapterStatus *adapterStatus = adapterStatuses[adapter];
+            NSDictionary *dict = @{
+                @"name":adapter,
+                @"state":@(adapterStatus.state),
+                @"description":adapterStatus.description
+            };
+            [adapters addObject:dict];
+        }
+        resolve(adapters);
+    }];
 }
 
 RCT_EXPORT_METHOD(isTestDevice:(RCTPromiseResolveBlock)resolve

@@ -6,7 +6,6 @@
 
 @interface RNGADMediaView: UIView <GADVideoControllerDelegate>
 
-
 @property (nonatomic) BOOL *pause;
 @property (nonatomic) BOOL *muted;
 
