@@ -51,7 +51,7 @@ Yes absolutely you can! There are no limiations. You can design ads that look ju
 7.  **Support for Video Ads**
 8.  Ad Mediation (**Especially Facebook Ads Mediation(Video & Banners)**)
 9.  Ad Targeting
-10. Typescript definations
+10. Typescript definitions
 
 ## Installation
 - [Installation Guide](https://ammarahm-ed.github.io/react-native-admob-native-ads/docs/installation-3)
