@@ -1,13 +1,7 @@
-import React, {useState} from 'react';
-import {
-  Image,
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { AdManager } from 'react-native-admob-native-ads';
-import { requestTrackingPermission } from 'react-native-tracking-transparency';
+import React, {useEffect, useState} from 'react';
+import {Image, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
+import {AdManager} from 'react-native-admob-native-ads';
+import {requestTrackingPermission} from 'react-native-tracking-transparency';
 import {AdView} from './src/AdView';
 import List from './src/List';
 import {routes} from './src/utils';
@@ -21,7 +15,7 @@ const App = () => {
       const trackingStatus = await requestTrackingPermission();
 
       let trackingAuthorized = false;
-      if (trackingStatus === "authorized" || trackingStatus === "unavailable") {
+      if (trackingStatus === 'authorized' || trackingStatus === 'unavailable') {
         trackingAuthorized = true;
       }
 

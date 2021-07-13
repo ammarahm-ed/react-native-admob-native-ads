@@ -19,7 +19,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
   const [error, setError] = useState(false);
   const nativeAdRef = useRef();
 
-  const onAdFailedToLoad = (event) => {
+  const onAdFailedToLoad = event => {
     setError(true);
     setLoading(false);
     /**
@@ -55,7 +55,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
     Logger('AD', 'IMPRESSION', 'Ad impression recorded');
   };
 
-  const onUnifiedNativeAdLoaded = (event) => {
+  const onNativeAdLoaded = event => {
     Logger('AD', 'RECIEVED', 'Unified ad  Recieved', event);
     setLoading(false);
     setLoaded(true);
@@ -67,42 +67,41 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
     Logger('AD', 'LEFT', 'Ad left application');
   };
 
-  const onViewableItemsChanged = (event) => {
-    /**
-     * [STEP IV] We check if any AdViews are currently viewable.
-     */
-    let viewableAds = event.viewableItems.filter(
-      (i) => i.key.indexOf('ad') !== -1,
-    );
-
-    viewableAds.forEach((adView) => {
-      if (adView.index === index && !loaded) {
-        /**
-         * [STEP V] If the ad is viewable and not loaded
-         * already, we will load the ad.
-         */
-        setLoading(true);
-        setLoaded(false);
-        setError(false);
-        Logger('AD', 'IN VIEW', 'Loading ' + index);
-        nativeAdRef.current?.loadAd();
-      } else {
-        /**
-         * We will not reload ads or load
-         * ads that are not viewable currently
-         * to save bandwidth and requests sent
-         * to server.
-         */
-        if (loaded) {
-          Logger('AD', 'IN VIEW', 'Loaded ' + index);
-        } else {
-          Logger('AD', 'NOT IN VIEW', index);
-        }
-      }
-    });
-  };
-
   useEffect(() => {
+    const onViewableItemsChanged = event => {
+      /**
+       * [STEP IV] We check if any AdViews are currently viewable.
+       */
+      let viewableAds = event.viewableItems.filter(
+        i => i.key.indexOf('ad') !== -1,
+      );
+
+      viewableAds.forEach(adView => {
+        if (adView.index === index && !loaded) {
+          /**
+           * [STEP V] If the ad is viewable and not loaded
+           * already, we will load the ad.
+           */
+          setLoading(true);
+          setLoaded(false);
+          setError(false);
+          Logger('AD', 'IN VIEW', 'Loading ' + index);
+          nativeAdRef.current?.loadAd();
+        } else {
+          /**
+           * We will not reload ads or load
+           * ads that are not viewable currently
+           * to save bandwidth and requests sent
+           * to server.
+           */
+          if (loaded) {
+            Logger('AD', 'IN VIEW', 'Loaded ' + index);
+          } else {
+            Logger('AD', 'NOT IN VIEW', index);
+          }
+        }
+      });
+    };
     /**
      * for previous steps go to List.js file.
      *
@@ -123,19 +122,19 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
         );
       }
     };
-  }, [loaded]);
+  }, [index, loadOnMount, loaded]);
 
   useEffect(() => {
     if (loadOnMount) {
       setLoading(true);
       setLoaded(false);
-      setError(false)
+      setError(false);
       nativeAdRef.current?.loadAd();
     }
     return () => {
       setLoaded(false);
     };
-  }, [type]);
+  }, [loadOnMount]);
 
   return (
     <NativeAdView
@@ -145,7 +144,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
       onAdLeftApplication={onAdLeftApplication}
       onAdClicked={onAdClicked}
       onAdImpression={onAdImpression}
-      onUnifiedNativeAdLoaded={onUnifiedNativeAdLoaded}
+      onNativeAdLoaded={onNativeAdLoaded}
       style={{
         width: '98%',
         alignSelf: 'center',
@@ -160,13 +159,13 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
         <View
           style={{
             width: '100%',
-            height: "100%",
+            height: '100%',
             backgroundColor: '#f0f0f0',
             position: 'absolute',
             justifyContent: 'center',
             alignItems: 'center',
             opacity: !loading && !error && loaded ? 0 : 1,
-            zIndex:!loading && !error && loaded ? 0 : 10
+            zIndex: !loading && !error && loaded ? 0 : 10,
           }}>
           {loading && <ActivityIndicator size={28} color="#a9a9a9" />}
           {error && <Text style={{color: '#a9a9a9'}}>:-(</Text>}
@@ -244,7 +243,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
               alignItems: 'center',
               elevation: 10,
               maxWidth: 100,
-              width:80
+              width: 80,
             }}
             buttonAndroidStyle={{
               backgroundColor: '#00ff00',

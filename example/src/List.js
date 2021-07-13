@@ -62,11 +62,11 @@ const List = () => {
    * we want to know what items are visible and store them
    * in a variable for later us.
    */
-  const onViewableItemsChanged = React.useCallback((e) => {
+  const onViewableItemsChanged = React.useCallback(e => {
     viewableItemsChanged = e;
   }, []);
 
-  const keyExtractor = React.useCallback((item) => item, []);
+  const keyExtractor = React.useCallback(item => item, []);
 
   return (
     <View style={styles.container}>
