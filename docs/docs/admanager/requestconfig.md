@@ -18,7 +18,7 @@ sidebar_label: setRequestConfiguration
 | tagForUnderAgeConsent        | `boolean`          | no       |
 | trackingAuthorized           | `boolean`          | no       |
 
-### `trackingAuthorized`
+#### `trackingAuthorized`
 
 If you are building for iOS 14 or later, Facebook requires that you explicitly set their Advertising Tracking Enabled flag. Use [react-native-tracking-transparency](https://github.com/mrousavy/react-native-tracking-transparency) to acquire permission status for tracking, and pass it to `trackingAuthorized` property.
 
@@ -31,6 +31,18 @@ If you are building for iOS 14 or later, Facebook requires that you explicitly s
 | PG          | "Parental guidance." Content suitable for most audiences with parental guidance, including topics like non-realistic, cartoonish violence.        |
 | T           | "Teen." Content suitable for teen and older audiences, including topics such as general health, social networks, scary imagery, and fight sports. |
 | UNSPECIFIED | Set default value to ""                                                                                                                           |
+
+### MediationAdapterStatus
+
+| Name        | Type           |
+| ----------- | -------------- |
+| name        | `string`       |
+| description | `string`       |
+| state       | `AdapterState` |
+
+#### `AdapterState`
+
+`enum AdapterState { NOT_READY, READY }`
 
 ### Usage example
 
