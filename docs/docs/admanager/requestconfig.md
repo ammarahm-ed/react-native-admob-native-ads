@@ -4,7 +4,9 @@ title: setRequestConfiguration
 sidebar_label: setRequestConfiguration
 ---
 
-Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
+`setRequestConfiguration` is a function configures Ad requests and initializes Mobile Ads SDK. You need to call this function before you load any Ads. Generally, you call this function when the root component of your app is mounted. You need to pass a single object as an argument with at least one of the following properties.
+
+`setRequestConfiguration` returns `Promise<MediationAdapterStatus[]>` which is each mediation adapter's initialization status.
 
 ### Properties
 
@@ -14,11 +16,15 @@ Configure your Ad Requests during App Startup. You need to pass a single object 
 | maxAdContentRating           | Ad Content Ratings | no       |
 | tagForChildDirectedTreatment | `boolean`          | no       |
 | tagForUnderAgeConsent        | `boolean`          | no       |
+| trackingAuthorized           | `boolean`          | no       |
+
+### `trackingAuthorized`
+
+If you are building for iOS 14 or later, Facebook requires that you explicitly set their Advertising Tracking Enabled flag. Use [react-native-tracking-transparency](https://github.com/mrousavy/react-native-tracking-transparency) to acquire permission status for tracking, and pass it to `trackingAuthorized` property.
 
 ### Ad Content Ratings
 
-
-| Type       | Description                                                                                                                                       |
+| Type        | Description                                                                                                                                       |
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | G           | "General audiences." Content suitable for all audiences, including families and children.                                                         |
 | MA          | "Mature audiences." Content suitable only for mature audiences; includes topics such as alcohol, gambling, sexual content, and weapons.           |
@@ -36,5 +42,28 @@ const config = {
   tagForUnderAgeConsent: false,
 };
 
-AdManager.setRequestConfiguration(config);
+export default function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const init = async () => {
+      const trackingStatus = await requestTrackingPermission();
+
+      let trackingAuthorized = false;
+      if (trackingStatus === "authorized" || trackingStatus === "unavailable") {
+        trackingAuthorized = true;
+      }
+
+      await AdManager.setRequestConfiguration({
+        ...config,
+        trackingAuthorized,
+      });
+
+      setLoading(false);
+    };
+
+    init();
+  }, []);
+
+  return (/* Your App code */)
 ```

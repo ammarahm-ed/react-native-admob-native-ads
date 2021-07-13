@@ -10,4 +10,4 @@ Check if the current device is registered as a test device to show test ads.
 AdManager.isTestDevice().then((result) => console.log(result));
 ```
 
-return: `boolean`
+return: `Promise<boolean>`

@@ -2,17 +2,38 @@ import React, {useState} from 'react';
 import {
   Image,
   SafeAreaView,
-  ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { AdManager } from 'react-native-admob-native-ads';
+import { requestTrackingPermission } from 'react-native-tracking-transparency';
 import {AdView} from './src/AdView';
 import List from './src/List';
 import {routes} from './src/utils';
 
 const App = () => {
   const [currentRoute, setCurrentRoute] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const init = async () => {
+      const trackingStatus = await requestTrackingPermission();
+
+      let trackingAuthorized = false;
+      if (trackingStatus === "authorized" || trackingStatus === "unavailable") {
+        trackingAuthorized = true;
+      }
+
+      await AdManager.setRequestConfiguration({
+        trackingAuthorized,
+      });
+
+      setLoading(false);
+    };
+
+    init();
+  }, []);
 
   return (
     <SafeAreaView
@@ -50,7 +71,7 @@ const App = () => {
         )}
       </View>
 
-      {!currentRoute && (
+      {!loading && !currentRoute && (
         <View
           style={{
             alignItems: 'center',
