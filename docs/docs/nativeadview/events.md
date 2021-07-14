@@ -6,7 +6,7 @@ sidebar_label: Event props
 
 All events are available through props. The following event are available on both Android and iOS:
 
-### `onUnifiedNativeAdLoaded`
+### `onNativeAdLoaded`
 
 This event returns a data object which contains all the ad related information incase you need it. Usually you wont need this because everything is loaded automatically in the views.
 
@@ -22,7 +22,7 @@ This event returns a data object which contains all the ad related information i
 | `images:Array<Image>` | Array of image urls recieved with the ad. The `Image` object contains `url`,`width` and `height` of image.                           | All      |
 | `callToAction:string` | callToAction text value for the native ad.                                                                                           | All      |
 | `rating:number`       | If ad is for an app, then its rating on the respective store.                                                                        | All      |
-| `video:boolean` | if ad has video content or not. | All |
+| `video:boolean`       | if ad has video content or not.                                                                                                      | All      |
 
 ### `onAdFailedToLoad`
 

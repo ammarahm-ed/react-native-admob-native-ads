@@ -1,3 +1,4 @@
+import {Platform} from 'react-native';
 /**
  *
  * @param {string} tag
@@ -41,8 +42,6 @@ export const adUnitIDs = {
 export const Events = {
   onViewableItemsChanged: 'onViewableItemsChanged',
 };
-
-
 
 export const routes = [
   {
