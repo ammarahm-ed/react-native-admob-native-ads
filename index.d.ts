@@ -1,5 +1,11 @@
 import React from "react";
-import { ViewStyle, TextProps, ImageProps, TextStyle, StyleProp } from "react-native";
+import {
+  ViewStyle,
+  TextProps,
+  ImageProps,
+  TextStyle,
+  StyleProp,
+} from "react-native";
 
 type Image = {
   /**
@@ -11,13 +17,10 @@ type Image = {
    */
   height: number;
   /**
- * The width of the image
- */
+   * The width of the image
+   */
   width: number;
-}
-
-
-
+};
 
 type NativeAd = {
   /**
@@ -72,12 +75,12 @@ type NativeAd = {
 
 type options = {
   adChoicesPlacement: {
-    TOP_LEFT: number,
-    TOP_RIGHT: number,
-    BOTTOM_RIGHT: number,
-    BOTTOM_LEFT: number
-  }
-}
+    TOP_LEFT: number;
+    TOP_RIGHT: number;
+    BOTTOM_RIGHT: number;
+    BOTTOM_LEFT: number;
+  };
+};
 /**
  * | Name      | Description |
 | --------- | -------- |
@@ -87,29 +90,29 @@ type options = {
 | T | "Teen." Content suitable for teen and older audiences, including topics such as general health, social networks, scary imagery, and fight sports. |
 | UNSPECIFIED | Set default value to ""|
  */
-type MAX_AD_CONTENT_RATING = 'G' | 'MA' | 'PG' | 'T' | 'UNSPECIFIED';
+type MAX_AD_CONTENT_RATING = "G" | "MA" | "PG" | "T" | "UNSPECIFIED";
 
 type AdManagerConfiguration = {
-  maxAdContentRating: MAX_AD_CONTENT_RATING,
-  tagForChildDirectedTreatment: boolean,
-  tagForUnderAgeConsent: boolean,
-  testDeviceIds: Array<string>,
-  trackingAuthorized: boolean
-}
+  maxAdContentRating: MAX_AD_CONTENT_RATING;
+  tagForChildDirectedTreatment: boolean;
+  tagForUnderAgeConsent: boolean;
+  testDeviceIds: Array<string>;
+  trackingAuthorized: boolean;
+};
 
 export enum AdapterState {
   NOT_READY,
-  READY
+  READY,
 }
 
 type MediationAdapterStatus = {
-  name: string,
-  description: string,
-  state: AdapterState
-}
+  name: string;
+  description: string;
+  state: AdapterState;
+};
 
-type ImagePropsWithOptionalSource = Omit<ImageProps, 'source'> & Partial<Pick<ImageProps, 'source'>>;
-
+type ImagePropsWithOptionalSource = Omit<ImageProps, "source"> &
+  Partial<Pick<ImageProps, "source">>;
 
 type NativeAdViewProps = {
   /**
@@ -134,14 +137,14 @@ type NativeAdViewProps = {
   /**
    * Ads returned will be of the desired aspectRatio
    */
-  mediaAspectRatio?: 'any' | 'landscape' | 'portrait' | 'square' | 'unknown'
+  mediaAspectRatio?: "any" | "landscape" | "portrait" | "square" | "unknown";
 
   /**
    * Placement of AdChoicesView in any of the 4 corners of the ad
    *
    */
 
-  adChoicesPlacement?: "topLeft" | "topRight" | "bottomLeft" | "bottomRight"
+  adChoicesPlacement?: "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
 
   /**
    * Under the Google EU User Consent Policy, you must make certain disclosures
@@ -162,22 +165,22 @@ type NativeAdViewProps = {
    * Set testdevices for the ad. (DEPRECATED)
    */
   videoOptions: {
-    muted?: boolean,
-    clickToExpand?: boolean,
-    customControlsRequested?: boolean
+    muted?: boolean;
+    clickToExpand?: boolean;
+    customControlsRequested?: boolean;
   };
 
   mediationOptions: {
-    nativeBanner?: boolean,
+    nativeBanner?: boolean;
   };
   targetingOptions: {
-    targets?: Array<{ key: boolean, value: string | Array<string> }>,
-    categoryExclusions?: Array<string>,
-    publisherId?: string,
-    requestAgent?: string,
-    keywords?: Array<string>,
-    contentUrl?: string,
-    neighboringContentUrls?: Array<string>
+    targets?: Array<{ key: boolean; value: string | Array<string> }>;
+    categoryExclusions?: Array<string>;
+    publisherId?: string;
+    requestAgent?: string;
+    keywords?: Array<string>;
+    contentUrl?: string;
+    neighboringContentUrls?: Array<string>;
   };
   testDevices?: Array<string>;
   onAdOpened?: () => void;
@@ -201,34 +204,42 @@ type NestedTextProps = {
   allowFontScaling?: boolean;
   buttonAndroidStyle?: {
     /**
-* Only 6 digit hex colors are supported. Example: #f0f0f0
-*/
-    backgroundColor?: string,
+     * Only 6 digit hex colors are supported. Example: #f0f0f0
+     */
+    backgroundColor?: string;
     /**
-* Only 6 digit hex colors are supported. Example: #f0f0f0
-*/
-    borderColor?: string,
-    borderWidth?: number,
-    borderRadius?: number,
-  }
+     * Only 6 digit hex colors are supported. Example: #f0f0f0
+     */
+    borderColor?: string;
+    borderWidth?: number;
+    borderRadius?: number;
+  };
 };
 
 type StarViewProps = {
-  style?: StyleProp<ViewStyle>,
-  size?: number,
-  iconSet?: 'Entypo' | 'EvilIcons' | 'Feather' | 'FontAwesome' | 'Foundation' | 'Ionicons' | 'MaterialIcons' | 'MaterialCommunityIcons' | 'Octicons' | 'Zocial' | 'SimpleLineIcons',
-  fullIcon?: string,
-  halfIcon?: string,
-  emptyIcon?: string,
-  fullIconColor?: string,
-  halfIconColor?: string,
-  emptyIconColor?: string
+  style?: StyleProp<ViewStyle>;
+  size?: number;
+  iconSet?:
+    | "Entypo"
+    | "EvilIcons"
+    | "Feather"
+    | "FontAwesome"
+    | "Foundation"
+    | "Ionicons"
+    | "MaterialIcons"
+    | "MaterialCommunityIcons"
+    | "Octicons"
+    | "Zocial"
+    | "SimpleLineIcons";
+  fullIcon?: string;
+  halfIcon?: string;
+  emptyIcon?: string;
+  fullIconColor?: string;
+  halfIconColor?: string;
+  emptyIconColor?: string;
 };
 
-
 declare module "react-native-admob-native-ads" {
-
-
   /**
    *
    * Wrapper for the UnifiedNativeAdView from Google Ads SDK. All your views should be
@@ -240,14 +251,12 @@ declare module "react-native-admob-native-ads" {
     loadAd: () => void;
   }
 
-
   /**
    * AdManager can be used to configure your ads on App Startup such as setting test devices.
    *
    */
 
   export const AdManager: {
-
     /**
     * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
 
@@ -275,7 +284,9 @@ declare module "react-native-admob-native-ads" {
     *
     */
 
-    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => Promise<MediationAdapterStatus[]>;
+    setRequestConfiguration: (
+      config: Partial<AdManagerConfiguration>
+    ) => Promise<MediationAdapterStatus[]>;
 
     /**
      * Check if the current device is registered as a test device to show test ads.
@@ -285,17 +296,15 @@ declare module "react-native-admob-native-ads" {
   ```
   return: `boolean`
      */
-    isTestDevice: () => Promise<boolean>,
-  }
-
+    isTestDevice: () => Promise<boolean>;
+  };
 
   export const AdOptions: options;
 
-
   /**
-  * Ad Badge shows the {ad} badge on top of the ad telling the user that this is an AD.
-  *
-  */
+   * Ad Badge shows the {ad} badge on top of the ad telling the user that this is an AD.
+   *
+   */
 
   export function AdBadge(props: NestedTextProps): JSX.Element;
 
@@ -340,16 +349,18 @@ declare module "react-native-admob-native-ads" {
    * If the ad has images or video content. It will be loaded inside the MediaView.
    */
   export function NativeMediaView(props: {
-    style?: StyleProp<ViewStyle>,
-    onVideoStart?: () => void,
-    onVideoEnd?: () => void,
-    onVideoPause?: () => void,
-    onVideoPlay?: () => void,
-    onVideoProgress?: (progress: { duration: string, currentTime: string }) => {},
-    onVideoMute?: (muted: boolean) => {},
-    paused?: boolean,
-    muted?: boolean
-
+    style?: StyleProp<ViewStyle>;
+    onVideoStart?: () => void;
+    onVideoEnd?: () => void;
+    onVideoPause?: () => void;
+    onVideoPlay?: () => void;
+    onVideoProgress?: (progress: {
+      duration: string;
+      currentTime: string;
+    }) => {};
+    onVideoMute?: (muted: boolean) => {};
+    paused?: boolean;
+    muted?: boolean;
   }): JSX.Element;
 
   /**
@@ -358,15 +369,11 @@ declare module "react-native-admob-native-ads" {
    * work since they have no effect. Native side does not recieve the call hence simple
    * Text Component is used to receive the clicks.
    */
-  export function CallToActionView(
-    props: NestedTextProps
-  ): JSX.Element;
+  export function CallToActionView(props: NestedTextProps): JSX.Element;
 
   /**
    * A Star Rating View to show the star rating for the app ads that you might recieve from
    * the server.
    */
-  export function StarRatingView(
-    props: StarViewProps
-  ): JSX.Element;
+  export function StarRatingView(props: StarViewProps): JSX.Element;
 }
