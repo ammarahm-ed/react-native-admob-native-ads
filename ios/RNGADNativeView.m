@@ -1,19 +1,10 @@
 #import "RNGADNativeView.h"
 #import "RNGADMediaView.h"
 #import "RNNativeAdMobUtils.h"
-#import <React/RCTRootView.h>
-#import <React/RCTRootViewDelegate.h>
-#import <React/RCTViewManager.h>
-#import <React/RCTUtils.h>
-#import <React/RCTAssert.h>
-#import <React/RCTBridge.h>
-#import <React/RCTConvert.h>
-#import <React/RCTUIManager.h>
-#import <React/RCTBridgeModule.h>
-#import <React/RCTUIManagerUtils.h>
-#import <React/RCTImageView.h>
 
+#ifdef MEDIATION_FACEBOOK
 @import FacebookAdapter;
+#endif
 
 @implementation RNGADNativeView : GADNativeAdView
 
@@ -77,7 +68,7 @@ BOOL *nonPersonalizedAds;
         /**
          The following code adds support for Native Banner for Facebook Mediation Ads.
          */
-        
+        #ifdef MEDIATION_FACEBOOK
         GADFBNetworkExtras * extras = [[GADFBNetworkExtras alloc] init];
         
         if ([[mediationOptions valueForKey:@"nativeBanner"] isEqual:[NSNumber numberWithBool:NO]]) {
@@ -88,6 +79,7 @@ BOOL *nonPersonalizedAds;
        
         
         [adRequest registerAdNetworkExtras:extras];
+        #endif
     }
     
 }

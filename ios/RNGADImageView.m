@@ -6,10 +6,6 @@
 //
 #import "RNGADImageView.h"
 
-#import <React/RCTBridge.h>
-#import <React/RCTUIManager.h>
-#import <React/RCTEventDispatcher.h>
-
 #import <UIKit/UIImageView.h>
 
 @implementation RNGADImageView: RCTViewManager

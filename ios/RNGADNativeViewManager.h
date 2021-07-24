@@ -1,4 +1,4 @@
-#import <React/RCTViewManager.h>
+@import React;
 
 @interface RNGADNativeViewManager : RCTViewManager
 @end

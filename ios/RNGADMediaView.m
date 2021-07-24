@@ -1,16 +1,5 @@
 #import "RNGADMediaView.h"
 #import "RNNativeAdMobUtils.h"
-#import <React/RCTRootView.h>
-#import <React/RCTRootViewDelegate.h>
-#import <React/RCTViewManager.h>
-#import <React/RCTUtils.h>
-#import <React/RCTAssert.h>
-#import <React/RCTBridge.h>
-#import <React/RCTConvert.h>
-#import <React/RCTUIManager.h>
-#import <React/RCTBridgeModule.h>
-#import <React/RCTUIManagerUtils.h>
-#import <React/RCTImageView.h>
 
 @implementation RNGADMediaView : UIView
 
