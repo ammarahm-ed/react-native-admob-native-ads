@@ -48,17 +48,13 @@
     "admob-native-advanced-ads"
   ],
   "peerDependencies": {
-    "react-native": "*",
-    "prop-types": "15.7.2"
+    "react-native": ">= 0.60.2"
   },
   "private": false,
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.0.0",
     "eslint": "^7.31.0",
-    "eslint-config-prettier": "^7.0.0",
-    "prettier": "^1.18.2",
-    "react": "17.0.1",
-    "react-native": "0.64.2"
-  },
-  "dependencies": {}
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.3.2"
+  }
 }
