@@ -1,11 +1,6 @@
 #import "RNGADNativeViewManager.h"
 #import "RNGADNativeView.h"
 
-#import <React/RCTBridge.h>
-#import <React/RCTUIManager.h>
-#import <React/RCTEventDispatcher.h>
-#import <React/RCTViewManager.h>
-
 @implementation RNGADNativeViewManager 
 
 RCT_EXPORT_MODULE(RNGADNativeView);

@@ -1,7 +1,4 @@
-#import <React/RCTView.h>
-#import <React/RCTBridge.h>
-#import <React/RCTComponent.h>
-
+@import React;
 @import GoogleMobileAds;
 
 @interface RNGADMediaView: UIView <GADVideoControllerDelegate>
