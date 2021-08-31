@@ -17,7 +17,8 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-public class RNAdmobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper> {
+
+public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView> {
 
 
     public static final String REACT_CLASS = "RNGADNativeView";
@@ -29,11 +30,10 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String EVENT_AD_IMPRESSION = "onAdImpression";
     public static final String EVENT_AD_LOADED = "onAdLoaded";
     public static final String EVENT_AD_LEFT_APPLICATION = "onAdLeftApplication";
-    public static final String EVENT_UNIFIED_NATIVE_AD_LOADED = "onUnifiedNativeAdLoaded";
+    public static final String EVENT_NATIVE_AD_LOADED = "onNativeAdLoaded";
     public static final String PROP_DELAY_AD_LOAD = "delayAdLoad";
     public static final String PROP_TEST_DEVICES = "testDevices";
     public static final String PROP_AD_UNIT_ID = "adUnitID";
-    public static final String PROP_AD_REPOSITORY = "repository";
     public static final String PROP_MEDIA_VIEW = "mediaview";
     public static final String PROP_REFRESH_INTERVAL = "refreshInterval";
     public static final String PROP_HEADLINE_VIEW = "headline";
@@ -52,10 +52,6 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     public static final String PROP_VIDEO_OPTIONS = "videoOptions";
     public static final String PROP_MEDIATION_OPTIONS = "mediationOptions";
     public static final String PROP_TARGETING_OPTIONS = "targetingOptions";
-    public static final String PROP_MUTE_ADS = "requestMuteAds";
-
-    private RNNativeAdWrapper nativeAdView;
-
 
     @javax.annotation.Nullable
     @Override
@@ -69,7 +65,7 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
                 EVENT_AD_IMPRESSION,
                 EVENT_AD_LOADED,
                 EVENT_AD_LEFT_APPLICATION,
-                EVENT_UNIFIED_NATIVE_AD_LOADED,
+                EVENT_NATIVE_AD_LOADED,
         };
         for (String event : events) {
             builder.put(event, MapBuilder.of("registrationName", event));
@@ -83,38 +79,31 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
     @Override
-    protected RNNativeAdWrapper createViewInstance(ThemedReactContext reactContext) {
+    protected RNAdmobNativeView createViewInstance(ThemedReactContext reactContext) {
 
-        return new RNNativeAdWrapper(reactContext);
+        return new RNAdmobNativeView(reactContext);
 
     }
 
     @ReactProp(name = "messagingModuleName")
-    public void setMessagingModuleName(RNNativeAdWrapper nativeAdWrapper, String moduleName) {
+    public void setMessagingModuleName(RNAdmobNativeView nativeAdWrapper, String moduleName) {
         nativeAdWrapper.setMessagingModuleName(moduleName);
     }
 
 
-
-
-
     @Override
-    public void addView(RNNativeAdWrapper parent, View child, int index) {
+    public void addView(RNAdmobNativeView parent, View child, int index) {
         //super.addView(parent, child, index);
-
-        nativeAdView.addNewView(child, index);
+        parent.addNewView(child, index);
 
     }
+
+
     @ReactProp(name = PROP_TARGETING_OPTIONS)
     public void setPropTargetingOptions(final RNAdmobNativeView nativeAdWrapper, final ReadableMap options) {
         nativeAdWrapper.setTargetingOptions(options);
     }
-    @ReactProp(name = PROP_REFRESH_INTERVAL)
-    public void setRefreshInterval(final RNNativeAdWrapper view, final int interval) {
 
-        view.setAdRefreshInterval(interval);
-
-    }
     @ReactProp(name = PROP_VIDEO_OPTIONS)
     public void setVideoOptions(final RNAdmobNativeView nativeAdWrapper, final ReadableMap options) {
         nativeAdWrapper.setVideoOptions(options);
@@ -126,10 +115,11 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
     @ReactProp(name = PROP_NON_PERSONALIZED_ADS, defaultBoolean = false)
-    public void setPropNonPersonalizedAds(final RNNativeAdWrapper nativeAdWrapper, final boolean npa) {
+    public void setPropNonPersonalizedAds(final RNAdmobNativeView nativeAdWrapper, final boolean npa) {
 
         nativeAdWrapper.setRequestNonPersonalizedAdsOnly(npa);
     }
+
 
 
     @ReactProp(name = PROP_AD_CHOICES_PLACEMENT)
@@ -140,12 +130,15 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
 
-    @ReactProp(name = PROP_DELAY_AD_LOAD)
-    public void setPropDelayAdLoad(final RNNativeAdWrapper view, final int delay) {
 
-        view.setLoadWithDelay(delay);
 
+    @ReactProp(name = PROP_MEDIA_ASPECT_RATIO)
+    public void setMediaAspectRatio(final RNAdmobNativeView nativeAdWrapper, final int type) {
+        nativeAdWrapper.setMediaAspectRatio(type);
     }
+
+
+
 
     @ReactProp(name = PROP_MEDIA_VIEW)
     public void setMediaView(final RNAdmobNativeView nativeAdWrapper, final int id) {
@@ -220,11 +213,12 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
     }
 
     @ReactProp(name = PROP_CALL_TO_ACTION_VIEW)
-    public void setPropCallToActionView(final RNNativeAdWrapper nativeAdWrapper, final int id) {
+    public void setPropCallToActionView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
-            View view = nativeAdWrapper.findViewById(id);
-            nativeAdWrapper.nativeAdView.setCallToActionView(view);
-            nativeAdWrapper.setNativeAd();
+        View view = nativeAdWrapper.findViewById(id);
+        nativeAdWrapper.nativeAdView.setCallToActionView(view);
+        nativeAdWrapper.setNativeAd();
+
 
     }
 
@@ -238,6 +232,7 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
                 .build();
     }
 
+
     @Override
     public void receiveCommand(RNAdmobNativeView nativeAdWrapper, int commandId, @Nullable ReadableArray args) {
         switch (commandId) {
@@ -246,43 +241,27 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNNativeAdWrapper
                 break;
         }
     }
-    @ReactProp(name = PROP_TEST_DEVICES)
-    public void setPropTestDevices(final RNNativeAdWrapper nativeAdWrapper, final ReadableArray testDevices) {
-      //  ReadableNativeArray nativeArray = (ReadableNativeArray) testDevices;
-      //  ArrayList<Object> list = nativeArray.toArrayList();
-
-      //  List<String> testDeviceIds = Arrays.asList(list.toArray(new String[list.size()]));
-      //  RequestConfiguration configuration =
-      //          new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-     //   MobileAds.setRequestConfiguration(configuration);
-    }
 
 
     @ReactProp(name = PROP_AD_UNIT_ID)
-    public void setPropAdUnitId(final RNNativeAdWrapper nativeAdWrapper, final String adUnitId) {
+    public void setPropAdUnitId(final RNAdmobNativeView nativeAdWrapper, final String adUnitId) {
         if (adUnitId == null) return;
         nativeAdWrapper.setAdUnitId(adUnitId);
-    }
 
-    @ReactProp(name = PROP_AD_REPOSITORY)
-    public void setPropAdRepository(final RNNativeAdWrapper nativeAdWrapper, final String repo) {
-        if (repo == null) return;
-        nativeAdWrapper.setAdRepository(repo);
-    }
-
-    @ReactProp(name = PROP_MUTE_ADS, defaultBoolean = true)
-    public void setPropMuteAds(final RNNativeAdWrapper view, final Boolean mute) {
-        view.setMute(mute);
     }
 
     @Override
-    public void onDropViewInstance(@NonNull RNNativeAdWrapper nativeAdWrapper) {
+    public void onDropViewInstance(@NonNull RNAdmobNativeView nativeAdWrapper) {
         super.onDropViewInstance(nativeAdWrapper);
         nativeAdWrapper.removeHandler();
-        if (nativeAdWrapper.unifiedNativeAd != null){
-            nativeAdWrapper.unifiedNativeAd.destroy();
+        if (nativeAdWrapper.nativeAd != null){
+            if (nativeAdWrapper.unifiedNativeAdContainer != null){
+                nativeAdWrapper.unifiedNativeAdContainer.references -= 1;
+            } else{
+                nativeAdWrapper.nativeAdView.destroy();
+            }
         }
-	if (nativeAdWrapper.nativeAdView != null){
+        if (nativeAdWrapper.nativeAdView != null){
             nativeAdWrapper.nativeAdView.destroy();
         }
     }

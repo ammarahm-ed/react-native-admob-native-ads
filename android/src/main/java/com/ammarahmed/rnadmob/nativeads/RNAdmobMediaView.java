@@ -6,6 +6,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.google.android.gms.ads.MediaContent;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.nativead.MediaView;
 
@@ -15,8 +16,7 @@ import javax.annotation.Nullable;
 public class RNAdmobMediaView extends MediaView {
 
     ReactContext mContext;
-    VideoController vc;
-
+    MediaContent mediaContent;
     private final Runnable measureAndLayout = new Runnable() {
         @Override
         public void run() {
@@ -28,18 +28,18 @@ public class RNAdmobMediaView extends MediaView {
     };
 
 
-    public void setVideoController(VideoController videoController) {
-        vc = videoController;
+    public void setVideoController(MediaContent mediaContent) {
+        this.mediaContent = mediaContent;
 
     }
 
     public void getCurrentProgress() {
-        if (vc == null) return;
+        if (mediaContent == null) return;
         WritableMap progress = Arguments.createMap();
-        progress.putString("currentTime", String.valueOf(vc.getVideoCurrentTime()));
-        progress.putString("duration", String.valueOf(vc.getVideoDuration()));
+        progress.putString("currentTime", String.valueOf(mediaContent.getCurrentTime()));
+        progress.putString("duration", String.valueOf(mediaContent.getDuration()));
         Log.d("RNGADMediaView", "PROGRESS UPDATE");
-        sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_PROGRESS, progress);
+        sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_PROGRESS, progress);
 
     }
 
@@ -69,25 +69,25 @@ public class RNAdmobMediaView extends MediaView {
         @Override
         public void onVideoStart() {
             super.onVideoStart();
-            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_START, null);
+            sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_START, null);
         }
 
         @Override
         public void onVideoPlay() {
             super.onVideoPlay();
-            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_PLAY, null);
+            sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_PLAY, null);
         }
 
         @Override
         public void onVideoPause() {
             super.onVideoPause();
-            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_PAUSE, null);
+            sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_PAUSE, null);
         }
 
         @Override
         public void onVideoEnd() {
             super.onVideoEnd();
-            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_END, null);
+            sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_END, null);
         }
 
         @Override
@@ -96,23 +96,23 @@ public class RNAdmobMediaView extends MediaView {
 
             WritableMap event = Arguments.createMap();
             event.putBoolean("muted", b);
-            sendEvent(RNAdMobMediaViewManager.EVENT_ON_VIDEO_MUTE, event);
+            sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_MUTE, event);
 
         }
     };
 
     public void setPause(boolean pause) {
-        if (vc == null) return;
+        if (mediaContent == null) return;
         if (pause) {
-            vc.pause();
+            mediaContent.getVideoController().pause();
         } else {
-            vc.play();
+            mediaContent.getVideoController().play();
         }
     }
 
     public void setMuted(boolean muted) {
-        if (vc == null) return;
-        vc.mute(muted);
+        if (mediaContent == null) return;
+        mediaContent.getVideoController().mute(muted);
 
     }
 

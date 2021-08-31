@@ -10,7 +10,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
  
-public class RNAdMobMediaViewManager extends ViewGroupManager<RNAdmobMediaView> {
+public class RNAdmobMediaViewManager extends ViewGroupManager<RNAdmobMediaView> {
     private static final String REACT_CLASS = "RNGADMediaView";
 
 

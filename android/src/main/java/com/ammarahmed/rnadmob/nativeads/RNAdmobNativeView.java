@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.CatalystInstance;
@@ -27,6 +29,7 @@ import com.google.ads.mediation.facebook.FacebookExtras;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.MediaContent;
@@ -65,15 +68,18 @@ public class RNAdmobNativeView extends LinearLayout {
     protected @Nullable
     String messagingModuleName;
 
+    RNAdMobUnifiedAdContainer unifiedNativeAdContainer;
+
+
     private int adChoicesPlacement = 1;
     private boolean requestNonPersonalizedAdsOnly = false;
 
     AdListener adListener = new AdListener() {
         @Override
-        public void onAdFailedToLoad(int i) {
-            super.onAdFailedToLoad(i);
+        public void onAdFailedToLoad(@NonNull LoadAdError var1) {
+            super.onAdFailedToLoad(var1);
             String errorMessage = "Unknown error";
-            switch (i) {
+            switch (var1.getCode()) {
                 case AdRequest.ERROR_CODE_INTERNAL_ERROR:
                     errorMessage = "Internal error, an invalid response was received from the ad server.";
                     break;
@@ -93,7 +99,6 @@ public class RNAdmobNativeView extends LinearLayout {
             event.putMap("error", error);
             sendEvent(RNAdmobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
         }
-
         @Override
         public void onAdClosed() {
             super.onAdClosed();
@@ -403,7 +408,7 @@ public class RNAdmobNativeView extends LinearLayout {
                         if (mediaView != null && nativeAdView.getMediaView()!=null) {
                             nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
                             if (nativeAd.getMediaContent().hasVideoContent()) {
-                                mediaView.setVideoController(nativeAd.getMediaContent().getVideoController());
+                                mediaView.setVideoController(nativeAd.getMediaContent());
                             }
                         }
 
