@@ -328,8 +328,8 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - Google-Mobile-Ads-SDK (= 8.7.0)
-  - GoogleMobileAdsMediationFacebook (= 6.5.1.0)
+  - Google-Mobile-Ads-SDK
+  - GoogleMobileAdsMediationFacebook
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -442,7 +442,7 @@ SPEC CHECKSUMS:
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBAudienceNetwork: 9a5f277d6ed36a46354a045c46a4858b47407a72
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
-  FBReactNativeSpec: bccf44c6f233e70e12b8144372f3698d329abb66
+  FBReactNativeSpec: 6ac2a7ef29f2a3415a0930a4a77713c31c29c15b
   FBSDKCoreKit_Basics: 06780a4a12e16596bde8406add02c6aa1bf38616
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   Google-Mobile-Ads-SDK: e242f463fdb8564ac3f11847a30215a0e042c934
@@ -480,6 +480,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
 
-PODFILE CHECKSUM: dd7f24a53a6e21e92868a0406d858f823adf8632
+PODFILE CHECKSUM: c197d577b6c16658d1113b1da4e8a979ac5e9fb8
 
 COCOAPODS: 1.10.1

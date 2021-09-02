@@ -175,7 +175,9 @@ const App = () => {
         </View>
       )}
 
-      {currentRoute?.type === 'banner' && <AdView type="image" media={false} />}
+      {currentRoute?.type === 'banner' && <>
+      <AdView type="image" media={false} />
+      </>}
 
       {currentRoute?.type === 'image' && (
         <View
