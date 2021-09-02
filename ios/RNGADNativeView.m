@@ -8,6 +8,8 @@
 
 @implementation RNGADNativeView : GADNativeAdView
 
+
+
 RCTBridge *bridge;
 
 
@@ -29,7 +31,6 @@ NSNumber *storeViewId;
 
 dispatch_block_t block;
 RNGADMediaView *rnMediaView;
-BOOL isLoading = FALSE;
 
 GADNativeAdViewAdOptions *adPlacementOptions;
 GADNativeAdMediaAdLoaderOptions *adMediaOptions;
@@ -41,14 +42,14 @@ BOOL *nonPersonalizedAds;
 
 - (void)dealloc
 {
-    isLoading = FALSE;
+    _isLoading = NO;
 }
 
 - (instancetype)initWithBridge:(RCTBridge *)_bridge
 {
     delay = @1;
     refreshingInterval = @60000;
-    isLoading = FALSE;
+    _isLoading = NO;
     adRequest = [GAMRequest request];
     adPlacementOptions = [[GADNativeAdViewAdOptions alloc] init];
     adVideoOptions = [[GADVideoOptions alloc] init];
@@ -441,8 +442,9 @@ BOOL *nonPersonalizedAds;
 
 - (void)loadAd
 {
-    if (isLoading == TRUE) return;
-    isLoading = TRUE;
+    if (_isLoading == YES) return;
+    _isLoading = YES;
+        
     
     self.adLoader = [[GADAdLoader alloc] initWithAdUnitID:adUnitId
                                        rootViewController:self.reactViewController
@@ -458,20 +460,20 @@ BOOL *nonPersonalizedAds;
 
 
 - (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(NSError *)error {
-    isLoading = FALSE;
+    _isLoading = NO;
     if (self.onAdFailedToLoad) {
         self.onAdFailedToLoad(@{ @"error": @{ @"message": [error localizedDescription] } });
     }
 }
 
 - (void)adLoaderDidFinishLoading:(GADAdLoader *)adLoader {
-    isLoading = FALSE;
+    _isLoading = NO;
 }
 
 
 
 - (void)adLoader:(GADAdLoader *)adLoader didReceiveNativeAd:(GADNativeAd *)nativeAd {
-    isLoading = FALSE;
+    _isLoading = NO;
     if (self.onAdLoaded) {
         self.onAdLoaded(@{});
         
