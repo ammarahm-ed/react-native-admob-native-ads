@@ -174,7 +174,6 @@ NativeAdView.defaultProps = {
   videoOptions: {
     muted: false,
     clickToExpand: false,
-    clickToExpand: false,
   },
   mediationOptions: {
     nativeBanner: false,
