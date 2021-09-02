@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {ActivityIndicator, DeviceEventEmitter, Text, View} from 'react-native';
+import {ActivityIndicator, DeviceEventEmitter, Platform, Text, View} from 'react-native';
 import NativeAdView, {
   AdvertiserView,
   CallToActionView,
@@ -149,6 +149,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
       style={{
         width: '98%',
         alignSelf: 'center',
+        backgroundColor:"transparent"
       }}
       adUnitID={type === 'image' ? adUnitIDs.image : adUnitIDs.video} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
     >
@@ -237,7 +238,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
           </View>
 
           <CallToActionView
-            style={{
+            style={[{
               minHeight: 45,
               paddingHorizontal: 12,
               justifyContent: 'center',
@@ -245,7 +246,11 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
               elevation: 10,
               maxWidth: 100,
               width: 80,
-            }}
+            },Platform.OS === "ios" ? {
+            backgroundColor: '#00ff00',
+            borderRadius: 5,
+          } : {}]}
+
             buttonAndroidStyle={{
               backgroundColor: '#00ff00',
               borderRadius: 5,
