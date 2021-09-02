@@ -15,7 +15,7 @@ buildscript {
     if (project == rootProject) {
         repositories {
             google()
-            jcenter()
+            mavenCentral()
         }
         dependencies {
             classpath 'com.android.tools.build:gradle:3.5.4'
@@ -23,6 +23,7 @@ buildscript {
     }
     repositories {
         mavenCentral()
+        google()
     }
 }
 
@@ -58,13 +59,13 @@ repositories {
         // Android JSC is installed from npm
         url "$rootDir/../node_modules/jsc-android/dist"
     }
+    mavenCentral()
     google()
-    jcenter()
 }
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation("com.google.android.gms:play-services-ads:19.8.0") { force = true; }
+    implementation('com.google.android.gms:play-services-ads:+')
     implementation 'com.android.support:support-annotations:28.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
