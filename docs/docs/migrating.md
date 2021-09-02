@@ -17,7 +17,7 @@ pod 'Google-Mobile-Ads-SDK'
 pod 'GoogleMobileAdsMediationFacebook'
 ```
 
-Then run `pod update` & `pod install`. If you are upgading, then run, `pod install --repo-update`
+Then run `pod update` & `pod install`. If you are upgrading, then run, `pod install --repo-update`
 
 ### Rename `onUnifiedNativeAdLoaded` to `onNativeAdLoaded`
 
