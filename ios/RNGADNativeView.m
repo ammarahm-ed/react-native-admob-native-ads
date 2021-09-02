@@ -126,6 +126,7 @@ BOOL *nonPersonalizedAds;
     }
     
     if ([allKeys containsObject:@"customControlsRequested"]) {
+
         [adVideoOptions setCustomControlsRequested:(BOOL)[videoOptions valueForKey:@"customControlsRequested"]];
     }
     
@@ -450,7 +451,6 @@ BOOL *nonPersonalizedAds;
                                        rootViewController:self.reactViewController
                                                   adTypes:@[ kGADAdLoaderAdTypeNative ]
                                                   options:@[adMediaOptions,adPlacementOptions,adVideoOptions]];
-    
     
     self.adLoader.delegate = self;
     
