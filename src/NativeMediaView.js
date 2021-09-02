@@ -83,6 +83,7 @@ const NativeMediaView = (props) => {
   return (
     <AdMediaView
       {...props}
+      pause={props.paused}
       onVideoPlay={onVideoPlay}
       onVideoPause={onVideoPause}
       onVideoEnd={onVideoEnd}
