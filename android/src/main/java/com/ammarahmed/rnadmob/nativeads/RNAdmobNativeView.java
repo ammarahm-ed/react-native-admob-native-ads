@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
@@ -27,6 +28,7 @@ import com.google.ads.mediation.facebook.FacebookExtras;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.MediaContent;
@@ -64,35 +66,26 @@ public class RNAdmobNativeView extends LinearLayout {
     RNAdmobMediaView mediaView;
     protected @Nullable
     String messagingModuleName;
+    private boolean loadingAd = false;
 
     private int adChoicesPlacement = 1;
     private boolean requestNonPersonalizedAdsOnly = false;
 
     AdListener adListener = new AdListener() {
+
         @Override
-        public void onAdFailedToLoad(int i) {
-            super.onAdFailedToLoad(i);
-            String errorMessage = "Unknown error";
-            switch (i) {
-                case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-                    errorMessage = "Internal error, an invalid response was received from the ad server.";
-                    break;
-                case AdRequest.ERROR_CODE_INVALID_REQUEST:
-                    errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
-                    break;
-                case AdRequest.ERROR_CODE_NETWORK_ERROR:
-                    errorMessage = "The ad request was unsuccessful due to network connectivity.";
-                    break;
-                case AdRequest.ERROR_CODE_NO_FILL:
-                    errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
-                    break;
-            }
+        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+            super.onAdFailedToLoad(loadAdError);
             WritableMap event = Arguments.createMap();
             WritableMap error = Arguments.createMap();
-            error.putString("message", errorMessage);
-            event.putMap("error", error);
+            error.putString("message", loadAdError.getMessage());
+            error.putInt("code", loadAdError.getCode());
+            error.putString("domain", loadAdError.getDomain());
+            event.putMap("error",error);
+            loadingAd = false;
             sendEvent(RNAdmobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
         }
+
 
         @Override
         public void onAdClosed() {
@@ -116,6 +109,7 @@ public class RNAdmobNativeView extends LinearLayout {
         @Override
         public void onAdLoaded() {
             super.onAdLoaded();
+            loadingAd = false;
             sendEvent(RNAdmobNativeViewManager.EVENT_AD_LOADED, null);
         }
 
@@ -123,12 +117,6 @@ public class RNAdmobNativeView extends LinearLayout {
         public void onAdImpression() {
             super.onAdImpression();
             sendEvent(RNAdmobNativeViewManager.EVENT_AD_IMPRESSION, null);
-        }
-
-        @Override
-        public void onAdLeftApplication() {
-            super.onAdLeftApplication();
-            sendEvent(RNAdmobNativeViewManager.EVENT_AD_LEFT_APPLICATION, null);
         }
     };
     private String admobAdUnitId = "";
@@ -145,6 +133,7 @@ public class RNAdmobNativeView extends LinearLayout {
                 nativeAd = ad;
                 setNativeAd();
             }
+            loadingAd = false;
             setNativeAdToJS(ad);
         }
     };
@@ -309,6 +298,7 @@ public class RNAdmobNativeView extends LinearLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        loadingAd = false;
     }
 
     public void sendEvent(String name, @Nullable WritableMap event) {
@@ -321,13 +311,13 @@ public class RNAdmobNativeView extends LinearLayout {
     }
 
     public void loadAd() {
+        if (loadingAd) return;
         try {
-
+            loadingAd = true;
             adLoader.loadAd(adRequest.build());
 
 
-        } catch (Exception e) {
-
+        } catch (Exception e) {loadingAd = false;
         }
 
     }
@@ -404,6 +394,7 @@ public class RNAdmobNativeView extends LinearLayout {
                             nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
                             if (nativeAd.getMediaContent().hasVideoContent()) {
                                 mediaView.setVideoController(nativeAd.getMediaContent().getVideoController());
+                                mediaView.setMedia(nativeAd.getMediaContent());
                             }
                         }
 
@@ -496,6 +487,7 @@ public class RNAdmobNativeView extends LinearLayout {
     }
 
     public void removeHandler() {
+        loadingAd = false;
         if (handler != null) {
             handler.removeCallbacks(runnableForMount);
             runnableForMount = null;

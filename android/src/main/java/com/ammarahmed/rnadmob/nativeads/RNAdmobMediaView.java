@@ -6,6 +6,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.google.android.gms.ads.MediaContent;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.nativead.MediaView;
 
@@ -16,6 +17,7 @@ public class RNAdmobMediaView extends MediaView {
 
     ReactContext mContext;
     VideoController vc;
+    MediaContent mediaContent;
 
     private final Runnable measureAndLayout = new Runnable() {
         @Override
@@ -30,17 +32,22 @@ public class RNAdmobMediaView extends MediaView {
 
     public void setVideoController(VideoController videoController) {
         vc = videoController;
+    }
 
+    public  void setMedia(MediaContent mc) {
+        mediaContent = mc;
     }
 
     public void getCurrentProgress() {
         if (vc == null) return;
         WritableMap progress = Arguments.createMap();
-        progress.putString("currentTime", String.valueOf(vc.getVideoCurrentTime()));
-        progress.putString("duration", String.valueOf(vc.getVideoDuration()));
-        Log.d("RNGADMediaView", "PROGRESS UPDATE");
-        sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_PROGRESS, progress);
-
+        if (vc.getPlaybackState() == VideoController.PLAYBACK_STATE_PLAYING) {
+            if (mediaContent != null) {
+                progress.putString("currentTime", String.valueOf(mediaContent.getCurrentTime()));
+                progress.putString("duration", String.valueOf(mediaContent.getDuration()));
+                sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_PROGRESS, progress);
+            }
+        }
     }
 
 
