@@ -67,41 +67,42 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
     Logger('AD', 'LEFT', 'Ad left application');
   };
 
-  useEffect(() => {
-    const onViewableItemsChanged = event => {
-      /**
-       * [STEP IV] We check if any AdViews are currently viewable.
-       */
-      let viewableAds = event.viewableItems.filter(
-        i => i.key.indexOf('ad') !== -1,
-      );
+  const onViewableItemsChanged = event => {
+    /**
+     * [STEP IV] We check if any AdViews are currently viewable.
+     */
+    let viewableAds = event.viewableItems.filter(
+      i => i.key.indexOf('ad') !== -1,
+    );
 
-      viewableAds.forEach(adView => {
-        if (adView.index === index && !loaded) {
-          /**
-           * [STEP V] If the ad is viewable and not loaded
-           * already, we will load the ad.
-           */
-          setLoading(true);
-          setLoaded(false);
-          setError(false);
-          Logger('AD', 'IN VIEW', 'Loading ' + index);
-          nativeAdRef.current?.loadAd();
+    viewableAds.forEach(adView => {
+      if (adView.index === index && !loaded) {
+        /**
+         * [STEP V] If the ad is viewable and not loaded
+         * already, we will load the ad.
+         */
+        setLoading(true);
+        setLoaded(false);
+        setError(false);
+        Logger('AD', 'IN VIEW', 'Loading ' + index);
+        nativeAdRef.current?.loadAd();
+      } else {
+        /**
+         * We will not reload ads or load
+         * ads that are not viewable currently
+         * to save bandwidth and requests sent
+         * to server.
+         */
+        if (loaded) {
+          Logger('AD', 'IN VIEW', 'Loaded ' + index);
         } else {
-          /**
-           * We will not reload ads or load
-           * ads that are not viewable currently
-           * to save bandwidth and requests sent
-           * to server.
-           */
-          if (loaded) {
-            Logger('AD', 'IN VIEW', 'Loaded ' + index);
-          } else {
-            Logger('AD', 'NOT IN VIEW', index);
-          }
+          Logger('AD', 'NOT IN VIEW', index);
         }
-      });
-    };
+      }
+    });
+  };
+
+  useEffect(() => {
     /**
      * for previous steps go to List.js file.
      *
@@ -125,7 +126,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
   }, [index, loadOnMount, loaded]);
 
   useEffect(() => {
-    if (loadOnMount) {
+    if (loadOnMount || index <= 15) {
       setLoading(true);
       setLoaded(false);
       setError(false);
@@ -227,7 +228,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
                 starSize={12}
                 fullStarColor="orange"
                 emptyStarColor="gray"
-                containerStyle={{
+                style={{
                   width: 65,
                   marginLeft: 10,
                 }}
