@@ -29,7 +29,7 @@ AdManager.registerRepository({
   mute: true,
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
-}).then((result) => {
+}).then(result => {
   console.log('registered: ', result);
 });
 
@@ -42,7 +42,7 @@ AdManager.registerRepository({
   mute: false,
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
-}).then((result) => {
+}).then(result => {
   console.log('registered: ', result);
 });
 
@@ -55,7 +55,7 @@ AdManager.registerRepository({
   mute: true,
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
-}).then((result) => {
+}).then(result => {
   console.log('registered: ', result);
 });
 
