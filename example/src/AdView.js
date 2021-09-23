@@ -145,12 +145,13 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
       onAdClicked={onAdClicked}
       onAdImpression={onAdImpression}
       onNativeAdLoaded={onNativeAdLoaded}
+      refreshInterval={60000 * 2}
       style={{
         width: '98%',
         alignSelf: 'center',
       }}
-      adUnitID={type === 'image' ? adUnitIDs.image : adUnitIDs.video} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
-    >
+      // adUnitID={type === 'image' ? adUnitIDs.image : adUnitIDs.video} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
+      repository={type === 'image' ? 'imageAd' : 'videoAd'}>
       <View
         style={{
           width: '100%',
@@ -257,7 +258,6 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
             }}
           />
         </View>
-
         {media ? <MediaView aspectRatio={aspectRatio} /> : null}
       </View>
     </NativeAdView>

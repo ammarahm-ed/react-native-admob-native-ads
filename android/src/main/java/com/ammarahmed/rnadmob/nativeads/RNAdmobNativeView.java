@@ -21,7 +21,7 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
-import com.facebook.react.uimanager.events.RCTEventEmitter; 
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.ads.mediation.facebook.FacebookAdapter;
@@ -68,6 +68,10 @@ public class RNAdmobNativeView extends LinearLayout {
     protected @Nullable
     String messagingModuleName;
 
+    public int adRefreshInterval = 60000;
+    private Runnable retryRunnable;
+    private String adRepo;
+//    NativeAd unifiedNativeAd;
     RNAdMobUnifiedAdContainer unifiedNativeAdContainer;
 
 
@@ -98,6 +102,16 @@ public class RNAdmobNativeView extends LinearLayout {
             error.putString("message", errorMessage);
             event.putMap("error", error);
             sendEvent(RNAdmobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
+
+            if (handler != null) {
+                retryRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        loadAd();
+                    }
+                };
+                handler.postDelayed(retryRunnable, adRefreshInterval);
+            }
         }
         @Override
         public void onAdClosed() {
@@ -121,6 +135,10 @@ public class RNAdmobNativeView extends LinearLayout {
         @Override
         public void onAdLoaded() {
             super.onAdLoaded();
+            if (adRepo != null){
+                CacheManager.instance.detachAdListener(adRepo);
+                loadAd();
+            }
             sendEvent(RNAdmobNativeViewManager.EVENT_AD_LOADED, null);
         }
 
@@ -327,16 +345,53 @@ public class RNAdmobNativeView extends LinearLayout {
 
     public void loadAd() {
         try {
-
-            adLoader.loadAd(adRequest.build());
-
-
+            if (adRepo!= null){
+                getAdFromRepository();
+            }else{
+                adLoader.loadAd(adRequest.build());
+            }
         } catch (Exception e) {
 
         }
 
     }
+    private void getAdFromRepository() {
+        try {
+            if (!CacheManager.instance.isRegistered(adRepo)) {
+                if (adListener != null)
+                    adListener.onAdFailedToLoad(new LoadAdError(3, "The requested repo is not registered", "", null, null));
+            } else {
+                if (CacheManager.instance.numberOfAds(adRepo) != 0) {
+                    unifiedNativeAdContainer = CacheManager.instance.getNativeAd(adRepo);
 
+                    // todo :: check if this is required
+//                if (unifiedNativeAd != null) {
+//                    unifiedNativeAd.destroy();
+//                }
+                    if (unifiedNativeAdContainer != null) {
+                        nativeAd = unifiedNativeAdContainer.unifiedNativeAd;
+                        nativeAdView.setNativeAd(nativeAd);
+                        if (mediaView != null) {
+                            nativeAdView.setMediaView(mediaView);
+                            mediaView.requestLayout();
+                            setNativeAd();
+                        }
+                        setNativeAdToJS(nativeAd);
+                    }
+                } else {
+                    if (!CacheManager.instance.isLoading(adRepo)){
+                        CacheManager.instance.attachAdListener(adRepo, adListener);
+                        CacheManager.instance.requestAd(adRepo);
+                    }else{
+                        CacheManager.instance.attachAdListener(adRepo, adListener);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            adListener.onAdFailedToLoad(new LoadAdError(3, e.toString(), "", null, null));
+        }
+    }
 
     public void addNewView(View child, int index) {
         try {
@@ -353,6 +408,15 @@ public class RNAdmobNativeView extends LinearLayout {
     public void addView(View child) {
         super.addView(child);
         requestLayout();
+    }
+    public void setAdRefreshInterval(int interval) {
+        adRefreshInterval = interval;
+    }
+
+    public void setAdRepository(String repo) {
+        adRepo = repo;
+        if (adRepo == null) return;
+        getAdFromRepository();
     }
 
 
@@ -394,32 +458,31 @@ public class RNAdmobNativeView extends LinearLayout {
     }
 
     public void setNativeAd() {
-        if (nativeAd != null) {
-            if (handler != null && runnableForMount != null) {
-                handler.removeCallbacks(runnableForMount);
-                runnableForMount = null;
-            }
-            runnableForMount = new Runnable() {
-                @Override
-                public void run() {
-                    if (nativeAdView != null && nativeAd != null) {
-                        nativeAdView.setNativeAd(nativeAd);
-
-                        if (mediaView != null && nativeAdView.getMediaView()!=null) {
-                            nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
-                            if (nativeAd.getMediaContent().hasVideoContent()) {
-                                mediaView.setVideoController(nativeAd.getMediaContent());
-                            }
-                        }
-
-                    }
-                }
-            };
-            if (handler != null ) {
-                handler.postDelayed(runnableForMount, 1000);
-            }
-
+        if (nativeAd == null) { return;}
+        if (handler != null && runnableForMount != null) {
+            handler.removeCallbacks(runnableForMount);
+            runnableForMount = null;
         }
+        runnableForMount = new Runnable() {
+            @Override
+            public void run() {
+                if (nativeAdView != null && nativeAd != null) {
+                    nativeAdView.setNativeAd(nativeAd);
+
+                    if (mediaView != null && nativeAdView.getMediaView()!=null) {
+                        nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
+                        if (nativeAd.getMediaContent().hasVideoContent()) {
+                            mediaView.setVideoController(nativeAd.getMediaContent());
+                        }
+                    }
+
+                }
+            }
+        };
+        if (handler != null ) {
+            handler.postDelayed(runnableForMount, 1000);
+        }
+
     }
 
 

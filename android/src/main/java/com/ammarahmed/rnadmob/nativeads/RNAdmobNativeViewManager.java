@@ -52,6 +52,8 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     public static final String PROP_VIDEO_OPTIONS = "videoOptions";
     public static final String PROP_MEDIATION_OPTIONS = "mediationOptions";
     public static final String PROP_TARGETING_OPTIONS = "targetingOptions";
+    public static final String PROP_AD_REPOSITORY = "repository";
+
 
     @javax.annotation.Nullable
     @Override
@@ -248,6 +250,17 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
         if (adUnitId == null) return;
         nativeAdWrapper.setAdUnitId(adUnitId);
 
+    }
+
+    @ReactProp(name = PROP_AD_REPOSITORY)
+    public void setPropAdRepository(final RNAdmobNativeView nativeAdWrapper, final String repo) {
+        if (repo == null) return;
+        nativeAdWrapper.setAdRepository(repo);
+    }
+
+    @ReactProp(name = PROP_REFRESH_INTERVAL)
+    public void setRefreshInterval(final RNAdmobNativeView nativeAdWrapper, final int interval) {
+        nativeAdWrapper.setAdRefreshInterval(interval);
     }
 
     @Override

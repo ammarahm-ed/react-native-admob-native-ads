@@ -15,6 +15,9 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.PriorityQueue;
 
 public class RNAdMobUnifiedAdQueueWrapper {
@@ -30,7 +33,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
     private AdRequest adRequest;
     AdListener attachedAdListener;
     private final onUnifiedNativeAdLoadedListener unifiedNativeAdLoadedListener;
-    public PriorityQueue<RNAdMobUnifiedAdContainer> nativeAds;
+    public List<RNAdMobUnifiedAdContainer> nativeAds;
     Context mContext;
 
     public void attachAdListener(AdListener listener) {
@@ -49,7 +52,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
         if (config.hasKey("numOfAds")){
             totalAds = config.getInt("numOfAds");
         }
-        nativeAds= new PriorityQueue<RNAdMobUnifiedAdContainer>(totalAds, new RNAdMobUnifiedAdComparator());
+        nativeAds= new ArrayList<RNAdMobUnifiedAdContainer>(totalAds);
         if (config.hasKey("mute")){
             muted = config.getBoolean("mute");
         }
@@ -67,7 +70,8 @@ public class RNAdMobUnifiedAdQueueWrapper {
         } else {
             adRequest = new AdRequest.Builder().build();
         }
-        unifiedNativeAdLoadedListener = new onUnifiedNativeAdLoadedListener(repo, nativeAds, totalAds, context);
+        unifiedNativeAdLoadedListener = new onUnifiedNativeAdLoadedListener(repo, nativeAds,
+                totalAds, context);
         AdLoader.Builder builder = new AdLoader.Builder(context, adUnitId);
         builder.forNativeAd(unifiedNativeAdLoadedListener);
         VideoOptions videoOptions = new VideoOptions.Builder()
@@ -191,25 +195,33 @@ public class RNAdMobUnifiedAdQueueWrapper {
 
     public RNAdMobUnifiedAdContainer getAd(){
         long now = System.currentTimeMillis();
-        RNAdMobUnifiedAdContainer ad;
-        while (true){
-            if (!nativeAds.isEmpty()){
-                ad = nativeAds.peek();
-                if (ad != null && (ad.loadTime - now) < expirationInterval) {
+        RNAdMobUnifiedAdContainer ad = null;
+
+        if (!nativeAds.isEmpty()){
+            Collections.sort(nativeAds, new RNAdMobUnifiedAdComparator());
+            List<RNAdMobUnifiedAdContainer> discardItems = new ArrayList<>();
+            for (RNAdMobUnifiedAdContainer item:nativeAds){
+                if ((now - item.loadTime) < expirationInterval) {
+                    ad = item;//acceptable ad found
                     break;
                 } else {
-                    if (ad.references <=0){
-                        ad.unifiedNativeAd.destroy();
-                        nativeAds.remove(ad);
+                    if (item.references <=0){
+                        discardItems.add(item);
                     }
                 }
-            }else{
-                return null;
             }
+            for (RNAdMobUnifiedAdContainer item:discardItems) {
+                item.unifiedNativeAd.destroy();
+                nativeAds.remove(item);
+            }
+        }else{
+            return null;
         }
-        fillAd();
+
+        assert ad != null;
         ad.showCount += 1;
         ad.references += 1;
+        fillAd();
         return ad;
     }
 

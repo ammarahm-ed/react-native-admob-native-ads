@@ -6,7 +6,6 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.formats.UnifiedNativeAd;
 
 import java.util.HashMap;
 import java.util.Map;
