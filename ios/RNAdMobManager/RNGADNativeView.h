@@ -1,7 +1,7 @@
 @import React;
 @import GoogleMobileAds;
-
-@interface RNGADNativeView : GADNativeAdView <GADNativeAdLoaderDelegate,
+#import "AdListener.h"
+@interface RNGADNativeView : GADNativeAdView <AdListener,GADNativeAdLoaderDelegate,
 GADNativeAdDelegate>
 
 @property(nonatomic, strong) GADNativeAdView *nativeAdView;

@@ -1,6 +1,10 @@
 #import "RNGADNativeView.h"
 #import "RNGADMediaView.h"
 #import "RNNativeAdMobUtils.h"
+#import "RNAdMobUnifiedAdContainer.h"
+#import "CacheManager.h"
+#import "EventEmitter.h"
+#import "RNGADNativeViewManager.h"
 
 #ifdef MEDIATION_FACEBOOK
 @import FacebookAdapter;
@@ -30,12 +34,18 @@ NSNumber *storeViewId;
 dispatch_block_t block;
 RNGADMediaView *rnMediaView;
 BOOL isLoading = FALSE;
+BOOL isWait4Retry = FALSE;
+NSString *adRepo = nil;
+id<AdListener> adListener = nil;
+GADNativeAd *unifiedNativeAd;
 
 GADNativeAdViewAdOptions *adPlacementOptions;
 GADNativeAdMediaAdLoaderOptions *adMediaOptions;
 
 GAMRequest *adRequest;
 GADVideoOptions *adVideoOptions;
+
+RNAdMobUnifiedAdContainer *unifiedNativeAdContainer;
 
 BOOL *nonPersonalizedAds;
 
@@ -57,9 +67,18 @@ BOOL *nonPersonalizedAds;
     if (self = [super init]) {
         bridge = _bridge;
     }
+    adListener = self;
     return self;
 }
 
+- (void) willMoveToSuperview: (UIView *) newSuperview{
+    if(newSuperview == nil){
+        // UIView was removed from superview
+        unifiedNativeAdContainer.references -= 1;
+    } else {
+        // UIView was added to superview
+    }
+}
 
 - (void)setMediationOptions:(NSDictionary *)mediationOptions {
     NSArray *allKeys = [mediationOptions allKeys];
@@ -68,7 +87,7 @@ BOOL *nonPersonalizedAds;
         /**
          The following code adds support for Native Banner for Facebook Mediation Ads.
          */
-        #ifdef MEDIATION_FACEBOOK
+#ifdef MEDIATION_FACEBOOK
         GADFBNetworkExtras * extras = [[GADFBNetworkExtras alloc] init];
         
         if ([[mediationOptions valueForKey:@"nativeBanner"] isEqual:[NSNumber numberWithBool:NO]]) {
@@ -76,10 +95,10 @@ BOOL *nonPersonalizedAds;
         } else {
             extras.nativeAdFormat = GADFBAdFormatNativeBanner;
         }
-       
+        
         
         [adRequest registerAdNetworkExtras:extras];
-        #endif
+#endif
     }
     
 }
@@ -181,7 +200,9 @@ BOOL *nonPersonalizedAds;
 
 - (void)setDelayAdLoad:(NSNumber *)delayAdLoad
 {
-    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayAdLoad.intValue * NSEC_PER_SEC)),RCTGetUIManagerQueue(), ^{
+        [self loadAd];
+    });
 }
 
 - (void)setTestDevices:(NSArray *)testDevices
@@ -223,14 +244,14 @@ BOOL *nonPersonalizedAds;
 
 - (void)setHeadline:(NSNumber *)headline {
     
-   headlineViewId = headline;
+    headlineViewId = headline;
     
     dispatch_async(RCTGetUIManagerQueue(),^{
         
         [bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
             
             UIView *headlineView = viewRegistry[headline];
-        
+            
             if (headlineView != nil) {
                 [self setHeadlineView:headlineView];
                 if (self.nativeAd != nil) {
@@ -436,14 +457,23 @@ BOOL *nonPersonalizedAds;
     });
     
 }
-
+- (void)setRepository:(NSString *)repo
+{
+    adRepo = repo;
+}
 
 
 - (void)loadAd
 {
+    if (adRepo != nil){
+        [self getAdFromRepository];
+    } else {
+        [self requestAd];
+    }
+}
+- (void) requestAd{
     if (isLoading == TRUE) return;
     isLoading = TRUE;
-    
     self.adLoader = [[GADAdLoader alloc] initWithAdUnitID:adUnitId
                                        rootViewController:self.reactViewController
                                                   adTypes:@[ kGADAdLoaderAdTypeNative ]
@@ -455,43 +485,37 @@ BOOL *nonPersonalizedAds;
     [self.adLoader loadRequest:adRequest];
     
 }
-
-
-- (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(NSError *)error {
-    isLoading = FALSE;
-    if (self.onAdFailedToLoad) {
-        self.onAdFailedToLoad(@{ @"error": @{ @"message": [error localizedDescription] } });
-    }
-}
-
-- (void)adLoaderDidFinishLoading:(GADAdLoader *)adLoader {
-    isLoading = FALSE;
-}
-
-
-
-- (void)adLoader:(GADAdLoader *)adLoader didReceiveNativeAd:(GADNativeAd *)nativeAd {
-    isLoading = FALSE;
-    if (self.onAdLoaded) {
-        self.onAdLoaded(@{});
-        
-    }
-    
-    nativeAd.delegate = self;
-    
-    if (rnMediaView != nil) {
-        [self setMediaView:rnMediaView.subviews.firstObject];
-        if (nativeAd.mediaContent.videoController != nil) {
-            nativeAd.mediaContent.videoController.delegate = rnMediaView.self;
+- (void) getAdFromRepository{
+    if (![CacheManager.sharedInstance isRegistered:adRepo]) {
+        if (adListener != nil){
+            NSDictionary *userInfo = [[NSDictionary alloc]
+                                      initWithObjectsAndKeys:@"The requested repo is not registered",
+                                      @"NSLocalizedDescriptionKey",NULL];
+            
+            NSError* error = [[NSError alloc]initWithDomain:@"" code:3 userInfo:userInfo];
+            [adListener didFailToReceiveAdWithError:error];
+        }
+    } else {
+        unifiedNativeAdContainer = [CacheManager.sharedInstance getNativeAd:adRepo];
+        if (unifiedNativeAdContainer != nil) {
+                unifiedNativeAd = unifiedNativeAdContainer.unifiedNativeAd;
+                [self setNativeAd:unifiedNativeAd];
+                if (rnMediaView != nil) {
+                    [self setMediaView:rnMediaView.subviews.firstObject];
+                    [rnMediaView layoutIfNeeded];
+                }
+                [self  setNativeAdToJS:unifiedNativeAd];
+        } else {
+            if (![CacheManager.sharedInstance isLoading:adRepo]){
+                [CacheManager.sharedInstance attachAdListener:adRepo listener:adListener];
+                [CacheManager.sharedInstance requestAd:adRepo];
+            }else{
+                [CacheManager.sharedInstance attachAdListener:adRepo listener:adListener];
+            }
         }
     }
-    
-    [self setNativeAd:nativeAd];
-    
-    if (self.mediaView != nil) {
-        [self.mediaView setMediaContent:nativeAd.mediaContent];
-    }
-    
+}
+- (void) setNativeAdToJS:(GADNativeAd *) nativeAd{
     if (nativeAd != NULL) {
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
         
@@ -561,16 +585,62 @@ BOOL *nonPersonalizedAds;
         self.onNativeAdLoaded(dic);
         
     }
-    
 }
 
+- (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(NSError *)error {
+    isLoading = FALSE;
+    if (self.onAdFailedToLoad) {
+        self.onAdFailedToLoad(@{ @"error": @{ @"message": [error localizedDescription] } });
+    }
+}
+
+- (void)adLoaderDidFinishLoading:(GADAdLoader *)adLoader {
+    isLoading = FALSE;
+}
+
+
+
+- (void)adLoader:(GADAdLoader *)adLoader didReceiveNativeAd:(GADNativeAd *)nativeAd {
+    isLoading = FALSE;
+    if (self.onAdLoaded) {
+        self.onAdLoaded(@{});
+        
+    }
+    unifiedNativeAd = nativeAd;
+    nativeAd.delegate = self;
+    
+    if (rnMediaView != nil) {
+        [self setMediaView:rnMediaView.subviews.firstObject];
+        if (nativeAd.mediaContent.videoController != nil) {
+            nativeAd.mediaContent.videoController.delegate = rnMediaView.self;
+        }
+    }
+    
+    [self setNativeAd:nativeAd];
+    
+    if (self.mediaView != nil) {
+        [self.mediaView setMediaContent:nativeAd.mediaContent];
+    }
+    
+    if (nativeAd != NULL) {
+        [self setNativeAdToJS:nativeAd];
+    }
+    
+}
+-(void)didAdLoaded:(GADNativeAd *)nativeAd{
+    if (adRepo != nil){
+        [CacheManager.sharedInstance detachAdListener:adRepo];
+        [self loadAd];
+    }
+    [EventEmitter.sharedInstance sendEvent:RNGADNativeViewManager.EVENT_AD_LOADED dict:nil];
+}
 
 - (void)nativeAdDidRecordImpression:(nonnull GADNativeAd *)nativeAd
 {
     if (self.onAdImpression) {
         self.onAdImpression(@{});
-        
     }
+    [EventEmitter.sharedInstance sendEvent:RNGADNativeViewManager.EVENT_AD_IMPRESSION dict:nil];
 }
 
 - (void)nativeAdDidRecordClick:(nonnull GADNativeAd *)nativeAd
@@ -578,6 +648,7 @@ BOOL *nonPersonalizedAds;
     if (self.onAdClicked) {
         self.onAdClicked(@{});
     }
+    [EventEmitter.sharedInstance sendEvent:RNGADNativeViewManager.EVENT_AD_CLICKED dict:nil];
 }
 
 - (void)nativeAdWillPresentScreen:(nonnull GADNativeAd *)nativeAd
@@ -585,6 +656,7 @@ BOOL *nonPersonalizedAds;
     if (self.onAdOpened) {
         self.onAdOpened(@{});
     }
+    [EventEmitter.sharedInstance sendEvent:RNGADNativeViewManager.EVENT_AD_OPENED dict:nil];
 }
 
 - (void)nativeAdWillDismissScreen:(nonnull GADNativeAd *)nativeAd
@@ -592,6 +664,7 @@ BOOL *nonPersonalizedAds;
     if (self.onAdClosed) {
         self.onAdClosed(@{});
     }
+    [EventEmitter.sharedInstance sendEvent:RNGADNativeViewManager.EVENT_AD_CLOSED dict:nil];
 }
 
 - (void)nativeAdWillLeaveApplication:(nonnull GADNativeAd *)nativeAd
@@ -600,9 +673,43 @@ BOOL *nonPersonalizedAds;
         self.onAdLeftApplication(@{});
     }
 }
-
+- (void)didFailToReceiveAdWithError:(nonnull NSError *)error{
+    NSString *errorMessage = @"Unknown error";
+    BOOL stopPreloading = false;
+    switch (error.code) {
+        case GADErrorInternalError:
+            stopPreloading = true;
+            errorMessage = @"Internal error, an invalid response was received from the ad server.";
+            break;
+        case GADErrorInvalidRequest:
+            stopPreloading = true;
+            errorMessage = @"Invalid ad request, possibly an incorrect ad unit ID was given.";
+            break;
+        case GADErrorNetworkError:
+            errorMessage = @"The ad request was unsuccessful due to network connectivity.";
+            break;
+        case GADErrorNoFill:
+            errorMessage = @"The ad request was successful, but no ad was returned due to lack of ad inventory.";
+            break;
+    }
+    NSDictionary *errorDic = @{
+        @"errorMessage":error.localizedDescription,
+        @"message":errorMessage,
+        @"code":@(error.code).stringValue
+    };
+    NSDictionary *event = @{
+        @"error":errorDic,
+    };
+    
+    [EventEmitter.sharedInstance sendEvent:RNGADNativeViewManager.EVENT_AD_FAILED_TO_LOAD dict:event];
+    if (!isWait4Retry) {
+        isWait4Retry = true;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(_refreshInterval)),RCTGetUIManagerQueue(), ^{
+            [self loadAd];
+        });
+    }
+    
+    
+    
+}
 @end
-
-
-
-
