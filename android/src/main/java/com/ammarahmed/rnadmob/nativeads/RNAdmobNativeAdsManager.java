@@ -1,5 +1,8 @@
 package com.ammarahmed.rnadmob.nativeads;
 
+import android.content.Context;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
@@ -9,6 +12,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableNativeArray;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
@@ -35,6 +39,11 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setRequestConfiguration(ReadableMap config, Promise promise) {
+        Context context = getReactApplicationContext().getCurrentActivity();
+        if (context == null) {
+            Log.e("AdmobNativeAds", "setRequestConfiguration() is called outside MainActivity");
+            context = getReactApplicationContext();
+        }
         RequestConfiguration.Builder configuration = new RequestConfiguration.Builder();
 
         if (config.hasKey("maxAdContentRating")) {
@@ -56,28 +65,22 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
             boolean tagForUnderAgeOfConsent = config.getBoolean("tagForUnderAgeOfConsent");
             configuration.setTagForUnderAgeOfConsent(tagForUnderAgeOfConsent ? 1 : 0);
         }
+
         if (config.hasKey("testDeviceIds")) {
-            ReadableNativeArray nativeArray = (ReadableNativeArray) config.getArray("testDeviceIds");
-            if (nativeArray != null) {
-                ArrayList<Object> list = nativeArray.toArrayList();
-                List<String> testDeviceIds = new ArrayList<>(list.size());
-                for (Object object : list) {
-                    testDeviceIds.add(object != null ? object.toString() : null);
-                }
-                configuration.setTestDeviceIds(testDeviceIds);
-            }
+            configuration.setTestDeviceIds(Arguments.toList(config.getArray("testDeviceIds")));
         }
 
         MobileAds.setRequestConfiguration(configuration.build());
-        MobileAds.initialize(getReactApplicationContext().getCurrentActivity(), (InitializationStatus status) -> {
-            WritableMap map = Arguments.createMap();
+        MobileAds.initialize(context, (InitializationStatus status) -> {
+            WritableArray array = Arguments.createArray();
             for (Map.Entry<String, AdapterStatus> entry: status.getAdapterStatusMap().entrySet()) {
                 WritableMap info = Arguments.createMap();
-                info.putString("initialization_state", entry.getValue().getInitializationState().toString());
+                info.putString("name", entry.getKey());
+                info.putInt("state", entry.getValue().getInitializationState().ordinal());
                 info.putString("description", entry.getValue().getDescription());
-                map.putMap(entry.getKey(), info);
+                array.pushMap(info);
             }
-            promise.resolve(map);
+            promise.resolve(array);
         });
     }
 

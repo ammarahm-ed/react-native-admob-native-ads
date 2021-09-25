@@ -67,11 +67,11 @@ public class RNAdmobNativeView extends LinearLayout {
     RNAdmobMediaView mediaView;
     protected @Nullable
     String messagingModuleName;
+    private boolean loadingAd = false;
 
     public int adRefreshInterval = 60000;
     private Runnable retryRunnable;
     private String adRepo;
-//    NativeAd unifiedNativeAd;
     RNAdMobUnifiedAdContainer unifiedNativeAdContainer;
 
 
@@ -101,6 +101,7 @@ public class RNAdmobNativeView extends LinearLayout {
             WritableMap error = Arguments.createMap();
             error.putString("message", errorMessage);
             event.putMap("error", error);
+            loadingAd = false;
             sendEvent(RNAdmobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
 
             if (handler != null) {
@@ -139,6 +140,7 @@ public class RNAdmobNativeView extends LinearLayout {
                 CacheManager.instance.detachAdListener(adRepo);
                 loadAd();
             }
+            loadingAd = false;
             sendEvent(RNAdmobNativeViewManager.EVENT_AD_LOADED, null);
         }
 
@@ -147,12 +149,6 @@ public class RNAdmobNativeView extends LinearLayout {
             super.onAdImpression();
             sendEvent(RNAdmobNativeViewManager.EVENT_AD_IMPRESSION, null);
         }
-
-//        @Override
-//        public void onAdLeftApplication() {
-//            super.onAdLeftApplication();
-//            sendEvent(RNAdmobNativeViewManager.EVENT_AD_LEFT_APPLICATION, null);
-//        }
     };
     private String admobAdUnitId = "";
     private Handler handler;
@@ -168,6 +164,7 @@ public class RNAdmobNativeView extends LinearLayout {
                 nativeAd = ad;
                 setNativeAd();
             }
+            loadingAd = false;
             setNativeAdToJS(ad);
         }
     };
@@ -330,8 +327,10 @@ public class RNAdmobNativeView extends LinearLayout {
 
 
     @Override
-    protected void onDetachedFromWindow() {
+    protected void onDetachedFromWindow()
+    {
         super.onDetachedFromWindow();
+        loadingAd = false;
     }
 
     public void sendEvent(String name, @Nullable WritableMap event) {
@@ -344,14 +343,17 @@ public class RNAdmobNativeView extends LinearLayout {
     }
 
     public void loadAd() {
-        try {
-            if (adRepo!= null){
-                getAdFromRepository();
-            }else{
+        if (adRepo!= null){
+            getAdFromRepository();
+        }else {
+            try {
+                if (loadingAd) return;
+                loadingAd = true;
                 adLoader.loadAd(adRequest.build());
-            }
-        } catch (Exception e) {
 
+            } catch (Exception e) {
+                loadingAd = false;
+            }
         }
 
     }
@@ -364,10 +366,6 @@ public class RNAdmobNativeView extends LinearLayout {
                 if (CacheManager.instance.numberOfAds(adRepo) != 0) {
                     unifiedNativeAdContainer = CacheManager.instance.getNativeAd(adRepo);
 
-                    // todo :: check if this is required
-//                if (unifiedNativeAd != null) {
-//                    unifiedNativeAd.destroy();
-//                }
                     if (unifiedNativeAdContainer != null) {
                         nativeAd = unifiedNativeAdContainer.unifiedNativeAd;
                         nativeAdView.setNativeAd(nativeAd);
@@ -472,7 +470,8 @@ public class RNAdmobNativeView extends LinearLayout {
                     if (mediaView != null && nativeAdView.getMediaView()!=null) {
                         nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
                         if (nativeAd.getMediaContent().hasVideoContent()) {
-                            mediaView.setVideoController(nativeAd.getMediaContent());
+                            mediaView.setVideoController(nativeAd.getMediaContent().getVideoController());
+                            mediaView.setMedia(nativeAd.getMediaContent());
                         }
                     }
 
@@ -564,6 +563,7 @@ public class RNAdmobNativeView extends LinearLayout {
     }
 
     public void removeHandler() {
+        loadingAd = false;
         if (handler != null) {
             handler.removeCallbacks(runnableForMount);
             runnableForMount = null;

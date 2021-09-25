@@ -10,13 +10,15 @@ import com.google.android.gms.ads.MediaContent;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.nativead.MediaView;
 
- 
+
 import javax.annotation.Nullable;
 
 public class RNAdmobMediaView extends MediaView {
 
     ReactContext mContext;
+    VideoController vc;
     MediaContent mediaContent;
+
     private final Runnable measureAndLayout = new Runnable() {
         @Override
         public void run() {
@@ -28,19 +30,24 @@ public class RNAdmobMediaView extends MediaView {
     };
 
 
-    public void setVideoController(MediaContent mediaContent) {
-        this.mediaContent = mediaContent;
+    public void setVideoController(VideoController videoController) {
+        vc = videoController;
+    }
 
+    public  void setMedia(MediaContent mc) {
+        mediaContent = mc;
     }
 
     public void getCurrentProgress() {
-        if (mediaContent == null) return;
+        if (vc == null) return;
         WritableMap progress = Arguments.createMap();
-        progress.putString("currentTime", String.valueOf(mediaContent.getCurrentTime()));
-        progress.putString("duration", String.valueOf(mediaContent.getDuration()));
-        Log.d("RNGADMediaView", "PROGRESS UPDATE");
-        sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_PROGRESS, progress);
-
+        if (vc.getPlaybackState() == VideoController.PLAYBACK_STATE_PLAYING) {
+            if (mediaContent != null) {
+                progress.putString("currentTime", String.valueOf(mediaContent.getCurrentTime()));
+                progress.putString("duration", String.valueOf(mediaContent.getDuration()));
+                sendEvent(RNAdmobMediaViewManager.EVENT_ON_VIDEO_PROGRESS, progress);
+            }
+        }
     }
 
 
@@ -102,17 +109,17 @@ public class RNAdmobMediaView extends MediaView {
     };
 
     public void setPause(boolean pause) {
-        if (mediaContent == null) return;
+        if (vc == null) return;
         if (pause) {
-            mediaContent.getVideoController().pause();
+            vc.pause();
         } else {
-            mediaContent.getVideoController().play();
+            vc.play();
         }
     }
 
     public void setMuted(boolean muted) {
-        if (mediaContent == null) return;
-        mediaContent.getVideoController().mute(muted);
+        if (vc == null) return;
+        vc.mute(muted);
 
     }
 

@@ -160,14 +160,6 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 if (attachedAdListener == null) return;
                 attachedAdListener.onAdImpression();
             }
-
-            // todo :: if needed put it somewhere else
-//            @Override
-//            public void onAdLeftApplication() {
-//                super.onAdLeftApplication();
-//                if (attachedAdListener == null) return;
-//                attachedAdListener.onAdLeftApplication();
-//            }
         };
         adLoader = builder.withAdListener(adListener).build();
     }
