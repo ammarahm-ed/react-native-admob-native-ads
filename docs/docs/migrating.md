@@ -13,11 +13,11 @@ Update your Google Mobile Ads Library in Podfile.
 Add these to your Podfile.
 
 ```
-pod 'Google-Mobile-Ads-SDK', '8.7.0'
-pod 'GoogleMobileAdsMediationFacebook', '6.5.1.0'
+pod 'Google-Mobile-Ads-SDK'
+pod 'GoogleMobileAdsMediationFacebook'
 ```
 
-Then run `pod update` & `pod install`
+Then run `pod update` & `pod install`. If you are upgrading, then run, `pod install --repo-update`
 
 ### Rename `onUnifiedNativeAdLoaded` to `onNativeAdLoaded`
 

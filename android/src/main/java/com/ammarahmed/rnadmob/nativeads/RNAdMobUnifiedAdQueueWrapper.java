@@ -44,22 +44,22 @@ public class RNAdMobUnifiedAdQueueWrapper {
         attachedAdListener = null;
     }
 
-    public RNAdMobUnifiedAdQueueWrapper(Context context, ReadableMap config, String repo){
+    public RNAdMobUnifiedAdQueueWrapper(Context context, ReadableMap config, String repo) {
         mContext = context;
         adUnitId = config.getString("adUnitId");
         name = repo;
 
-        if (config.hasKey("numOfAds")){
+        if (config.hasKey("numOfAds")) {
             totalAds = config.getInt("numOfAds");
         }
-        nativeAds= new ArrayList<RNAdMobUnifiedAdContainer>(totalAds);
-        if (config.hasKey("mute")){
+        nativeAds = new ArrayList<RNAdMobUnifiedAdContainer>(totalAds);
+        if (config.hasKey("mute")) {
             muted = config.getBoolean("mute");
         }
-        if (config.hasKey("expirationPeriod")){
+        if (config.hasKey("expirationPeriod")) {
             expirationInterval = config.getInt("expirationPeriod");
         }
-        if (config.hasKey("mediationEnabled")){
+        if (config.hasKey("mediationEnabled")) {
             mediation = config.getBoolean("mediationEnabled");
         }
         if (config.hasKey("nonPersonalizedAdsOnly")) {
@@ -88,32 +88,14 @@ public class RNAdMobUnifiedAdQueueWrapper {
             @Override
             public void onAdFailedToLoad(LoadAdError adError) {
                 super.onAdFailedToLoad(adError);
-                String errorMessage = "";
                 boolean stopPreloading = false;
-                switch (adError.getCode()) {
-                    case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-                        stopPreloading = true;
-                        errorMessage = "Internal error, an invalid response was received from the ad server.";
-                        break;
-                    case AdRequest.ERROR_CODE_INVALID_REQUEST:
-                        stopPreloading = true;
-                        errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
-                        break;
-                    case AdRequest.ERROR_CODE_NETWORK_ERROR:
-                        errorMessage = "The ad request was unsuccessful due to network connectivity.";
-                        break;
-                    case AdRequest.ERROR_CODE_NO_FILL:
-                        errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
-                        break;
-                }
                 if (attachedAdListener == null) {
                     if (stopPreloading) {
                         WritableMap event = Arguments.createMap();
                         WritableMap error = Arguments.createMap();
-                        error.putString("errorMessage", adError.getMessage());
-                        error.putString("message", errorMessage);
+                        error.putString("message", adError.getMessage());
                         error.putInt("code", adError.getCode());
-//                        error.putString("responseInfo", adError.getResponseInfo() != null ? adError.getResponseInfo().toString() : "");
+                        error.putString("domain", adError.getDomain());
                         event.putMap("error", error);
                         EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
                     }
@@ -149,9 +131,6 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 super.onAdLoaded();
                 if (attachedAdListener == null) return;
                 attachedAdListener.onAdLoaded();
-//            if (nativeAds.size() == 1) {
-//                attachedAdListener.onAdLoaded();
-//            }
             }
 
             @Override
@@ -164,9 +143,9 @@ public class RNAdMobUnifiedAdQueueWrapper {
         adLoader = builder.withAdListener(adListener).build();
     }
 
-    public void loadAds(){
-        if (mediation){
-            for (int i = 0; i<totalAds; i++){
+    public void loadAds() {
+        if (mediation) {
+            for (int i = 0; i < totalAds; i++) {
                 adLoader.loadAd(adRequest);
             }
         } else {
@@ -174,39 +153,39 @@ public class RNAdMobUnifiedAdQueueWrapper {
         }
     }
 
-    public void loadAd(){
+    public void loadAd() {
         adLoader.loadAd(adRequest);
         fillAd();
     }
 
-    public void fillAd(){
-        if (!isLoading()){
+    public void fillAd() {
+        if (!isLoading()) {
             adLoader.loadAd(adRequest);
         }
     }
 
-    public RNAdMobUnifiedAdContainer getAd(){
+    public RNAdMobUnifiedAdContainer getAd() {
         long now = System.currentTimeMillis();
         RNAdMobUnifiedAdContainer ad = null;
 
-        if (!nativeAds.isEmpty()){
+        if (!nativeAds.isEmpty()) {
             Collections.sort(nativeAds, new RNAdMobUnifiedAdComparator());
             List<RNAdMobUnifiedAdContainer> discardItems = new ArrayList<>();
-            for (RNAdMobUnifiedAdContainer item:nativeAds){
+            for (RNAdMobUnifiedAdContainer item : nativeAds) {
                 if ((now - item.loadTime) < expirationInterval) {
                     ad = item;//acceptable ad found
                     break;
                 } else {
-                    if (item.references <=0){
+                    if (item.references <= 0) {
                         discardItems.add(item);
                     }
                 }
             }
-            for (RNAdMobUnifiedAdContainer item:discardItems) {
+            for (RNAdMobUnifiedAdContainer item : discardItems) {
                 item.unifiedNativeAd.destroy();
                 nativeAds.remove(item);
             }
-        }else{
+        } else {
             return null;
         }
 
@@ -217,14 +196,14 @@ public class RNAdMobUnifiedAdQueueWrapper {
         return ad;
     }
 
-    public Boolean isLoading(){
-        if (adLoader != null){
+    public Boolean isLoading() {
+        if (adLoader != null) {
             return adLoader.isLoading();
         }
         return false;
     }
 
-    public WritableMap hasAd(){
+    public WritableMap hasAd() {
         WritableMap args = Arguments.createMap();
         args.putInt(name, nativeAds.size());
         return args;

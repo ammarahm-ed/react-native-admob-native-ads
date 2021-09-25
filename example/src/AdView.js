@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {ActivityIndicator, DeviceEventEmitter, Text, View} from 'react-native';
+import {ActivityIndicator, DeviceEventEmitter, Platform, Text, View} from 'react-native';
 import NativeAdView, {
   AdvertiserView,
   CallToActionView,
@@ -67,41 +67,42 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
     Logger('AD', 'LEFT', 'Ad left application');
   };
 
-  useEffect(() => {
-    const onViewableItemsChanged = event => {
-      /**
-       * [STEP IV] We check if any AdViews are currently viewable.
-       */
-      let viewableAds = event.viewableItems.filter(
-        i => i.key.indexOf('ad') !== -1,
-      );
+  const onViewableItemsChanged = event => {
+    /**
+     * [STEP IV] We check if any AdViews are currently viewable.
+     */
+    let viewableAds = event.viewableItems.filter(
+      i => i.key.indexOf('ad') !== -1,
+    );
 
-      viewableAds.forEach(adView => {
-        if (adView.index === index && !loaded) {
-          /**
-           * [STEP V] If the ad is viewable and not loaded
-           * already, we will load the ad.
-           */
-          setLoading(true);
-          setLoaded(false);
-          setError(false);
-          Logger('AD', 'IN VIEW', 'Loading ' + index);
-          nativeAdRef.current?.loadAd();
+    viewableAds.forEach(adView => {
+      if (adView.index === index && !loaded) {
+        /**
+         * [STEP V] If the ad is viewable and not loaded
+         * already, we will load the ad.
+         */
+        setLoading(true);
+        setLoaded(false);
+        setError(false);
+        Logger('AD', 'IN VIEW', 'Loading ' + index);
+        nativeAdRef.current?.loadAd();
+      } else {
+        /**
+         * We will not reload ads or load
+         * ads that are not viewable currently
+         * to save bandwidth and requests sent
+         * to server.
+         */
+        if (loaded) {
+          Logger('AD', 'IN VIEW', 'Loaded ' + index);
         } else {
-          /**
-           * We will not reload ads or load
-           * ads that are not viewable currently
-           * to save bandwidth and requests sent
-           * to server.
-           */
-          if (loaded) {
-            Logger('AD', 'IN VIEW', 'Loaded ' + index);
-          } else {
-            Logger('AD', 'NOT IN VIEW', index);
-          }
+          Logger('AD', 'NOT IN VIEW', index);
         }
-      });
-    };
+      }
+    });
+  };
+
+  useEffect(() => {
     /**
      * for previous steps go to List.js file.
      *
@@ -125,7 +126,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
   }, [index, loadOnMount, loaded]);
 
   useEffect(() => {
-    if (loadOnMount) {
+    if (loadOnMount || index <= 15) {
       setLoading(true);
       setLoaded(false);
       setError(false);
@@ -149,6 +150,10 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
       style={{
         width: '98%',
         alignSelf: 'center',
+        backgroundColor:"transparent"
+      }}
+      videoOptions={{
+        customControlsRequested:true,
       }}
       // adUnitID={type === 'image' ? adUnitIDs.image : adUnitIDs.video} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
       repository={type === 'image' ? 'imageAd' : 'videoAd'}
@@ -229,7 +234,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
                 starSize={12}
                 fullStarColor="orange"
                 emptyStarColor="gray"
-                containerStyle={{
+                style={{
                   width: 65,
                   marginLeft: 10,
                 }}
@@ -238,7 +243,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
           </View>
 
           <CallToActionView
-            style={{
+            style={[{
               minHeight: 45,
               paddingHorizontal: 12,
               justifyContent: 'center',
@@ -246,7 +251,11 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
               elevation: 10,
               maxWidth: 100,
               width: 80,
-            }}
+            },Platform.OS === "ios" ? {
+            backgroundColor: '#00ff00',
+            borderRadius: 5,
+          } : {}]}
+
             buttonAndroidStyle={{
               backgroundColor: '#00ff00',
               borderRadius: 5,

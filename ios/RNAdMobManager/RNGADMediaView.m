@@ -4,6 +4,7 @@
 @implementation RNGADMediaView : UIView
 
 GADMediaView *cMediaView;
+GADVideoController *vc;
 
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -27,12 +28,12 @@ GADMediaView *cMediaView;
 - (void)setPause:(BOOL *)pause {
     if (pause) {
         
-        if (cMediaView.mediaContent != nil && cMediaView.mediaContent.videoController) {
-            [cMediaView.mediaContent.videoController pause];
+        if (cMediaView.mediaContent != nil && vc != nil) {
+            [vc pause];
         }
     } else {
-        if (cMediaView.mediaContent != nil &&  cMediaView.mediaContent.videoController) {
-            [cMediaView.mediaContent.videoController play];
+        if (cMediaView.mediaContent != nil && vc != nil) {
+            [vc play];
         }
     }
 }
@@ -40,13 +41,14 @@ GADMediaView *cMediaView;
 
 
 - (void)setMuted:(BOOL *)muted {
-    if (cMediaView.mediaContent != nil && cMediaView.mediaContent.videoController) {
-        [cMediaView.mediaContent.videoController setMute:muted? true : false];
+    if (cMediaView.mediaContent != nil && vc != nil) {
+        [vc setMute:muted? YES : NO];
     }
 }
 
 - (void)videoControllerDidPlayVideo:(GADVideoController *)videoController {
     if (self.onVideoPlay) {
+        vc = videoController;
         self.onVideoPlay(@{});
     }
 }

@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Image, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
+import {Image, Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View} from 'react-native';
 import {AdManager} from 'react-native-admob-native-ads';
 import {requestTrackingPermission} from 'react-native-tracking-transparency';
 import {AdView} from './src/AdView';
 import List from './src/List';
 import {routes} from './src/utils';
-
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 const App = () => {
   const [currentRoute, setCurrentRoute] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -34,7 +34,9 @@ const App = () => {
       style={{
         height: '100%',
         width: '100%',
+        paddingTop:Platform.OS === "android" ? StatusBar.currentHeight : 0
       }}>
+        <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
       <View
         style={{
           flexDirection: 'row',
@@ -42,25 +44,20 @@ const App = () => {
           height: 50,
           paddingHorizontal: 12,
           marginBottom: 10,
+          width:"100%",
         }}>
         {currentRoute && (
           <TouchableOpacity
             onPress={() => setCurrentRoute(null)}
             activeOpacity={0.8}
             style={{
-              backgroundColor: 'green',
               width: 50,
               alignItems: 'center',
               height: 50,
               justifyContent: 'center',
               borderRadius: 100,
             }}>
-            <Text
-              style={{
-                color: 'white',
-              }}>
-              Back
-            </Text>
+            <Icon name="arrow-left" size={28} />
           </TouchableOpacity>
         )}
       </View>
@@ -178,7 +175,9 @@ const App = () => {
         </View>
       )}
 
-      {currentRoute?.type === 'banner' && <AdView type="image" media={false} />}
+      {currentRoute?.type === 'banner' && <>
+      <AdView type="image" media={false} />
+      </>}
 
       {currentRoute?.type === 'image' && (
         <View

@@ -79,30 +79,17 @@ public class RNAdmobNativeView extends LinearLayout {
     private boolean requestNonPersonalizedAdsOnly = false;
 
     AdListener adListener = new AdListener() {
+
         @Override
-        public void onAdFailedToLoad(@NonNull LoadAdError var1) {
-            super.onAdFailedToLoad(var1);
-            String errorMessage = "Unknown error";
-            switch (var1.getCode()) {
-                case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-                    errorMessage = "Internal error, an invalid response was received from the ad server.";
-                    break;
-                case AdRequest.ERROR_CODE_INVALID_REQUEST:
-                    errorMessage = "Invalid ad request, possibly an incorrect ad unit ID was given.";
-                    break;
-                case AdRequest.ERROR_CODE_NETWORK_ERROR:
-                    errorMessage = "The ad request was unsuccessful due to network connectivity.";
-                    break;
-                case AdRequest.ERROR_CODE_NO_FILL:
-                    errorMessage = "The ad request was successful, but no ad was returned due to lack of ad inventory.";
-                    break;
-            }
+        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+            super.onAdFailedToLoad(loadAdError);
             WritableMap event = Arguments.createMap();
             WritableMap error = Arguments.createMap();
-            error.putString("message", errorMessage);
+            error.putString("message", loadAdError.getMessage());
+            error.putInt("code", loadAdError.getCode());
+            error.putString("domain", loadAdError.getDomain());
             event.putMap("error", error);
             loadingAd = false;
-            sendEvent(RNAdmobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
 
             if (handler != null) {
                 retryRunnable = new Runnable() {
@@ -114,6 +101,7 @@ public class RNAdmobNativeView extends LinearLayout {
                 handler.postDelayed(retryRunnable, adRefreshInterval);
             }
         }
+
         @Override
         public void onAdClosed() {
             super.onAdClosed();
@@ -136,7 +124,7 @@ public class RNAdmobNativeView extends LinearLayout {
         @Override
         public void onAdLoaded() {
             super.onAdLoaded();
-            if (adRepo != null){
+            if (adRepo != null) {
                 CacheManager.instance.detachAdListener(adRepo);
                 loadAd();
             }
@@ -327,8 +315,7 @@ public class RNAdmobNativeView extends LinearLayout {
 
 
     @Override
-    protected void onDetachedFromWindow()
-    {
+    protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         loadingAd = false;
     }
@@ -343,9 +330,9 @@ public class RNAdmobNativeView extends LinearLayout {
     }
 
     public void loadAd() {
-        if (adRepo!= null){
+        if (adRepo != null) {
             getAdFromRepository();
-        }else {
+        } else {
             try {
                 if (loadingAd) return;
                 loadingAd = true;
@@ -357,6 +344,7 @@ public class RNAdmobNativeView extends LinearLayout {
         }
 
     }
+
     private void getAdFromRepository() {
         try {
             if (!CacheManager.instance.isRegistered(adRepo)) {
@@ -377,10 +365,10 @@ public class RNAdmobNativeView extends LinearLayout {
                         setNativeAdToJS(nativeAd);
                     }
                 } else {
-                    if (!CacheManager.instance.isLoading(adRepo)){
+                    if (!CacheManager.instance.isLoading(adRepo)) {
                         CacheManager.instance.attachAdListener(adRepo, adListener);
                         CacheManager.instance.requestAd(adRepo);
-                    }else{
+                    } else {
                         CacheManager.instance.attachAdListener(adRepo, adListener);
                     }
                 }
@@ -407,6 +395,7 @@ public class RNAdmobNativeView extends LinearLayout {
         super.addView(child);
         requestLayout();
     }
+
     public void setAdRefreshInterval(int interval) {
         adRefreshInterval = interval;
     }
@@ -456,7 +445,9 @@ public class RNAdmobNativeView extends LinearLayout {
     }
 
     public void setNativeAd() {
-        if (nativeAd == null) { return;}
+        if (nativeAd == null) {
+            return;
+        }
         if (handler != null && runnableForMount != null) {
             handler.removeCallbacks(runnableForMount);
             runnableForMount = null;
@@ -467,7 +458,7 @@ public class RNAdmobNativeView extends LinearLayout {
                 if (nativeAdView != null && nativeAd != null) {
                     nativeAdView.setNativeAd(nativeAd);
 
-                    if (mediaView != null && nativeAdView.getMediaView()!=null) {
+                    if (mediaView != null && nativeAdView.getMediaView() != null) {
                         nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
                         if (nativeAd.getMediaContent().hasVideoContent()) {
                             mediaView.setVideoController(nativeAd.getMediaContent().getVideoController());
@@ -478,7 +469,7 @@ public class RNAdmobNativeView extends LinearLayout {
                 }
             }
         };
-        if (handler != null ) {
+        if (handler != null) {
             handler.postDelayed(runnableForMount, 1000);
         }
 
