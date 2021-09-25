@@ -1,23 +1,24 @@
-import React, { useRef, useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef,useCallback } from "react";
 import { findNodeHandle, Image } from "react-native";
 import { NativeAdContext } from "./context";
 
 const ImageView = (props) => {
   const { nativeAd, nativeAdView } = useContext(NativeAdContext);
   const imageViewRef = useRef();
-  const _onLayout = () => {
+  const _onLayout = useCallback(() => {
     if (!nativeAdView) return;
+
     let handle = findNodeHandle(imageViewRef.current);
     nativeAdView.setNativeProps({
       image: handle,
     });
-  };
+  }, [nativeAdView, imageViewRef]);
 
   useEffect(() => {
     _onLayout();
   }, [nativeAd, nativeAdView]);
 
-  return nativeAd && nativeAd.images && nativeAd.images[0] ? (
+  return nativeAd?.images[0] ? (
     <Image
       {...props}
       ref={imageViewRef}

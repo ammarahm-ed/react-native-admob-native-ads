@@ -1,17 +1,18 @@
-import React, { useRef, useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useRef } from "react";
 import { findNodeHandle, Text } from "react-native";
 import { NativeAdContext } from "./context";
 
 const TaglineView = (props) => {
   const { nativeAd, nativeAdView } = useContext(NativeAdContext);
   const taglineRef = useRef();
-  const _onLayout = () => {
+  const _onLayout = useCallback(() => {
     if (!nativeAdView) return;
+
     let handle = findNodeHandle(taglineRef.current);
     nativeAdView.setNativeProps({
       tagline: handle,
     });
-  };
+  }, [nativeAdView, taglineRef]);
 
   useEffect(() => {
     _onLayout();

@@ -1,8 +1,4 @@
-// CalendarManager.h
-#import <React/RCTBridgeModule.h>
-
+@import React;
 
 @interface RNAdmobNativeAdsManager : NSObject <RCTBridgeModule>
-
 @end
-

@@ -1,8 +1,15 @@
 export const AdOptions = Object.freeze({
   adChoicesPlacement: {
-    TOP_LEFT: 0,
-    TOP_RIGHT: 1,
-    BOTTOM_RIGHT: 2,
-    BOTTOM_LEFT: 3,
+    topLeft: 0,
+    topRight: 1,
+    bottomLeft: 2,
+    bottomRight: 3,
+  },
+  mediaAspectRatio: {
+    unknown: 0,
+    any: 1,
+    landscape: 2,
+    portrait: 3,
+    square: 4,
   },
 });

@@ -1,12 +1,10 @@
-#import <React/RCTView.h>
-#import <React/RCTBridge.h>
-
+@import React;
 @import GoogleMobileAds;
 
-@interface RNGADNativeView : GADUnifiedNativeAdView <GADUnifiedNativeAdLoaderDelegate,
-    GADUnifiedNativeAdDelegate>
+@interface RNGADNativeView : GADNativeAdView <GADNativeAdLoaderDelegate,
+GADNativeAdDelegate>
 
-@property(nonatomic, strong) GADUnifiedNativeAd *nativeAdView;
+@property(nonatomic, strong) GADNativeAdView *nativeAdView;
 @property(nonatomic, strong) GADAdLoader *adLoader;
 
 @property (nonatomic, copy) NSArray *testDevices;
@@ -24,18 +22,27 @@
 @property (nonatomic, copy) NSNumber *starrating;
 @property (nonatomic, copy) NSNumber *callToAction;
 @property (nonatomic, copy) NSNumber *adChoicesPlacement;
-@property (nonatomic) BOOL *requestNonPersonalizedAdsOnly; 
+@property (nonatomic) BOOL *requestNonPersonalizedAdsOnly;
+
+
+@property (nonatomic, copy) NSNumber *mediaAspectRatio;
+@property (nonatomic, copy) NSDictionary *mediationOptions;
+@property (nonatomic, copy) NSDictionary *targetingOptions;
+@property (nonatomic, copy) NSDictionary *videoOptions;
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge;
 
-@property (nonatomic, copy) RCTBubblingEventBlock onAdLoaded;
-@property (nonatomic, copy) RCTBubblingEventBlock onAdFailedToLoad;
-@property (nonatomic, copy) RCTBubblingEventBlock onAdOpened;
-@property (nonatomic, copy) RCTBubblingEventBlock onAdClosed;
-@property (nonatomic, copy) RCTBubblingEventBlock onAdLeftApplication;
-@property (nonatomic, copy) RCTBubblingEventBlock onAdClicked;
-@property (nonatomic, copy) RCTBubblingEventBlock onAdImpression;
-@property (nonatomic, copy) RCTBubblingEventBlock onUnifiedNativeAdLoaded;
+- (void)loadAd;
 
+@property (nonatomic, copy) RCTDirectEventBlock onAdLoaded;
+@property (nonatomic, copy) RCTDirectEventBlock onAdFailedToLoad;
+@property (nonatomic, copy) RCTDirectEventBlock onAdOpened;
+@property (nonatomic, copy) RCTDirectEventBlock onAdClosed;
+@property (nonatomic, copy) RCTDirectEventBlock onAdLeftApplication;
+@property (nonatomic, copy) RCTDirectEventBlock onAdClicked;
+@property (nonatomic, copy) RCTDirectEventBlock onAdImpression;
+@property (nonatomic, copy) RCTDirectEventBlock onNativeAdLoaded;
+
+@property (nonatomic, assign) BOOL isLoading;
 
 @end

@@ -10,20 +10,21 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "react": "16.13.1",
-    "react-native": "0.63.0",
+    "react": "17.0.1",
+    "react-native": "0.64.2",
     "react-native-admob-native-ads": "../",
-    "react-native-vector-icons": "^7.0.0"
+    "react-native-tracking-transparency": "^0.1.1",
+    "react-native-vector-icons": "^8.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/runtime": "^7.8.4",
-    "@react-native-community/eslint-config": "^1.1.0",
-    "babel-jest": "^25.1.0",
-    "eslint": "^6.5.1",
-    "jest": "^25.1.0",
-    "metro-react-native-babel-preset": "^0.59.0",
-    "react-test-renderer": "16.13.1"
+    "@babel/core": "^7.14.6",
+    "@babel/runtime": "^7.14.6",
+    "@react-native-community/eslint-config": "^3.0.0",
+    "babel-jest": "^27.0.6",
+    "eslint": "^7.30.0",
+    "jest": "^27.0.6",
+    "metro-react-native-babel-preset": "^0.66.1",
+    "react-test-renderer": "17.0.1"
   },
   "jest": {
     "preset": "react-native"

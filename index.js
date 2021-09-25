@@ -4,7 +4,7 @@ import HeadlineView from './src/HeadlineView'
 import TaglineView from './src/TaglineView'
 import AdvertiserView from './src/AdvertiserView'
 import ImageView from './src/ImageView'
-import MediaView from './src/MediaView'
+import NativeMediaView from './src/NativeMediaView'
 import StoreView from './src/StoreView'
 import StarRatingView from './src/StarRatingView'
 import PriceView from "./src/PriceView";
@@ -21,7 +21,7 @@ export {
   TaglineView,
   AdvertiserView,
   ImageView,
-  MediaView,
+  NativeMediaView,
   StoreView,
   StarRatingView,
   PriceView,
