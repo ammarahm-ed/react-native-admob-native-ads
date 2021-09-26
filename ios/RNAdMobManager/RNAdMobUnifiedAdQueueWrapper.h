@@ -18,6 +18,7 @@
 @property(nonatomic, readwrite) NSString* name;
 @property(nonatomic, readwrite) BOOL npa;
 @property(nonatomic, readwrite) int totalAds;
+@property(nonatomic, readwrite) int adChoicesPlacement;
 @property(nonatomic, readwrite) long expirationInterval; // in ms
 @property(nonatomic, readwrite) BOOL muted;
 @property(nonatomic, readwrite) BOOL mediation;

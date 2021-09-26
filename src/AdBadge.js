@@ -25,7 +25,6 @@ export default AdBadge;
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
     height: 15,
     width: 15,
     borderWidth: 1,

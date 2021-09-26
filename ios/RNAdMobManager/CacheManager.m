@@ -79,7 +79,6 @@ static CacheManager *_sharedInstance = nil;
     if (repoId != nil){
              
                 if (![repositoriesMap objectForKey:repoId]) {
-//                    RNAdMobUnifiedAdQueueWrapper *repo = [[RNAdMobUnifiedAdQueueWrapper alloc] init];
                     RNAdMobUnifiedAdQueueWrapper *repo = [[RNAdMobUnifiedAdQueueWrapper alloc] initWithConfig:config repo:repoId rootVC:rootVC];
                     [repositoriesMap setObject:repo forKey:repoId];
                 

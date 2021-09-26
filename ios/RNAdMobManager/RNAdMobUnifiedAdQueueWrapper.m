@@ -46,13 +46,15 @@
     if ([config objectForKey:@"mediationEnabled"]){
         _mediation = ((NSNumber *)[config objectForKey:@"mediationEnabled"]).boolValue;
     }
+    if ([config objectForKey:@"adChoicesPlacement"]){
+        _adChoicesPlacement = ((NSNumber *)[config objectForKey:@"adChoicesPlacement"]).intValue;
+    }
     if ([config objectForKey:@"nonPersonalizedAdsOnly"]){
         _npa = ((NSNumber *)[config objectForKey:@"nonPersonalizedAdsOnly"]).boolValue;
         
         adRequest = [GADRequest request];
         GADCustomEventExtras *extras = [[GADCustomEventExtras alloc] init];
         
-        //MARK:TODO require test!
         [extras setExtras:@{@"npa": @([NSNumber numberWithInt:_npa].intValue)} forLabel:@"npa"];
         [adRequest registerAdNetworkExtras:extras];
         
@@ -73,7 +75,23 @@
     
     GADNativeAdViewAdOptions* adPlacementOptions = [[GADNativeAdViewAdOptions alloc]init];
     adPlacementOptions.preferredAdChoicesPosition = GADAdChoicesPositionTopRightCorner;
-    
+    switch (_adChoicesPlacement) {
+        case 0:
+            [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopLeftCorner];
+            break;
+        case 1:
+            [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
+            break;
+        case 2:
+            [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionBottomRightCorner];
+            break;
+        case 3:
+            [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionBottomLeftCorner];
+            break;
+        default:
+            [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
+            break;
+    }
     
     GADMultipleAdsAdLoaderOptions* multipleAdsOptions = [[GADMultipleAdsAdLoaderOptions alloc] init];
     multipleAdsOptions.numberOfAds = _totalAds;
@@ -93,7 +111,6 @@
     for (int i = 0; i<_totalAds; i++){
         [adLoader loadRequest:adRequest];
     }
-    //MARK:TODO require test!
     //https://ads-developers.googleblog.com/2017/12/loading-multiple-native-ads-in-google.html
     //https://developers.google.com/admob/ios/api/reference/Classes/GADMultipleAdsAdLoaderOptions
 }
@@ -158,30 +175,13 @@
 
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didFailToReceiveAdWithError:(nonnull NSError *)error {
     [unifiedNativeAdLoadedListener adLoader:adLoader didFailToReceiveAdWithError:error];
-    NSString *errorMessage = @"";
     BOOL stopPreloading = false;
-    switch (error.code) {
-        case GADErrorInternalError:
-            stopPreloading = true;
-            errorMessage = @"Internal error, an invalid response was received from the ad server.";
-            break;
-        case GADErrorInvalidRequest:
-            stopPreloading = true;
-            errorMessage = @"Invalid ad request, possibly an incorrect ad unit ID was given.";
-            break;
-        case GADErrorNetworkError:
-            errorMessage = @"The ad request was unsuccessful due to network connectivity.";
-            break;
-        case GADErrorNoFill:
-            errorMessage = @"The ad request was successful, but no ad was returned due to lack of ad inventory.";
-            break;
-    }
     if (attachedAdListener == nil) {
         if (stopPreloading) {
             
             NSDictionary *errorDic = @{
-                @"errorMessage":error.localizedDescription,
-                @"message":errorMessage,
+                @"domain":error.domain,
+                @"message":error.localizedDescription,
                 @"code":@(error.code).stringValue
             };
             NSDictionary *event = @{
