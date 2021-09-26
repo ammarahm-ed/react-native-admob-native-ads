@@ -104,15 +104,11 @@ static CacheManager *_sharedInstance = nil;
 }
 -(void) configAdLoader:(NSString*) id rootVC:(UIViewController *) rootVC{
     RNAdMobUnifiedAdQueueWrapper *repo =  (RNAdMobUnifiedAdQueueWrapper *)([repositoriesMap objectForKey:id]);
-    [repo configAdLoader:rootVC];
+    [repo configAdLoaderOption:rootVC];
 }
 -(void) requestAds:(NSString*) id{
     RNAdMobUnifiedAdQueueWrapper *repo =  (RNAdMobUnifiedAdQueueWrapper *)([repositoriesMap objectForKey:id]);
-    [repo loadAds];
-}
--(void) requestAd:(NSString*) id{
-    RNAdMobUnifiedAdQueueWrapper *repo =  (RNAdMobUnifiedAdQueueWrapper *)([repositoriesMap objectForKey:id]);
-    [repo loadAd];
+    [repo fillAds];
 }
 
 -(BOOL) isRegistered:(NSString*) id{

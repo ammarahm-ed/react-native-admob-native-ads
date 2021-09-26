@@ -27,7 +27,6 @@
 -(void) unRegisterRepo:(NSString*) repo;
 -(void) resetCache;
 -(void) requestAds:(NSString*) repo;
--(void) requestAd:(NSString*) repo;
 
 -(BOOL) isRegistered:(NSString*) repo;
 -(RNAdMobUnifiedAdContainer*) getNativeAd:(NSString*) repo;

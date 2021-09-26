@@ -18,9 +18,14 @@
 @property(nonatomic, readwrite) NSString* name;
 @property(nonatomic, readwrite) BOOL npa;
 @property(nonatomic, readwrite) int totalAds;
-@property(nonatomic, readwrite) int adChoicesPlacement;
+@property(nonatomic, readwrite) NSNumber* adChoicesPlacement;
+@property(nonatomic, readwrite) NSNumber* mediaAspectRatio;
+
 @property(nonatomic, readwrite) long expirationInterval; // in ms
 @property(nonatomic, readwrite) BOOL muted;
+@property(nonatomic, readwrite) BOOL clickToExpand;
+@property(nonatomic, readwrite) BOOL customControlsRequested;
+
 @property(nonatomic, readwrite) BOOL mediation;
 @property(nonatomic, readwrite) UIViewController* rootVC;
  
@@ -28,10 +33,8 @@
 
 -(void) attachAdListener:(id<AdListener>) listener;
 -(void) detachAdListener;
--(void) configAdLoader:(UIViewController *) rootVC;
--(void) loadAds;
--(void) loadAd;
--(void) fillAd;
+-(void) configAdLoaderOption:(UIViewController *) rootVC;
+-(void) fillAds;
 -(RNAdMobUnifiedAdContainer*) getAd;
 -(BOOL) isLoading;
 -(NSDictionary*) hasAd;

@@ -18,6 +18,10 @@
     GADRequest* adRequest;
     id<AdListener> attachedAdListener;
     OnUnifiedNativeAdLoadedListener* unifiedNativeAdLoadedListener;
+    GADVideoOptions* adVideoOptions;
+    GADNativeAdMediaAdLoaderOptions* adMediaOptions;
+    GADNativeAdViewAdOptions* adPlacementOptions;
+    BOOL isInLoading;//true after all ads loaded
 }
 
 -(instancetype)initWithConfig:(NSDictionary *)config repo:(NSString *)repo rootVC:(UIViewController*)rootVC{
@@ -27,7 +31,13 @@
         self.expirationInterval = 3600000; // in ms
         self.muted = true;
         self.mediation = false;
+        isInLoading = false;
+        adVideoOptions = [[GADVideoOptions alloc]init];
+        adMediaOptions = [[GADNativeAdMediaAdLoaderOptions alloc] init];
+        adPlacementOptions = [[GADNativeAdViewAdOptions alloc]init];
     }
+    
+    
     _adUnitId = [config objectForKey:@"adUnitId"] ;
     _name = repo;
     if ([config objectForKey:@"numOfAds"]){
@@ -40,6 +50,14 @@
     if ([config objectForKey:@"mute"]){
         _muted = ((NSNumber *)[config objectForKey:@"mute"]).boolValue;
     }
+    if ([config objectForKey:@"clickToExpand"]) {
+        _clickToExpand = ((NSNumber *)[config objectForKey:@"clickToExpand"]).boolValue;
+    }
+    
+    if ([config objectForKey:@"customControlsRequested"]) {
+        _customControlsRequested = ((NSNumber *)[config objectForKey:@"customControlsRequested"]).boolValue;
+    }
+    
     if ([config objectForKey:@"expirationPeriod"]){
         _expirationInterval = ((NSNumber *)[config objectForKey:@"expirationPeriod"]).intValue;
     }
@@ -47,7 +65,10 @@
         _mediation = ((NSNumber *)[config objectForKey:@"mediationEnabled"]).boolValue;
     }
     if ([config objectForKey:@"adChoicesPlacement"]){
-        _adChoicesPlacement = ((NSNumber *)[config objectForKey:@"adChoicesPlacement"]).intValue;
+        _adChoicesPlacement = ((NSNumber *)[config objectForKey:@"adChoicesPlacement"]);
+    }
+    if ([config objectForKey:@"mediaAspectRatio"]){
+        _mediaAspectRatio = ((NSNumber *)[config objectForKey:@"mediaAspectRatio"]);
     }
     if ([config objectForKey:@"nonPersonalizedAdsOnly"]){
         _npa = ((NSNumber *)[config objectForKey:@"nonPersonalizedAdsOnly"]).boolValue;
@@ -64,41 +85,46 @@
     
     unifiedNativeAdLoadedListener = [[OnUnifiedNativeAdLoadedListener alloc]initWithRepo:repo nativeAds:_nativeAds tAds:_totalAds];
     
-    [self configAdLoader:rootVC];
+    [self configAdLoaderOption:rootVC];
     
     return self;
 }
--(void) configAdLoader:(UIViewController *) rootVC {
+-(void) configAdLoaderOption:(UIViewController *) rootVC{
     //https://developers.google.com/admob/ios/native/options#objective-c_1
+    self.rootVC = rootVC;
+    
     GADVideoOptions* adVideoOptions = [[GADVideoOptions alloc]init];
     [adVideoOptions setStartMuted:_muted];
+    [adVideoOptions setClickToExpandRequested:_clickToExpand];
+    [adVideoOptions setCustomControlsRequested:_customControlsRequested];
     
     GADNativeAdViewAdOptions* adPlacementOptions = [[GADNativeAdViewAdOptions alloc]init];
-    adPlacementOptions.preferredAdChoicesPosition = GADAdChoicesPositionTopRightCorner;
-    switch (_adChoicesPlacement) {
-        case 0:
-            [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopLeftCorner];
-            break;
-        case 1:
-            [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
-            break;
-        case 2:
-            [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionBottomRightCorner];
-            break;
-        case 3:
-            [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionBottomLeftCorner];
-            break;
-        default:
-            [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
-            break;
+    if ([_adChoicesPlacement isEqualToNumber:@0]) {
+        [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopLeftCorner];
+    } else if ([_adChoicesPlacement isEqualToNumber:@1]) {
+        [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
+    }  else if ([_adChoicesPlacement isEqualToNumber:@2]) {
+        [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionBottomRightCorner];
+    }  else if ([_adChoicesPlacement isEqualToNumber:@3]) {
+        [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionBottomLeftCorner];
+    } else {
+        [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
     }
     
-    GADMultipleAdsAdLoaderOptions* multipleAdsOptions = [[GADMultipleAdsAdLoaderOptions alloc] init];
-    multipleAdsOptions.numberOfAds = _totalAds;
     
-    adLoader = [[GADAdLoader alloc] initWithAdUnitID:_adUnitId rootViewController:rootVC adTypes:@[kGADAdLoaderAdTypeNative] options:@[adVideoOptions,adPlacementOptions,multipleAdsOptions]];
+    GADNativeAdMediaAdLoaderOptions* adMediaOptions = [[GADNativeAdMediaAdLoaderOptions alloc] init];
+    if ([_mediaAspectRatio isEqualToNumber:@0]) {
+        [adMediaOptions setMediaAspectRatio:GADMediaAspectRatioUnknown];
+    } else if ([_mediaAspectRatio isEqualToNumber:@1]) {
+        [adMediaOptions setMediaAspectRatio:GADMediaAspectRatioAny];
+    }  else if ([_mediaAspectRatio isEqualToNumber:@2]) {
+        [adMediaOptions setMediaAspectRatio:GADMediaAspectRatioLandscape];
+    }  else if ([_mediaAspectRatio isEqualToNumber:@3]) {
+        [adMediaOptions setMediaAspectRatio:GADMediaAspectRatioPortrait];
+    } else {
+        [adMediaOptions setMediaAspectRatio:GADMediaAspectRatioSquare];
+    }
     
-    [adLoader setDelegate:self];
     
 }
 -(void) attachAdListener:(id<AdListener>) listener {
@@ -107,21 +133,15 @@
 -(void) detachAdListener{
     attachedAdListener = nil;
 }
--(void) loadAds{
-    for (int i = 0; i<_totalAds; i++){
+
+-(void) fillAds{
+    if ( ![self isLoading] && _totalAds-_nativeAds.count>0){
+        GADMultipleAdsAdLoaderOptions* multipleAdsOptions = [[GADMultipleAdsAdLoaderOptions alloc] init];
+        multipleAdsOptions.numberOfAds = MAX(_totalAds-_nativeAds.count,0);
+        adLoader = [[GADAdLoader alloc] initWithAdUnitID:_adUnitId rootViewController:_rootVC adTypes:@[kGADAdLoaderAdTypeNative] options:@[adMediaOptions,adVideoOptions,adPlacementOptions,multipleAdsOptions]];
+        [adLoader setDelegate:self];
         [adLoader loadRequest:adRequest];
-    }
-    //https://ads-developers.googleblog.com/2017/12/loading-multiple-native-ads-in-google.html
-    //https://developers.google.com/admob/ios/api/reference/Classes/GADMultipleAdsAdLoaderOptions
-}
--(void) loadAd{
-    
-    [adLoader loadRequest:adRequest];
-    [self fillAd];
-}
--(void) fillAd{
-    if ( [self isLoading]){
-        [adLoader loadRequest:adRequest];
+        isInLoading = true;
     }
 }
 -(RNAdMobUnifiedAdContainer*) getAd{
@@ -153,12 +173,12 @@
     }
     ad.showCount += 1;
     ad.references += 1;
-    [self fillAd];
+    [self fillAds];
     return ad;
 }
 -(BOOL) isLoading{
     if (adLoader != nil){
-        return [adLoader isLoading];
+        return [adLoader isLoading] || isInLoading;
     }
     return false;
 }
@@ -169,9 +189,14 @@
 }
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didReceiveNativeAd:(nonnull GADNativeAd *)nativeAd {
     [unifiedNativeAdLoadedListener adLoader:adLoader didReceiveNativeAd:nativeAd];
-    [attachedAdListener didAdLoaded:nativeAd];
     [nativeAd setDelegate:self];
+    [attachedAdListener didAdLoaded:nativeAd];
 }
+- (void)adLoaderDidFinishLoading:(GADAdLoader *) adLoader {
+    isInLoading = false;
+  // The adLoader has finished loading ads, and a new request can be sent.
+}
+
 
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didFailToReceiveAdWithError:(nonnull NSError *)error {
     [unifiedNativeAdLoadedListener adLoader:adLoader didFailToReceiveAdWithError:error];
