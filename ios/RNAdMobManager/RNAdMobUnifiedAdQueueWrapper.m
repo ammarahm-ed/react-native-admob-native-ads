@@ -16,7 +16,7 @@
 @implementation RNAdMobUnifiedAdQueueWrapper{
     GADAdLoader* adLoader;
     GADRequest* adRequest;
-    id<AdListener> attachedAdListener;
+    __weak id<AdListener> attachedAdListener;
     OnUnifiedNativeAdLoadedListener* unifiedNativeAdLoadedListener;
     GADVideoOptions* adVideoOptions;
     GADNativeAdMediaAdLoaderOptions* adMediaOptions;
@@ -190,6 +190,7 @@
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didReceiveNativeAd:(nonnull GADNativeAd *)nativeAd {
     [unifiedNativeAdLoadedListener adLoader:adLoader didReceiveNativeAd:nativeAd];
     [nativeAd setDelegate:self];
+    if (attachedAdListener == nil) return;
     [attachedAdListener didAdLoaded:nativeAd];
 }
 - (void)adLoaderDidFinishLoading:(GADAdLoader *) adLoader {

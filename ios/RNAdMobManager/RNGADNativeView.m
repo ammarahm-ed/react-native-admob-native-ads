@@ -36,7 +36,6 @@ RNGADMediaView *rnMediaView;
 BOOL isLoading = FALSE;
 BOOL isWait4Retry = FALSE;
 NSString *adRepo = nil;
-id<AdListener> adListener = nil;
 
 GADNativeAdViewAdOptions *adPlacementOptions;
 GADNativeAdMediaAdLoaderOptions *adMediaOptions;
@@ -66,7 +65,6 @@ BOOL *nonPersonalizedAds;
     if (self = [super init]) {
         bridge = _bridge;
     }
-    adListener = self;
     return self;
 }
 
@@ -459,6 +457,8 @@ BOOL *nonPersonalizedAds;
 - (void)setRepository:(NSString *)repo
 {
     adRepo = repo;
+    if (adRepo == nil) {return;}
+    [self getAdFromRepository];
 }
 
 
@@ -486,24 +486,22 @@ BOOL *nonPersonalizedAds;
 }
 - (void) getAdFromRepository{
     if (![CacheManager.sharedInstance isRegistered:adRepo]) {
-        if (adListener != nil){
             NSDictionary *userInfo = [[NSDictionary alloc]
                                       initWithObjectsAndKeys:@"The requested repo is not registered",
                                       @"NSLocalizedDescriptionKey",NULL];
             
             NSError* error = [[NSError alloc]initWithDomain:@"" code:3 userInfo:userInfo];
-            [adListener didFailToReceiveAdWithError:error];
-        }
+            [self didFailToReceiveAdWithError:error];
     } else {
         unifiedNativeAdContainer = [CacheManager.sharedInstance getNativeAd:adRepo];
         if (unifiedNativeAdContainer != nil) {
                 [self setNativeAdToJS:unifiedNativeAdContainer.unifiedNativeAd];
         } else {
             if (![CacheManager.sharedInstance isLoading:adRepo]){
-                [CacheManager.sharedInstance attachAdListener:adRepo listener:adListener];
+                [CacheManager.sharedInstance attachAdListener:adRepo listener:self];
                 [CacheManager.sharedInstance requestAds:adRepo];
             }else{
-                [CacheManager.sharedInstance attachAdListener:adRepo listener:adListener];
+                [CacheManager.sharedInstance attachAdListener:adRepo listener:self];
             }
         }
     }
