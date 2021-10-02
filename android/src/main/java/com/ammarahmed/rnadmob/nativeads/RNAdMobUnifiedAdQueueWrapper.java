@@ -89,6 +89,12 @@ public class RNAdMobUnifiedAdQueueWrapper {
             public void onAdFailedToLoad(LoadAdError adError) {
                 super.onAdFailedToLoad(adError);
                 boolean stopPreloading = false;
+                switch (adError.getCode()) {
+                    case AdRequest.ERROR_CODE_INTERNAL_ERROR:
+                    case AdRequest.ERROR_CODE_INVALID_REQUEST:
+                        stopPreloading = true;
+                }
+
                 if (attachedAdListener == null) {
                     if (stopPreloading) {
                         WritableMap event = Arguments.createMap();

@@ -16,7 +16,7 @@
 @implementation RNAdMobUnifiedAdQueueWrapper{
     GADAdLoader* adLoader;
     GADRequest* adRequest;
-    __weak id<AdListener> attachedAdListener;
+    id<AdListener> attachedAdListener;
     OnUnifiedNativeAdLoadedListener* unifiedNativeAdLoadedListener;
     GADVideoOptions* adVideoOptions;
     GADNativeAdMediaAdLoaderOptions* adMediaOptions;
@@ -190,18 +190,23 @@
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didReceiveNativeAd:(nonnull GADNativeAd *)nativeAd {
     [unifiedNativeAdLoadedListener adLoader:adLoader didReceiveNativeAd:nativeAd];
     [nativeAd setDelegate:self];
-    if (attachedAdListener == nil) return;
     [attachedAdListener didAdLoaded:nativeAd];
 }
 - (void)adLoaderDidFinishLoading:(GADAdLoader *) adLoader {
     isInLoading = false;
-  // The adLoader has finished loading ads, and a new request can be sent.
+    // The adLoader has finished loading ads, and a new request can be sent.
 }
 
 
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didFailToReceiveAdWithError:(nonnull NSError *)error {
     [unifiedNativeAdLoadedListener adLoader:adLoader didFailToReceiveAdWithError:error];
     BOOL stopPreloading = false;
+    switch (error.code) {
+        case GADErrorInternalError:
+        case GADErrorInvalidRequest:
+            stopPreloading = true;
+            break;
+    }
     if (attachedAdListener == nil) {
         if (stopPreloading) {
             
