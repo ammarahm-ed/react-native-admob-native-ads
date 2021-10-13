@@ -10,7 +10,7 @@ import com.google.android.gms.ads.MediaContent;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.nativead.MediaView;
 
- 
+
 import javax.annotation.Nullable;
 
 public class RNAdmobMediaView extends MediaView {

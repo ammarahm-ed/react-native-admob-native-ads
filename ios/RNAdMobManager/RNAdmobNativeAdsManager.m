@@ -1,5 +1,7 @@
 #import "RNAdmobNativeAdsManager.h"
 #import "RNNativeAdMobUtils.h"
+#import "CacheManager.h"
+
 
 @import GoogleMobileAds;
 
@@ -10,6 +12,40 @@
 @implementation RNAdmobNativeAdsManager
 
 RCT_EXPORT_MODULE();
+
+RCT_EXPORT_METHOD(isTestDevice:resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+    
+}
+
+RCT_EXPORT_METHOD(registerRepository:(NSDictionary *)config resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+    
+    NSDictionary *result = [CacheManager.sharedInstance registerRepo:config rootVC:nil];
+    BOOL isSuccess = ((NSNumber *)[result objectForKey:@"success"]).boolValue;
+    if (isSuccess){
+        NSString* repo = [result objectForKey:@"repo"];
+        [CacheManager.sharedInstance requestAds:repo];
+    }
+    resolve(result);
+}
+
+RCT_EXPORT_METHOD(hasAd:(NSString *)repo resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+    
+    resolve([CacheManager.sharedInstance hasAd:repo]);
+}
+
+RCT_EXPORT_METHOD(unRegisterRepository:(NSString *) id resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+    [CacheManager.sharedInstance unRegisterRepo:id];
+}
+
+RCT_EXPORT_METHOD(resetCache:resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject){
+    [CacheManager.sharedInstance resetCache];
+}
+
 
 RCT_EXPORT_METHOD(setRequestConfiguration:(NSDictionary *)config resolver:(RCTPromiseResolveBlock)resolve
     rejecter:(RCTPromiseRejectBlock)reject)

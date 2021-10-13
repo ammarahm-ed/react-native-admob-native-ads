@@ -12,7 +12,7 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
- 
+
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -52,6 +52,8 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     public static final String PROP_VIDEO_OPTIONS = "videoOptions";
     public static final String PROP_MEDIATION_OPTIONS = "mediationOptions";
     public static final String PROP_TARGETING_OPTIONS = "targetingOptions";
+    public static final String PROP_AD_REPOSITORY = "repository";
+
 
     @javax.annotation.Nullable
     @Override
@@ -80,7 +82,7 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
 
     @Override
     protected RNAdmobNativeView createViewInstance(ThemedReactContext reactContext) {
-       
+
         return new RNAdmobNativeView(reactContext);
 
     }
@@ -215,9 +217,9 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     @ReactProp(name = PROP_CALL_TO_ACTION_VIEW)
     public void setPropCallToActionView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
-            View view = nativeAdWrapper.findViewById(id);
-            nativeAdWrapper.nativeAdView.setCallToActionView(view);
-            nativeAdWrapper.setNativeAd();
+        View view = nativeAdWrapper.findViewById(id);
+        nativeAdWrapper.nativeAdView.setCallToActionView(view);
+        nativeAdWrapper.setNativeAd();
 
 
     }
@@ -250,14 +252,29 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
 
     }
 
+    @ReactProp(name = PROP_AD_REPOSITORY)
+    public void setPropAdRepository(final RNAdmobNativeView nativeAdWrapper, final String repo) {
+        if (repo == null) return;
+        nativeAdWrapper.setAdRepository(repo);
+    }
+
+    @ReactProp(name = PROP_REFRESH_INTERVAL)
+    public void setRefreshInterval(final RNAdmobNativeView nativeAdWrapper, final int interval) {
+        nativeAdWrapper.setAdRefreshInterval(interval);
+    }
+
     @Override
     public void onDropViewInstance(@NonNull RNAdmobNativeView nativeAdWrapper) {
         super.onDropViewInstance(nativeAdWrapper);
         nativeAdWrapper.removeHandler();
         if (nativeAdWrapper.nativeAd != null){
-            nativeAdWrapper.nativeAd.destroy();
+            if (nativeAdWrapper.unifiedNativeAdContainer != null){
+                nativeAdWrapper.unifiedNativeAdContainer.references -= 1;
+            } else{
+                nativeAdWrapper.nativeAdView.destroy();
+            }
         }
-	if (nativeAdWrapper.nativeAdView != null){
+        if (nativeAdWrapper.nativeAdView != null){
             nativeAdWrapper.nativeAdView.destroy();
         }
     }

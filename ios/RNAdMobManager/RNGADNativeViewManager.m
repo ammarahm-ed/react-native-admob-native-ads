@@ -1,7 +1,17 @@
 #import "RNGADNativeViewManager.h"
 #import "RNGADNativeView.h"
 
-@implementation RNGADNativeViewManager 
+
+@implementation RNGADNativeViewManager
+
++ (NSString *)  EVENT_AD_FAILED_TO_LOAD {return @"onAdFailedToLoad";}
++ (NSString *)  EVENT_AD_CLICKED{return @"onAdClicked";}
++ (NSString *)  EVENT_AD_CLOSED{return @"onAdClosed";}
++ (NSString *)  EVENT_AD_OPENED{return @"onAdOpened";}
++ (NSString *)  EVENT_AD_IMPRESSION {return @"onAdImpression";}
++ (NSString *)  EVENT_AD_LOADED{return @"onAdLoaded";}
++ (NSString *)  EVENT_AD_LEFT_APPLICATION {return @"onAdLeftApplication";}
++ (NSString *)  EVENT_UNIFIED_NATIVE_AD_LOADED {return@ "onUnifiedNativeAdLoaded";}
 
 RCT_EXPORT_MODULE(RNGADNativeView);
 
@@ -48,6 +58,7 @@ RCT_EXPORT_VIEW_PROPERTY(starrating, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(callToAction, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(requestNonPersonalizedAdsOnly, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(adChoicesPlacement, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(repository, NSString)
 
 RCT_EXPORT_VIEW_PROPERTY(onSizeChange, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAppEvent, RCTDirectEventBlock)
@@ -59,4 +70,7 @@ RCT_EXPORT_VIEW_PROPERTY(onAdLeftApplication, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdClicked, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAdImpression, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onNativeAdLoaded, RCTDirectEventBlock)
+
+
+
 @end

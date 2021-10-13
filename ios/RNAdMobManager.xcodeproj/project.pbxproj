@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6513057E263DD92B00ECE0D9 /* RNAdmobNativeAdsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65130570263DD92A00ECE0D9 /* RNAdmobNativeAdsManager.m */; };
-		65130580263DD92B00ECE0D9 /* RNGADMediaViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65130573263DD92B00ECE0D9 /* RNGADMediaViewManager.m */; };
-		65130581263DD92B00ECE0D9 /* RNGADImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65130575263DD92B00ECE0D9 /* RNGADImageView.m */; };
-		65130583263DD92B00ECE0D9 /* RNNativeAdMobUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 65130579263DD92B00ECE0D9 /* RNNativeAdMobUtils.m */; };
-		6513058F263DD98400ECE0D9 /* RNGADMediaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6513058D263DD98400ECE0D9 /* RNGADMediaView.m */; };
-		F90A723223E90755001A979C /* RNGADNativeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F90A723123E90755001A979C /* RNGADNativeView.m */; };
-		F90A723623E91B31001A979C /* RNGADNativeViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F90A723523E91B31001A979C /* RNGADNativeViewManager.m */; };
+		419B6BD026D6286900C5A077 /* RNGADNativeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 419B6BC226D6286700C5A077 /* RNGADNativeView.m */; };
+		419B6BD126D6286900C5A077 /* RNGADMediaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 419B6BC426D6286800C5A077 /* RNGADMediaView.m */; };
+		419B6BD226D6286900C5A077 /* RNGADImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 419B6BC626D6286800C5A077 /* RNGADImageView.m */; };
+		419B6BD326D6286900C5A077 /* RNAdmobNativeAdsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 419B6BC726D6286800C5A077 /* RNAdmobNativeAdsManager.m */; };
+		419B6BD426D6286900C5A077 /* RNGADNativeViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 419B6BC926D6286800C5A077 /* RNGADNativeViewManager.m */; };
+		419B6BD526D6286900C5A077 /* RNNativeAdMobUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 419B6BCB26D6286800C5A077 /* RNNativeAdMobUtils.m */; };
+		419B6BD626D6286900C5A077 /* RNGADMediaViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 419B6BCD26D6286800C5A077 /* RNGADMediaViewManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,21 +29,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		65130570263DD92A00ECE0D9 /* RNAdmobNativeAdsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNAdmobNativeAdsManager.m; sourceTree = SOURCE_ROOT; };
-		65130571263DD92B00ECE0D9 /* RNGADMediaViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADMediaViewManager.h; sourceTree = SOURCE_ROOT; };
-		65130573263DD92B00ECE0D9 /* RNGADMediaViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADMediaViewManager.m; sourceTree = SOURCE_ROOT; };
-		65130575263DD92B00ECE0D9 /* RNGADImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADImageView.m; sourceTree = SOURCE_ROOT; };
-		65130577263DD92B00ECE0D9 /* RNGADImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADImageView.h; sourceTree = SOURCE_ROOT; };
-		65130578263DD92B00ECE0D9 /* RNAdmobNativeAdsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNAdmobNativeAdsManager.h; sourceTree = SOURCE_ROOT; };
-		65130579263DD92B00ECE0D9 /* RNNativeAdMobUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNativeAdMobUtils.m; sourceTree = SOURCE_ROOT; };
-		6513057D263DD92B00ECE0D9 /* RNNativeAdMobUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNativeAdMobUtils.h; sourceTree = SOURCE_ROOT; };
-		6513058D263DD98400ECE0D9 /* RNGADMediaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADMediaView.m; sourceTree = SOURCE_ROOT; };
-		6513058E263DD98400ECE0D9 /* RNGADMediaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADMediaView.h; sourceTree = SOURCE_ROOT; };
+		419B6BC226D6286700C5A077 /* RNGADNativeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADNativeView.m; sourceTree = "<group>"; };
+		419B6BC326D6286800C5A077 /* RNGADNativeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADNativeView.h; sourceTree = "<group>"; };
+		419B6BC426D6286800C5A077 /* RNGADMediaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADMediaView.m; sourceTree = "<group>"; };
+		419B6BC526D6286800C5A077 /* RNAdmobNativeAdsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNAdmobNativeAdsManager.h; sourceTree = "<group>"; };
+		419B6BC626D6286800C5A077 /* RNGADImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADImageView.m; sourceTree = "<group>"; };
+		419B6BC726D6286800C5A077 /* RNAdmobNativeAdsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNAdmobNativeAdsManager.m; sourceTree = "<group>"; };
+		419B6BC826D6286800C5A077 /* RNGADMediaViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADMediaViewManager.h; sourceTree = "<group>"; };
+		419B6BC926D6286800C5A077 /* RNGADNativeViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADNativeViewManager.m; sourceTree = "<group>"; };
+		419B6BCA26D6286800C5A077 /* RNGADImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADImageView.h; sourceTree = "<group>"; };
+		419B6BCB26D6286800C5A077 /* RNNativeAdMobUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNativeAdMobUtils.m; sourceTree = "<group>"; };
+		419B6BCC26D6286800C5A077 /* RNGADMediaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADMediaView.h; sourceTree = "<group>"; };
+		419B6BCD26D6286800C5A077 /* RNGADMediaViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGADMediaViewManager.m; sourceTree = "<group>"; };
+		419B6BCE26D6286800C5A077 /* RNGADNativeViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGADNativeViewManager.h; sourceTree = "<group>"; };
+		419B6BCF26D6286900C5A077 /* RNNativeAdMobUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNativeAdMobUtils.h; sourceTree = "<group>"; };
 		A96DA7741C146D7200FC639B /* libRNAdMobManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNAdMobManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		F90A723123E90755001A979C /* RNGADNativeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNGADNativeView.m; sourceTree = SOURCE_ROOT; };
-		F90A723323E90762001A979C /* RNGADNativeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNGADNativeView.h; sourceTree = SOURCE_ROOT; };
-		F90A723423E91B19001A979C /* RNGADNativeViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNGADNativeViewManager.h; sourceTree = SOURCE_ROOT; };
-		F90A723523E91B31001A979C /* RNGADNativeViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNGADNativeViewManager.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,20 +76,20 @@
 		A96DA7761C146D7200FC639B /* RNAdMobManager */ = {
 			isa = PBXGroup;
 			children = (
-				65130578263DD92B00ECE0D9 /* RNAdmobNativeAdsManager.h */,
-				65130570263DD92A00ECE0D9 /* RNAdmobNativeAdsManager.m */,
-				65130577263DD92B00ECE0D9 /* RNGADImageView.h */,
-				65130575263DD92B00ECE0D9 /* RNGADImageView.m */,
-				6513058E263DD98400ECE0D9 /* RNGADMediaView.h */,
-				6513058D263DD98400ECE0D9 /* RNGADMediaView.m */,
-				65130571263DD92B00ECE0D9 /* RNGADMediaViewManager.h */,
-				65130573263DD92B00ECE0D9 /* RNGADMediaViewManager.m */,
-				F90A723323E90762001A979C /* RNGADNativeView.h */,
-				F90A723123E90755001A979C /* RNGADNativeView.m */,
-				F90A723423E91B19001A979C /* RNGADNativeViewManager.h */,
-				F90A723523E91B31001A979C /* RNGADNativeViewManager.m */,
-				6513057D263DD92B00ECE0D9 /* RNNativeAdMobUtils.h */,
-				65130579263DD92B00ECE0D9 /* RNNativeAdMobUtils.m */,
+				419B6BC526D6286800C5A077 /* RNAdmobNativeAdsManager.h */,
+				419B6BC726D6286800C5A077 /* RNAdmobNativeAdsManager.m */,
+				419B6BCA26D6286800C5A077 /* RNGADImageView.h */,
+				419B6BC626D6286800C5A077 /* RNGADImageView.m */,
+				419B6BCC26D6286800C5A077 /* RNGADMediaView.h */,
+				419B6BC426D6286800C5A077 /* RNGADMediaView.m */,
+				419B6BC826D6286800C5A077 /* RNGADMediaViewManager.h */,
+				419B6BCD26D6286800C5A077 /* RNGADMediaViewManager.m */,
+				419B6BC326D6286800C5A077 /* RNGADNativeView.h */,
+				419B6BC226D6286700C5A077 /* RNGADNativeView.m */,
+				419B6BCE26D6286800C5A077 /* RNGADNativeViewManager.h */,
+				419B6BC926D6286800C5A077 /* RNGADNativeViewManager.m */,
+				419B6BCF26D6286900C5A077 /* RNNativeAdMobUtils.h */,
+				419B6BCB26D6286800C5A077 /* RNNativeAdMobUtils.m */,
 			);
 			path = RNAdMobManager;
 			sourceTree = "<group>";
@@ -163,13 +163,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6513057E263DD92B00ECE0D9 /* RNAdmobNativeAdsManager.m in Sources */,
-				65130583263DD92B00ECE0D9 /* RNNativeAdMobUtils.m in Sources */,
-				6513058F263DD98400ECE0D9 /* RNGADMediaView.m in Sources */,
-				F90A723223E90755001A979C /* RNGADNativeView.m in Sources */,
-				65130581263DD92B00ECE0D9 /* RNGADImageView.m in Sources */,
-				65130580263DD92B00ECE0D9 /* RNGADMediaViewManager.m in Sources */,
-				F90A723623E91B31001A979C /* RNGADNativeViewManager.m in Sources */,
+				419B6BD626D6286900C5A077 /* RNGADMediaViewManager.m in Sources */,
+				419B6BD026D6286900C5A077 /* RNGADNativeView.m in Sources */,
+				419B6BD526D6286900C5A077 /* RNNativeAdMobUtils.m in Sources */,
+				419B6BD226D6286900C5A077 /* RNGADImageView.m in Sources */,
+				419B6BD426D6286900C5A077 /* RNGADNativeViewManager.m in Sources */,
+				419B6BD326D6286900C5A077 /* RNAdmobNativeAdsManager.m in Sources */,
+				419B6BD126D6286900C5A077 /* RNGADMediaView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
