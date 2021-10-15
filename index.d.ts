@@ -140,11 +140,12 @@ type NativeAdViewProps = {
   mediaAspectRatio?: "any" | "landscape" | "portrait" | "square" | "unknown";
 
   /**
-   * Placement of AdChoicesView in any of the 4 corners of the ad
-   *
-   * import AdOptions then pass the value from there. AdOptions.adChoicesPlacement
-   * Ad Repository for Native ads registered for caching. Remember to use only when there is
-   * a registered repository. when registered the adUnitId and other settings would be ignored
+   * A repository is used to preload ads before they are presented. 
+   * Provide the name of the repository registered for ad caching. 
+   * If you have not registered a repository, you can do so by 
+   * calling `AdManager.registerRepository`.
+   * 
+   * **Note:** Use this only if you have registered a repository.
    */
 
   repository: string;
@@ -164,6 +165,11 @@ type NativeAdViewProps = {
    */
 
   delayAdLoading?: number;
+
+  /**
+   * Placement of AdChoicesView in any of the 4 corners of the ad
+   *
+   * import `AdOptions` then pass the value from there. AdOptions.adChoicesPlacement **/
 
   adChoicesPlacement?: "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
 
@@ -230,17 +236,17 @@ type StarViewProps = {
   style?: StyleProp<ViewStyle>;
   size?: number;
   iconSet?:
-    | "Entypo"
-    | "EvilIcons"
-    | "Feather"
-    | "FontAwesome"
-    | "Foundation"
-    | "Ionicons"
-    | "MaterialIcons"
-    | "MaterialCommunityIcons"
-    | "Octicons"
-    | "Zocial"
-    | "SimpleLineIcons";
+  | "Entypo"
+  | "EvilIcons"
+  | "Feather"
+  | "FontAwesome"
+  | "Foundation"
+  | "Ionicons"
+  | "MaterialIcons"
+  | "MaterialCommunityIcons"
+  | "Octicons"
+  | "Zocial"
+  | "SimpleLineIcons";
   fullIcon?: string;
   halfIcon?: string;
   emptyIcon?: string;
@@ -290,12 +296,6 @@ declare module "react-native-admob-native-ads" {
    }
 
      AdManager.setRequestConfiguration(config);
-
-<<<<<<< HEAD
-    setRequestConfiguration: (
-      config: Partial<AdManagerConfiguration>
-    ) => Promise<MediationAdapterStatus[]>;
-=======
      ```
      *
      */
@@ -312,40 +312,34 @@ declare module "react-native-admob-native-ads" {
     isTestDevice: () => Promise<any>
 
     /**
-     * register repository for a unitId with given settings for native ads
-     ``` js
-     AdManager.registerRepository({
-      name: 'muteVideoAd'
-      adUnitId: 'ca-app-pub-3940256099942544/2247696110',
-      numOfAds: 3,
-      nonPersonalizedAdsOnly: false,
-      mute: true,
-      expirationPeriod: 3600000, in MilliSeconds
-      mediationEnabled: true,
-     });
+     * Register a repository  with given settings for native ads
      */
 
     registerRepository: (config: {
-        name: string;
-        adUnitId: string;
-        numOfAds: number;
-        nonPersonalizedAdsOnly: boolean;
-        mute: boolean,
-        expirationPeriod: number,
-        mediationEnabled: boolean,
-      } ) => Promise<{repo: string, success: boolean, error: string}>;
-    unRegisterRepository: (name: string) => void;
-    resetCache: () => void;
+      name: string;
+      adUnitId: string;
+      numOfAds: number;
+      nonPersonalizedAdsOnly: boolean;
+      mute: boolean,
+      expirationPeriod: number,
+      mediationEnabled: boolean,
+    }) => Promise<{ repo: string, success: boolean, error: string }>;
+
+
     /**
-     * Check if there is ad in a repo
-     ``` js
-     AdManager.hasAd("name").then(result => console.log(result))
-     ```
-     return {
-                "name" : boolean
-             }
+     * Unregister a repository. All preloaded ads in this repository will be destroyed.
      */
-    hasAd: (adUnitId: string) => Promise<any>;
+    unRegisterRepository: (name: string) => void;
+
+    /**
+     * Reset all ad repositories.
+     */
+    resetCache: () => void;
+
+    /**
+     * Check if there is ad in a repository.
+     */
+    hasAd: (name: string) => Promise<any>;
   };
 
   export const AdOptions: options;
