@@ -132,7 +132,6 @@ export class NativeAdView extends Component {
           ref={this._getRef}
           adUnitID={this.props.adUnitID}
           repository={this.props.repository}
-          requestMuteAds={this.props.requestMuteAds}
           onAdLoaded={this._onAdLoaded}
           onAdFailedToLoad={this._onAdFailedToLoad}
           onAdClicked={this._onAdClicked}

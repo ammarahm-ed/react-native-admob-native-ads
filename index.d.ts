@@ -213,7 +213,7 @@ type NativeAdViewProps = {
   videoOptions: VideoOptions;
   mediationOptions: MediationOptions;
   targetingOptions: TargetingOptions;
-  
+
   testDevices?: Array<string>;
   onAdOpened?: () => void;
   onAdClosed?: () => void;
@@ -223,7 +223,6 @@ type NativeAdViewProps = {
   onAdLoaded?: () => void;
   onNativeAdLoaded?: (event: NativeAd) => void;
   onAdFailedToLoad?: (error: { message: string }) => void;
-  requestMuteAds: boolean;
 };
 
 type SimpleViewProps = {
