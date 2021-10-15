@@ -100,6 +100,25 @@ type AdManagerConfiguration = {
   trackingAuthorized: boolean;
 };
 
+type VideoOptions = {
+  muted?: boolean;
+  clickToExpand?: boolean;
+  customControlsRequested?: boolean;
+}
+type MediationOptions = {
+  nativeBanner?: boolean; 
+}
+
+type TargetingOptions = {
+  targets?: Array<{ key: boolean; value: string | Array<string> }>;
+  categoryExclusions?: Array<string>;
+  publisherId?: string;
+  requestAgent?: string;
+  keywords?: Array<string>;
+  contentUrl?: string;
+  neighboringContentUrls?: Array<string>;
+};
+
 export enum AdapterState {
   NOT_READY,
   READY,
@@ -191,24 +210,10 @@ type NativeAdViewProps = {
   /**
    * Set testdevices for the ad. (DEPRECATED)
    */
-  videoOptions: {
-    muted?: boolean;
-    clickToExpand?: boolean;
-    customControlsRequested?: boolean;
-  };
-
-  mediationOptions: {
-    nativeBanner?: boolean;
-  };
-  targetingOptions: {
-    targets?: Array<{ key: boolean; value: string | Array<string> }>;
-    categoryExclusions?: Array<string>;
-    publisherId?: string;
-    requestAgent?: string;
-    keywords?: Array<string>;
-    contentUrl?: string;
-    neighboringContentUrls?: Array<string>;
-  };
+  videoOptions: VideoOptions;
+  mediationOptions: MediationOptions;
+  targetingOptions: TargetingOptions;
+  
   testDevices?: Array<string>;
   onAdOpened?: () => void;
   onAdClosed?: () => void;
