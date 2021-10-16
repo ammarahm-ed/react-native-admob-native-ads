@@ -100,6 +100,25 @@ type AdManagerConfiguration = {
   trackingAuthorized: boolean;
 };
 
+type VideoOptions = {
+  muted?: boolean;
+  clickToExpand?: boolean;
+  customControlsRequested?: boolean;
+}
+type MediationOptions = {
+  nativeBanner?: boolean; 
+}
+
+type TargetingOptions = {
+  targets?: Array<{ key: boolean; value: string | Array<string> }>;
+  categoryExclusions?: Array<string>;
+  publisherId?: string;
+  requestAgent?: string;
+  keywords?: Array<string>;
+  contentUrl?: string;
+  neighboringContentUrls?: Array<string>;
+};
+
 export enum AdapterState {
   NOT_READY,
   READY,
@@ -140,9 +159,36 @@ type NativeAdViewProps = {
   mediaAspectRatio?: "any" | "landscape" | "portrait" | "square" | "unknown";
 
   /**
+   * A repository is used to preload ads before they are presented. 
+   * Provide the name of the repository registered for ad caching. 
+   * If you have not registered a repository, you can do so by 
+   * calling `AdManager.registerRepository`.
+   * 
+   * **Note:** Use this only if you have registered a repository.
+   */
+
+  repository: string;
+
+  /**
+   * Time after which a new ad should be
+   * requested from the server. Default is 1 minute (60000 ms);
+   */
+  refreshInterval?: number;
+
+  /**
+   * Time in milliseconds to delay ad rendering.
+   * Use this if you are rendering multiple ads
+   * in your screen such as in a list. Default is 0ms.
+   * This is usually done so that ad request is done
+   * after the views are attached.
+   */
+
+  delayAdLoading?: number;
+
+  /**
    * Placement of AdChoicesView in any of the 4 corners of the ad
    *
-   */
+   * import `AdOptions` then pass the value from there. AdOptions.adChoicesPlacement **/
 
   adChoicesPlacement?: "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
 
@@ -164,24 +210,10 @@ type NativeAdViewProps = {
   /**
    * Set testdevices for the ad. (DEPRECATED)
    */
-  videoOptions: {
-    muted?: boolean;
-    clickToExpand?: boolean;
-    customControlsRequested?: boolean;
-  };
+  videoOptions: VideoOptions;
+  mediationOptions: MediationOptions;
+  targetingOptions: TargetingOptions;
 
-  mediationOptions: {
-    nativeBanner?: boolean;
-  };
-  targetingOptions: {
-    targets?: Array<{ key: boolean; value: string | Array<string> }>;
-    categoryExclusions?: Array<string>;
-    publisherId?: string;
-    requestAgent?: string;
-    keywords?: Array<string>;
-    contentUrl?: string;
-    neighboringContentUrls?: Array<string>;
-  };
   testDevices?: Array<string>;
   onAdOpened?: () => void;
   onAdClosed?: () => void;
@@ -202,35 +234,23 @@ type NestedTextProps = {
   textStyle?: TextStyle;
   allCaps?: boolean;
   allowFontScaling?: boolean;
-  buttonAndroidStyle?: {
-    /**
-     * Only 6 digit hex colors are supported. Example: #f0f0f0
-     */
-    backgroundColor?: string;
-    /**
-     * Only 6 digit hex colors are supported. Example: #f0f0f0
-     */
-    borderColor?: string;
-    borderWidth?: number;
-    borderRadius?: number;
-  };
 };
 
 type StarViewProps = {
   style?: StyleProp<ViewStyle>;
   size?: number;
   iconSet?:
-    | "Entypo"
-    | "EvilIcons"
-    | "Feather"
-    | "FontAwesome"
-    | "Foundation"
-    | "Ionicons"
-    | "MaterialIcons"
-    | "MaterialCommunityIcons"
-    | "Octicons"
-    | "Zocial"
-    | "SimpleLineIcons";
+  | "Entypo"
+  | "EvilIcons"
+  | "Feather"
+  | "FontAwesome"
+  | "Foundation"
+  | "Ionicons"
+  | "MaterialIcons"
+  | "MaterialCommunityIcons"
+  | "Octicons"
+  | "Zocial"
+  | "SimpleLineIcons";
   fullIcon?: string;
   halfIcon?: string;
   emptyIcon?: string;
@@ -240,6 +260,8 @@ type StarViewProps = {
 };
 
 declare module "react-native-admob-native-ads" {
+
+
   /**
    *
    * Wrapper for the UnifiedNativeAdView from Google Ads SDK. All your views should be
@@ -255,51 +277,77 @@ declare module "react-native-admob-native-ads" {
    * AdManager can be used to configure your ads on App Startup such as setting test devices.
    *
    */
-
   export const AdManager: {
     /**
-    * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with atleast one of the following properties
+     * Configure your Ad Requests during App Startup. You need to pass a single object as an argument with at least one of the following properties
 
-   | Name      | Type | Required |
-   | --------- | -------- | -------- |
-   | testDeviceIds | `Array<string>` | no  |
-   | maxAdContentRating | AdManager.MAX_AD_CONTENT_RATING | no  |
-   | tagForChildDirectedTreatment | AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT | no  |
-   | tagForUnderAgeConsent | AdManager.TAG_FOR_UNDER_AGE_CONSENT | no  |
+     | Name      | Type | Required |
+     | --------- | -------- | -------- |
+     | testDeviceIds | `Array<string>` | no  |
+     | maxAdContentRating | AdManager.MAX_AD_CONTENT_RATING | no  |
+     | tagForChildDirectedTreatment | AdManager.TAG_FOR_CHILD_DIRECTED_TREATMENT | no  |
+     | tagForUnderAgeConsent | AdManager.TAG_FOR_UNDER_AGE_CONSENT | no  |
 
-   Example:
+     Example:
 
-   ```js
+     ```js
 
-   const config = {
+     const config = {
      testDeviceIds:["YOUR_TEST_DEVICE_ID"],
-     maxAdContetRating: 'MA',
+     maxAdContentRating: 'MA',
      tagForChildDirectedTreatment: false,
      tagForUnderAgeConsent: false
    }
 
-   AdManager.setRequestConfiguration(config);
+     AdManager.setRequestConfiguration(config);
+     ```
+     *
+     */
 
-   ```
-    *
-    */
-
-    setRequestConfiguration: (
-      config: Partial<AdManagerConfiguration>
-    ) => Promise<MediationAdapterStatus[]>;
-
+    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => Promise<null>;
     /**
      * Check if the current device is registered as a test device to show test ads.
 
-  ```js
-    AdManager.isTestDevice().then(result => console.log(result))
-  ```
-  return: `boolean`
+     ```js
+     AdManager.isTestDevice().then(result => console.log(result))
+     ```
+     return: `boolean`
      */
-    isTestDevice: () => Promise<boolean>;
+    isTestDevice: () => Promise<any>
+
+    /**
+     * Register a repository  with given settings for native ads
+     */
+
+    registerRepository: (config: {
+      name: string;
+      adUnitId: string;
+      numOfAds: number;
+      nonPersonalizedAdsOnly: boolean;
+      mute: boolean,
+      expirationPeriod: number,
+      mediationEnabled: boolean,
+    }) => Promise<{ repo: string, success: boolean, error: string }>;
+
+
+    /**
+     * Unregister a repository. All preloaded ads in this repository will be destroyed.
+     */
+    unRegisterRepository: (name: string) => void;
+
+    /**
+     * Reset all ad repositories.
+     */
+    resetCache: () => void;
+
+    /**
+     * Check if there is ad in a repository.
+     */
+    hasAd: (name: string) => Promise<any>;
   };
 
   export const AdOptions: options;
+
 
   /**
    * Ad Badge shows the {ad} badge on top of the ad telling the user that this is an AD.

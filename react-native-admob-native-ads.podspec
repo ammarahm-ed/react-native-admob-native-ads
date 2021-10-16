@@ -12,8 +12,8 @@ Pod::Spec.new do |s|
   s.author                 = 'Ammar Ahmed <ammarahmed6506@gmail.com>'
   s.platforms              = { :ios => '9.0', :tvos => '9.2' }
   s.source                 = { :git => 'https://github.com/ammarahm-ed/react-native-admob-native-ads.git', :tag => "v#{version}" }
-  s.source_files           = 'ios/*.{h,m}'
-  
+  s.source_files           = 'ios/**/*.{h,m}'
+
   # We can't add the Google-Mobile-Ads-SDK as a dependency, as it would prevent
   # this library to be used with `use_frameworks!`.
   # So instead we add the default location of the framework to the framework
