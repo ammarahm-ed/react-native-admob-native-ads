@@ -1,4 +1,5 @@
 import {NativeModules} from 'react-native';
+import { AdOptions } from './utils';
 
 const RNAdmobNativeAdsManager = NativeModules.RNAdmobNativeAdsManager;
 
@@ -11,6 +12,8 @@ async function isTestDevice() {
 }
 
 function registerRepository(config) {
+  config.mediaAspectRatio = AdOptions.mediaAspectRatio[config.mediaAspectRatio || "unknown"];
+  config.adChoicesPlacement = AdOptions.adChoicesPlacement[config.adChoicesPlacement || "topRight"];
   return RNAdmobNativeAdsManager.registerRepository(config);
 }
 

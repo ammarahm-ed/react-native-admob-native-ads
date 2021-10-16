@@ -1,90 +1,50 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
-import android.os.Bundle;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
-import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.VideoOptions;
+import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.PriorityQueue;
 
 public class RNAdMobUnifiedAdQueueWrapper {
 
     public String adUnitId;
     public String name;
-    public Boolean npa = true;
     public Integer totalAds = 5;
     public long expirationInterval = 3600000; // in ms
     public Boolean muted = true;
     public Boolean mediation = false;
-    private final AdLoader adLoader;
-    private AdRequest adRequest;
-    AdListener attachedAdListener;
-    private final onUnifiedNativeAdLoadedListener unifiedNativeAdLoadedListener;
     public List<RNAdMobUnifiedAdContainer> nativeAds;
+    AdListener attachedAdListener;
     Context mContext;
+    VideoOptions.Builder videoOptions;
+    NativeAdOptions.Builder adOptions;
+    AdListener adListener;
+    private AdLoader adLoader;
+    private AdManagerAdRequest.Builder adRequest;
+    private onUnifiedNativeAdLoadedListener unifiedNativeAdLoadedListener;
 
-    public void attachAdListener(AdListener listener) {
-        attachedAdListener = listener;
-    }
-
-    public void detachAdListener() {
-        attachedAdListener = null;
-    }
-
-    public RNAdMobUnifiedAdQueueWrapper(Context context, ReadableMap config, String repo) {
+    public RNAdMobUnifiedAdQueueWrapper(Context context, ReadableMap config, String repository) {
         mContext = context;
         adUnitId = config.getString("adUnitId");
-        name = repo;
+        name = repository;
+        videoOptions = new VideoOptions.Builder();
+        adRequest = new AdManagerAdRequest.Builder();
+        adOptions = new NativeAdOptions.Builder();
 
-        if (config.hasKey("numOfAds")) {
-            totalAds = config.getInt("numOfAds");
-        }
-        nativeAds = new ArrayList<RNAdMobUnifiedAdContainer>(totalAds);
-        if (config.hasKey("mute")) {
-            muted = config.getBoolean("mute");
-        }
-        if (config.hasKey("expirationPeriod")) {
-            expirationInterval = config.getInt("expirationPeriod");
-        }
-        if (config.hasKey("mediationEnabled")) {
-            mediation = config.getBoolean("mediationEnabled");
-        }
-        if (config.hasKey("nonPersonalizedAdsOnly")) {
-            npa = config.getBoolean("nonPersonalizedAdsOnly");
-            Bundle extras = new Bundle();
-            extras.putString("npa", npa ? "1" : "0");
-            adRequest = new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
-        } else {
-            adRequest = new AdRequest.Builder().build();
-        }
-        unifiedNativeAdLoadedListener = new onUnifiedNativeAdLoadedListener(repo, nativeAds,
-                totalAds, context);
-        AdLoader.Builder builder = new AdLoader.Builder(context, adUnitId);
-        builder.forNativeAd(unifiedNativeAdLoadedListener);
-        VideoOptions videoOptions = new VideoOptions.Builder()
-                .setStartMuted(muted)
-                .build();
-
-        NativeAdOptions adOptions = new NativeAdOptions.Builder()
-                .setVideoOptions(videoOptions)
-                .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT) // todo:: get from config
-                .build();
-        builder.withNativeAdOptions(adOptions);
-
-        AdListener adListener = new AdListener() {
+        adListener = new AdListener() {
             @Override
             public void onAdFailedToLoad(LoadAdError adError) {
                 super.onAdFailedToLoad(adError);
@@ -129,7 +89,6 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 super.onAdClicked();
                 if (attachedAdListener == null) return;
                 attachedAdListener.onAdClicked();
-
             }
 
             @Override
@@ -146,27 +105,77 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 attachedAdListener.onAdImpression();
             }
         };
+
+        setConfiguration(config);
+
+    }
+
+    public void attachAdListener(AdListener listener) {
+        attachedAdListener = listener;
+    }
+
+    public void detachAdListener() {
+        attachedAdListener = null;
+    }
+
+    public void setConfiguration(ReadableMap config) {
+        if (config.hasKey("numOfAds")) {
+            totalAds = config.getInt("numOfAds");
+        }
+        nativeAds = new ArrayList<RNAdMobUnifiedAdContainer>(totalAds);
+
+        if (config.hasKey("mute")) {
+            muted = config.getBoolean("mute");
+        }
+        if (config.hasKey("expirationPeriod")) {
+            expirationInterval = config.getInt("expirationPeriod");
+        }
+        if (config.hasKey("mediationEnabled")) {
+            mediation = config.getBoolean("mediationEnabled");
+        }
+
+        if (config.hasKey("adChoicesPlacement")) {
+            adOptions.setAdChoicesPlacement(config.getInt("adChoicesPlacement"));
+        }
+
+        if (config.hasKey("requestNonPersonalizedAdsOnly")) {
+            Utils.setRequestNonPersonalizedAdsOnly(config.getBoolean("requestNonPersonalizedAdsOnly"), adRequest);
+        }
+        ;
+
+        if (config.hasKey("mediaAspectRatio")) {
+            Utils.setMediaAspectRatio(config.getInt("mediaAspectRatio"), adOptions);
+        }
+
+        Utils.setVideoOptions(config.getMap("videoOptions"), videoOptions, adOptions);
+        Utils.setTargetingOptions(config.getMap("targetingOptions"), adRequest);
+        Utils.setMediationOptions(config.getMap("mediationOptions"), adRequest);
+
+        unifiedNativeAdLoadedListener = new onUnifiedNativeAdLoadedListener(name, nativeAds,
+                totalAds, mContext);
+        AdLoader.Builder builder = new AdLoader.Builder(mContext, adUnitId);
+        builder.forNativeAd(unifiedNativeAdLoadedListener);
         adLoader = builder.withAdListener(adListener).build();
     }
 
     public void loadAds() {
         if (mediation) {
             for (int i = 0; i < totalAds; i++) {
-                adLoader.loadAd(adRequest);
+                adLoader.loadAd(adRequest.build());
             }
         } else {
-            adLoader.loadAds(adRequest, totalAds);
+            adLoader.loadAds(adRequest.build(), totalAds);
         }
     }
 
     public void loadAd() {
-        adLoader.loadAd(adRequest);
+        adLoader.loadAd(adRequest.build());
         fillAd();
     }
 
     public void fillAd() {
         if (!isLoading()) {
-            adLoader.loadAd(adRequest);
+            adLoader.loadAd(adRequest.build());
         }
     }
 

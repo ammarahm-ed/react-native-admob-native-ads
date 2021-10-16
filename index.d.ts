@@ -101,12 +101,15 @@ type AdManagerConfiguration = {
 };
 
 type VideoOptions = {
+  /** Sets if the video should be muted by default when played automatically */
   muted?: boolean;
+  /** Allow the ad to expand to full screen on click */
   clickToExpand?: boolean;
+  /** Set this to true if you want to use custom controls for play/pause etc on videos */
   customControlsRequested?: boolean;
 }
 type MediationOptions = {
-  nativeBanner?: boolean; 
+  nativeBanner?: boolean;
 }
 
 type TargetingOptions = {
@@ -129,6 +132,40 @@ type MediationAdapterStatus = {
   description: string;
   state: AdapterState;
 };
+
+type AdRepositoryConfig = {
+  /** Name for this repository. If name is not provided, adUnitId will
+   * will be used as repository name.
+   */
+  name?: string;
+  /** **(Required)** Provide adUnitId to load ads. */
+  adUnitId: string;
+  /**The number of ads to preload. Default is `5` */
+  numOfAds?: number;
+  /**
+* Under the Google EU User Consent Policy, you must make certain disclosures
+* to your users in the European Economic Area (EEA) and obtain their consent
+* to use cookies or other local storage, where legally required, and to use
+* personal data (such as AdID) to serve ads. This policy reflects the requirements
+* of the EU ePrivacy Directive and the General Data Protection Regulation (GDPR).
+*
+* You can use library such as: https://github.com/birgernass/react-native-ad-consent
+* to obtain the consent or if you are using rn-firebase you can obtain the consent from
+* there and then pass the consent to this library. If user has selected
+* non-personalized-ads then pass `true` and non-personalized ads will be shown to the user.
+*
+*/
+  requestNonPersonalizedAdsOnly?: boolean;
+  /** After how long should ads in this repository expire after being loaded in milliseconds. Default is `3600000`.*/
+  expirationPeriod?: number;
+  /** Set this to true if you are using mediation. */
+  mediationEnabled?: boolean;
+  videoOptions: VideoOptions;
+  mediationOptions: MediationOptions;
+  targetingOptions: TargetingOptions;
+  adChoicesPlacement:"topLeft" | "topRight" | "bottomLeft" | "bottomRight"
+  mediaAspectRatio:"any" | "landscape" | "portrait" | "square" | "unknown"
+}
 
 type ImagePropsWithOptionalSource = Omit<ImageProps, "source"> &
   Partial<Pick<ImageProps, "source">>;
@@ -304,7 +341,7 @@ declare module "react-native-admob-native-ads" {
      *
      */
 
-    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => Promise<null>;
+    setRequestConfiguration: (config: Partial<AdManagerConfiguration>) => Promise<Array<MediationAdapterStatus>>;
     /**
      * Check if the current device is registered as a test device to show test ads.
 
@@ -313,21 +350,13 @@ declare module "react-native-admob-native-ads" {
      ```
      return: `boolean`
      */
-    isTestDevice: () => Promise<any>
+    isTestDevice: () => Promise<boolean>
 
     /**
      * Register a repository  with given settings for native ads
      */
 
-    registerRepository: (config: {
-      name: string;
-      adUnitId: string;
-      numOfAds: number;
-      nonPersonalizedAdsOnly: boolean;
-      mute: boolean,
-      expirationPeriod: number,
-      mediationEnabled: boolean,
-    }) => Promise<{ repo: string, success: boolean, error: string }>;
+    registerRepository: (config: AdRepositoryConfig) => Promise<{ repo: string, success: boolean, error: string }>;
 
 
     /**

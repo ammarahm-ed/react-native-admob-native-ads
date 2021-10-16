@@ -1,7 +1,6 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,74 +9,60 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.CatalystInstance;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
-
-import com.google.ads.mediation.admob.AdMobAdapter;
-import com.google.ads.mediation.facebook.FacebookAdapter;
-import com.google.ads.mediation.facebook.FacebookExtras;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MediaContent;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
-import com.google.android.gms.ads.MediaContent;
 import com.google.android.gms.ads.nativead.MediaView;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.android.gms.ads.nativead.NativeAdView;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.UUID;
 
 public class RNAdmobNativeView extends LinearLayout {
 
-    private final Runnable measureAndLayout = new Runnable() {
-        @Override
-        public void run() {
-            measure(
-                    MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
-                    MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
-            layout(getLeft(), getTop(), getRight(), getBottom());
-        }
+    private final Runnable measureAndLayout = () -> {
+        measure(
+                MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
+        layout(getLeft(), getTop(), getRight(), getBottom());
     };
-    private int mediaAspectRatio = 1;
-    private Runnable runnableForMount = null;
+    public int adRefreshInterval = 60000;
+    protected @Nullable
+    String messagingModuleName;
     ReactContext mContext;
     NativeAdView nativeAdView;
     NativeAd nativeAd;
-    VideoOptions videoOptions;
-    Bundle facebookExtras;
+    VideoOptions.Builder videoOptions;
     AdManagerAdRequest.Builder adRequest;
     NativeAdOptions.Builder adOptions;
     AdLoader.Builder builder;
     AdLoader adLoader;
     RNAdmobMediaView mediaView;
-    protected @Nullable
-    String messagingModuleName;
+    RNAdMobUnifiedAdContainer unifiedNativeAdContainer;
+    CatalystInstance mCatalystInstance;
+    private int mediaAspectRatio = 1;
+    private Runnable runnableForMount = null;
     private boolean loadingAd = false;
-
-    public int adRefreshInterval = 60000;
     private Runnable retryRunnable;
     private String adRepo;
-    RNAdMobUnifiedAdContainer unifiedNativeAdContainer;
-
-
     private int adChoicesPlacement = 1;
     private boolean requestNonPersonalizedAdsOnly = false;
-
+    private String admobAdUnitId = "";
+    private Handler handler;
     AdListener adListener = new AdListener() {
 
         @Override
@@ -138,9 +123,6 @@ public class RNAdmobNativeView extends LinearLayout {
             sendEvent(RNAdmobNativeViewManager.EVENT_AD_IMPRESSION, null);
         }
     };
-    private String admobAdUnitId = "";
-    private Handler handler;
-
     NativeAd.OnNativeAdLoadedListener onNativeAdLoadedListener = new NativeAd.OnNativeAdLoadedListener() {
         @Override
         public void onNativeAdLoaded(NativeAd ad) {
@@ -157,7 +139,6 @@ public class RNAdmobNativeView extends LinearLayout {
         }
     };
 
-
     public RNAdmobNativeView(ReactContext context) {
         super(context);
         mContext = context;
@@ -165,7 +146,7 @@ public class RNAdmobNativeView extends LinearLayout {
         handler = new Handler();
         mCatalystInstance = mContext.getCatalystInstance();
         setId(UUID.randomUUID().hashCode() + this.getId());
-        videoOptions = new VideoOptions.Builder().build();
+        videoOptions = new VideoOptions.Builder();
         adRequest = new AdManagerAdRequest.Builder();
         adOptions = new NativeAdOptions.Builder();
 
@@ -194,7 +175,6 @@ public class RNAdmobNativeView extends LinearLayout {
         }
     }
 
-
     private Method getDeclaredMethod(Object obj, String name) {
         try {
             return obj.getClass().getDeclaredMethod(name);
@@ -205,7 +185,6 @@ public class RNAdmobNativeView extends LinearLayout {
         }
         return null;
     }
-
 
     private void setNativeAdToJS(NativeAd nativeAd) {
 
@@ -287,18 +266,14 @@ public class RNAdmobNativeView extends LinearLayout {
         }
     }
 
-
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
     }
 
-
     public void setMessagingModuleName(String moduleName) {
         messagingModuleName = moduleName;
     }
-
-    CatalystInstance mCatalystInstance;
 
     protected void sendDirectMessage(WritableMap data) {
 
@@ -312,7 +287,6 @@ public class RNAdmobNativeView extends LinearLayout {
         }
 
     }
-
 
     @Override
     protected void onDetachedFromWindow() {
@@ -387,7 +361,6 @@ public class RNAdmobNativeView extends LinearLayout {
         } catch (Exception e) {
 
         }
-
     }
 
     @Override
@@ -405,7 +378,6 @@ public class RNAdmobNativeView extends LinearLayout {
         if (adRepo == null) return;
         getAdFromRepository();
     }
-
 
     public void setAdUnitId(String id) {
         admobAdUnitId = id;
@@ -427,15 +399,7 @@ public class RNAdmobNativeView extends LinearLayout {
     }
 
     public void setRequestNonPersonalizedAdsOnly(boolean npa) {
-        requestNonPersonalizedAdsOnly = npa;
-        Bundle extras = new Bundle();
-        if (requestNonPersonalizedAdsOnly) {
-            extras.putString("npa", "1");
-            adRequest.addNetworkExtrasBundle(AdMobAdapter.class, extras);
-        } else {
-            extras.putString("npa", "0");
-            adRequest.addNetworkExtrasBundle(AdMobAdapter.class, extras);
-        }
+        Utils.setRequestNonPersonalizedAdsOnly(npa, adRequest);
 
     }
 
@@ -452,21 +416,18 @@ public class RNAdmobNativeView extends LinearLayout {
             handler.removeCallbacks(runnableForMount);
             runnableForMount = null;
         }
-        runnableForMount = new Runnable() {
-            @Override
-            public void run() {
-                if (nativeAdView != null && nativeAd != null) {
-                    nativeAdView.setNativeAd(nativeAd);
+        runnableForMount = () -> {
+            if (nativeAdView != null && nativeAd != null) {
+                nativeAdView.setNativeAd(nativeAd);
 
-                    if (mediaView != null && nativeAdView.getMediaView() != null) {
-                        nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
-                        if (nativeAd.getMediaContent().hasVideoContent()) {
-                            mediaView.setVideoController(nativeAd.getMediaContent().getVideoController());
-                            mediaView.setMedia(nativeAd.getMediaContent());
-                        }
+                if (mediaView != null && nativeAdView.getMediaView() != null) {
+                    nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
+                    if (nativeAd.getMediaContent().hasVideoContent()) {
+                        mediaView.setVideoController(nativeAd.getMediaContent().getVideoController());
+                        mediaView.setMedia(nativeAd.getMediaContent());
                     }
-
                 }
+
             }
         };
         if (handler != null) {
@@ -475,76 +436,16 @@ public class RNAdmobNativeView extends LinearLayout {
 
     }
 
-
     public void setVideoOptions(ReadableMap options) {
-        VideoOptions.Builder builder = new VideoOptions.Builder();
-
-        if (options.hasKey("muted")) {
-            builder.setStartMuted(options.getBoolean("muted"));
-        }
-
-        if (options.hasKey("clickToExpand")) {
-            builder.setClickToExpandRequested(options.getBoolean("clickToExpand"));
-        }
-
-        if (options.hasKey("clickToExpand")) {
-            builder.setCustomControlsRequested(options.getBoolean("clickToExpand"));
-        }
-        videoOptions = builder.build();
-
-        adOptions.setVideoOptions(videoOptions);
+        Utils.setVideoOptions(options, videoOptions, adOptions);
     }
 
     public void setTargetingOptions(ReadableMap options) {
-        VideoOptions.Builder builder = new VideoOptions.Builder();
-
-        if (options.hasKey("targets")) {
-            ReadableArray targets = options.getArray("targets");
-            for (int i = 0; i < targets.size(); i++) {
-                ReadableMap target = targets.getMap(i);
-                String key = target.getString("key");
-                if (target.getType("value") == ReadableType.Array) {
-                    List list = Arguments.toList(target.getArray("value"));
-                    adRequest.addCustomTargeting(key, list);
-                } else {
-                    adRequest.addCustomTargeting(key, target.getString("value"));
-                }
-            }
-        }
-        if (options.hasKey("categoryExclusions")) {
-            ReadableArray categoryExclusions = options.getArray("categoryExclusions");
-            for (int i = 0; i < categoryExclusions.size(); i++) {
-                adRequest.addCategoryExclusion(categoryExclusions.getString(i));
-            }
-        }
-        if (options.hasKey("publisherId")) {
-            adRequest.setPublisherProvidedId(options.getString("publisherId"));
-        }
-        if (options.hasKey("requestAgent")) {
-            adRequest.setRequestAgent(options.getString("requestAgent"));
-        }
-        if (options.hasKey("keywords")) {
-            ReadableArray keywords = options.getArray("keywords");
-            for (int i = 0; i < keywords.size(); i++) {
-                adRequest.addKeyword(keywords.getString(i));
-            }
-        }
-        if (options.hasKey("contentUrl")) {
-            adRequest.setContentUrl(options.getString("contentUrl"));
-        }
-        if (options.hasKey("neighboringContentUrls")) {
-            List list = Arguments.toList(options.getArray("neighboringContentUrls"));
-            adRequest.setNeighboringContentUrls(list);
-        }
+        Utils.setTargetingOptions(options, adRequest);
     }
 
-
     public void setMediationOptions(ReadableMap options) {
-        if (options.hasKey("nativeBanner")) {
-            facebookExtras = new FacebookExtras().setNativeBanner(options.getBoolean("nativeBanner")).build();
-            adRequest.addNetworkExtrasBundle(FacebookAdapter.class, facebookExtras);
-        }
-
+        Utils.setMediationOptions(options, adRequest);
     }
 
     @Override
