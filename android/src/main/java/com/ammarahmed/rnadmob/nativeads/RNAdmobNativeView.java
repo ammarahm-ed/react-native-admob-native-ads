@@ -217,7 +217,6 @@ public class RNAdmobNativeView extends LinearLayout {
             args.putString("callToAction", nativeAd.getCallToAction());
             args.putBoolean("video", nativeAd.getMediaContent().hasVideoContent());
 
-
             if (nativeAd.getPrice() != null) {
                 args.putString("price", nativeAd.getPrice());
             }
@@ -367,7 +366,7 @@ public class RNAdmobNativeView extends LinearLayout {
                 } else {
                     if (!CacheManager.instance.isLoading(adRepo)) {
                         CacheManager.instance.attachAdListener(adRepo, adListener);
-                        CacheManager.instance.requestAd(adRepo);
+                        CacheManager.instance.requestAds(adRepo);
                     } else {
                         CacheManager.instance.attachAdListener(adRepo, adListener);
                     }
