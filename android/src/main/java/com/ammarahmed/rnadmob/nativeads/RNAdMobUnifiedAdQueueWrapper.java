@@ -33,9 +33,6 @@ public class RNAdMobUnifiedAdQueueWrapper {
     Context mContext;
     int loadingAdRequestCount = 0;
 
-    public void attachAdListener(AdListener listener) {
-        attachedAdListener = listener;
-    }
     VideoOptions.Builder videoOptions;
     NativeAdOptions.Builder adOptions;
     AdListener adListener;
@@ -162,7 +159,6 @@ public class RNAdMobUnifiedAdQueueWrapper {
         if (config.hasKey("requestNonPersonalizedAdsOnly")) {
             Utils.setRequestNonPersonalizedAdsOnly(config.getBoolean("requestNonPersonalizedAdsOnly"), adRequest);
         }
-        ;
 
         if (config.hasKey("mediaAspectRatio")) {
             Utils.setMediaAspectRatio(config.getInt("mediaAspectRatio"), adOptions);
@@ -186,18 +182,17 @@ public class RNAdMobUnifiedAdQueueWrapper {
         loadingAdRequestCount =  require2fill;
         if (mediation) {
             for (int i = 0; i < require2fill; i++) {
-                adLoader.loadAd(adRequest);
+                adLoader.loadAd(adRequest.build());
             }
         } else {
-            adLoader.loadAds(adRequest, require2fill);
+            adLoader.loadAds(adRequest.build(), require2fill);
         }
     }
 
     public RNAdMobUnifiedAdContainer getAd() {
+        if (nativeAds.isEmpty()) { return  null;}
         long now = System.currentTimeMillis();
         RNAdMobUnifiedAdContainer ad = null;
-
-        if (!nativeAds.isEmpty()) {
             Collections.sort(nativeAds, new RNAdMobUnifiedAdComparator());
             List<RNAdMobUnifiedAdContainer> discardItems = new ArrayList<>();
             for (RNAdMobUnifiedAdContainer item : nativeAds) {
@@ -214,14 +209,11 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 item.unifiedNativeAd.destroy();
                 nativeAds.remove(item);
             }
-        } else {
-            return null;
-        }
 
-        assert ad != null;
+        fillAds();
+        if (ad == null) {return null;}
         ad.showCount += 1;
         ad.references += 1;
-        fillAds();
         return ad;
     }
 
