@@ -22,8 +22,7 @@
 -(NSInteger)  numberOfAds:(NSString*) id;
 -(void) attachAdListener:(NSString*) id listener:(id<AdListener>)listener;
 -(void) detachAdListener:(NSString*) id;
--(NSDictionary*)registerRepo:(NSDictionary*) config rootVC:(UIViewController*)rootVC;
--(void) configAdLoader:(NSString*) id rootVC:(UIViewController *) rootVC;
+-(NSDictionary*)registerRepo:(NSDictionary*) config;
 -(void) unRegisterRepo:(NSString*) repo;
 -(void) resetCache;
 -(void) requestAds:(NSString*) repo;

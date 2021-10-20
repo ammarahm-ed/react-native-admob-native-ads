@@ -21,7 +21,7 @@ RCT_EXPORT_METHOD(isTestDevice:resolver:(RCTPromiseResolveBlock)resolve
 RCT_EXPORT_METHOD(registerRepository:(NSDictionary *)config resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
     
-    NSDictionary *result = [CacheManager.sharedInstance registerRepo:config rootVC:nil];
+    NSDictionary *result = [CacheManager.sharedInstance registerRepo:config];
     BOOL isSuccess = ((NSNumber *)[result objectForKey:@"success"]).boolValue;
     if (isSuccess){
         NSString* repo = [result objectForKey:@"repo"];

@@ -12,32 +12,36 @@
 #import "EventEmitter.h"
 #import "CacheManager.h"
 @import GoogleMobileAds;
+#ifdef MEDIATION_FACEBOOK
+@import FacebookAdapter;
+#endif
 
 @implementation RNAdMobUnifiedAdQueueWrapper{
     GADAdLoader* adLoader;
-    GADRequest* adRequest;
+    GAMRequest* adRequest;
     id<AdListener> attachedAdListener;
     OnUnifiedNativeAdLoadedListener* unifiedNativeAdLoadedListener;
     GADVideoOptions* adVideoOptions;
     GADNativeAdMediaAdLoaderOptions* adMediaOptions;
     GADNativeAdViewAdOptions* adPlacementOptions;
+    NSDictionary* targetingOptions;
     int loadingAdRequestCount;
 }
 
--(instancetype)initWithConfig:(NSDictionary *)config repo:(NSString *)repo rootVC:(UIViewController*)rootVC{
+-(instancetype)initWithConfig:(NSDictionary *)config repo:(NSString *)repo{
     if (self = [super init])  {
-        self.npa = true;
         self.totalAds = 5;
         self.expirationInterval = 3600000; // in ms
-        self.muted = true;
         self.isMediationEnabled = false;
+        adRequest = [GAMRequest request];
         loadingAdRequestCount = 0;
         adVideoOptions = [[GADVideoOptions alloc]init];
         adMediaOptions = [[GADNativeAdMediaAdLoaderOptions alloc] init];
         adPlacementOptions = [[GADNativeAdViewAdOptions alloc]init];
+        
     }
 
-
+    //Set repository settings
     _adUnitId = [config objectForKey:@"adUnitId"] ;
     _name = repo;
     if ([config objectForKey:@"numOfAds"]){
@@ -46,87 +50,44 @@
 
     _nativeAds =  [[NSMutableArray<RNAdMobUnifiedAdContainer *> alloc]init];
 
-
-    if ([config objectForKey:@"mute"]){
-        _muted = ((NSNumber *)[config objectForKey:@"mute"]).boolValue;
-    }
-    if ([config objectForKey:@"clickToExpand"]) {
-        _clickToExpand = ((NSNumber *)[config objectForKey:@"clickToExpand"]).boolValue;
-    }
-
-    if ([config objectForKey:@"customControlsRequested"]) {
-        _customControlsRequested = ((NSNumber *)[config objectForKey:@"customControlsRequested"]).boolValue;
-    }
-
     if ([config objectForKey:@"expirationPeriod"]){
         _expirationInterval = ((NSNumber *)[config objectForKey:@"expirationPeriod"]).intValue;
     }
     if ([config objectForKey:@"mediationEnabled"]){
         _isMediationEnabled = ((NSNumber *)[config objectForKey:@"mediationEnabled"]).boolValue;
     }
+    
+    
+    //Set request options
     if ([config objectForKey:@"adChoicesPlacement"]){
-        _adChoicesPlacement = ((NSNumber *)[config objectForKey:@"adChoicesPlacement"]);
+        [adPlacementOptions setPreferredAdChoicesPosition:((NSNumber *)[config objectForKey:@"adChoicesPlacement"]).intValue];
     }
     if ([config objectForKey:@"mediaAspectRatio"]){
-        _mediaAspectRatio = ((NSNumber *)[config objectForKey:@"mediaAspectRatio"]);
+        [adMediaOptions setMediaAspectRatio:((NSNumber *)[config objectForKey:@"mediaAspectRatio"]).intValue];
     }
+    
+    if ([config objectForKey:@"videoOptions"]){
+        [self configVideoOptions:[config objectForKey:@"videoOptions"]];
+    }
+    if ([config objectForKey:@"mediationOptions"]){
+        [self configMediationOptions:[config objectForKey:@"mediationOptions"]];
+    }
+    if ([config objectForKey:@"targetingOptions"]){
+        [self configTargetOptions:[config objectForKey:@"targetingOptions"]];
+    }
+    
+    
     if ([config objectForKey:@"nonPersonalizedAdsOnly"]){
-        _npa = ((NSNumber *)[config objectForKey:@"nonPersonalizedAdsOnly"]).boolValue;
-
-        adRequest = [GADRequest request];
         GADCustomEventExtras *extras = [[GADCustomEventExtras alloc] init];
-
-        [extras setExtras:@{@"npa": @([NSNumber numberWithInt:_npa].intValue)} forLabel:@"npa"];
+        bool npa = ((NSNumber *)[config objectForKey:@"nonPersonalizedAdsOnly"]).boolValue;
+        [extras setExtras:@{@"npa": @([NSNumber numberWithInt:npa].intValue)} forLabel:@"npa"];
         [adRequest registerAdNetworkExtras:extras];
-
-    }else{
-        adRequest = [GADRequest request];
     }
 
     unifiedNativeAdLoadedListener = [[OnUnifiedNativeAdLoadedListener alloc]initWithRepo:repo nativeAds:_nativeAds tAds:_totalAds];
-
-    [self configAdLoaderOption:rootVC];
-
     return self;
 }
--(void) configAdLoaderOption:(UIViewController *) rootVC{
-    //https://developers.google.com/admob/ios/native/options#objective-c_1
-    self.rootVC = rootVC;
 
-    GADVideoOptions* adVideoOptions = [[GADVideoOptions alloc]init];
-    [adVideoOptions setStartMuted:_muted];
-    [adVideoOptions setClickToExpandRequested:_clickToExpand];
-    [adVideoOptions setCustomControlsRequested:_customControlsRequested];
-
-    GADNativeAdViewAdOptions* adPlacementOptions = [[GADNativeAdViewAdOptions alloc]init];
-    if ([_adChoicesPlacement isEqualToNumber:@0]) {
-        [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopLeftCorner];
-    } else if ([_adChoicesPlacement isEqualToNumber:@1]) {
-        [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
-    }  else if ([_adChoicesPlacement isEqualToNumber:@2]) {
-        [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionBottomRightCorner];
-    }  else if ([_adChoicesPlacement isEqualToNumber:@3]) {
-        [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionBottomLeftCorner];
-    } else {
-        [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
-    }
-
-
-    GADNativeAdMediaAdLoaderOptions* adMediaOptions = [[GADNativeAdMediaAdLoaderOptions alloc] init];
-    if ([_mediaAspectRatio isEqualToNumber:@0]) {
-        [adMediaOptions setMediaAspectRatio:GADMediaAspectRatioUnknown];
-    } else if ([_mediaAspectRatio isEqualToNumber:@1]) {
-        [adMediaOptions setMediaAspectRatio:GADMediaAspectRatioAny];
-    }  else if ([_mediaAspectRatio isEqualToNumber:@2]) {
-        [adMediaOptions setMediaAspectRatio:GADMediaAspectRatioLandscape];
-    }  else if ([_mediaAspectRatio isEqualToNumber:@3]) {
-        [adMediaOptions setMediaAspectRatio:GADMediaAspectRatioPortrait];
-    } else {
-        [adMediaOptions setMediaAspectRatio:GADMediaAspectRatioSquare];
-    }
-
-
-}
 -(void) attachAdListener:(id<AdListener>) listener {
     attachedAdListener = listener;
 }
@@ -151,8 +112,7 @@
         multipleAdsOptions.numberOfAds = MAX(require2fill,0);
         [options addObject:multipleAdsOptions];
     }
-
-    adLoader = [[GADAdLoader alloc] initWithAdUnitID:_adUnitId rootViewController:_rootVC adTypes:@[kGADAdLoaderAdTypeNative] options:options];
+    adLoader = [[GADAdLoader alloc] initWithAdUnitID:_adUnitId rootViewController:nil adTypes:@[kGADAdLoaderAdTypeNative] options:options];
     [adLoader setDelegate:self];
 
     loadingAdRequestCount = require2fill;
@@ -292,6 +252,61 @@
 
 }
 
+-(void)configVideoOptions:(NSDictionary *)config{
 
+    bool muted = ((NSNumber *)[config objectForKey:@"mute"]).boolValue;
+    bool clickToExpand = ((NSNumber *)[config objectForKey:@"clickToExpand"]).boolValue;
+    bool customControlsRequested = ((NSNumber *)[config objectForKey:@"customControlsRequested"]).boolValue;
+    
+    [adVideoOptions setStartMuted:muted];
+    [adVideoOptions setClickToExpandRequested:clickToExpand];
+    [adVideoOptions setCustomControlsRequested:customControlsRequested];
+}
+
+-(void)configTargetOptions:(NSDictionary *)config{
+
+    if ([config objectForKey:@"targets"]){
+        NSArray<NSDictionary *>* targets = (NSArray<NSDictionary *> *)[config objectForKey:@"targets"];
+        for (NSDictionary* target in targets){
+             [adRequest setCustomTargeting:target];
+        }
+        
+        if ([config objectForKey:@"categoryExclusions"]){
+            [adRequest setCategoryExclusions:(NSArray<NSString *> *)[config objectForKey:@"categoryExclusions"]];
+        }
+        if ([config objectForKey:@"publisherId"]){
+            [adRequest setPublisherProvidedID:(NSString *)[config objectForKey:@"publisherId"]];
+        }
+        
+        if ([config objectForKey:@"requestAgent"]){
+            [adRequest setRequestAgent:(NSString *)[config objectForKey:@"requestAgent"]];
+        }
+        if ([config objectForKey:@"keywords"]){
+            [adRequest setKeywords:(NSArray<NSString *> *)[config objectForKey:@"requestAgent"]];
+        }
+        if ([config objectForKey:@"contentUrl"]){
+            [adRequest setContentURL:(NSString *)[config objectForKey:@"contentUrl"]];
+        }
+        if ([config objectForKey:@"neighboringContentUrls"]){
+            [adRequest setNeighboringContentURLStrings:(NSArray<NSString *> *)[config objectForKey:@"neighboringContentUrls"]];
+        }
+    
+    }
+}
+
+-(void)configMediationOptions:(NSDictionary *)config{
+#ifdef MEDIATION_FACEBOOK
+        GADFBNetworkExtras * extras = [[GADFBNetworkExtras alloc] init];
+        
+        if ([config valueForKey:@"nativeBanner"]) {
+            extras.nativeAdFormat = GADFBAdFormatNative;
+        } else {
+            extras.nativeAdFormat = GADFBAdFormatNativeBanner;
+        }
+        
+        [adRequest registerAdNetworkExtras:extras];
+#endif
+    
+}
 
 @end
