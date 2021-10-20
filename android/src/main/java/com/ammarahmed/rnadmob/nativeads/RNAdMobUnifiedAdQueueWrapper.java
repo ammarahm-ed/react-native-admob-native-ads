@@ -1,6 +1,8 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -29,6 +31,8 @@ public class RNAdMobUnifiedAdQueueWrapper {
     public List<RNAdMobUnifiedAdContainer> nativeAds;
     AdListener attachedAdListener;
     Context mContext;
+    int loadingAdRequestCount = 0;
+
     VideoOptions.Builder videoOptions;
     NativeAdOptions.Builder adOptions;
     AdListener adListener;
@@ -48,6 +52,12 @@ public class RNAdMobUnifiedAdQueueWrapper {
             @Override
             public void onAdFailedToLoad(LoadAdError adError) {
                 super.onAdFailedToLoad(adError);
+                if (mediation) {
+                    loadingAdRequestCount--;
+                }else{
+                    loadingAdRequestCount = 0;
+                }
+
                 boolean stopPreloading = false;
                 switch (adError.getCode()) {
                     case AdRequest.ERROR_CODE_INTERNAL_ERROR:
@@ -94,6 +104,14 @@ public class RNAdMobUnifiedAdQueueWrapper {
             @Override
             public void onAdLoaded() {
                 super.onAdLoaded();
+                if (mediation) {
+                    loadingAdRequestCount--;
+                }else{
+                    loadingAdRequestCount = 0;
+                }
+                if (loadingAdRequestCount == 0){
+                    fillAds();//<-try to fill up if still not full
+                }
                 if (attachedAdListener == null) return;
                 attachedAdListener.onAdLoaded();
             }
@@ -141,7 +159,6 @@ public class RNAdMobUnifiedAdQueueWrapper {
         if (config.hasKey("requestNonPersonalizedAdsOnly")) {
             Utils.setRequestNonPersonalizedAdsOnly(config.getBoolean("requestNonPersonalizedAdsOnly"), adRequest);
         }
-        ;
 
         if (config.hasKey("mediaAspectRatio")) {
             Utils.setMediaAspectRatio(config.getInt("mediaAspectRatio"), adOptions);
@@ -158,32 +175,24 @@ public class RNAdMobUnifiedAdQueueWrapper {
         adLoader = builder.withAdListener(adListener).build();
     }
 
-    public void loadAds() {
+    public void fillAds() {
+        int require2fill = totalAds-nativeAds.size();
+        if (require2fill <= 0 || isLoading()) {return;}
+        Log.i("AdMob repo","require to load >" + require2fill+ "< ads more");
+        loadingAdRequestCount =  require2fill;
         if (mediation) {
-            for (int i = 0; i < totalAds; i++) {
+            for (int i = 0; i < require2fill; i++) {
                 adLoader.loadAd(adRequest.build());
             }
         } else {
-            adLoader.loadAds(adRequest.build(), totalAds);
-        }
-    }
-
-    public void loadAd() {
-        adLoader.loadAd(adRequest.build());
-        fillAd();
-    }
-
-    public void fillAd() {
-        if (!isLoading()) {
-            adLoader.loadAd(adRequest.build());
+            adLoader.loadAds(adRequest.build(), require2fill);
         }
     }
 
     public RNAdMobUnifiedAdContainer getAd() {
+        if (nativeAds.isEmpty()) { return  null;}
         long now = System.currentTimeMillis();
         RNAdMobUnifiedAdContainer ad = null;
-
-        if (!nativeAds.isEmpty()) {
             Collections.sort(nativeAds, new RNAdMobUnifiedAdComparator());
             List<RNAdMobUnifiedAdContainer> discardItems = new ArrayList<>();
             for (RNAdMobUnifiedAdContainer item : nativeAds) {
@@ -200,20 +209,17 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 item.unifiedNativeAd.destroy();
                 nativeAds.remove(item);
             }
-        } else {
-            return null;
-        }
 
-        assert ad != null;
+        fillAds();
+        if (ad == null) {return null;}
         ad.showCount += 1;
         ad.references += 1;
-        fillAd();
         return ad;
     }
 
     public Boolean isLoading() {
         if (adLoader != null) {
-            return adLoader.isLoading();
+            return adLoader.isLoading() ||  loadingAdRequestCount > 0;
         }
         return false;
     }

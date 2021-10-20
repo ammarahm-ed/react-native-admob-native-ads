@@ -26,9 +26,9 @@
 @property(nonatomic, readwrite) BOOL clickToExpand;
 @property(nonatomic, readwrite) BOOL customControlsRequested;
 
-@property(nonatomic, readwrite) BOOL mediation;
+@property(nonatomic, readwrite) BOOL isMediationEnabled;
 @property(nonatomic, readwrite) UIViewController* rootVC;
- 
+
 @property(nonatomic, readwrite) NSMutableArray<RNAdMobUnifiedAdContainer *> *nativeAds;
 
 -(void) attachAdListener:(id<AdListener>) listener;

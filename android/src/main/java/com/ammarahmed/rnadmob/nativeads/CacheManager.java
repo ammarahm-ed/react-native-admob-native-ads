@@ -79,12 +79,8 @@ public class CacheManager {
         repositoriesMap.clear();
     }
 
-    public void requestAds(String repo) {
-        repositoriesMap.get(repo).loadAds();
-    }
-
-    public void requestAd(String repo) {
-        repositoriesMap.get(repo).loadAd();
+    public void requestAds(String repo){
+        repositoriesMap.get(repo).fillAds();
     }
 
     public Boolean isRegistered(String repository) {

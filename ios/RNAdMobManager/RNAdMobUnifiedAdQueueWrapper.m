@@ -21,7 +21,7 @@
     GADVideoOptions* adVideoOptions;
     GADNativeAdMediaAdLoaderOptions* adMediaOptions;
     GADNativeAdViewAdOptions* adPlacementOptions;
-    BOOL isInLoading;//true after all ads loaded
+    int loadingAdRequestCount;
 }
 
 -(instancetype)initWithConfig:(NSDictionary *)config repo:(NSString *)repo rootVC:(UIViewController*)rootVC{
@@ -30,39 +30,39 @@
         self.totalAds = 5;
         self.expirationInterval = 3600000; // in ms
         self.muted = true;
-        self.mediation = false;
-        isInLoading = false;
+        self.isMediationEnabled = false;
+        loadingAdRequestCount = 0;
         adVideoOptions = [[GADVideoOptions alloc]init];
         adMediaOptions = [[GADNativeAdMediaAdLoaderOptions alloc] init];
         adPlacementOptions = [[GADNativeAdViewAdOptions alloc]init];
     }
-    
-    
+
+
     _adUnitId = [config objectForKey:@"adUnitId"] ;
     _name = repo;
     if ([config objectForKey:@"numOfAds"]){
         _totalAds = ((NSNumber *)[config objectForKey:@"numOfAds"]).intValue;
     }
-    
+
     _nativeAds =  [[NSMutableArray<RNAdMobUnifiedAdContainer *> alloc]init];
-    
-    
+
+
     if ([config objectForKey:@"mute"]){
         _muted = ((NSNumber *)[config objectForKey:@"mute"]).boolValue;
     }
     if ([config objectForKey:@"clickToExpand"]) {
         _clickToExpand = ((NSNumber *)[config objectForKey:@"clickToExpand"]).boolValue;
     }
-    
+
     if ([config objectForKey:@"customControlsRequested"]) {
         _customControlsRequested = ((NSNumber *)[config objectForKey:@"customControlsRequested"]).boolValue;
     }
-    
+
     if ([config objectForKey:@"expirationPeriod"]){
         _expirationInterval = ((NSNumber *)[config objectForKey:@"expirationPeriod"]).intValue;
     }
     if ([config objectForKey:@"mediationEnabled"]){
-        _mediation = ((NSNumber *)[config objectForKey:@"mediationEnabled"]).boolValue;
+        _isMediationEnabled = ((NSNumber *)[config objectForKey:@"mediationEnabled"]).boolValue;
     }
     if ([config objectForKey:@"adChoicesPlacement"]){
         _adChoicesPlacement = ((NSNumber *)[config objectForKey:@"adChoicesPlacement"]);
@@ -72,32 +72,32 @@
     }
     if ([config objectForKey:@"nonPersonalizedAdsOnly"]){
         _npa = ((NSNumber *)[config objectForKey:@"nonPersonalizedAdsOnly"]).boolValue;
-        
+
         adRequest = [GADRequest request];
         GADCustomEventExtras *extras = [[GADCustomEventExtras alloc] init];
-        
+
         [extras setExtras:@{@"npa": @([NSNumber numberWithInt:_npa].intValue)} forLabel:@"npa"];
         [adRequest registerAdNetworkExtras:extras];
-        
+
     }else{
         adRequest = [GADRequest request];
     }
-    
+
     unifiedNativeAdLoadedListener = [[OnUnifiedNativeAdLoadedListener alloc]initWithRepo:repo nativeAds:_nativeAds tAds:_totalAds];
-    
+
     [self configAdLoaderOption:rootVC];
-    
+
     return self;
 }
 -(void) configAdLoaderOption:(UIViewController *) rootVC{
     //https://developers.google.com/admob/ios/native/options#objective-c_1
     self.rootVC = rootVC;
-    
+
     GADVideoOptions* adVideoOptions = [[GADVideoOptions alloc]init];
     [adVideoOptions setStartMuted:_muted];
     [adVideoOptions setClickToExpandRequested:_clickToExpand];
     [adVideoOptions setCustomControlsRequested:_customControlsRequested];
-    
+
     GADNativeAdViewAdOptions* adPlacementOptions = [[GADNativeAdViewAdOptions alloc]init];
     if ([_adChoicesPlacement isEqualToNumber:@0]) {
         [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopLeftCorner];
@@ -110,8 +110,8 @@
     } else {
         [adPlacementOptions setPreferredAdChoicesPosition:GADAdChoicesPositionTopRightCorner];
     }
-    
-    
+
+
     GADNativeAdMediaAdLoaderOptions* adMediaOptions = [[GADNativeAdMediaAdLoaderOptions alloc] init];
     if ([_mediaAspectRatio isEqualToNumber:@0]) {
         [adMediaOptions setMediaAspectRatio:GADMediaAspectRatioUnknown];
@@ -124,8 +124,8 @@
     } else {
         [adMediaOptions setMediaAspectRatio:GADMediaAspectRatioSquare];
     }
-    
-    
+
+
 }
 -(void) attachAdListener:(id<AdListener>) listener {
     attachedAdListener = listener;
@@ -134,27 +134,49 @@
     attachedAdListener = nil;
 }
 
+/* fill up repository if need. max for multi ads request is 5 base of google admob doc
+ if use mediation,you can't use GADMultipleAdsAdLoaderOptions for load ads
+ */
 -(void) fillAds{
-    if ( ![self isLoading] && _totalAds-_nativeAds.count>0){
+
+    int require2fill = _totalAds-((int)_nativeAds.count);
+
+    if ( [self isLoading] || require2fill<=0){
+        return;
+    }
+    NSMutableArray<GADAdLoaderOptions *>* options = [NSMutableArray arrayWithArray:@[adMediaOptions,adVideoOptions,adPlacementOptions]];
+
+    if (!_isMediationEnabled) {
         GADMultipleAdsAdLoaderOptions* multipleAdsOptions = [[GADMultipleAdsAdLoaderOptions alloc] init];
-        multipleAdsOptions.numberOfAds = MAX(_totalAds-_nativeAds.count,0);
-        adLoader = [[GADAdLoader alloc] initWithAdUnitID:_adUnitId rootViewController:_rootVC adTypes:@[kGADAdLoaderAdTypeNative] options:@[adMediaOptions,adVideoOptions,adPlacementOptions,multipleAdsOptions]];
-        [adLoader setDelegate:self];
+        multipleAdsOptions.numberOfAds = MAX(require2fill,0);
+        [options addObject:multipleAdsOptions];
+    }
+
+    adLoader = [[GADAdLoader alloc] initWithAdUnitID:_adUnitId rootViewController:_rootVC adTypes:@[kGADAdLoaderAdTypeNative] options:options];
+    [adLoader setDelegate:self];
+
+    loadingAdRequestCount = require2fill;
+    if(_isMediationEnabled){
+        printf("admob request count:",MIN(require2fill,5));
+        for (int i = 0; i <  MIN(require2fill,5); i++)
+        {
+            [adLoader loadRequest:adRequest];
+        }
+    }else{
         [adLoader loadRequest:adRequest];
-        isInLoading = true;
     }
 }
 -(RNAdMobUnifiedAdContainer*) getAd{
     long long now = (long long)([[NSDate date] timeIntervalSince1970] * 1000.0);
     RNAdMobUnifiedAdContainer *ad = nil;
-    
+
     if (!(_nativeAds.count == 0)){
         //sortAds
         [_nativeAds sortUsingComparator:^NSComparisonResult(id<Comparable, NSObject>  _Nonnull obj1,
                                                             id<Comparable, NSObject>  _Nonnull obj2) {
             return [obj1 compareTo:obj2] > 0; //find lowest showCount
         }];
-        
+
         NSMutableArray<RNAdMobUnifiedAdContainer *> *discardedItems = [NSMutableArray<RNAdMobUnifiedAdContainer *> array];
         for (RNAdMobUnifiedAdContainer *item in self.nativeAds) {
             if (item != nil && (now - item.loadTime) < _expirationInterval) {
@@ -178,7 +200,7 @@
 }
 -(BOOL) isLoading{
     if (adLoader != nil){
-        return [adLoader isLoading] || isInLoading;
+        return [adLoader isLoading] || loadingAdRequestCount>0;
     }
     return false;
 }
@@ -188,17 +210,29 @@
     return args;
 }
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didReceiveNativeAd:(nonnull GADNativeAd *)nativeAd {
+    loadingAdRequestCount--;
     [unifiedNativeAdLoadedListener adLoader:adLoader didReceiveNativeAd:nativeAd];
     [nativeAd setDelegate:self];
     [attachedAdListener didAdLoaded:nativeAd];
 }
 - (void)adLoaderDidFinishLoading:(GADAdLoader *) adLoader {
-    isInLoading = false;
+    if(_isMediationEnabled){
+        if (loadingAdRequestCount == 0){
+            [self fillAds];//fill up repository if need
+        }
+    }else{
+        [self fillAds];//fill up repository if need
+    }
     // The adLoader has finished loading ads, and a new request can be sent.
 }
 
 
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didFailToReceiveAdWithError:(nonnull NSError *)error {
+      if(_isMediationEnabled){
+         loadingAdRequestCount--;
+      }else{
+         loadingAdRequestCount = 0;
+      }
     [unifiedNativeAdLoadedListener adLoader:adLoader didFailToReceiveAdWithError:error];
     BOOL stopPreloading = false;
     switch (error.code) {
@@ -209,7 +243,7 @@
     }
     if (attachedAdListener == nil) {
         if (stopPreloading) {
-            
+
             NSDictionary *errorDic = @{
                 @"domain":error.domain,
                 @"message":error.localizedDescription,
@@ -218,7 +252,7 @@
             NSDictionary *event = @{
                 @"error":errorDic,
             };
-            
+
             [EventEmitter.sharedInstance sendEvent:CacheManager.EVENT_AD_PRELOAD_ERROR dict:event];
         }
         return;
@@ -255,7 +289,7 @@
 - (void)nativeAdIsMuted:(nonnull GADNativeAd *)nativeAd{
     if (attachedAdListener == nil) return;
     [attachedAdListener nativeAdIsMuted:nativeAd];
-    
+
 }
 
 
