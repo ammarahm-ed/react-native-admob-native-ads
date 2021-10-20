@@ -669,7 +669,7 @@ BOOL *nonPersonalizedAds;
     
     if (!isWait4Retry) {
         isWait4Retry = true;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(_refreshInterval)),RCTGetUIManagerQueue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(refreshingInterval.doubleValue/1000 * NSEC_PER_SEC)),dispatch_get_main_queue(), ^{
             [self loadAd];
         });
     }

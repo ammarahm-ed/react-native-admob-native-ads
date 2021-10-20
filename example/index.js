@@ -26,7 +26,9 @@ AdManager.registerRepository({
   adUnitId: NATIVE_AD_ID,
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
-  mute: true,
+  videoOptions:{
+    mute: false
+  },
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
 }).then(result => {
@@ -39,7 +41,9 @@ AdManager.registerRepository({
   adUnitId: NATIVE_AD_VIDEO_ID,
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
-  mute: false,
+  videoOptions:{
+    mute: false
+  },
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
 }).then(result => {
@@ -52,7 +56,9 @@ AdManager.registerRepository({
   adUnitId: NATIVE_AD_VIDEO_ID,
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
-  mute: true,
+  videoOptions:{
+    mute: false
+  },
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
 }).then(result => {
