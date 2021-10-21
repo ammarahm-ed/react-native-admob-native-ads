@@ -77,9 +77,9 @@
     }
     
     
-    if ([config objectForKey:@"nonPersonalizedAdsOnly"]){
+    if ([config objectForKey:@"requestNonPersonalizedAdsOnly"]){
         GADCustomEventExtras *extras = [[GADCustomEventExtras alloc] init];
-        bool npa = ((NSNumber *)[config objectForKey:@"nonPersonalizedAdsOnly"]).boolValue;
+        bool npa = ((NSNumber *)[config objectForKey:@"requestNonPersonalizedAdsOnly"]).boolValue;
         [extras setExtras:@{@"npa": @([NSNumber numberWithInt:npa].intValue)} forLabel:@"npa"];
         [adRequest registerAdNetworkExtras:extras];
     }
