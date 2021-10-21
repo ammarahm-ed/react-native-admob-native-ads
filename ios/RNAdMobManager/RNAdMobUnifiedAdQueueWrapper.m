@@ -44,40 +44,40 @@
     //Set repository settings
     _adUnitId = [config objectForKey:@"adUnitId"] ;
     _name = repo;
-    if ([config objectForKey:@"numOfAds"]){
+    if ([config containsObject:@"numOfAds"]){
         _totalAds = ((NSNumber *)[config objectForKey:@"numOfAds"]).intValue;
     }
 
     _nativeAds =  [[NSMutableArray<RNAdMobUnifiedAdContainer *> alloc]init];
 
-    if ([config objectForKey:@"expirationPeriod"]){
+    if ([config containsObject:@"expirationPeriod"]){
         _expirationInterval = ((NSNumber *)[config objectForKey:@"expirationPeriod"]).intValue;
     }
-    if ([config objectForKey:@"mediationEnabled"]){
+    if ([config containsObject:@"mediationEnabled"]){
         _isMediationEnabled = ((NSNumber *)[config objectForKey:@"mediationEnabled"]).boolValue;
     }
     
     
     //Set request options
-    if ([config objectForKey:@"adChoicesPlacement"]){
+    if ([config containsObject:@"adChoicesPlacement"]){
         [adPlacementOptions setPreferredAdChoicesPosition:((NSNumber *)[config objectForKey:@"adChoicesPlacement"]).intValue];
     }
-    if ([config objectForKey:@"mediaAspectRatio"]){
+    if ([config containsObject:@"mediaAspectRatio"]){
         [adMediaOptions setMediaAspectRatio:((NSNumber *)[config objectForKey:@"mediaAspectRatio"]).intValue];
     }
     
-    if ([config objectForKey:@"videoOptions"]){
+    if ([config containsObject:@"videoOptions"]){
         [self configVideoOptions:[config objectForKey:@"videoOptions"]];
     }
-    if ([config objectForKey:@"mediationOptions"]){
+    if ([config containsObject:@"mediationOptions"]){
         [self configMediationOptions:[config objectForKey:@"mediationOptions"]];
     }
-    if ([config objectForKey:@"targetingOptions"]){
+    if ([config containsObject:@"targetingOptions"]){
         [self configTargetOptions:[config objectForKey:@"targetingOptions"]];
     }
     
     
-    if ([config objectForKey:@"requestNonPersonalizedAdsOnly"]){
+    if ([config containsObject:@"requestNonPersonalizedAdsOnly"]){
         GADCustomEventExtras *extras = [[GADCustomEventExtras alloc] init];
         bool npa = ((NSNumber *)[config objectForKey:@"requestNonPersonalizedAdsOnly"]).boolValue;
         [extras setExtras:@{@"npa": @([NSNumber numberWithInt:npa].intValue)} forLabel:@"npa"];
@@ -254,40 +254,47 @@
 
 -(void)configVideoOptions:(NSDictionary *)config{
 
-    bool muted = ((NSNumber *)[config objectForKey:@"mute"]).boolValue;
-    bool clickToExpand = ((NSNumber *)[config objectForKey:@"clickToExpand"]).boolValue;
-    bool customControlsRequested = ((NSNumber *)[config objectForKey:@"customControlsRequested"]).boolValue;
-    
-    [adVideoOptions setStartMuted:muted];
-    [adVideoOptions setClickToExpandRequested:clickToExpand];
-    [adVideoOptions setCustomControlsRequested:customControlsRequested];
+    if ([config containsObject:@"mute"]) {
+        bool muted = ((NSNumber *)[config objectForKey:@"mute"]).boolValue;
+        [adVideoOptions setStartMuted:muted];
+    }
+
+    if ([config containsObject:@"clickToExpand"]) {
+        bool clickToExpand = ((NSNumber *)[config objectForKey:@"clickToExpand"]).boolValue;
+        [adVideoOptions setClickToExpandRequested:clickToExpand];
+    }
+
+    if ([config containsObject:@"customControlsRequested"]) {
+        bool customControlsRequested = ((NSNumber *)[config objectForKey:@"customControlsRequested"]).boolValue;    
+        [adVideoOptions setCustomControlsRequested:customControlsRequested];
+    }
 }
 
 -(void)configTargetOptions:(NSDictionary *)config{
 
-    if ([config objectForKey:@"targets"]){
+    if ([config containsObject:@"targets"]){
         NSArray<NSDictionary *>* targets = (NSArray<NSDictionary *> *)[config objectForKey:@"targets"];
         for (NSDictionary* target in targets){
              [adRequest setCustomTargeting:target];
         }
         
-        if ([config objectForKey:@"categoryExclusions"]){
+        if ([config containsObject:@"categoryExclusions"]){
             [adRequest setCategoryExclusions:(NSArray<NSString *> *)[config objectForKey:@"categoryExclusions"]];
         }
-        if ([config objectForKey:@"publisherId"]){
+        if ([config containsObject:@"publisherId"]){
             [adRequest setPublisherProvidedID:(NSString *)[config objectForKey:@"publisherId"]];
         }
         
-        if ([config objectForKey:@"requestAgent"]){
+        if ([config containsObject:@"requestAgent"]){
             [adRequest setRequestAgent:(NSString *)[config objectForKey:@"requestAgent"]];
         }
-        if ([config objectForKey:@"keywords"]){
+        if ([config containsObject:@"keywords"]){
             [adRequest setKeywords:(NSArray<NSString *> *)[config objectForKey:@"requestAgent"]];
         }
-        if ([config objectForKey:@"contentUrl"]){
+        if ([config containsObject:@"contentUrl"]){
             [adRequest setContentURL:(NSString *)[config objectForKey:@"contentUrl"]];
         }
-        if ([config objectForKey:@"neighboringContentUrls"]){
+        if ([config containsObject:@"neighboringContentUrls"]){
             [adRequest setNeighboringContentURLStrings:(NSArray<NSString *> *)[config objectForKey:@"neighboringContentUrls"]];
         }
     
