@@ -434,8 +434,8 @@ declare module "react-native-admob-native-ads" {
     onVideoProgress?: (progress: {
       duration: string;
       currentTime: string;
-    }) => {};
-    onVideoMute?: (muted: boolean) => {};
+    }) => void;
+    onVideoMute?: (muted: boolean) => void;
     paused?: boolean;
     muted?: boolean;
   }): JSX.Element;
