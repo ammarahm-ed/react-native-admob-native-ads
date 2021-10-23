@@ -38,7 +38,7 @@
         adVideoOptions = [[GADVideoOptions alloc]init];
         adMediaOptions = [[GADNativeAdMediaAdLoaderOptions alloc] init];
         adPlacementOptions = [[GADNativeAdViewAdOptions alloc]init];
-        
+
     }
 
     //Set repository settings
@@ -56,8 +56,8 @@
     if ([config objectForKey:@"mediationEnabled"]){
         _isMediationEnabled = ((NSNumber *)[config objectForKey:@"mediationEnabled"]).boolValue;
     }
-    
-    
+
+
     //Set request options
     if ([config objectForKey:@"adChoicesPlacement"]){
         [adPlacementOptions setPreferredAdChoicesPosition:((NSNumber *)[config objectForKey:@"adChoicesPlacement"]).intValue];
@@ -65,7 +65,7 @@
     if ([config objectForKey:@"mediaAspectRatio"]){
         [adMediaOptions setMediaAspectRatio:((NSNumber *)[config objectForKey:@"mediaAspectRatio"]).intValue];
     }
-    
+
     if ([config objectForKey:@"videoOptions"]){
         [self configVideoOptions:[config objectForKey:@"videoOptions"]];
     }
@@ -75,8 +75,8 @@
     if ([config objectForKey:@"targetingOptions"]){
         [self configTargetOptions:[config objectForKey:@"targetingOptions"]];
     }
-    
-    
+
+
     if ([config objectForKey:@"nonPersonalizedAdsOnly"]){
         GADCustomEventExtras *extras = [[GADCustomEventExtras alloc] init];
         bool npa = ((NSNumber *)[config objectForKey:@"nonPersonalizedAdsOnly"]).boolValue;
@@ -174,16 +174,10 @@
     [unifiedNativeAdLoadedListener adLoader:adLoader didReceiveNativeAd:nativeAd];
     [nativeAd setDelegate:self];
     [attachedAdListener didAdLoaded:nativeAd];
-}
-- (void)adLoaderDidFinishLoading:(GADAdLoader *) adLoader {
-    if(_isMediationEnabled){
-        if (loadingAdRequestCount == 0){
-            [self fillAds];//fill up repository if need
-        }
-    }else{
+
+    if (loadingAdRequestCount == 0){
         [self fillAds];//fill up repository if need
     }
-    // The adLoader has finished loading ads, and a new request can be sent.
 }
 
 
@@ -257,7 +251,7 @@
     bool muted = ((NSNumber *)[config objectForKey:@"mute"]).boolValue;
     bool clickToExpand = ((NSNumber *)[config objectForKey:@"clickToExpand"]).boolValue;
     bool customControlsRequested = ((NSNumber *)[config objectForKey:@"customControlsRequested"]).boolValue;
-    
+
     [adVideoOptions setStartMuted:muted];
     [adVideoOptions setClickToExpandRequested:clickToExpand];
     [adVideoOptions setCustomControlsRequested:customControlsRequested];
@@ -270,14 +264,14 @@
         for (NSDictionary* target in targets){
              [adRequest setCustomTargeting:target];
         }
-        
+
         if ([config objectForKey:@"categoryExclusions"]){
             [adRequest setCategoryExclusions:(NSArray<NSString *> *)[config objectForKey:@"categoryExclusions"]];
         }
         if ([config objectForKey:@"publisherId"]){
             [adRequest setPublisherProvidedID:(NSString *)[config objectForKey:@"publisherId"]];
         }
-        
+
         if ([config objectForKey:@"requestAgent"]){
             [adRequest setRequestAgent:(NSString *)[config objectForKey:@"requestAgent"]];
         }
@@ -290,23 +284,23 @@
         if ([config objectForKey:@"neighboringContentUrls"]){
             [adRequest setNeighboringContentURLStrings:(NSArray<NSString *> *)[config objectForKey:@"neighboringContentUrls"]];
         }
-    
+
     }
 }
 
 -(void)configMediationOptions:(NSDictionary *)config{
 #ifdef MEDIATION_FACEBOOK
         GADFBNetworkExtras * extras = [[GADFBNetworkExtras alloc] init];
-        
+
         if ([config valueForKey:@"nativeBanner"]) {
             extras.nativeAdFormat = GADFBAdFormatNative;
         } else {
             extras.nativeAdFormat = GADFBAdFormatNativeBanner;
         }
-        
+
         [adRequest registerAdNetworkExtras:extras];
 #endif
-    
+
 }
 
 @end
