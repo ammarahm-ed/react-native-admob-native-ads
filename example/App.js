@@ -34,7 +34,8 @@ const App = () => {
       style={{
         height: '100%',
         width: '100%',
-        paddingTop:Platform.OS === "android" ? StatusBar.currentHeight : 0
+        paddingTop:Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        backgroundColor:'white'
       }}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
       <View
