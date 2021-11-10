@@ -60,7 +60,7 @@ static CacheManager *_sharedInstance = nil;
         [repo detachAdListener];
     }
 }
--(NSDictionary*)registerRepo:(NSDictionary*) config rootVC:(UIViewController*)rootVC{
+-(NSDictionary*)registerRepo:(NSDictionary*) config{
     
     NSMutableDictionary*  args = [[NSMutableDictionary alloc] init];
     NSString* repoId = nil;
@@ -79,7 +79,7 @@ static CacheManager *_sharedInstance = nil;
     if (repoId != nil){
              
                 if (![repositoriesMap objectForKey:repoId]) {
-                    RNAdMobUnifiedAdQueueWrapper *repo = [[RNAdMobUnifiedAdQueueWrapper alloc] initWithConfig:config repo:repoId rootVC:rootVC];
+                    RNAdMobUnifiedAdQueueWrapper *repo = [[RNAdMobUnifiedAdQueueWrapper alloc] initWithConfig:config repo:repoId];
                     [repositoriesMap setObject:repo forKey:repoId];
                 
                     [args setObject:[NSNumber numberWithBool:YES] forKey:@"success"];
@@ -101,10 +101,6 @@ static CacheManager *_sharedInstance = nil;
 }
 -(void) resetCache{
     [repositoriesMap removeAllObjects];
-}
--(void) configAdLoader:(NSString*) id rootVC:(UIViewController *) rootVC{
-    RNAdMobUnifiedAdQueueWrapper *repo =  (RNAdMobUnifiedAdQueueWrapper *)([repositoriesMap objectForKey:id]);
-    [repo configAdLoaderOption:rootVC];
 }
 -(void) requestAds:(NSString*) id{
     RNAdMobUnifiedAdQueueWrapper *repo =  (RNAdMobUnifiedAdQueueWrapper *)([repositoriesMap objectForKey:id]);
