@@ -457,8 +457,6 @@ BOOL *nonPersonalizedAds;
 - (void)setRepository:(NSString *)repo
 {
     adRepo = repo;
-    if (adRepo == nil) {return;}
-    [self getAdFromRepository];
 }
 
 
