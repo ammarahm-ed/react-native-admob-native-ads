@@ -258,8 +258,8 @@ public class RNAdmobNativeView extends LinearLayout {
             } else {
                 args.putString("icon", "noicon");
             }
-
-            sendDirectMessage(args);
+            
+            sendEvent(RNAdmobNativeViewManager.EVENT_NATIVE_AD_LOADED,args);
 
         } catch (Exception e) {
         }
@@ -268,23 +268,6 @@ public class RNAdmobNativeView extends LinearLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-    }
-
-    public void setMessagingModuleName(String moduleName) {
-        messagingModuleName = moduleName;
-    }
-
-    protected void sendDirectMessage(WritableMap data) {
-
-        WritableNativeMap event = new WritableNativeMap();
-        event.putMap("nativeEvent", data);
-        WritableNativeArray params = new WritableNativeArray();
-        params.pushMap(event);
-
-        if (mCatalystInstance != null) {
-            mCatalystInstance.callFunction(messagingModuleName, "onNativeAdLoaded", params);
-        }
-
     }
 
     @Override

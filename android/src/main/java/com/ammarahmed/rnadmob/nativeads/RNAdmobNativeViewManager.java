@@ -87,15 +87,9 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
 
     }
 
-    @ReactProp(name = "messagingModuleName")
-    public void setMessagingModuleName(RNAdmobNativeView nativeAdWrapper, String moduleName) {
-        nativeAdWrapper.setMessagingModuleName(moduleName);
-    }
-
 
     @Override
     public void addView(RNAdmobNativeView parent, View child, int index) {
-        //super.addView(parent, child, index);
         parent.addNewView(child, index);
 
     }
