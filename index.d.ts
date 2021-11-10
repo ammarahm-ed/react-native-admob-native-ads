@@ -93,11 +93,11 @@ type options = {
 type MAX_AD_CONTENT_RATING = "G" | "MA" | "PG" | "T" | "UNSPECIFIED";
 
 type AdManagerConfiguration = {
-  maxAdContentRating: MAX_AD_CONTENT_RATING;
-  tagForChildDirectedTreatment: boolean;
-  tagForUnderAgeConsent: boolean;
-  testDeviceIds: Array<string>;
-  trackingAuthorized: boolean;
+  maxAdContentRating?: MAX_AD_CONTENT_RATING;
+  tagForChildDirectedTreatment?: boolean;
+  tagForUnderAgeConsent?: boolean;
+  testDeviceIds?: Array<string>;
+  trackingAuthorized?: boolean;
 };
 
 type VideoOptions = {
@@ -160,11 +160,11 @@ type AdRepositoryConfig = {
   expirationPeriod?: number;
   /** Set this to true if you are using mediation. */
   mediationEnabled?: boolean;
-  videoOptions: VideoOptions;
-  mediationOptions: MediationOptions;
-  targetingOptions: TargetingOptions;
-  adChoicesPlacement:"topLeft" | "topRight" | "bottomLeft" | "bottomRight"
-  mediaAspectRatio:"any" | "landscape" | "portrait" | "square" | "unknown"
+  videoOptions?: VideoOptions;
+  mediationOptions?: MediationOptions;
+  targetingOptions?: TargetingOptions;
+  adChoicesPlacement?:"topLeft" | "topRight" | "bottomLeft" | "bottomRight"
+  mediaAspectRatio?:"any" | "landscape" | "portrait" | "square" | "unknown"
 }
 
 type ImagePropsWithOptionalSource = Omit<ImageProps, "source"> &
@@ -188,7 +188,7 @@ type NativeAdViewProps = {
    * development mode or add your device to testDevices.
    */
 
-  adUnitID: string;
+  adUnitID?: string;
 
   /**
    * Ads returned will be of the desired aspectRatio
@@ -204,7 +204,7 @@ type NativeAdViewProps = {
    * **Note:** Use this only if you have registered a repository.
    */
 
-  repository: string;
+  repository?: string;
 
   /**
    * Time after which a new ad should be
@@ -247,9 +247,9 @@ type NativeAdViewProps = {
   /**
    * Set testdevices for the ad. (DEPRECATED)
    */
-  videoOptions: VideoOptions;
-  mediationOptions: MediationOptions;
-  targetingOptions: TargetingOptions;
+  videoOptions?: VideoOptions;
+  mediationOptions?: MediationOptions;
+  targetingOptions?: TargetingOptions;
 
   testDevices?: Array<string>;
   onAdOpened?: () => void;
@@ -356,7 +356,7 @@ declare module "react-native-admob-native-ads" {
      * Register a repository  with given settings for native ads
      */
 
-    registerRepository: (config: AdRepositoryConfig) => Promise<{ repo: string, success: boolean, error: string }>;
+    registerRepository: (config: AdRepositoryConfig) => Promise<boolean>;
 
 
     /**
@@ -372,7 +372,7 @@ declare module "react-native-admob-native-ads" {
     /**
      * Check if there is ad in a repository.
      */
-    hasAd: (name: string) => Promise<any>;
+    hasAd: (name: string) => Promise<boolean>;
   };
 
   export const AdOptions: options;
@@ -434,8 +434,8 @@ declare module "react-native-admob-native-ads" {
     onVideoProgress?: (progress: {
       duration: string;
       currentTime: string;
-    }) => {};
-    onVideoMute?: (muted: boolean) => {};
+    }) => void;
+    onVideoMute?: (muted: boolean) => void;
     paused?: boolean;
     muted?: boolean;
   }): JSX.Element;

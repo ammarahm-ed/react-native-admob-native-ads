@@ -5,7 +5,6 @@ import {
   requireNativeComponent,
   UIManager
 } from "react-native";
-import BatchedBridge from "react-native/Libraries/BatchedBridge/BatchedBridge";
 import { defaultAd, NativeAdContext } from "./context";
 import { AdOptions } from "./utils";
 import Wrapper from "./Wrapper";
@@ -36,8 +35,6 @@ export class NativeAdView extends Component {
     this.componentMounted = false;
     this.ad = defaultAd;
   }
-
-  messagingModuleName = `NativeAdMessageHandler${Date.now() + Math.random()}`;
 
   _onAdFailedToLoad = (event) => {
     if (this.props.onAdFailedToLoad) {
@@ -103,7 +100,6 @@ export class NativeAdView extends Component {
       } else {
         this.updateAd(this.ad);
       }
-      BatchedBridge.registerCallableModule(this.messagingModuleName, this);
     } catch (e) {}
   }
 
@@ -144,7 +140,6 @@ export class NativeAdView extends Component {
             AdOptions.mediaAspectRatio[this.props.mediaAspectRatio]
           }
           onNativeAdLoaded={this.onNativeAdLoaded}
-          messagingModuleName={this.messagingModuleName}
           requestNonPersonalizedAdsOnly={
             this.props.requestNonPersonalizedAdsOnly
           }
