@@ -42,7 +42,6 @@ public class RNAdmobNativeView extends LinearLayout {
     };
     public int adRefreshInterval = 60000;
     protected @Nullable
-    String messagingModuleName;
     ReactContext mContext;
     NativeAdView nativeAdView;
     NativeAd nativeAd;
@@ -55,7 +54,6 @@ public class RNAdmobNativeView extends LinearLayout {
     RNAdMobUnifiedAdContainer unifiedNativeAdContainer;
     CatalystInstance mCatalystInstance;
     private int mediaAspectRatio = 1;
-    private Runnable runnableForMount = null;
     private boolean loadingAd = false;
     private Runnable retryRunnable;
     private String adRepo;
@@ -63,6 +61,9 @@ public class RNAdmobNativeView extends LinearLayout {
     private boolean requestNonPersonalizedAdsOnly = false;
     private String admobAdUnitId = "";
     private Handler handler;
+
+
+
     AdListener adListener = new AdListener() {
 
         @Override
@@ -110,7 +111,7 @@ public class RNAdmobNativeView extends LinearLayout {
         public void onAdLoaded() {
             super.onAdLoaded();
             if (adRepo != null) {
-                CacheManager.instance.detachAdListener(adRepo);
+                CacheManager.instance.detachAdListener(adRepo,adListener);
                 loadAd();
             }
             loadingAd = false;
@@ -157,6 +158,10 @@ public class RNAdmobNativeView extends LinearLayout {
         View viewRoot = layoutInflater.inflate(R.layout.rn_ad_unified_native_ad, this, true);
         nativeAdView = (NativeAdView) viewRoot.findViewById(R.id.native_ad_view);
 
+    }
+
+    public String getAdRepo() {
+        return adRepo;
     }
 
     public void addMediaView(int id) {
@@ -389,31 +394,18 @@ public class RNAdmobNativeView extends LinearLayout {
     }
 
     public void setNativeAd() {
-        if (nativeAd == null) {
-            return;
-        }
-        if (handler != null && runnableForMount != null) {
-            handler.removeCallbacks(runnableForMount);
-            runnableForMount = null;
-        }
-        runnableForMount = () -> {
-            if (nativeAdView != null && nativeAd != null) {
-                nativeAdView.setNativeAd(nativeAd);
+        if (nativeAdView != null && nativeAd != null) {
+            nativeAdView.setNativeAd(nativeAd);
 
-                if (mediaView != null && nativeAdView.getMediaView() != null) {
-                    nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
-                    if (nativeAd.getMediaContent().hasVideoContent()) {
-                        mediaView.setVideoController(nativeAd.getMediaContent().getVideoController());
-                        mediaView.setMedia(nativeAd.getMediaContent());
-                    }
+            if (mediaView != null && nativeAdView.getMediaView() != null) {
+                nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
+                if (nativeAd.getMediaContent().hasVideoContent()) {
+                    mediaView.setVideoController(nativeAd.getMediaContent().getVideoController());
+                    mediaView.setMedia(nativeAd.getMediaContent());
                 }
-
             }
-        };
-        if (handler != null) {
-            handler.postDelayed(runnableForMount, 1000);
-        }
 
+        }
     }
 
     public void setVideoOptions(ReadableMap options) {
@@ -437,8 +429,6 @@ public class RNAdmobNativeView extends LinearLayout {
     public void removeHandler() {
         loadingAd = false;
         if (handler != null) {
-            handler.removeCallbacks(runnableForMount);
-            runnableForMount = null;
             handler = null;
         }
     }

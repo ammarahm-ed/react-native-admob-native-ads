@@ -8,7 +8,7 @@
 #ifndef AdListener_h
 #define AdListener_h
 @import GoogleMobileAds;
-@protocol AdListener <GADNativeAdDelegate>
+@protocol AdListener
 @optional
 - (void)didAdLoaded:(nonnull GADNativeAd *)nativeAd;
 - (void)didFailToReceiveAdWithError:(nonnull NSError *)error;

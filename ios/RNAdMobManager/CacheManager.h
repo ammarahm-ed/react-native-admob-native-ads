@@ -21,7 +21,7 @@
 -(BOOL) isLoading:(NSString*) id;
 -(NSInteger)  numberOfAds:(NSString*) id;
 -(void) attachAdListener:(NSString*) id listener:(id<AdListener>)listener;
--(void) detachAdListener:(NSString*) id;
+-(void) detachAdListener:(NSString*) id listener:(id<AdListener>)listener;
 -(NSDictionary*)registerRepo:(NSDictionary*) config;
 -(void) unRegisterRepo:(NSString*) repo;
 -(void) resetCache;

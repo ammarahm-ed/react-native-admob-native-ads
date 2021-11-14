@@ -15,6 +15,10 @@ public class CacheManager {
 
     public static final String EVENT_AD_PRELOAD_LOADED = "onAdPreloadLoaded";
     public static final String EVENT_AD_PRELOAD_ERROR = "onAdPreloadError";
+    public static final String EVENT_AD_CLOSED = "onAdPreloadClosed";
+    public static final String EVENT_AD_OPEN = "onAdPreloadOpen";
+    public static final String EVENT_AD_CLICKED = "onAdPreloadClicked";
+    public static final String EVENT_AD_IMPRESSION = "onAdPreloadImpression";
     public static CacheManager instance = new CacheManager();
     Map<String, RNAdMobUnifiedAdQueueWrapper> repositoriesMap = new HashMap<>();
 
@@ -41,9 +45,9 @@ public class CacheManager {
         }
     }
 
-    public void detachAdListener(String id) {
+    public void detachAdListener(String id,AdListener listener) {
         if (repositoriesMap.get(id) != null) {
-            repositoriesMap.get(id).detachAdListener();
+            repositoriesMap.get(id).detachAdListener(listener);
         }
     }
 

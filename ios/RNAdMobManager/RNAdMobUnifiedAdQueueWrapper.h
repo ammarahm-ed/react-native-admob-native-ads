@@ -24,7 +24,7 @@
 @property(nonatomic, readwrite) NSMutableArray<RNAdMobUnifiedAdContainer *> *nativeAds;
 
 -(void) attachAdListener:(id<AdListener>) listener;
--(void) detachAdListener;
+-(void) detachAdListener:(id<AdListener>) listener;
 -(void) fillAds;
 -(RNAdMobUnifiedAdContainer*) getAd;
 -(BOOL) isLoading;

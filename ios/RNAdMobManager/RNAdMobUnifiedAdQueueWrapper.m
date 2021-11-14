@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "RNAdMobUnifiedAdQueueWrapper.h"
-#import "OnUnifiedNativeAdLoadedListener.h"
+#import "UnifiedNativeAdLoadedListener.h"
 #import "RNAdMobUnifiedAdContainer.h"
 #import "EventEmitter.h"
 #import "CacheManager.h"
@@ -19,13 +19,17 @@
 @implementation RNAdMobUnifiedAdQueueWrapper{
     GADAdLoader* adLoader;
     GAMRequest* adRequest;
-    id<AdListener> attachedAdListener;
-    OnUnifiedNativeAdLoadedListener* unifiedNativeAdLoadedListener;
+
+    NSMutableSet<id<AdListener>>* attachedAdListeners;
+    UnifiedNativeAdLoadedListener* unifiedNativeAdLoadedListener;
     GADVideoOptions* adVideoOptions;
     GADNativeAdMediaAdLoaderOptions* adMediaOptions;
     GADNativeAdViewAdOptions* adPlacementOptions;
     NSDictionary* targetingOptions;
     int loadingAdRequestCount;
+    int retryDelay;
+    int totalRetryCount;
+    int retryCount;
 }
 
 -(instancetype)initWithConfig:(NSDictionary *)config repo:(NSString *)repo{
@@ -33,12 +37,16 @@
         self.totalAds = 5;
         self.expirationInterval = 3600000; // in ms
         self.isMediationEnabled = false;
+        retryDelay = 2000;// in ms
+        totalRetryCount = 10;
+        retryCount = 0;
         adRequest = [GAMRequest request];
         loadingAdRequestCount = 0;
         adVideoOptions = [[GADVideoOptions alloc]init];
         adMediaOptions = [[GADNativeAdMediaAdLoaderOptions alloc] init];
         adPlacementOptions = [[GADNativeAdViewAdOptions alloc]init];
 
+        attachedAdListeners = [[NSMutableSet<id<AdListener>> alloc] init];
     }
 
     //Set repository settings
@@ -46,6 +54,13 @@
     _name = repo;
     if ([config objectForKey:@"numOfAds"]){
         _totalAds = ((NSNumber *)[config objectForKey:@"numOfAds"]).intValue;
+    }
+    if ([config objectForKey:@"totalRetryCount"]){
+        totalRetryCount = ((NSNumber *)[config objectForKey:@"totalRetryCount"]).boolValue;
+    }
+
+    if ([config objectForKey:@"retryDelay"]){
+        retryDelay = ((NSNumber *)[config objectForKey:@"retryDelay"]).boolValue;
     }
 
     _nativeAds =  [[NSMutableArray<RNAdMobUnifiedAdContainer *> alloc]init];
@@ -84,15 +99,15 @@
         [adRequest registerAdNetworkExtras:extras];
     }
 
-    unifiedNativeAdLoadedListener = [[OnUnifiedNativeAdLoadedListener alloc]initWithRepo:repo nativeAds:_nativeAds tAds:_totalAds];
+    unifiedNativeAdLoadedListener = [[UnifiedNativeAdLoadedListener alloc]initWithRepo:repo nativeAds:_nativeAds tAds:_totalAds];
     return self;
 }
 
 -(void) attachAdListener:(id<AdListener>) listener {
-    attachedAdListener = listener;
+    [attachedAdListeners addObject:listener];
 }
--(void) detachAdListener{
-    attachedAdListener = nil;
+-(void) detachAdListener:(id<AdListener>) listener{
+    [attachedAdListeners removeObject:listener];
 }
 
 /* fill up repository if need. max for multi ads request is 5 base of google admob doc
@@ -171,9 +186,14 @@
 }
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didReceiveNativeAd:(nonnull GADNativeAd *)nativeAd {
     loadingAdRequestCount--;
+    retryCount = 0;
     [unifiedNativeAdLoadedListener adLoader:adLoader didReceiveNativeAd:nativeAd];
-    [nativeAd setDelegate:self];
-    [attachedAdListener didAdLoaded:nativeAd];
+
+    //to prevent a crash (check the link below), first copy attachedAdListeners into a new array
+    //link:https://stackoverflow.com/questions/44648610/collection-nsarraym-was-mutated-while-being-enumerated
+    for (id<AdListener> listener in [attachedAdListeners copy]){
+        [listener didAdLoaded:nativeAd];
+    }
 
     if (loadingAdRequestCount == 0){
         [self fillAds];//fill up repository if need
@@ -188,7 +208,10 @@
       }else{
          loadingAdRequestCount = 0;
       }
+
     [unifiedNativeAdLoadedListener adLoader:adLoader didFailToReceiveAdWithError:error];
+
+
     BOOL stopPreloading = false;
     switch (error.code) {
         case GADErrorInternalError:
@@ -196,10 +219,9 @@
             stopPreloading = true;
             break;
     }
-    if (attachedAdListener == nil) {
-        if (stopPreloading) {
 
-            NSDictionary *errorDic = @{
+    if (stopPreloading) {
+        NSDictionary *errorDic = @{
                 @"domain":error.domain,
                 @"message":error.localizedDescription,
                 @"code":@(error.code).stringValue
@@ -207,43 +229,39 @@
             NSDictionary *event = @{
                 @"error":errorDic,
             };
-
+       
             [EventEmitter.sharedInstance sendEvent:CacheManager.EVENT_AD_PRELOAD_ERROR dict:event];
-        }
+            for (id<AdListener> listener in [attachedAdListeners copy]){
+               [listener didFailToReceiveAdWithError:error];
+             }
+            return;
+    }
+
+    if (retryCount >= totalRetryCount){
+        NSDictionary *errorDic = @{
+               @"domain":@"",
+               @"message":@"reach max retry",
+               @"code":@""
+            };
+            NSDictionary *event = @{
+                @"error":errorDic,
+            };
+        [EventEmitter.sharedInstance sendEvent:CacheManager.EVENT_AD_PRELOAD_ERROR dict:event];
+        for (id<AdListener> listener in [attachedAdListeners copy]){
+           [listener didFailToReceiveAdWithError:error];
+         }
         return;
     }
-    [attachedAdListener didFailToReceiveAdWithError:error];
-}
-
-- (void)nativeAdDidRecordImpression:(nonnull GADNativeAd *)nativeAd{
-    if (attachedAdListener == nil) return;
-    [attachedAdListener nativeAdDidRecordImpression:nativeAd];
-}
-
-- (void)nativeAdDidRecordClick:(nonnull GADNativeAd *)nativeAd{
-    if (attachedAdListener == nil) return;
-    [attachedAdListener nativeAdDidRecordClick:nativeAd];
-}
-
-- (void)nativeAdWillPresentScreen:(nonnull GADNativeAd *)nativeAd{
-    if (attachedAdListener == nil) return;
-    [attachedAdListener nativeAdWillPresentScreen:nativeAd];
-}
-
-- (void)nativeAdWillDismissScreen:(nonnull GADNativeAd *)nativeAd{
-    if (attachedAdListener == nil) return;
-    [attachedAdListener nativeAdWillDismissScreen:nativeAd];
-}
-
-- (void)nativeAdDidDismissScreen:(nonnull GADNativeAd *)nativeAd{
-    if (attachedAdListener == nil) return;
-    [attachedAdListener nativeAdDidDismissScreen:nativeAd];
-}
 
 
-- (void)nativeAdIsMuted:(nonnull GADNativeAd *)nativeAd{
-    if (attachedAdListener == nil) return;
-    [attachedAdListener nativeAdIsMuted:nativeAd];
+    if (loadingAdRequestCount == 0) {
+        retryCount++;
+        __weak typeof(self) weakSelf = self;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)((retryDelay/1000) * NSEC_PER_SEC)),
+                       dispatch_get_main_queue(), ^{
+            [weakSelf fillAds];
+        });
+    }
 
 }
 

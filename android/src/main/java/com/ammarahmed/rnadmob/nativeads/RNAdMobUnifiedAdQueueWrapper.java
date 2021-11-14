@@ -1,9 +1,12 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.NativeAdListener;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
@@ -26,10 +29,14 @@ public class RNAdMobUnifiedAdQueueWrapper {
     public String name;
     public Integer totalAds = 5;
     public long expirationInterval = 3600000; // in ms
+    public int totalRetryCount = 10;
+    public long retryDelay = 2000;
+    private int retryCount = 0;
     public Boolean muted = true;
     public Boolean mediation = false;
     public List<RNAdMobUnifiedAdContainer> nativeAds;
-    AdListener attachedAdListener;
+    //AdListener attached to attachedAdListeners list,if they are waiting for load ads
+    List<AdListener> attachedAdListeners = new ArrayList<>();
     Context mContext;
     int loadingAdRequestCount = 0;
 
@@ -38,7 +45,8 @@ public class RNAdMobUnifiedAdQueueWrapper {
     AdListener adListener;
     private AdLoader adLoader;
     private AdManagerAdRequest.Builder adRequest;
-    private onUnifiedNativeAdLoadedListener unifiedNativeAdLoadedListener;
+    private UnifiedNativeAdLoadedListener unifiedNativeAdLoadedListener;
+    private final Handler handler = new Handler();
 
     public RNAdMobUnifiedAdQueueWrapper(Context context, ReadableMap config, String repository) {
         mContext = context;
@@ -65,8 +73,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
                         stopPreloading = true;
                 }
 
-                if (attachedAdListener == null) {
-                    if (stopPreloading) {
+                if (stopPreloading) {
                         WritableMap event = Arguments.createMap();
                         WritableMap error = Arguments.createMap();
                         error.putString("message", adError.getMessage());
@@ -74,36 +81,65 @@ public class RNAdMobUnifiedAdQueueWrapper {
                         error.putString("domain", adError.getDomain());
                         event.putMap("error", error);
                         EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
+                        for (AdListener adListener : attachedAdListeners)
+                        {
+                        adListener.onAdFailedToLoad(adError);
+                        }
+                return;
+                }
+
+                if (retryCount>=totalRetryCount){
+                    WritableMap event = Arguments.createMap();
+                    WritableMap error = Arguments.createMap();
+                    error.putString("message", "reach maximum retry");
+                    error.putInt("code", AdRequest.ERROR_CODE_INTERNAL_ERROR);
+                    error.putString("domain","");
+                    event.putMap("error", error);
+                    EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
+                    for (AdListener adListener : attachedAdListeners)
+                    {
+                        adListener.onAdFailedToLoad(adError);
                     }
                     return;
                 }
-                attachedAdListener.onAdFailedToLoad(adError);
+                    retryCount++;
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            fillAds();
+                        }
+                    }, retryDelay);
+
+            }
+            @Override
+            public void onAdImpression() {
+                super.onAdImpression();
+                EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_IMPRESSION, null);
             }
 
             @Override
             public void onAdClosed() {
                 super.onAdClosed();
-                if (attachedAdListener == null) return;
-                attachedAdListener.onAdClosed();
+                EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_CLOSED, null);
             }
 
             @Override
             public void onAdOpened() {
                 super.onAdOpened();
-                if (attachedAdListener == null) return;
-                attachedAdListener.onAdOpened();
+                EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_OPEN, null);
             }
 
             @Override
             public void onAdClicked() {
                 super.onAdClicked();
-                if (attachedAdListener == null) return;
-                attachedAdListener.onAdClicked();
+                EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_CLICKED, null);
+
             }
 
             @Override
             public void onAdLoaded() {
                 super.onAdLoaded();
+                retryCount = 0;
                 if (mediation) {
                     loadingAdRequestCount--;
                 }else{
@@ -112,16 +148,13 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 if (loadingAdRequestCount == 0){
                     fillAds();//<-try to fill up if still not full
                 }
-                if (attachedAdListener == null) return;
-                attachedAdListener.onAdLoaded();
+                for (AdListener adListener : attachedAdListeners)
+                {
+                    adListener.onAdLoaded();
+                }
             }
 
-            @Override
-            public void onAdImpression() {
-                super.onAdImpression();
-                if (attachedAdListener == null) return;
-                attachedAdListener.onAdImpression();
-            }
+
         };
 
         setConfiguration(config);
@@ -129,14 +162,20 @@ public class RNAdMobUnifiedAdQueueWrapper {
     }
 
     public void attachAdListener(AdListener listener) {
-        attachedAdListener = listener;
+        attachedAdListeners.add(listener);
     }
 
-    public void detachAdListener() {
-        attachedAdListener = null;
+    public void detachAdListener(AdListener listener) {
+        attachedAdListeners.remove(listener);
     }
 
     public void setConfiguration(ReadableMap config) {
+        if (config.hasKey("retryDelay")) {
+            retryDelay = config.getInt("retryDelay");
+        }
+        if (config.hasKey("totalRetryCount")) {
+            totalRetryCount = config.getInt("totalRetryCount");
+        }
         if (config.hasKey("numOfAds")) {
             totalAds = config.getInt("numOfAds");
         }
@@ -168,7 +207,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
         Utils.setTargetingOptions(config.getMap("targetingOptions"), adRequest);
         Utils.setMediationOptions(config.getMap("mediationOptions"), adRequest);
 
-        unifiedNativeAdLoadedListener = new onUnifiedNativeAdLoadedListener(name, nativeAds,
+        unifiedNativeAdLoadedListener = new UnifiedNativeAdLoadedListener(name, nativeAds,
                 totalAds, mContext);
         AdLoader.Builder builder = new AdLoader.Builder(mContext, adUnitId);
         builder.forNativeAd(unifiedNativeAdLoadedListener);
