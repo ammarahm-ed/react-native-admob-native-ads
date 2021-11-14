@@ -37,7 +37,7 @@
         self.totalAds = 5;
         self.expirationInterval = 3600000; // in ms
         self.isMediationEnabled = false;
-        retryDelay = 2000;// in ms
+        retryDelay = 3000;// in ms
         totalRetryCount = 10;
         retryCount = 0;
         adRequest = [GAMRequest request];
@@ -229,7 +229,7 @@
             NSDictionary *event = @{
                 @"error":errorDic,
             };
-       
+
             [EventEmitter.sharedInstance sendEvent:CacheManager.EVENT_AD_PRELOAD_ERROR dict:event];
             for (id<AdListener> listener in [attachedAdListeners copy]){
                [listener didFailToReceiveAdWithError:error];

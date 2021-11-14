@@ -30,7 +30,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
     public Integer totalAds = 5;
     public long expirationInterval = 3600000; // in ms
     public int totalRetryCount = 10;
-    public long retryDelay = 2000;
+    public long retryDelay = 3000;
     private int retryCount = 0;
     public Boolean muted = true;
     public Boolean mediation = false;
