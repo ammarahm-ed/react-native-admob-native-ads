@@ -357,8 +357,6 @@ public class RNAdmobNativeView extends LinearLayout {
 
     public void setAdRepository(String repo) {
         adRepo = repo;
-        if (adRepo == null) return;
-        getAdFromRepository();
     }
 
     public void setAdUnitId(String id) {
