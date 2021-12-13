@@ -21,6 +21,7 @@ import com.google.android.gms.ads.nativead.NativeAdOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class RNAdMobUnifiedAdQueueWrapper {
@@ -81,9 +82,10 @@ public class RNAdMobUnifiedAdQueueWrapper {
                         error.putString("domain", adError.getDomain());
                         event.putMap("error", error);
                         EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
-                        for (AdListener adListener : attachedAdListeners)
-                        {
-                        adListener.onAdFailedToLoad(adError);
+                        //use Iterator to prevent concurrentModificationException in ArrayList
+                        Iterator<AdListener> itr = attachedAdListeners.iterator();
+                        while (itr.hasNext()){
+                            itr.next().onAdFailedToLoad(adError);
                         }
                 return;
                 }
@@ -96,9 +98,10 @@ public class RNAdMobUnifiedAdQueueWrapper {
                     error.putString("domain","");
                     event.putMap("error", error);
                     EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
-                    for (AdListener adListener : attachedAdListeners)
-                    {
-                        adListener.onAdFailedToLoad(adError);
+                    //use Iterator to prevent concurrentModificationException in ArrayList
+                    Iterator<AdListener> itr = attachedAdListeners.iterator();
+                    while (itr.hasNext()){
+                        itr.next().onAdFailedToLoad(adError);
                     }
                     return;
                 }
@@ -148,9 +151,10 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 if (loadingAdRequestCount == 0){
                     fillAds();//<-try to fill up if still not full
                 }
-                for (AdListener adListener : attachedAdListeners)
-                {
-                    adListener.onAdLoaded();
+                //use Iterator to prevent concurrentModificationException in ArrayList
+                Iterator<AdListener> itr = attachedAdListeners.iterator();
+                while (itr.hasNext()){
+                    itr.next().onAdLoaded();
                 }
             }
 
