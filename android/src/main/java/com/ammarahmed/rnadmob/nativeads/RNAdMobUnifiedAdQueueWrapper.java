@@ -63,7 +63,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 super.onAdFailedToLoad(adError);
                 if (mediation) {
                     loadingAdRequestCount--;
-                }else{
+                } else {
                     loadingAdRequestCount = 0;
                 }
 
@@ -75,45 +75,46 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 }
 
                 if (stopPreloading) {
-                        WritableMap event = Arguments.createMap();
-                        WritableMap error = Arguments.createMap();
-                        error.putString("message", adError.getMessage());
-                        error.putInt("code", adError.getCode());
-                        error.putString("domain", adError.getDomain());
-                        event.putMap("error", error);
-                        EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
-                        //use Iterator to prevent concurrentModificationException in ArrayList
-                        Iterator<AdListener> itr = attachedAdListeners.iterator();
-                        while (itr.hasNext()){
-                            itr.next().onAdFailedToLoad(adError);
-                        }
-                return;
+                    WritableMap event = Arguments.createMap();
+                    WritableMap error = Arguments.createMap();
+                    error.putString("message", adError.getMessage());
+                    error.putInt("code", adError.getCode());
+                    error.putString("domain", adError.getDomain());
+                    event.putMap("error", error);
+                    EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
+                    //use Iterator to prevent concurrentModificationException in ArrayList
+                    AdListener[] array = attachedAdListeners.toArray(new AdListener[0]);
+                    for (AdListener item : array) {
+                        item.onAdFailedToLoad(adError);
+                    }
+                    return;
                 }
 
-                if (retryCount>=totalRetryCount){
+                if (retryCount >= totalRetryCount) {
                     WritableMap event = Arguments.createMap();
                     WritableMap error = Arguments.createMap();
                     error.putString("message", "reach maximum retry");
                     error.putInt("code", AdRequest.ERROR_CODE_INTERNAL_ERROR);
-                    error.putString("domain","");
+                    error.putString("domain", "");
                     event.putMap("error", error);
                     EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
                     //use Iterator to prevent concurrentModificationException in ArrayList
-                    Iterator<AdListener> itr = attachedAdListeners.iterator();
-                    while (itr.hasNext()){
-                        itr.next().onAdFailedToLoad(adError);
+                    AdListener[] array = attachedAdListeners.toArray(new AdListener[0]);
+                    for (AdListener item : array) {
+                        item.onAdFailedToLoad(adError);
                     }
                     return;
                 }
-                    retryCount++;
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            fillAds();
-                        }
-                    }, retryDelay);
+                retryCount++;
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fillAds();
+                    }
+                }, retryDelay);
 
             }
+
             @Override
             public void onAdImpression() {
                 super.onAdImpression();
@@ -145,16 +146,16 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 retryCount = 0;
                 if (mediation) {
                     loadingAdRequestCount--;
-                }else{
+                } else {
                     loadingAdRequestCount = 0;
                 }
-                if (loadingAdRequestCount == 0){
+                if (loadingAdRequestCount == 0) {
                     fillAds();//<-try to fill up if still not full
                 }
                 //use Iterator to prevent concurrentModificationException in ArrayList
-                Iterator<AdListener> itr = attachedAdListeners.iterator();
-                while (itr.hasNext()){
-                    itr.next().onAdLoaded();
+                AdListener[] array = attachedAdListeners.toArray(new AdListener[0]);
+                for (AdListener item : array) {
+                    item.onAdLoaded();
                 }
             }
 
@@ -219,10 +220,12 @@ public class RNAdMobUnifiedAdQueueWrapper {
     }
 
     public void fillAds() {
-        int require2fill = totalAds-nativeAds.size();
-        if (require2fill <= 0 || isLoading()) {return;}
-        Log.i("AdMob repo","require to load >" + require2fill+ "< ads more");
-        loadingAdRequestCount =  require2fill;
+        int require2fill = totalAds - nativeAds.size();
+        if (require2fill <= 0 || isLoading()) {
+            return;
+        }
+        Log.i("AdMob repo", "require to load >" + require2fill + "< ads more");
+        loadingAdRequestCount = require2fill;
         if (mediation) {
             for (int i = 0; i < require2fill; i++) {
                 adLoader.loadAd(adRequest.build());
@@ -233,28 +236,32 @@ public class RNAdMobUnifiedAdQueueWrapper {
     }
 
     public RNAdMobUnifiedAdContainer getAd() {
-        if (nativeAds.isEmpty()) { return  null;}
+        if (nativeAds.isEmpty()) {
+            return null;
+        }
         long now = System.currentTimeMillis();
         RNAdMobUnifiedAdContainer ad = null;
-            Collections.sort(nativeAds, new RNAdMobUnifiedAdComparator());
-            List<RNAdMobUnifiedAdContainer> discardItems = new ArrayList<>();
-            for (RNAdMobUnifiedAdContainer item : nativeAds) {
-                if ((now - item.loadTime) < expirationInterval) {
-                    ad = item;//acceptable ad found
-                    break;
-                } else {
-                    if (item.references <= 0) {
-                        discardItems.add(item);
-                    }
+        Collections.sort(nativeAds, new RNAdMobUnifiedAdComparator());
+        List<RNAdMobUnifiedAdContainer> discardItems = new ArrayList<>();
+        for (RNAdMobUnifiedAdContainer item : nativeAds) {
+            if ((now - item.loadTime) < expirationInterval) {
+                ad = item;//acceptable ad found
+                break;
+            } else {
+                if (item.references <= 0) {
+                    discardItems.add(item);
                 }
             }
-            for (RNAdMobUnifiedAdContainer item : discardItems) {
-                item.unifiedNativeAd.destroy();
-                nativeAds.remove(item);
-            }
+        }
+        for (RNAdMobUnifiedAdContainer item : discardItems) {
+            item.unifiedNativeAd.destroy();
+            nativeAds.remove(item);
+        }
 
         fillAds();
-        if (ad == null) {return null;}
+        if (ad == null) {
+            return null;
+        }
         ad.showCount += 1;
         ad.references += 1;
         return ad;
@@ -262,7 +269,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
 
     public Boolean isLoading() {
         if (adLoader != null) {
-            return adLoader.isLoading() ||  loadingAdRequestCount > 0;
+            return adLoader.isLoading() || loadingAdRequestCount > 0;
         }
         return false;
     }
