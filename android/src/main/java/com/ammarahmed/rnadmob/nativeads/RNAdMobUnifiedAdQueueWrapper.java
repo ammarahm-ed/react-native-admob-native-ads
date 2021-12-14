@@ -66,6 +66,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 } else {
                     loadingAdRequestCount = 0;
                 }
+                if (loadingAdRequestCount > 0) {return;}//wait until all request failed
 
                 boolean stopPreloading = false;
                 switch (adError.getCode()) {
@@ -82,11 +83,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
                     error.putString("domain", adError.getDomain());
                     event.putMap("error", error);
                     EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
-                    //use Iterator to prevent concurrentModificationException in ArrayList
-                    AdListener[] array = attachedAdListeners.toArray(new AdListener[0]);
-                    for (AdListener item : array) {
-                        item.onAdFailedToLoad(adError);
-                    }
+                    notifyOnAdsLoadFailed(adError);
                     return;
                 }
 
@@ -98,11 +95,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
                     error.putString("domain", "");
                     event.putMap("error", error);
                     EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
-                    //use Iterator to prevent concurrentModificationException in ArrayList
-                    AdListener[] array = attachedAdListeners.toArray(new AdListener[0]);
-                    for (AdListener item : array) {
-                        item.onAdFailedToLoad(adError);
-                    }
+                    notifyOnAdsLoadFailed(adError);
                     return;
                 }
                 retryCount++;
@@ -149,21 +142,30 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 } else {
                     loadingAdRequestCount = 0;
                 }
-                if (loadingAdRequestCount == 0) {
+                notifyOnAdsLoaded();
+                if (loadingAdRequestCount == 0) { //wait until all requests finish
                     fillAds();//<-try to fill up if still not full
                 }
-                //use Iterator to prevent concurrentModificationException in ArrayList
-                AdListener[] array = attachedAdListeners.toArray(new AdListener[0]);
-                for (AdListener item : array) {
-                    item.onAdLoaded();
-                }
             }
-
-
         };
 
         setConfiguration(config);
 
+    }
+
+    private void  notifyOnAdsLoadFailed(LoadAdError adError){
+        //use Iterator to prevent concurrentModificationException in ArrayList
+        AdListener[] array = attachedAdListeners.toArray(new AdListener[0]);
+        for (AdListener item : array) {
+            item.onAdFailedToLoad(adError);
+        }
+    }
+    private void  notifyOnAdsLoaded(){
+        //use Iterator to prevent concurrentModificationException in ArrayList
+        AdListener[] array = attachedAdListeners.toArray(new AdListener[0]);
+        for (AdListener item : array) {
+            item.onAdLoaded();
+        }
     }
 
     public void attachAdListener(AdListener listener) {

@@ -62,8 +62,6 @@ public class RNAdmobNativeView extends LinearLayout {
     private String admobAdUnitId = "";
     private Handler handler;
 
-
-
     AdListener adListener = new AdListener() {
 
         @Override
@@ -76,16 +74,10 @@ public class RNAdmobNativeView extends LinearLayout {
             error.putString("domain", loadAdError.getDomain());
             event.putMap("error", error);
             loadingAd = false;
-
-            if (handler != null) {
-                retryRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        loadAd();
-                    }
-                };
-                handler.postDelayed(retryRunnable, adRefreshInterval);
+            if (adRepo != null) {
+                 CacheManager.instance.detachAdListener(adRepo,adListener);
             }
+            sendEvent(RNAdmobNativeViewManager.EVENT_AD_FAILED_TO_LOAD, event);
         }
 
         @Override
@@ -263,7 +255,7 @@ public class RNAdmobNativeView extends LinearLayout {
             } else {
                 args.putString("icon", "noicon");
             }
-            
+
             sendEvent(RNAdmobNativeViewManager.EVENT_NATIVE_AD_LOADED,args);
 
         } catch (Exception e) {
