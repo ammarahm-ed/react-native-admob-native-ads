@@ -6,11 +6,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OnUnifiedNativeAdLoadedListener.h"
+#import "UnifiedNativeAdLoadedListener.h"
 #import "RNAdMobUnifiedAdContainer.h"
 #import "EventEmitter.h"
 #import "CacheManager.h"
-@implementation OnUnifiedNativeAdLoadedListener
+@implementation UnifiedNativeAdLoadedListener
 -(instancetype) initWithRepo:(NSString *)repo nativeAds:(NSMutableArray<RNAdMobUnifiedAdContainer *> *) nativeAds tAds:(int)tAds{
     _repo = repo;
     _nativeAds = nativeAds;

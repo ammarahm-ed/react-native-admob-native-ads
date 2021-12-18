@@ -1,9 +1,12 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.NativeAdListener;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
@@ -18,6 +21,7 @@ import com.google.android.gms.ads.nativead.NativeAdOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class RNAdMobUnifiedAdQueueWrapper {
@@ -26,10 +30,14 @@ public class RNAdMobUnifiedAdQueueWrapper {
     public String name;
     public Integer totalAds = 5;
     public long expirationInterval = 3600000; // in ms
+    public int totalRetryCount = 10;
+    public long retryDelay = 3000;
+    private int retryCount = 0;
     public Boolean muted = true;
     public Boolean mediation = false;
     public List<RNAdMobUnifiedAdContainer> nativeAds;
-    AdListener attachedAdListener;
+    //AdListener attached to attachedAdListeners list,if they are waiting for load ads
+    List<AdListener> attachedAdListeners = new ArrayList<>();
     Context mContext;
     int loadingAdRequestCount = 0;
 
@@ -38,7 +46,8 @@ public class RNAdMobUnifiedAdQueueWrapper {
     AdListener adListener;
     private AdLoader adLoader;
     private AdManagerAdRequest.Builder adRequest;
-    private onUnifiedNativeAdLoadedListener unifiedNativeAdLoadedListener;
+    private UnifiedNativeAdLoadedListener unifiedNativeAdLoadedListener;
+    private final Handler handler = new Handler();
 
     public RNAdMobUnifiedAdQueueWrapper(Context context, ReadableMap config, String repository) {
         mContext = context;
@@ -54,9 +63,10 @@ public class RNAdMobUnifiedAdQueueWrapper {
                 super.onAdFailedToLoad(adError);
                 if (mediation) {
                     loadingAdRequestCount--;
-                }else{
+                } else {
                     loadingAdRequestCount = 0;
                 }
+                if (loadingAdRequestCount > 0) {return;}//wait until all request failed
 
                 boolean stopPreloading = false;
                 switch (adError.getCode()) {
@@ -65,62 +75,77 @@ public class RNAdMobUnifiedAdQueueWrapper {
                         stopPreloading = true;
                 }
 
-                if (attachedAdListener == null) {
-                    if (stopPreloading) {
-                        WritableMap event = Arguments.createMap();
-                        WritableMap error = Arguments.createMap();
-                        error.putString("message", adError.getMessage());
-                        error.putInt("code", adError.getCode());
-                        error.putString("domain", adError.getDomain());
-                        event.putMap("error", error);
-                        EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
-                    }
+                if (stopPreloading) {
+                    WritableMap event = Arguments.createMap();
+                    WritableMap error = Arguments.createMap();
+                    error.putString("message", adError.getMessage());
+                    error.putInt("code", adError.getCode());
+                    error.putString("domain", adError.getDomain());
+                    event.putMap("error", error);
+                    EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
+                    notifyOnAdsLoadFailed(adError);
                     return;
                 }
-                attachedAdListener.onAdFailedToLoad(adError);
-            }
 
-            @Override
-            public void onAdClosed() {
-                super.onAdClosed();
-                if (attachedAdListener == null) return;
-                attachedAdListener.onAdClosed();
-            }
-
-            @Override
-            public void onAdOpened() {
-                super.onAdOpened();
-                if (attachedAdListener == null) return;
-                attachedAdListener.onAdOpened();
-            }
-
-            @Override
-            public void onAdClicked() {
-                super.onAdClicked();
-                if (attachedAdListener == null) return;
-                attachedAdListener.onAdClicked();
-            }
-
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                if (mediation) {
-                    loadingAdRequestCount--;
-                }else{
-                    loadingAdRequestCount = 0;
+                if (retryCount >= totalRetryCount) {
+                    WritableMap event = Arguments.createMap();
+                    WritableMap error = Arguments.createMap();
+                    error.putString("message", "reach maximum retry");
+                    error.putInt("code", AdRequest.ERROR_CODE_INTERNAL_ERROR);
+                    error.putString("domain", "");
+                    event.putMap("error", error);
+                    EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR, event);
+                    notifyOnAdsLoadFailed(adError);
+                    return;
                 }
-                if (loadingAdRequestCount == 0){
-                    fillAds();//<-try to fill up if still not full
-                }
-                if (attachedAdListener == null) return;
-                attachedAdListener.onAdLoaded();
+                retryCount++;
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fillAds();
+                    }
+                }, retryDelay);
+
             }
 
             @Override
             public void onAdImpression() {
                 super.onAdImpression();
-                if (attachedAdListener == null) return;
-                attachedAdListener.onAdImpression();
+                EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_IMPRESSION, null);
+            }
+
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_CLOSED, null);
+            }
+
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+                EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_OPEN, null);
+            }
+
+            @Override
+            public void onAdClicked() {
+                super.onAdClicked();
+                EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_CLICKED, null);
+
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                retryCount = 0;
+                if (mediation) {
+                    loadingAdRequestCount--;
+                } else {
+                    loadingAdRequestCount = 0;
+                }
+                notifyOnAdsLoaded();
+                if (loadingAdRequestCount == 0) { //wait until all requests finish
+                    fillAds();//<-try to fill up if still not full
+                }
             }
         };
 
@@ -128,15 +153,36 @@ public class RNAdMobUnifiedAdQueueWrapper {
 
     }
 
-    public void attachAdListener(AdListener listener) {
-        attachedAdListener = listener;
+    private void  notifyOnAdsLoadFailed(LoadAdError adError){
+        //use Iterator to prevent concurrentModificationException in ArrayList
+        AdListener[] array = attachedAdListeners.toArray(new AdListener[0]);
+        for (AdListener item : array) {
+            item.onAdFailedToLoad(adError);
+        }
+    }
+    private void  notifyOnAdsLoaded(){
+        //use Iterator to prevent concurrentModificationException in ArrayList
+        AdListener[] array = attachedAdListeners.toArray(new AdListener[0]);
+        for (AdListener item : array) {
+            item.onAdLoaded();
+        }
     }
 
-    public void detachAdListener() {
-        attachedAdListener = null;
+    public void attachAdListener(AdListener listener) {
+        attachedAdListeners.add(listener);
+    }
+
+    public void detachAdListener(AdListener listener) {
+        attachedAdListeners.remove(listener);
     }
 
     public void setConfiguration(ReadableMap config) {
+        if (config.hasKey("retryDelay")) {
+            retryDelay = config.getInt("retryDelay");
+        }
+        if (config.hasKey("totalRetryCount")) {
+            totalRetryCount = config.getInt("totalRetryCount");
+        }
         if (config.hasKey("numOfAds")) {
             totalAds = config.getInt("numOfAds");
         }
@@ -168,7 +214,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
         Utils.setTargetingOptions(config.getMap("targetingOptions"), adRequest);
         Utils.setMediationOptions(config.getMap("mediationOptions"), adRequest);
 
-        unifiedNativeAdLoadedListener = new onUnifiedNativeAdLoadedListener(name, nativeAds,
+        unifiedNativeAdLoadedListener = new UnifiedNativeAdLoadedListener(name, nativeAds,
                 totalAds, mContext);
         AdLoader.Builder builder = new AdLoader.Builder(mContext, adUnitId);
         builder.forNativeAd(unifiedNativeAdLoadedListener);
@@ -176,10 +222,12 @@ public class RNAdMobUnifiedAdQueueWrapper {
     }
 
     public void fillAds() {
-        int require2fill = totalAds-nativeAds.size();
-        if (require2fill <= 0 || isLoading()) {return;}
-        Log.i("AdMob repo","require to load >" + require2fill+ "< ads more");
-        loadingAdRequestCount =  require2fill;
+        int require2fill = totalAds - nativeAds.size();
+        if (require2fill <= 0 || isLoading()) {
+            return;
+        }
+        Log.i("AdMob repo", "require to load >" + require2fill + "< ads more");
+        loadingAdRequestCount = require2fill;
         if (mediation) {
             for (int i = 0; i < require2fill; i++) {
                 adLoader.loadAd(adRequest.build());
@@ -190,28 +238,32 @@ public class RNAdMobUnifiedAdQueueWrapper {
     }
 
     public RNAdMobUnifiedAdContainer getAd() {
-        if (nativeAds.isEmpty()) { return  null;}
+        if (nativeAds.isEmpty()) {
+            return null;
+        }
         long now = System.currentTimeMillis();
         RNAdMobUnifiedAdContainer ad = null;
-            Collections.sort(nativeAds, new RNAdMobUnifiedAdComparator());
-            List<RNAdMobUnifiedAdContainer> discardItems = new ArrayList<>();
-            for (RNAdMobUnifiedAdContainer item : nativeAds) {
-                if ((now - item.loadTime) < expirationInterval) {
-                    ad = item;//acceptable ad found
-                    break;
-                } else {
-                    if (item.references <= 0) {
-                        discardItems.add(item);
-                    }
+        Collections.sort(nativeAds, new RNAdMobUnifiedAdComparator());
+        List<RNAdMobUnifiedAdContainer> discardItems = new ArrayList<>();
+        for (RNAdMobUnifiedAdContainer item : nativeAds) {
+            if ((now - item.loadTime) < expirationInterval) {
+                ad = item;//acceptable ad found
+                break;
+            } else {
+                if (item.references <= 0) {
+                    discardItems.add(item);
                 }
             }
-            for (RNAdMobUnifiedAdContainer item : discardItems) {
-                item.unifiedNativeAd.destroy();
-                nativeAds.remove(item);
-            }
+        }
+        for (RNAdMobUnifiedAdContainer item : discardItems) {
+            item.unifiedNativeAd.destroy();
+            nativeAds.remove(item);
+        }
 
         fillAds();
-        if (ad == null) {return null;}
+        if (ad == null) {
+            return null;
+        }
         ad.showCount += 1;
         ad.references += 1;
         return ad;
@@ -219,7 +271,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
 
     public Boolean isLoading() {
         if (adLoader != null) {
-            return adLoader.isLoading() ||  loadingAdRequestCount > 0;
+            return adLoader.isLoading() || loadingAdRequestCount > 0;
         }
         return false;
     }

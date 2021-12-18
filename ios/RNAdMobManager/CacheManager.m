@@ -54,10 +54,10 @@ static CacheManager *_sharedInstance = nil;
     }
   
 }
--(void) detachAdListener:(NSString*) id{
+-(void) detachAdListener:(NSString*) id listener:(id<AdListener>)listener{
     RNAdMobUnifiedAdQueueWrapper *repo =  (RNAdMobUnifiedAdQueueWrapper *)([repositoriesMap objectForKey:id]);
     if (repo != nil){
-        [repo detachAdListener];
+        [repo detachAdListener:listener];
     }
 }
 -(NSDictionary*)registerRepo:(NSDictionary*) config{

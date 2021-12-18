@@ -12,13 +12,13 @@ import java.lang.Long;
 import java.util.List;
 import java.util.PriorityQueue;
 
-public class onUnifiedNativeAdLoadedListener implements OnNativeAdLoadedListener {
+public class UnifiedNativeAdLoadedListener implements OnNativeAdLoadedListener {
     String repo;
     List<RNAdMobUnifiedAdContainer> nativeAds;
     Context mContext;
     Integer totalAds;
 
-    public onUnifiedNativeAdLoadedListener(String repo, List<RNAdMobUnifiedAdContainer> nativeAds, Integer tAds, Context context) {
+    public UnifiedNativeAdLoadedListener(String repo, List<RNAdMobUnifiedAdContainer> nativeAds, Integer tAds, Context context) {
         this.repo = repo;
         this.nativeAds = nativeAds;
         this.mContext = context;
