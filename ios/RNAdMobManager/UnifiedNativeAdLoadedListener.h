@@ -10,7 +10,7 @@
 #import "RNAdMobUnifiedAdContainer.h"
 @import GoogleMobileAds;
 
-@interface OnUnifiedNativeAdLoadedListener : NSObject<GADNativeAdLoaderDelegate>
+@interface UnifiedNativeAdLoadedListener : NSObject<GADNativeAdLoaderDelegate>
 
 - (instancetype)initWithRepo:(NSString *)repo nativeAds:(NSMutableArray<RNAdMobUnifiedAdContainer *> *) nativeAds  tAds:(int)tAds;
 @property(nonatomic, readwrite) NSString* repo;

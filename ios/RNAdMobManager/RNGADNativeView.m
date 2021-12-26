@@ -72,6 +72,7 @@ BOOL *nonPersonalizedAds;
     if(newSuperview == nil){
         // UIView was removed from superview
         unifiedNativeAdContainer.references -= 1;
+        [CacheManager.sharedInstance detachAdListener:adRepo listener:self];
     } else {
         // UIView was added to superview
     }
@@ -614,7 +615,7 @@ BOOL *nonPersonalizedAds;
 -(void)didAdLoaded:(GADNativeAd *)nativeAd{
     isLoading = FALSE;
     if (adRepo != nil){
-        [CacheManager.sharedInstance detachAdListener:adRepo];
+        [CacheManager.sharedInstance detachAdListener:adRepo listener:self];
         [self loadAd];
     }
     [EventEmitter.sharedInstance sendEvent:RNGADNativeViewManager.EVENT_AD_LOADED dict:nil];

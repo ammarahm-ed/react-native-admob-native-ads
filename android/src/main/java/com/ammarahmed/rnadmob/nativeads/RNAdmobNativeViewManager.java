@@ -261,6 +261,9 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     public void onDropViewInstance(@NonNull RNAdmobNativeView nativeAdWrapper) {
         super.onDropViewInstance(nativeAdWrapper);
         nativeAdWrapper.removeHandler();
+
+        CacheManager.instance.detachAdListener(nativeAdWrapper.getAdRepo(),nativeAdWrapper.adListener);
+
         if (nativeAdWrapper.nativeAd != null){
             if (nativeAdWrapper.unifiedNativeAdContainer != null){
                 nativeAdWrapper.unifiedNativeAdContainer.references -= 1;
