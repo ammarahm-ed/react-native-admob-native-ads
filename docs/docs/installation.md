@@ -28,6 +28,12 @@ Add your AdMob App ID to `AndroidManifest.xml`, as described in the [Google Mobi
 
 Follow the guide to add [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project. Also don't forget to update your info.plist file to add AppID.
 
+Also add the following to your podfile:
+
+```
+pod 'GoogleMobileAdsMediationFacebook'
+```
+
 After configuring your project as mentioned in the above guide you must run:
 
 ```bash
