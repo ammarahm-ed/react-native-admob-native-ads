@@ -68,7 +68,7 @@ Style for your NativeAdView.
 Set Ad Unit ID for Native Advanced Ads that you created on your AdMob account.
 
 | Type     | Required | Platform |
-| -------- | -------- | -------- |
+|----------|----------|----------|
 | `string` | Yes      | All      |
 
 :::tip
@@ -88,7 +88,7 @@ During development you should never use your Admob IDs. Instead you can grab the
 Setting this to true will load a placeholder ad (Not from Admob server) incase you have no internet etc so you can design your ad as you want with ease. Remember to set the `adUnitID` to null when using this so the placeholder ad is not replaced by a real ad.
 
 | Type      | Required | Platform |
-| --------- | -------- | -------- |
+|-----------|----------|----------|
 | `boolean` | no       | All      |
 
 ### `adChoicesPlacement`
@@ -98,7 +98,7 @@ Placement of AdChoices can be in any of the 4 corners of the ad
 **AdOptions.adChoicesPlacement**
 
 | Value       | Description                                     |
-| ----------- | ----------------------------------------------- |
+|-------------|-------------------------------------------------|
 | topLeft     | Show AdChoices on top right corner of the Ad    |
 | topRight    | Show AdChoices on top lef corner of the Ad      |
 | bottomLeft  | Show AdChoices on bottom right corner of the Ad |
@@ -110,13 +110,13 @@ Placement of AdChoices can be in any of the 4 corners of the ad
 
 You can specify to Admob what kind of ad you want to recieve however it is not guarenteed that you will recieve the same ad you requested.
 
-| Value     | Description                                     |
-| --------- | ----------------------------------------------- |
-| unknown   | Show whatever ad is available    |
-| any       | Any ads are prefferred.     |
+| Value     | Description                   |
+|-----------|-------------------------------|
+| unknown   | Show whatever ad is available |
+| any       | Any ads are prefferred.       |
 | landscape | Landscape ads are prefferred. |
 | portrait  | Portrait ads are prefferred.  |
-| square    | Square ads are prefferred.  |
+| square    | Square ads are prefferred.    |
 
 `default: any`
 
@@ -134,5 +134,5 @@ there and then pass the consent to this library. If user has selected
 non-personalized-ads then pass `true` and non-personalized ads will be shown to the user.
 
 | Type      | Required | Platform |
-| --------- | -------- | -------- |
+|-----------|----------|----------|
 | `boolean` | no       | All      |

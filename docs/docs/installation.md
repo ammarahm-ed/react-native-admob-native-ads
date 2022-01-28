@@ -4,21 +4,20 @@ title: Installation
 sidebar_label: Installation
 ---
 
-If you are using `react-native >= 0.60` you just need to do a simple:
-
     npm install react-native-admob-native-ads --save
+
 
 or if you use yarn:
 
     yarn add react-native-admob-native-ads
 
-You also need to install `react-native-vector-icons`:
+You also need to install `react-native-vector-icons` to use `StarRatingView`. 
 
 ```bash
 yarn add react-native-vector-icons
 ```
+Complete setup of [react-native-vector-icons ](https://github.com/oblador/react-native-vector-icons) for iOS & Android.
 
-Don't forget to setup [react-native-vector-icons ](https://github.com/oblador/react-native-vector-icons) as the guide states for iOS & Android
 
 ## Android Setup
 
@@ -28,18 +27,49 @@ Add your AdMob App ID to `AndroidManifest.xml`, as described in the [Google Mobi
 
 Follow the guide to add [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project. Also don't forget to update your info.plist file to add AppID.
 
-Also add the following to your podfile:
-
-```
-pod 'GoogleMobileAdsMediationFacebook'
-```
-
 After configuring your project as mentioned in the above guide you must run:
 
 ```bash
 pod install
 ```
 
-## Requesting IDFA on iOS 14
+### Requesting IDFA on iOS 14
 
 On iOS 14 onwards, you need to request IDFA access through App Tracking Transparency Dialog to show targeted ads to the user. For that you can use [react-native-tracking-transparency](https://github.com/mrousavy/react-native-tracking-transparency).
+
+## Generate your Native Ad Ids
+Before you can show any ads, you will need to generate Admob Ids on your Admob account. For debugging you can use test ad ids provided by google given below:
+
+### Android
+
+| Type                  | ID                                     |
+|-----------------------|----------------------------------------|
+| Native Advanced       | ca-app-pub-3940256099942544/2247696110 |
+| Native Advanced Video | ca-app-pub-3940256099942544/1044960115 |
+
+### iOS
+
+| Type                  | ID                                     |
+|-----------------------|----------------------------------------|
+| Native Advanced       | ca-app-pub-3940256099942544/3986624511 |
+| Native Advanced Video | ca-app-pub-3940256099942544/2521693316 |
+
+## Enable Test Device
+A test device can be registered on App launch with `AdManager`:
+
+```jsx
+import {AdManager} from "react-native-admob-native-ads";
+
+AdManager.setRequestConfiguration({
+        testDeviceIds:["Your test device id"];
+});
+```
+To get your device test ids, follow the guide for [iOS](https://developers.google.com/admob/ios/test-ads#enable_test_devices) & [Android](https://developers.google.com/admob/ios/test-ads#enable_test_devices).
+
+:::caution
+
+When you newly generate your ad ids from Admob account and implement them in the app. It can take a few hours to a day for ads to show up. So be patient or use the test ids above for testing.
+
+:::
+
+
