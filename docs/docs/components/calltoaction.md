@@ -33,17 +33,6 @@ Style the outer `View` Component.
 
 Style the inner `Text` Component
 
-### `buttonAndroidStyle`
-
-Style the button on android using this prop.
-
-| Property        | Type                          | Required | Platform |
-| --------------- | ----------------------------- | -------- | -------- |
-| backgroundColor | 6 digit hex color string only | No       | All      |
-| borderColor     | 6 digit hex color string only | No       | All      |
-| borderWidth     | `number`                      | No       | All      |
-| borderRadius    | `number`                      | No       | All      |
-
 ### `allowFontScaling`
 
 Allow font scaling on text
