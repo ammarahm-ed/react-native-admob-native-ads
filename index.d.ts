@@ -135,7 +135,7 @@ type MediationAdapterStatus = {
 
 type AdRepositoryConfig = {
   /** Name for this repository. If name is not provided, adUnitId will
-   * will be used as repository name.
+   *  be used as repository name.
    */
   name?: string;
   /** **(Required)** Provide adUnitId to load ads. */

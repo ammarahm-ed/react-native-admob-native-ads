@@ -4,18 +4,30 @@ title: Installation
 sidebar_label: Installation
 ---
 
-    npm install react-native-admob-native-ads --save
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 
-or if you use yarn:
+<Tabs>
+  <TabItem value="npm" label="npm" default>
+   <pre> npm install react-native-admob-native-ads --save </pre>
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+   <pre> yarn add react-native-admob-native-ads </pre>
+  </TabItem>
+</Tabs>
 
-    yarn add react-native-admob-native-ads
+Install `react-native-vector-icons` to use `StarRatingView`. 
 
-You also need to install `react-native-vector-icons` to use `StarRatingView`. 
+<Tabs>
+  <TabItem value="npm" label="npm" default>
+   <pre>npm install react-native-vector-icons --save</pre> 
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+   <pre>yarn add react-native-vector-icons</pre>
+  </TabItem>
+</Tabs>
 
-```bash
-yarn add react-native-vector-icons
-```
 Complete setup of [react-native-vector-icons ](https://github.com/oblador/react-native-vector-icons) for iOS & Android.
 
 
@@ -23,14 +35,32 @@ Complete setup of [react-native-vector-icons ](https://github.com/oblador/react-
 
 Add your AdMob App ID to `AndroidManifest.xml`, as described in the [Google Mobile Ads SDK documentation](https://developers.google.com/admob/android/quick-start#update_your_androidmanifestxml).
 
+```xml
+<manifest>
+    <application>
+        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy"/>
+    </application>
+</manifest>
+```
+
 ## iOS Setup
 
-Follow the guide to add [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project. Also don't forget to update your info.plist file to add AppID.
+Follow the guide to add [Google Mobile Ads SDK](https://developers.google.com/admob/ios/quick-start#import_the_mobile_ads_sdk) to your Xcode project.
 
-After configuring your project as mentioned in the above guide you must run:
+1. In your `Podfile`:
+
+```
+pod 'Google-Mobile-Ads-SDK'
+```
+2. Update your `info.plist` file as mentioned in [Admob Documentation](https://developers.google.com/admob/ios/quick-start#update_your_infoplist)
+
+After configuring your project run:
 
 ```bash
-pod install
+pod install --repo-update
 ```
 
 ### Requesting IDFA on iOS 14
