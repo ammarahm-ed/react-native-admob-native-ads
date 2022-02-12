@@ -27,4 +27,5 @@ Pod::Spec.new do |s|
   }
 
   s.dependency 'React-Core'
+  s.dependency 'Google-Mobile-Ads-SDK', '~>9.0.0'
 end

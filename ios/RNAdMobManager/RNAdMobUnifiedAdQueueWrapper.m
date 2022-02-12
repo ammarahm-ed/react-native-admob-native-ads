@@ -127,7 +127,7 @@
         multipleAdsOptions.numberOfAds = MAX(require2fill,0);
         [options addObject:multipleAdsOptions];
     }
-    adLoader = [[GADAdLoader alloc] initWithAdUnitID:_adUnitId rootViewController:nil adTypes:@[kGADAdLoaderAdTypeNative] options:options];
+    adLoader = [[GADAdLoader alloc] initWithAdUnitID:_adUnitId rootViewController:nil adTypes:@[GADAdLoaderAdTypeNative] options:options];
     [adLoader setDelegate:self];
 
     loadingAdRequestCount = require2fill;
