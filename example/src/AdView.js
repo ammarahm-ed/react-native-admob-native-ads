@@ -108,8 +108,10 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
      *
      * [STEP III] We will subscribe to onViewableItemsChanged event in all AdViews in the List.
      */
+    let onViewableItemsChangedHandler;
+    
     if (!loadOnMount) {
-      DeviceEventEmitter.addListener(
+     onViewableItemsChangedHandler = DeviceEventEmitter.addListener(
         Events.onViewableItemsChanged,
         onViewableItemsChanged,
       );
@@ -117,10 +119,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
 
     return () => {
       if (!loadOnMount) {
-        DeviceEventEmitter.removeListener(
-          Events.onViewableItemsChanged,
-          onViewableItemsChanged,
-        );
+        onViewableItemsChangedHandler.remove();
       }
     };
   }, [index, loadOnMount, loaded]);
