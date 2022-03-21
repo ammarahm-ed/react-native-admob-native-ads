@@ -1,4 +1,4 @@
-@import React;
+#import <React/RCTBridgeModule.h>
 
 @interface RNAdmobNativeAdsManager : NSObject <RCTBridgeModule>
 @end
