@@ -195,7 +195,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
             width: '100%',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             paddingHorizontal: 10,
             opacity: loading || error || !loaded ? 0 : 1,
           }}
@@ -208,8 +208,8 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
           />
           <View
             style={{
-              width: '60%',
-              maxWidth: '60%',
+              flexGrow:1,
+              flexShrink:1,
               paddingHorizontal: 6,
             }}
           >
@@ -269,20 +269,21 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
               },
               Platform.OS === 'ios'
                 ? {
-                    backgroundColor: '#00ff00',
-                    borderRadius: 5,
+                    backgroundColor: '#FFA500',
+                    borderRadius: 10,
                   }
                 : {},
             ]}
             buttonAndroidStyle={{
-              backgroundColor: '#00ff00',
-              borderRadius: 5,
+              backgroundColor: '#FFA500',
+              borderRadius: 10,
             }}
             allCaps
             textStyle={{
               fontSize: 13,
               flexWrap: 'wrap',
               textAlign: 'center',
+              color:'white'
             }}
           />
         </View>
