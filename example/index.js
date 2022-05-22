@@ -1,10 +1,10 @@
 /**
  * @format
  */
-import {AppRegistry, Platform} from 'react-native';
+import { AppRegistry, Platform } from 'react-native';
 import App from './App';
-import {name as appName} from './app.json';
-import {AdManager} from 'react-native-admob-native-ads';
+import { name as appName } from './app.json';
+import { AdManager } from 'react-native-admob-native-ads';
 
 AdManager.setRequestConfiguration({
   tagForChildDirectedTreatment: false,
@@ -26,8 +26,8 @@ AdManager.registerRepository({
   adUnitId: NATIVE_AD_ID,
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
-  videoOptions:{
-    mute: false
+  videoOptions: {
+    mute: false,
   },
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
@@ -41,8 +41,8 @@ AdManager.registerRepository({
   adUnitId: NATIVE_AD_VIDEO_ID,
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
-  videoOptions:{
-    mute: false
+  videoOptions: {
+    mute: false,
   },
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
@@ -56,7 +56,7 @@ AdManager.registerRepository({
   adUnitId: NATIVE_AD_VIDEO_ID,
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
-  videoOptions:{
+  videoOptions: {
     mute: false
   },
   expirationPeriod: 3600000, // in milliseconds (optional)

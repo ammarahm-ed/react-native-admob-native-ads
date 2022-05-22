@@ -1,5 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {ActivityIndicator, DeviceEventEmitter, Platform, Text, View} from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  ActivityIndicator,
+  DeviceEventEmitter,
+  Platform,
+  Text,
+  View
+} from 'react-native';
 import NativeAdView, {
   AdvertiserView,
   CallToActionView,
@@ -7,10 +13,10 @@ import NativeAdView, {
   IconView,
   StarRatingView,
   StoreView,
-  TaglineView,
+  TaglineView
 } from 'react-native-admob-native-ads';
-import {MediaView} from './MediaView';
-import {adUnitIDs, Events, Logger} from './utils';
+import { MediaView } from './MediaView';
+import { Events, Logger } from './utils';
 
 export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
   const [aspectRatio, setAspectRatio] = useState(1.5);
@@ -67,40 +73,43 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
     Logger('AD', 'LEFT', 'Ad left application');
   };
 
-  const onViewableItemsChanged = event => {
-    /**
-     * [STEP IV] We check if any AdViews are currently viewable.
-     */
-    let viewableAds = event.viewableItems.filter(
-      i => i.key.indexOf('ad') !== -1,
-    );
+  const onViewableItemsChanged = useCallback(
+    event => {
+      /**
+       * [STEP IV] We check if any AdViews are currently viewable.
+       */
+      let viewableAds = event.viewableItems.filter(
+        i => i.key.indexOf('ad') !== -1,
+      );
 
-    viewableAds.forEach(adView => {
-      if (adView.index === index && !loaded) {
-        /**
-         * [STEP V] If the ad is viewable and not loaded
-         * already, we will load the ad.
-         */
-        setLoading(true);
-        setLoaded(false);
-        setError(false);
-        Logger('AD', 'IN VIEW', 'Loading ' + index);
-        nativeAdRef.current?.loadAd();
-      } else {
-        /**
-         * We will not reload ads or load
-         * ads that are not viewable currently
-         * to save bandwidth and requests sent
-         * to server.
-         */
-        if (loaded) {
-          Logger('AD', 'IN VIEW', 'Loaded ' + index);
+      viewableAds.forEach(adView => {
+        if (adView.index === index && !loaded) {
+          /**
+           * [STEP V] If the ad is viewable and not loaded
+           * already, we will load the ad.
+           */
+          setLoading(true);
+          setLoaded(false);
+          setError(false);
+          Logger('AD', 'IN VIEW', 'Loading ' + index);
+          nativeAdRef.current?.loadAd();
         } else {
-          Logger('AD', 'NOT IN VIEW', index);
+          /**
+           * We will not reload ads or load
+           * ads that are not viewable currently
+           * to save bandwidth and requests sent
+           * to server.
+           */
+          if (loaded) {
+            Logger('AD', 'IN VIEW', 'Loaded ' + index);
+          } else {
+            Logger('AD', 'NOT IN VIEW', index);
+          }
         }
-      }
-    });
-  };
+      });
+    },
+    [index, loaded],
+  );
 
   useEffect(() => {
     /**
@@ -123,7 +132,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
         );
       }
     };
-  }, [index, loadOnMount, loaded]);
+  }, [index, loadOnMount, loaded, onViewableItemsChanged]);
 
   useEffect(() => {
     if (loadOnMount || index <= 15) {
@@ -135,7 +144,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
     return () => {
       setLoaded(false);
     };
-  }, [loadOnMount]);
+  }, [loadOnMount, index]);
 
   return (
     <NativeAdView
@@ -150,19 +159,20 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
       style={{
         width: '98%',
         alignSelf: 'center',
-        backgroundColor:"transparent"
+        backgroundColor: 'transparent',
       }}
       videoOptions={{
-        customControlsRequested:true,
+        customControlsRequested: true,
       }}
-       // adUnitID={type === 'image' ? adUnitIDs.image : adUnitIDs.video} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
+      // adUnitID={type === 'image' ? adUnitIDs.image : adUnitIDs.video} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
       repository={type === 'image' ? 'imageAd' : 'videoAd'}
-        >
+    >
       <View
         style={{
           width: '100%',
           alignItems: 'center',
-        }}>
+        }}
+      >
         <View
           style={{
             width: '100%',
@@ -173,7 +183,8 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
             alignItems: 'center',
             opacity: !loading && !error && loaded ? 0 : 1,
             zIndex: !loading && !error && loaded ? 0 : 10,
-          }}>
+          }}
+        >
           {loading && <ActivityIndicator size={28} color="#a9a9a9" />}
           {error && <Text style={{color: '#a9a9a9'}}>:-(</Text>}
         </View>
@@ -187,7 +198,8 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
             alignItems: 'center',
             paddingHorizontal: 10,
             opacity: loading || error || !loaded ? 0 : 1,
-          }}>
+          }}
+        >
           <IconView
             style={{
               width: 60,
@@ -199,7 +211,8 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
               width: '60%',
               maxWidth: '60%',
               paddingHorizontal: 6,
-            }}>
+            }}
+          >
             <HeadlineView
               hello="abc"
               style={{
@@ -224,7 +237,8 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-              }}>
+              }}
+            >
               <StoreView
                 style={{
                   fontSize: 12,
@@ -243,19 +257,23 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
           </View>
 
           <CallToActionView
-            style={[{
-              minHeight: 45,
-              paddingHorizontal: 12,
-              justifyContent: 'center',
-              alignItems: 'center',
-              elevation: 10,
-              maxWidth: 100,
-              width: 80,
-            },Platform.OS === "ios" ? {
-            backgroundColor: '#00ff00',
-            borderRadius: 5,
-          } : {}]}
-
+            style={[
+              {
+                minHeight: 45,
+                paddingHorizontal: 12,
+                justifyContent: 'center',
+                alignItems: 'center',
+                elevation: 10,
+                maxWidth: 100,
+                width: 80,
+              },
+              Platform.OS === 'ios'
+                ? {
+                    backgroundColor: '#00ff00',
+                    borderRadius: 5,
+                  }
+                : {},
+            ]}
             buttonAndroidStyle={{
               backgroundColor: '#00ff00',
               borderRadius: 5,
