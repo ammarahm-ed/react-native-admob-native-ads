@@ -4,7 +4,7 @@ title: NativeAdView
 sidebar_label: How to use
 ---
 
-NativeAdView wraps all your Ad components inside it and provides a `Context` through which each component gets the ad information it requires.
+NativeAdView wraps all your Ad components inside it and provides a `Context` through which each component loads an ad.
 
 ## Importing
 
@@ -45,6 +45,45 @@ const AdView = () => {
 };
 ```
 
+## Preloading ads
+You probably do not want the user to wait for the ad to load. Hence loading the ads before showing them makes the ad experience a lot better. From v0.6.0 of library, you can preload ads by a repository anywhere in the app.
+
+```jsx
+AdManager.registerRepository({
+  name: 'imageAd',
+  adUnitId: NATIVE_AD_ID,
+  numOfAds: 3,
+  nonPersonalizedAdsOnly: false,
+  videoOptions: {
+    mute: false,
+  },
+  expirationPeriod: 3600000, // in milliseconds (optional)
+  mediationEnabled: false,
+}).then(result => {
+  console.log('registered: ', result);
+});
+```
+
+And then later you can show the preloaded ads in the app. As soon as an ad is shown, it will be discarded from the repository and a new ad will be preloaded in it's place.
+
+```jsx
+const AdView = () => {
+  const nativeAdViewRef = useRef();
+  React.useEffect(() => {
+    nativeAdViewRef.current?.loadAd();
+  }, []);
+  return (
+    <NativeAdView
+      ref={nativeAdViewRef}
+      repository="imageAd"
+    >
+      <View>/* All other ad components */</View>
+    </NativeAdView>
+  );
+};
+```
+You can register multiple repositories. For example a repository for videoAds, imageAds, banners etc and so on. You are in full control.
+
 :::tip
 
 To prevent `NativeAdView` from rerendering and requesting new ads, you can wrap your component in `React.memo()` or use `React.PureComponent`.
@@ -63,13 +102,22 @@ From version `0.4.0` onwards ads do not refresh automatically to save bandwidth 
 
 Style for your NativeAdView.
 
-### `adUnitID`
+### `repository`
+Repositories preload ads for the NativeAdView and are useful to show ads instantly without any delay when user navigates to new screen.
 
 Set Ad Unit ID for Native Advanced Ads that you created on your AdMob account.
 
 | Type     | Required | Platform |
-| -------- | -------- | -------- |
+|----------|----------|----------|
 | `string` | Yes      | All      |
+
+### `adUnitID`
+
+Set Ad Unit ID for Native Advanced Ads that you created on your AdMob account. **If you are using repositories to preload ads, defining `adUnitID is not required.**
+ 
+| Type     | Required | Platform |
+|----------|----------|----------|
+| `string` | No       | All      |
 
 :::tip
 
@@ -88,7 +136,7 @@ During development you should never use your Admob IDs. Instead you can grab the
 Setting this to true will load a placeholder ad (Not from Admob server) incase you have no internet etc so you can design your ad as you want with ease. Remember to set the `adUnitID` to null when using this so the placeholder ad is not replaced by a real ad.
 
 | Type      | Required | Platform |
-| --------- | -------- | -------- |
+|-----------|----------|----------|
 | `boolean` | no       | All      |
 
 ### `adChoicesPlacement`
@@ -98,7 +146,7 @@ Placement of AdChoices can be in any of the 4 corners of the ad
 **AdOptions.adChoicesPlacement**
 
 | Value       | Description                                     |
-| ----------- | ----------------------------------------------- |
+|-------------|-------------------------------------------------|
 | topLeft     | Show AdChoices on top right corner of the Ad    |
 | topRight    | Show AdChoices on top lef corner of the Ad      |
 | bottomLeft  | Show AdChoices on bottom right corner of the Ad |
@@ -110,13 +158,13 @@ Placement of AdChoices can be in any of the 4 corners of the ad
 
 You can specify to Admob what kind of ad you want to recieve however it is not guarenteed that you will recieve the same ad you requested.
 
-| Value     | Description                                     |
-| --------- | ----------------------------------------------- |
-| unknown   | Show whatever ad is available    |
-| any       | Any ads are prefferred.     |
+| Value     | Description                   |
+|-----------|-------------------------------|
+| unknown   | Show whatever ad is available |
+| any       | Any ads are prefferred.       |
 | landscape | Landscape ads are prefferred. |
 | portrait  | Portrait ads are prefferred.  |
-| square    | Square ads are prefferred.  |
+| square    | Square ads are prefferred.    |
 
 `default: any`
 
@@ -134,5 +182,5 @@ there and then pass the consent to this library. If user has selected
 non-personalized-ads then pass `true` and non-personalized ads will be shown to the user.
 
 | Type      | Required | Platform |
-| --------- | -------- | -------- |
+|-----------|----------|----------|
 | `boolean` | no       | All      |

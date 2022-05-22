@@ -1,33 +1,23 @@
 /**
  * @format
  */
-import {AppRegistry, Platform} from 'react-native';
+import {AppRegistry} from 'react-native';
+import {AdManager, TestIds} from 'react-native-admob-native-ads';
 import App from './App';
 import {name as appName} from './app.json';
-import {AdManager} from 'react-native-admob-native-ads';
 
 AdManager.setRequestConfiguration({
   tagForChildDirectedTreatment: false,
 });
 
-const NATIVE_AD_ID =
-  Platform.OS === 'ios'
-    ? 'ca-app-pub-3940256099942544/3986624511'
-    : 'ca-app-pub-3940256099942544/2247696110';
-
-const NATIVE_AD_VIDEO_ID =
-  Platform.OS === 'ios'
-    ? 'ca-app-pub-3940256099942544/2521693316'
-    : 'ca-app-pub-3940256099942544/1044960115';
-
 // image test ad
 AdManager.registerRepository({
   name: 'imageAd',
-  adUnitId: NATIVE_AD_ID,
+  adUnitId: TestIds.Image,
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
-  videoOptions:{
-    mute: false
+  videoOptions: {
+    mute: false,
   },
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
@@ -38,11 +28,11 @@ AdManager.registerRepository({
 // unmute video test ad
 AdManager.registerRepository({
   name: 'videoAd',
-  adUnitId: NATIVE_AD_VIDEO_ID,
+  adUnitId: TestIds.Video,
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
-  videoOptions:{
-    mute: false
+  videoOptions: {
+    mute: false,
   },
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
@@ -53,11 +43,11 @@ AdManager.registerRepository({
 // mute video test ad
 AdManager.registerRepository({
   name: 'muteVideoAd',
-  adUnitId: NATIVE_AD_VIDEO_ID,
+  adUnitId: TestIds.Video,
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
-  videoOptions:{
-    mute: false
+  videoOptions: {
+    mute: false,
   },
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,

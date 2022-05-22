@@ -9,7 +9,7 @@ module.exports = {
       "nativeadview/targetingoptions-6",
       "nativeadview/videooptions-7",
     ],
-    AdManager: ["admanager/requestconfig-1", "admanager/testdevice-2"],
+    AdManager: ["admanager/requestconfig-1", "admanager/testdevice-2","admanager/repository-1"],
     "Child Components": [
       "components/adbadge",
       "components/headline",

@@ -28,7 +28,7 @@ Style the outer `NativeMediaView` Component.
 Mute/unmute the video.
 
 | Type      | Required | Platform |
-| --------- | -------- | -------- |
+|-----------|----------|----------|
 | `boolean` | no       | All      |
 
 `default:false`
@@ -38,7 +38,7 @@ Mute/unmute the video.
 Pause/play the video
 
 | Type      | Required | Platform |
-| --------- | -------- | -------- |
+|-----------|----------|----------|
 | `boolean` | no       | All      |
 
 `default:false`
@@ -66,7 +66,7 @@ Called when the video starts playing.
 Returns with the `duration` and `currentTime` when the video is playing.
 
 | Type       | Required | Platform |
-| ---------- | -------- | -------- |
+|------------|----------|----------|
 | `Progress` | no       | All      |
 
 `Progress:{ duration: string, currentTime: string }`
