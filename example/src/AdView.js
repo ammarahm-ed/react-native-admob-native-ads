@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   DeviceEventEmitter,
   Platform,
   Text,
-  View
+  View,
 } from 'react-native';
 import NativeAdView, {
   AdvertiserView,
@@ -13,10 +13,10 @@ import NativeAdView, {
   IconView,
   StarRatingView,
   StoreView,
-  TaglineView
+  TaglineView,
 } from 'react-native-admob-native-ads';
-import { MediaView } from './MediaView';
-import { Events, Logger } from './utils';
+import {MediaView} from './MediaView';
+import {Events, Logger} from './utils';
 
 export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
   const [aspectRatio, setAspectRatio] = useState(1.5);
