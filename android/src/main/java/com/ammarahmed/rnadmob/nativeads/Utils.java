@@ -1,6 +1,7 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableArray;
@@ -8,12 +9,28 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.ads.mediation.facebook.FacebookAdapter;
-import com.google.ads.mediation.facebook.FacebookExtras;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 
 import java.util.List;
+
+
+class FacebookExtras {
+    public static String NATIVE_BANNER = "native_banner";
+    private static boolean _nativeBanner;
+
+    public FacebookExtras setNativeBanner(boolean nativeBanner) {
+        _nativeBanner = nativeBanner;
+        return this;
+    }
+
+    public Bundle build() {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(NATIVE_BANNER, _nativeBanner);
+        return bundle;
+    }
+}
 
 public class Utils {
 
@@ -80,6 +97,8 @@ public class Utils {
     }
 
     public static void setMediaAspectRatio(int type, NativeAdOptions.Builder adOptions) {
+        Log.d("LOG_NATIVE_ADS" , FacebookAdapter.class.getName());
+
         adOptions.setMediaAspectRatio(type);
     }
 
