@@ -9,7 +9,7 @@ Renders the `NativeMediaView` used for displaying video & image assets of the ad
 ```jsx
 import { NativeMediaView } from "react-native-admob-native-ads";
 
-<MediaView
+<NativeMediaView
   style={{
     width: "100%",
     height: 250,
@@ -21,14 +21,14 @@ import { NativeMediaView } from "react-native-admob-native-ads";
 
 ### `style:ViewStyle`
 
-Style the outer `MediaView` Component.
+Style the outer `NativeMediaView` Component.
 
 ### `muted`
 
 Mute/unmute the video.
 
 | Type      | Required | Platform |
-| --------- | -------- | -------- |
+|-----------|----------|----------|
 | `boolean` | no       | All      |
 
 `default:false`
@@ -38,7 +38,7 @@ Mute/unmute the video.
 Pause/play the video
 
 | Type      | Required | Platform |
-| --------- | -------- | -------- |
+|-----------|----------|----------|
 | `boolean` | no       | All      |
 
 `default:false`
@@ -66,7 +66,7 @@ Called when the video starts playing.
 Returns with the `duration` and `currentTime` when the video is playing.
 
 | Type       | Required | Platform |
-| ---------- | -------- | -------- |
+|------------|----------|----------|
 | `Progress` | no       | All      |
 
 `Progress:{ duration: string, currentTime: string }`

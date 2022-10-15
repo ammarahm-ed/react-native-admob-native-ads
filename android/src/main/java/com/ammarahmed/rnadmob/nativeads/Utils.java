@@ -1,6 +1,7 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableArray;
@@ -80,6 +81,8 @@ public class Utils {
     }
 
     public static void setMediaAspectRatio(int type, NativeAdOptions.Builder adOptions) {
+        Log.d("LOG_NATIVE_ADS" , FacebookAdapter.class.getName());
+
         adOptions.setMediaAspectRatio(type);
     }
 

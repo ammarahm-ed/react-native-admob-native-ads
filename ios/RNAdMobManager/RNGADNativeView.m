@@ -5,6 +5,7 @@
 #import "CacheManager.h"
 #import "EventEmitter.h"
 #import "RNGADNativeViewManager.h"
+#import <React/RCTUIManagerUtils.h>
 
 #ifdef MEDIATION_FACEBOOK
 @import FacebookAdapter;

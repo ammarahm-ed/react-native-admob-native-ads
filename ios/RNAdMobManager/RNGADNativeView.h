@@ -1,4 +1,7 @@
-@import React;
+#import <React/RCTViewManager.h>
+#import <React/RCTUIManager.h>
+#import <React/RCTLog.h>
+
 @import GoogleMobileAds;
 #import "AdListener.h"
 @interface RNGADNativeView : GADNativeAdView <AdListener,GADNativeAdLoaderDelegate,

@@ -135,7 +135,7 @@ type MediationAdapterStatus = {
 
 type AdRepositoryConfig = {
   /** Name for this repository. If name is not provided, adUnitId will
-   * will be used as repository name.
+   *  be used as repository name.
    */
   name?: string;
   /** **(Required)** Provide adUnitId to load ads. */
@@ -163,8 +163,8 @@ type AdRepositoryConfig = {
   videoOptions?: VideoOptions;
   mediationOptions?: MediationOptions;
   targetingOptions?: TargetingOptions;
-  adChoicesPlacement?:"topLeft" | "topRight" | "bottomLeft" | "bottomRight"
-  mediaAspectRatio?:"any" | "landscape" | "portrait" | "square" | "unknown"
+  adChoicesPlacement?: "topLeft" | "topRight" | "bottomLeft" | "bottomRight"
+  mediaAspectRatio?: "any" | "landscape" | "portrait" | "square" | "unknown"
 }
 
 type ImagePropsWithOptionalSource = Omit<ImageProps, "source"> &
@@ -453,4 +453,9 @@ declare module "react-native-admob-native-ads" {
    * the server.
    */
   export function StarRatingView(props: StarViewProps): JSX.Element;
+
+  export const TestIds: {
+    Video: string;
+    Image: string;
+  }
 }

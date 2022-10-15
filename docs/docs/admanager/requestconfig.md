@@ -4,14 +4,14 @@ title: setRequestConfiguration
 sidebar_label: setRequestConfiguration
 ---
 
-`setRequestConfiguration` is a function configures Ad requests and initializes Mobile Ads SDK. You need to call this function before you load any Ads. Generally, you call this function when the root component of your app is mounted. You need to pass a single object as an argument with at least one of the following properties.
+`setRequestConfiguration` is a function that configures Ad requests and initializes Mobile Ads SDK. You need to call this function before you load any Ads. Generally, you call this function when the root component of your app is mounted.
 
 `setRequestConfiguration` returns `Promise<MediationAdapterStatus[]>` which is each mediation adapter's initialization status.
 
 ### Properties
 
 | Name                         | Type               | Required |
-| ---------------------------- | ------------------ | -------- |
+|------------------------------|--------------------|----------|
 | testDeviceIds                | `Array<string>`    | no       |
 | maxAdContentRating           | Ad Content Ratings | no       |
 | tagForChildDirectedTreatment | `boolean`          | no       |
@@ -25,7 +25,7 @@ If you are building for iOS 14 or later, Facebook requires that you explicitly s
 ### Ad Content Ratings
 
 | Type        | Description                                                                                                                                       |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | G           | "General audiences." Content suitable for all audiences, including families and children.                                                         |
 | MA          | "Mature audiences." Content suitable only for mature audiences; includes topics such as alcohol, gambling, sexual content, and weapons.           |
 | PG          | "Parental guidance." Content suitable for most audiences with parental guidance, including topics like non-realistic, cartoonish violence.        |
@@ -35,7 +35,7 @@ If you are building for iOS 14 or later, Facebook requires that you explicitly s
 ### MediationAdapterStatus
 
 | Name        | Type           |
-| ----------- | -------------- |
+|-------------|----------------|
 | name        | `string`       |
 | description | `string`       |
 | state       | `AdapterState` |
