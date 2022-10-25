@@ -15,12 +15,12 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(isTestDevice:resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
-    
+
 }
 
 RCT_EXPORT_METHOD(registerRepository:(NSDictionary *)config resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
-    
+
     NSDictionary *result = [CacheManager.sharedInstance registerRepo:config];
     BOOL isSuccess = ((NSNumber *)[result objectForKey:@"success"]).boolValue;
     if (isSuccess){
@@ -32,7 +32,7 @@ RCT_EXPORT_METHOD(registerRepository:(NSDictionary *)config resolver:(RCTPromise
 
 RCT_EXPORT_METHOD(hasAd:(NSString *)repo resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject){
-    
+
     resolve([CacheManager.sharedInstance hasAd:repo]);
 }
 
@@ -64,17 +64,17 @@ RCT_EXPORT_METHOD(setRequestConfiguration:(NSDictionary *)config resolver:(RCTPr
             [[[GADMobileAds sharedInstance] requestConfiguration] setMaxAdContentRating:NULL];
         }
     };
-    
+
     if ([[config allKeys] containsObject:@"tagForChildDirectedTreatment"]) {
         NSNumber *tag = [config valueForKey:@"tagForChildDirectedTreatment"];
         [[[GADMobileAds sharedInstance] requestConfiguration] tagForChildDirectedTreatment:tag.boolValue];
     };
-    
+
     if ([[config allKeys] containsObject:@"tagForUnderAgeConsent"]) {
         NSNumber *tagC = [config valueForKey:@"tagForUnderAgeConsent"];
         [[[GADMobileAds sharedInstance] requestConfiguration] tagForUnderAgeOfConsent:tagC.boolValue];
     };
-    
+
     if ([[config allKeys] containsObject:@"testDeviceIds"]) {
         NSArray *testDevices = RNAdMobProcessTestDevices([config valueForKey:@"testDeviceIds"],GADSimulatorID);
         [[[GADMobileAds sharedInstance] requestConfiguration] setTestDeviceIdentifiers:testDevices];

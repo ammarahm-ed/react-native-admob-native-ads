@@ -12,8 +12,8 @@ target 'example' do
     :hermes_enabled => false
   )
 
-  pod 'Google-Mobile-Ads-SDK', '8.11.0'
-  pod 'GoogleMobileAdsMediationFacebook', '6.5.1.0'
+  pod 'Google-Mobile-Ads-SDK', '~>9.11.0'
+  pod 'GoogleMobileAdsMediationFacebook'
 
   target 'exampleTests' do
     inherit! :complete
