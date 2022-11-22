@@ -273,6 +273,21 @@ type NestedTextProps = {
   allowFontScaling?: boolean;
 };
 
+type CallToActionViewProps = NestedTextProps & {
+  buttonAndroidStyle?: {
+    /**
+     * Only 6 digit hex colors are supported. Example: #f0f0f0
+     */
+    backgroundColor?: string;
+    /**
+     * Only 6 digit hex colors are supported. Example: #f0f0f0
+     */
+    borderColor?: string;
+    borderWidth?: number;
+    borderRadius?: number;
+  };
+};
+
 type StarViewProps = {
   style?: StyleProp<ViewStyle>;
   size?: number;
@@ -446,7 +461,7 @@ declare module "react-native-admob-native-ads" {
    * work since they have no effect. Native side does not recieve the call hence simple
    * Text Component is used to receive the clicks.
    */
-  export function CallToActionView(props: NestedTextProps): JSX.Element;
+  export function CallToActionView(props: CallToActionViewProps): JSX.Element;
 
   /**
    * A Star Rating View to show the star rating for the app ads that you might recieve from
