@@ -53,8 +53,24 @@
   "private": false,
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.0.0",
+    "@tsconfig/react-native": "^2.0.3",
+    "@types/jest": "^29.2.5",
+    "@types/react": "^18.0.26",
+    "@types/react-native": "^0.70.8",
+    "@types/react-test-renderer": "^18.0.0",
     "eslint": "^7.31.0",
     "eslint-config-prettier": "^8.3.0",
-    "prettier": "^2.3.2"
+    "expo": "^47.0.12",
+    "expo-module-scripts": "^3.0.4",
+    "prettier": "^2.3.2",
+    "typescript": "^4.9.4"
+  },
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module"
   }
 }
