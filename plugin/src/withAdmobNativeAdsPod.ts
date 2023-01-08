@@ -1,8 +1,8 @@
-const { withDangerousMod, withPlugins } = require('@expo/config-plugins');
-const { resolve } = require('path');
-const { readFileSync, writeFileSync } = require('fs');
+import { withDangerousMod, withPlugins } from '@expo/config-plugins';
+import { resolve } from 'path';
+import { writeFileSync, readFileSync } from 'fs';
 
-function withAdmobNativeAdsPod(config) {
+function withAdmobNativeAdsPod(config: any) {
     return withDangerousMod(config, [
     'ios',
     (cfg) => {
@@ -10,7 +10,7 @@ function withAdmobNativeAdsPod(config) {
         const podfile = resolve(platformProjectRoot, 'Podfile');
         const contents = readFileSync(podfile, 'utf-8');
         const lines = contents.split('\n');
-        const index = lines.findIndex((line) =>
+        const index = lines.findIndex((line: string) =>
         /\s+use_expo_modules!/.test(line)
         );
 
@@ -28,10 +28,8 @@ function withAdmobNativeAdsPod(config) {
     }
     ]);
 }
-function withAdmobNativeAds(config) {
+export function withAdmobNativeAdsPodNat(config: any) {
     return withPlugins(config, [
         withAdmobNativeAdsPod,
     ]);
 }
-
-module.exports = withAdmobNativeAds;

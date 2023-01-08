@@ -1,16 +1,16 @@
-const { withDangerousMod, withPlugins } = require('@expo/config-plugins');
-const { resolve } = require('path');
-const { readFileSync, writeFileSync } = require('fs');
+import { withDangerousMod, withPlugins } from '@expo/config-plugins';
+import { resolve } from 'path';
+import { writeFileSync, readFileSync } from 'fs';
 
-function withAdmobNativeAdsAppBuildGradle(config) {
+function withAdmobNativeAdsAppBuildGradle(config: any) {
     return withDangerousMod(config, [
     'android',
-    (cfg) => {
+    (cfg: any) => {
         const { platformProjectRoot } = cfg.modRequest;
         const build = resolve(platformProjectRoot, 'app/build.gradle');
         const contents = readFileSync(build, 'utf-8');
         const lines = contents.split('\n');
-        const index = lines.findIndex((line) =>
+        const index = lines.findIndex((line: any) =>
         /dependencies\s{/.test(line)
         );
 
@@ -27,10 +27,8 @@ function withAdmobNativeAdsAppBuildGradle(config) {
     }
     ]);
 }
-function withAdmobNativeAds(config) {
+export function withAdmobNativeAdsGradle(config: any) {
     return withPlugins(config, [
         withAdmobNativeAdsAppBuildGradle,
     ]);
 }
-
-module.exports = withAdmobNativeAds;

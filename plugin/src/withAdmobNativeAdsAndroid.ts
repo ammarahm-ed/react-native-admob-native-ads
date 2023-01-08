@@ -1,18 +1,19 @@
-const {
+import {
   AndroidConfig,
+  ConfigPlugin,
   withAndroidManifest,
-} = require('@expo/config-plugins');
+} from '@expo/config-plugins';
 
 const { addMetaDataItemToMainApplication, getMainApplicationOrThrow } = AndroidConfig.Manifest;
 
-function withAdmobNativeAdsManifest(config, props) {
+const withAdmobNativeAdsManifest: ConfigPlugin = (config, props) => {
   return withAndroidManifest(config, (config) => {
     config.modResults = setAdmobNativeAdsConfig(config.modResults, props);
     return config;
   });
 };
 
-function setAdmobNativeAdsConfig(androidManifest, props) {
+const setAdmobNativeAdsConfig = (androidManifest: AndroidConfig.Manifest.AndroidManifest, props: any) => {
   let mainApplication = getMainApplicationOrThrow(androidManifest);
   addMetaDataItemToMainApplication(
       mainApplication,
@@ -23,8 +24,6 @@ function setAdmobNativeAdsConfig(androidManifest, props) {
   return androidManifest;
 }
 
-function withAdmobNativeAdsAndroid(config, props) {
+export const withAdmobNativeAdsAndroid: ConfigPlugin = (config, props) => {
   return withAdmobNativeAdsManifest(config, props);
 };
-
-module.exports = withAdmobNativeAdsAndroid;

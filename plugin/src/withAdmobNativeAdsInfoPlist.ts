@@ -1,7 +1,7 @@
-const { withInfoPlist } = require('@expo/config-plugins');
+import { withInfoPlist } from '@expo/config-plugins';
 
-function withAdmobNativeAdsInfoPlist(config, props) {
-    return withInfoPlist(config, config => {
+function withAdmobNativeAdsInfoPlist(config: any, props: any) {
+    return withInfoPlist(config, (config) => {
         config.modResults.GADApplicationIdentifier = props.iosAppId;
         const identifiers = [
             {
@@ -57,8 +57,6 @@ function withAdmobNativeAdsInfoPlist(config, props) {
         return config;
     });
 }
-function withAdmobNativeAds(config, props) {
+export function withAdmobNativeAdsPlist(config: any, props: any) {
     return withAdmobNativeAdsInfoPlist(config, props);
 }
-
-module.exports = withAdmobNativeAds;
