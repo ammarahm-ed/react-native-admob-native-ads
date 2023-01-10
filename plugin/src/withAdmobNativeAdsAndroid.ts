@@ -22,7 +22,7 @@ const setAdmobNativeAdsConfig = (androidManifest: AndroidConfig.Manifest.Android
   );
 
   return androidManifest;
-}
+};
 
 export const withAdmobNativeAdsAndroid: ConfigPlugin = (config, props) => {
   return withAdmobNativeAdsManifest(config, props);

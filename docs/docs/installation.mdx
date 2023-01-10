@@ -30,6 +30,25 @@ Install `react-native-vector-icons` to use `StarRatingView`.
 
 Complete setup of [react-native-vector-icons ](https://github.com/oblador/react-native-vector-icons) for iOS & Android.
 
+## Expo Setup
+
+Add your AdMob App IDs to `app.json` or `app.config.js`.
+
+```
+{
+  "expo": {
+    "plugins": [
+      [
+        "react-native-admob-native-ads",
+        {
+          "androidAppId":  "ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy",
+          "iosAppId":  "ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy"
+        }
+      ]
+    ]
+  }
+}
+```
 
 ## Android Setup
 

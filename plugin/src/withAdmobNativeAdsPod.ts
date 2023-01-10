@@ -2,7 +2,7 @@ import { withDangerousMod, withPlugins } from '@expo/config-plugins';
 import { resolve } from 'path';
 import { writeFileSync, readFileSync } from 'fs';
 
-function withAdmobNativeAdsPod(config: any) {
+const withAdmobNativeAdsPod = (config: any) => {
     return withDangerousMod(config, [
     'ios',
     (cfg) => {
@@ -27,9 +27,10 @@ function withAdmobNativeAdsPod(config: any) {
         return cfg;
     }
     ]);
-}
-export function withAdmobNativeAdsPodNat(config: any) {
+};
+
+export const withAdmobNativeAdsPodNat = (config: any) => {
     return withPlugins(config, [
         withAdmobNativeAdsPod,
     ]);
-}
+};

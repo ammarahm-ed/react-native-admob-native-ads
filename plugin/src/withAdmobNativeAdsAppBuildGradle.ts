@@ -2,7 +2,7 @@ import { withDangerousMod, withPlugins } from '@expo/config-plugins';
 import { resolve } from 'path';
 import { writeFileSync, readFileSync } from 'fs';
 
-function withAdmobNativeAdsAppBuildGradle(config: any) {
+const withAdmobNativeAdsAppBuildGradle = (config: any) => {
     return withDangerousMod(config, [
     'android',
     (cfg: any) => {
@@ -26,9 +26,10 @@ function withAdmobNativeAdsAppBuildGradle(config: any) {
         return cfg;
     }
     ]);
-}
-export function withAdmobNativeAdsGradle(config: any) {
+};
+
+export const withAdmobNativeAdsGradle = (config: any) => {
     return withPlugins(config, [
         withAdmobNativeAdsAppBuildGradle,
     ]);
-}
+};

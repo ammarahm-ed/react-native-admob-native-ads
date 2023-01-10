@@ -1,6 +1,6 @@
 import { withInfoPlist } from '@expo/config-plugins';
 
-function withAdmobNativeAdsInfoPlist(config: any, props: any) {
+const withAdmobNativeAdsInfoPlist = (config: any, props: any) => {
     return withInfoPlist(config, (config) => {
         config.modResults.GADApplicationIdentifier = props.iosAppId;
         const identifiers = [
@@ -52,11 +52,114 @@ function withAdmobNativeAdsInfoPlist(config: any, props: any) {
             {
                 SKAdNetworkIdentifier: 'hs6bdukanm.skadnetwork',
             },
+            {
+                SKAdNetworkIdentifier: 'prcb7njmu6.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'v4nxqhlyqp.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'wzmmz9fp6w.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'yclnxrl5pm.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 't38b2kh725.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '7ug5zh24hu.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '9rd848q2bz.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'y5ghdn5j9k.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'n6fk4nfna4.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'v9wttpbfk9.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'n38lu8286q.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '47vhws6wlr.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'kbd757ywx3.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '9t245vhmpl.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'a2p9lx4jpn.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '22mmun2rn5.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '4468km3ulz.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '2u9pt9hc89.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '8s468mfl3y.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'av6w8kgt66.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'klf5c3l5u5.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'ppxm28t8ap.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '424m5254lk.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'ecpz2srf59.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'uw77j35x4d.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'mlmmfzh3r3.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '578prtvx9j.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '4dzt52r2t5.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'gta9lk7p23.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'e5fvkxwrpn.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '8c4e2ghe7u.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: 'zq492l623r.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '3rd42ekr43.skadnetwork',
+            },
+            {
+                SKAdNetworkIdentifier: '3qcr597p9d.skadnetwork',
+            }
         ];
         config.modResults.SKAdNetworkItems = identifiers;
         return config;
     });
-}
-export function withAdmobNativeAdsPlist(config: any, props: any) {
+};
+
+export const withAdmobNativeAdsPlist = (config: any, props: any) => {
     return withAdmobNativeAdsInfoPlist(config, props);
-}
+};
