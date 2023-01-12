@@ -317,6 +317,10 @@ iOSInjectionProject/
 .expo
 __generated__
 
+# expo plugin files
+
+/plugin/src/*js
+
 ### ReactNative.Node Stack ###
 # Logs
 
