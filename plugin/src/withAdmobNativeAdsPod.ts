@@ -19,7 +19,7 @@ const withAdmobNativeAdsPod = (config: any) => {
         [
             ...lines.slice(0, index),
             `  pod 'Google-Mobile-Ads-SDK'`,
-            `  pod 'GoogleMobileAdsMediationFacebook'`,
+            `  pod 'GoogleMobileAdsMediationFacebook', '6.11.0.0'`,
             ...lines.slice(index),
         ].join('\n')
         );
