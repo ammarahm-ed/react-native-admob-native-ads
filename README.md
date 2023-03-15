@@ -38,7 +38,7 @@ We on the other hand do not load ads in a WebView. We use a more complex, Native
 
 ## Can I design the ads myself?
 
-Yes absolutely you can! There are no limiations. You can design ads that look just like your App's design and colors.
+Yes absolutely you can! There are no limitations. You can design ads that look just like your App's design and colors.
 
 ## I need other ad formats too, which library do you recommend?
 There are a bunch of projects trying to figure out showing ads on react-native. Most are not maintained properly. I would recommend that you use [react-native-admob/admob](https://github.com/react-native-admob/admob) by [@wjaykim](https://github.com/wjaykim). Banners, Interstitials, AdOpen and Rewarded, Rewarded Interstital ads are supported.
