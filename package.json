@@ -18,13 +18,16 @@
     "README.md",
     "android/",
     "android/build.gradle",
+    "app.plugin.js",
     "ios/RNAdMobManager.xcodeproj/project.pbxproj",
     "ios/**/*.h",
     "ios/**/*.m",
     "ios/**/*.swift",
     "index.js",
     "index.d.ts",
+    "plugin/",
     "src/*.js",
+    "tsconfig.json",
     "react-native-admob-native-ads.podspec"
   ],
   "keywords": [
@@ -68,11 +71,9 @@
     "typescript": "^4.9.4"
   },
   "scripts": {
-    "build": "expo-module build",
-    "clean": "expo-module clean",
-    "test": "expo-module test",
-    "prepare": "expo-module prepare",
-    "prepublishOnly": "expo-module prepublishOnly",
-    "expo-module": "expo-module"
+    "build:plugin": "tsc --build plugin",
+    "clean:plugin": "tsc --build --clean plugin",
+    "start": "react-native start",
+    "prepare": "npm run clean:plugin && npm run build:plugin"
   }
 }

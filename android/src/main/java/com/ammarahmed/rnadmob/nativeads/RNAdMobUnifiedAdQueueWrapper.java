@@ -209,7 +209,6 @@ public class RNAdMobUnifiedAdQueueWrapper {
 
         Utils.setVideoOptions(config.getMap("videoOptions"), videoOptions, adOptions);
         Utils.setTargetingOptions(config.getMap("targetingOptions"), adRequest);
-        Utils.setMediationOptions(config.getMap("mediationOptions"), adRequest);
 
         unifiedNativeAdLoadedListener = new UnifiedNativeAdLoadedListener(name, nativeAds,
                 totalAds, mContext);
