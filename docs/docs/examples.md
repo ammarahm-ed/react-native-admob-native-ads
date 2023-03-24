@@ -15,3 +15,5 @@ then run `yarn or npm install` in the example folder and finally to run the exam
 ```bash
     yarn react-native run-android
 ```
+
+Remember to remove any reference to react-native-admob-native-ads in the package.json and package-lock.json files before committing.
