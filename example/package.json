@@ -8,12 +8,12 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "postinstall": "cd .. && npm install && cd example && npm install ../"
+    "postinstall": "cd .. && npm install && cd example && npm pack ../ && node post-script.js"
   },
   "dependencies": {
     "react": "18.2.0",
     "react-native": "0.71.4",
-    "react-native-admob-native-ads": "file:..",
+    "react-native-admob-native-ads": "file:react-native-admob-native-ads-0.6.0.tgz",
     "react-native-tracking-transparency": "^0.1.2",
     "react-native-vector-icons": "^9.2.0"
   },
