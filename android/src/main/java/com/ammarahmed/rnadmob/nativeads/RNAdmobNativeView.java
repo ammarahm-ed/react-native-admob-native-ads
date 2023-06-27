@@ -408,10 +408,6 @@ public class RNAdmobNativeView extends LinearLayout {
         Utils.setTargetingOptions(options, adRequest);
     }
 
-    public void setMediationOptions(ReadableMap options) {
-        Utils.setMediationOptions(options, adRequest);
-    }
-
     @Override
     public void requestLayout() {
         super.requestLayout();

@@ -50,7 +50,6 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     public static final String PROP_PAUSE_AD_RELOAD = "pauseAdReload";
     public static final String PROP_MEDIA_ASPECT_RATIO = "mediaAspectRatio";
     public static final String PROP_VIDEO_OPTIONS = "videoOptions";
-    public static final String PROP_MEDIATION_OPTIONS = "mediationOptions";
     public static final String PROP_TARGETING_OPTIONS = "targetingOptions";
     public static final String PROP_AD_REPOSITORY = "repository";
 
@@ -103,11 +102,6 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     @ReactProp(name = PROP_VIDEO_OPTIONS)
     public void setVideoOptions(final RNAdmobNativeView nativeAdWrapper, final ReadableMap options) {
         nativeAdWrapper.setVideoOptions(options);
-    }
-
-    @ReactProp(name = PROP_MEDIATION_OPTIONS)
-    public void setMediationOptions(final RNAdmobNativeView nativeAdWrapper, final ReadableMap options) {
-        nativeAdWrapper.setMediationOptions(options);
     }
 
     @ReactProp(name = PROP_NON_PERSONALIZED_ADS, defaultBoolean = false)
