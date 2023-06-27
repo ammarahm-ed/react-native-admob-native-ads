@@ -3,7 +3,7 @@ import {
   findNodeHandle,
   Platform,
   requireNativeComponent,
-  UIManager
+  UIManager,
 } from "react-native";
 import { defaultAd, NativeAdContext } from "./context";
 import { AdOptions } from "./utils";
@@ -38,7 +38,7 @@ export class NativeAdView extends Component {
 
   _onAdFailedToLoad = (event) => {
     if (this.props.onAdFailedToLoad) {
-      this.props.onAdFailedToLoad(event.nativeEvent);
+      this.props.onAdFailedToLoad(event.nativeEvent?.error);
     }
   };
 
@@ -71,7 +71,9 @@ export class NativeAdView extends Component {
       this.updateAd();
       if (this.props.onUnifiedNativeAdLoaded) {
         this.props.onUnifiedNativeAdLoaded(this.ad);
-        console.warn('[DEPRECATED] onUnifiedNativeAdLoaded is deprecated and will be removed in future versions. Use onNativeAdLoaded instead.')
+        console.warn(
+          "[DEPRECATED] onUnifiedNativeAdLoaded is deprecated and will be removed in future versions. Use onNativeAdLoaded instead."
+        );
       }
       if (this.props.onNativeAdLoaded) {
         this.props.onNativeAdLoaded(this.ad);
@@ -146,7 +148,9 @@ export class NativeAdView extends Component {
           videoOptions={this.props.videoOptions}
           mediationOptions={this.props.mediationOptions}
           targetingOptions={this.props.targetingOptions}
-          adChoicesPlacement={AdOptions.adChoicesPlacement[this.props.adChoicesPlacement]}
+          adChoicesPlacement={
+            AdOptions.adChoicesPlacement[this.props.adChoicesPlacement]
+          }
         >
           <Wrapper
             onLayout={(event) => {
@@ -178,8 +182,6 @@ NativeAdView.defaultProps = {
 
 NativeAdView.simulatorId = "SIMULATOR";
 
-const RNGADNativeView = requireNativeComponent(
-  "RNGADNativeView"
-);
+const RNGADNativeView = requireNativeComponent("RNGADNativeView");
 
 export default NativeAdView;
