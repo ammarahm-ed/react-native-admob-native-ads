@@ -41,13 +41,22 @@ Add your AdMob App IDs to `app.json` or `app.config.js`.
         "react-native-admob-native-ads",
         {
           "androidAppId":  "ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy",
-          "iosAppId":  "ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy"
+          "iosAppId":  "ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy",
+          "facebookMediation": false
         }
       ]
     ]
   }
 }
 ```
+
+Run `expo prebuild` to setup android & ios folders for local development.
+
+:::caution
+
+Expo Go is not supported.
+
+:::
 
 ## Android Setup
 
