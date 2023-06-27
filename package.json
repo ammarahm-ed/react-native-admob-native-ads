@@ -1,6 +1,6 @@
 {
   "name": "react-native-admob-native-ads",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "A simple and robust library for creating & displaying Admob Native Ads in your React Native App using Native Views",
   "author": "Ammar Ahmed <ammarahmed6506@gmail.com>",
   "main": "index.js",
