@@ -1,8 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef } from "react";
-import {
-  findNodeHandle,
-  Image,
-} from "react-native";
+import { findNodeHandle, Image } from "react-native";
 import { NativeAdContext } from "./context";
 
 const IconView = (props) => {
@@ -20,19 +17,13 @@ const IconView = (props) => {
   useEffect(() => {
     _onLayout();
   }, [nativeAd, nativeAdView]);
-
   if (nativeAd && nativeAd.icon === "empty") {
-    return (
-      <Image
-        style={props.style}
-        ref={iconViewRef}
-        onLayout={_onLayout}
-      />
-    );
+    return <Image style={props.style} ref={iconViewRef} onLayout={_onLayout} />;
   }
 
   return (
-    nativeAd?.icon !== "noicon" && (
+    nativeAd?.icon !== "noicon" &&
+    nativeAd.icon && (
       <Image
         {...props}
         resizeMode="cover"

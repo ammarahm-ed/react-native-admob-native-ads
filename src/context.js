@@ -1,13 +1,13 @@
 import React from "react";
 
 export const defaultAd = {
-  icon:"empty",
-  images:[
+  icon: undefined,
+  images: [
     {
-      "url":null
-    }
-  ]
-}
+      url: null,
+    },
+  ],
+};
 
 export const NativeAdContext = React.createContext({
   nativeAd: defaultAd,

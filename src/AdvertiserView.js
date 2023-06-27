@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef,useCallback } from "react";
+import React, { useContext, useEffect, useRef, useCallback } from "react";
 import { findNodeHandle, Text } from "react-native";
 import { NativeAdContext } from "./context";
 
@@ -19,7 +19,17 @@ const AdvertiserView = (props) => {
   }, [nativeAd, nativeAdView]);
 
   return (
-    <Text {...props} nativeID="adAdvertiserView" onLayout={_onLayout}>
+    <Text
+      {...props}
+      nativeID="adAdvertiserView"
+      style={[
+        props.style,
+        {
+          height: nativeAd.advertiser ? undefined : 0,
+        },
+      ]}
+      onLayout={_onLayout}
+    >
       {nativeAd
         ? props.allCaps
           ? nativeAd.advertiser?.toUpperCase()

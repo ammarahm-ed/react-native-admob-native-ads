@@ -7,15 +7,11 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest",
-    "preinstall": "cd .. && npm install",
-    "prebuild": "npm pack ../",
-    "postscript": "node post-script.js",
-    "postinstall": "npm run prebuild && npm run postscript"
+    "test": "jest"
   },
   "dependencies": {
     "react": "18.2.0",
-    "react-native": "0.71.4",
+    "react-native": "^0.71.11",
     "react-native-tracking-transparency": "^0.1.2",
     "react-native-vector-icons": "^9.2.0"
   },

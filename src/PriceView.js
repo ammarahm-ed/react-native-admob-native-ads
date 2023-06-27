@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef,useCallback } from "react";
+import React, { useContext, useEffect, useRef, useCallback } from "react";
 import { findNodeHandle, Text } from "react-native";
 import { NativeAdContext } from "./context";
 
@@ -19,7 +19,17 @@ const PriceView = (props) => {
   }, [nativeAd, nativeAdView]);
 
   return (
-    <Text {...props} ref={priceViewRef} onLayout={_onLayout}>
+    <Text
+      {...props}
+      ref={priceViewRef}
+      style={[
+        props.style,
+        {
+          height: nativeAd.price ? undefined : 0,
+        },
+      ]}
+      onLayout={_onLayout}
+    >
       {nativeAd ? nativeAd.price : null}
     </Text>
   );
