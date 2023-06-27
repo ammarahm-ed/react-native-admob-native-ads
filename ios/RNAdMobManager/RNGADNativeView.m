@@ -8,7 +8,7 @@
 #import <React/RCTUIManagerUtils.h>
 
 #ifdef MEDIATION_FACEBOOK
-@import FacebookAdapter;
+@import MetaAdapter;
 #endif
 
 @implementation RNGADNativeView : GADNativeAdView

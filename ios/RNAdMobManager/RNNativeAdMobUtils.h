@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 
-#if __has_include(<FacebookAdapter/FacebookAdapter.h>)
+#if __has_include(<MetaAdapter/MetaAdapter.h>)
 #define MEDIATION_FACEBOOK
 #endif
 

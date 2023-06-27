@@ -163,6 +163,9 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
       videoOptions={{
         customControlsRequested: true,
       }}
+      mediationOptions={{
+        nativeBanner: true,
+      }}
       // adUnitID={type === 'image' ? adUnitIDs.image : adUnitIDs.video} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
       repository={type === 'image' ? 'imageAd' : 'videoAd'}>
       <View

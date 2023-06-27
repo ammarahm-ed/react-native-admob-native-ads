@@ -43,8 +43,8 @@ target 'example' do
     # :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  pod 'Google-Mobile-Ads-SDK', '~>9.11.0'
-  pod 'GoogleMobileAdsMediationFacebook'
+  pod 'Google-Mobile-Ads-SDK'
+  pod 'react-native-admob-native-ads', :path => '../../react-native-admob-native-ads.podspec'
 
   target 'exampleTests' do
     inherit! :complete
