@@ -280,7 +280,7 @@ PODS:
   - React-jsinspector (0.71.11)
   - React-logger (0.71.11):
     - glog
-  - react-native-admob-native-ads (0.6.1):
+  - react-native-admob-native-ads (0.6.4):
     - Google-Mobile-Ads-SDK
     - React-Core
   - react-native-tracking-transparency (0.1.2):
@@ -521,7 +521,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 089cd07c76ecf498960a64ba8ae0f2dddd382f44
   React-jsinspector: b6ed4cb3ffa27a041cd440300503dc512b761450
   React-logger: 186dd536128ae5924bc38ed70932c00aa740cd5b
-  react-native-admob-native-ads: f39c004b2903d344059f052e3d53308694cbae02
+  react-native-admob-native-ads: 3df173d98678bad9072a7576b09ac86259e816cb
   react-native-tracking-transparency: 25ff1ff866e338c137c818bdec20526bb05ffcc1
   React-perflogger: e706562ab7eb8eb590aa83a224d26fa13963d7f2
   React-RCTActionSheet: 57d4bd98122f557479a3359ad5dad8e109e20c5a

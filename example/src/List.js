@@ -10,7 +10,7 @@ import {AdView} from './AdView';
 import {Events, listItemsGenerator} from './utils';
 
 let viewableItemsChanged = null;
-const dummyData = listItemsGenerator(10);
+const dummyData = listItemsGenerator(100);
 
 const List = () => {
   const renderItem = React.useCallback(
@@ -20,7 +20,7 @@ const List = () => {
          * loadOnMount -> We are telling the AdView to not load the ad when
          * it is mounted.
          */
-        <AdView loadOnMount={false} index={index} type="image" media={false} />
+        <AdView loadOnMount={false} index={index} type="image" media={true} />
       ) : (
         <View
           style={{
@@ -28,15 +28,13 @@ const List = () => {
             borderBottomColor: 'orange',
             width: '100%',
             paddingHorizontal: 12,
-          }}
-        >
+          }}>
           <Text
             style={{
               paddingHorizontal: 12,
               height: 60,
               textAlignVertical: 'center',
-            }}
-          >
+            }}>
             {item}
           </Text>
         </View>
@@ -59,15 +57,6 @@ const List = () => {
     );
   }, []);
 
-  /**
-   * [STEP I] When viewable items change in the list
-   * we want to know what items are visible and store them
-   * in a variable for later us.
-   */
-  const onViewableItemsChanged = React.useCallback(e => {
-    viewableItemsChanged = e;
-  }, []);
-
   const keyExtractor = React.useCallback(item => item, []);
 
   return (
@@ -79,7 +68,6 @@ const List = () => {
         onScrollAnimationEnd={onScrollEnd}
         onMomentumScrollEnd={onScrollEnd}
         onScrollEndDrag={onScrollEnd}
-        onViewableItemsChanged={onViewableItemsChanged}
         renderItem={renderItem}
       />
     </View>
@@ -91,6 +79,7 @@ export default List;
 const styles = StyleSheet.create({
   list: {
     flex: 1,
+    width: '100%',
   },
   container: {
     height: '100%',

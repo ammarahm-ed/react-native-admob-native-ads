@@ -1,7 +1,7 @@
 /**
  * @format
  */
-import {AppRegistry} from 'react-native';
+import {AppRegistry, DeviceEventEmitter} from 'react-native';
 import {AdManager, TestIds} from 'react-native-admob-native-ads';
 import App from './App';
 import {name as appName} from './app.json';
@@ -53,6 +53,10 @@ AdManager.registerRepository({
   mediationEnabled: false,
 }).then(result => {
   console.log('registered: ', result);
+});
+
+AdManager.subscribe('imageAd', 'onAdPreloadClicked', () => {
+  console.log('click', 'imageAd');
 });
 
 AppRegistry.registerComponent(appName, () => App);
