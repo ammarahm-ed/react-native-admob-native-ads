@@ -15,8 +15,13 @@
 @interface CacheManager:NSObject
 
 + (CacheManager*)sharedInstance;
-+ (NSString*)  EVENT_AD_PRELOAD_LOADED;
-+ (NSString*)  EVENT_AD_PRELOAD_ERROR;
++ (NSString *)EVENT_AD_PRELOAD_LOADED:(NSString *)name;
++ (NSString *)EVENT_AD_PRELOAD_ERROR:(NSString *)name;
++ (NSString *)EVENT_AD_CLOSED:(NSString *)name;
++ (NSString *)EVENT_AD_OPEN:(NSString *)name;
++ (NSString *)EVENT_AD_CLICKED:(NSString *)name;
++ (NSString *)EVENT_AD_IMPRESSION:(NSString *)name;
+
 
 -(BOOL) isLoading:(NSString*) id;
 -(NSInteger)  numberOfAds:(NSString*) id;

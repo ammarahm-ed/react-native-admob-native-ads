@@ -20,11 +20,13 @@ public class Utils {
         if (options == null) return;
         if (options.hasKey("targets")) {
             ReadableArray targets = options.getArray("targets");
+
             for (int i = 0; i < targets.size(); i++) {
                 ReadableMap target = targets.getMap(i);
                 String key = target.getString("key");
                 if (target.getType("value") == ReadableType.Array) {
                     List list = Arguments.toList(target.getArray("value"));
+
                     adRequest.addCustomTargeting(key, list);
                 } else {
                     adRequest.addCustomTargeting(key, target.getString("value"));

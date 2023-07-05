@@ -266,7 +266,9 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
             }
         }
         if (nativeAdWrapper.nativeAdView != null){
+            nativeAdWrapper.nativeAdView.removeAllViews();
             nativeAdWrapper.nativeAdView.destroy();
+            nativeAdWrapper.removeAllViews();
         }
     }
 

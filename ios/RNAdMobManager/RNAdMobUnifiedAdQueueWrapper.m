@@ -194,6 +194,7 @@
     for (id<AdListener> listener in [attachedAdListeners copy]){
         [listener didAdLoaded:nativeAd];
     }
+    [EventEmitter.sharedInstance sendEvent:[CacheManager EVENT_AD_PRELOAD_LOADED:_name] dict:nil];
 
     if (loadingAdRequestCount == 0){
         [self fillAds];//fill up repository if need
@@ -201,6 +202,21 @@
     // The adLoader has finished loading ads, and a new request can be sent.
 }
 
+- (void)nativeAdDidRecordClick:(GADNativeAd *)nativeAd {
+    [EventEmitter.sharedInstance sendEvent:[CacheManager EVENT_AD_CLICKED:_name] dict:nil];
+}
+
+- (void)nativeAdDidRecordImpression:(GADNativeAd *)nativeAd {
+    [EventEmitter.sharedInstance sendEvent:[CacheManager EVENT_AD_IMPRESSION:_name] dict:nil];
+}
+
+- (void)nativeAdWillPresentScreen:(GADNativeAd *)nativeAd {
+    [EventEmitter.sharedInstance sendEvent:[CacheManager EVENT_AD_OPEN:_name] dict:nil];
+}
+
+- (void)nativeAdDidDismissScreen:(GADNativeAd *)nativeAd {
+    [EventEmitter.sharedInstance sendEvent:[CacheManager EVENT_AD_CLOSED:_name] dict:nil];
+}
 
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didFailToReceiveAdWithError:(nonnull NSError *)error {
       if(_isMediationEnabled){
@@ -230,7 +246,8 @@
                 @"error":errorDic,
             };
 
-            [EventEmitter.sharedInstance sendEvent:CacheManager.EVENT_AD_PRELOAD_ERROR dict:event];
+            [EventEmitter.sharedInstance sendEvent:[CacheManager EVENT_AD_PRELOAD_ERROR:_name] dict:event];
+        
             for (id<AdListener> listener in [attachedAdListeners copy]){
                [listener didFailToReceiveAdWithError:error];
              }
@@ -246,7 +263,7 @@
             NSDictionary *event = @{
                 @"error":errorDic,
             };
-        [EventEmitter.sharedInstance sendEvent:CacheManager.EVENT_AD_PRELOAD_ERROR dict:event];
+        [EventEmitter.sharedInstance sendEvent:[CacheManager EVENT_AD_PRELOAD_ERROR:_name] dict:event];
         for (id<AdListener> listener in [attachedAdListeners copy]){
            [listener didFailToReceiveAdWithError:error];
          }

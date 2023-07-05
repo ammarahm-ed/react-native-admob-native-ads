@@ -1,5 +1,5 @@
-import {NativeModules} from 'react-native';
-import { AdOptions } from './utils';
+import { DeviceEventEmitter, NativeModules } from "react-native";
+import { AdOptions } from "./utils";
 
 const RNAdmobNativeAdsManager = NativeModules.RNAdmobNativeAdsManager;
 
@@ -12,8 +12,10 @@ async function isTestDevice() {
 }
 
 function registerRepository(config) {
-  config.mediaAspectRatio = AdOptions.mediaAspectRatio[config.mediaAspectRatio || "unknown"];
-  config.adChoicesPlacement = AdOptions.adChoicesPlacement[config.adChoicesPlacement || "topRight"];
+  config.mediaAspectRatio =
+    AdOptions.mediaAspectRatio[config.mediaAspectRatio || "unknown"];
+  config.adChoicesPlacement =
+    AdOptions.adChoicesPlacement[config.adChoicesPlacement || "topRight"];
   return RNAdmobNativeAdsManager.registerRepository(config);
 }
 
@@ -29,6 +31,10 @@ async function resetCache() {
   return RNAdmobNativeAdsManager.resetCache();
 }
 
+function subscribe(repo, eventName, listener) {
+  return DeviceEventEmitter.addListener(`${eventName}:${repo}`, listener);
+}
+
 export default {
   setRequestConfiguration,
   isTestDevice,
@@ -36,4 +42,5 @@ export default {
   hasAd,
   unRegisterRepository,
   resetCache,
-}
+  subscribe,
+};

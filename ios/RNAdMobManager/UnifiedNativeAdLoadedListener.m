@@ -41,7 +41,7 @@
 
     NSMutableDictionary*  args = [[NSMutableDictionary alloc] init];
     [args setObject:[NSNumber numberWithInteger:_nativeAds.count] forKey:_repo];
-    [EventEmitter.sharedInstance sendEvent:CacheManager.EVENT_AD_PRELOAD_LOADED dict:args];
+    [EventEmitter.sharedInstance sendEvent:[CacheManager EVENT_AD_PRELOAD_LOADED:_repo] dict:args];
 }
 
 - (void)adLoader:(nonnull GADAdLoader *)adLoader didFailToReceiveAdWithError:(nonnull NSError *)error {

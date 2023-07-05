@@ -15,8 +15,12 @@
     NSMutableDictionary *repositoriesMap;
 }
 
-+ (NSString *)EVENT_AD_PRELOAD_LOADED { return @"onAdPreloadLoaded"; }
-+ (NSString *)EVENT_AD_PRELOAD_ERROR { return @"onAdPreloadError"; }
++ (NSString *)EVENT_AD_PRELOAD_LOADED:(NSString *)name { return [@"onAdPreloadLoaded" stringByAppendingString:[@":" stringByAppendingString:name]]; }
++ (NSString *)EVENT_AD_PRELOAD_ERROR:(NSString *)name { return [@"onAdPreloadError" stringByAppendingString:[@":" stringByAppendingString:name]]; }
++ (NSString *)EVENT_AD_CLOSED:(NSString *)name { return [@"onAdPreloadClosed" stringByAppendingString:[@":" stringByAppendingString:name]]; }
++ (NSString *)EVENT_AD_OPEN:(NSString *)name { return [@"onAdPreloadOpen" stringByAppendingString:[@":" stringByAppendingString:name]]; }
++ (NSString *)EVENT_AD_CLICKED:(NSString *)name { return [@"onAdPreloadClicked" stringByAppendingString:[@":" stringByAppendingString:name]]; }
++ (NSString *)EVENT_AD_IMPRESSION:(NSString *)name { return [@"onAdPreloadImpression" stringByAppendingString:[@":" stringByAppendingString:name]]; }
 
 static CacheManager *_sharedInstance = nil;
 

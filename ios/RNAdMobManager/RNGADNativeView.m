@@ -106,7 +106,12 @@ BOOL *nonPersonalizedAds;
     NSArray *allKeys = [targetingOptions allKeys];
 
     if ([allKeys containsObject:@"targets"]) {
-        [adRequest setCustomTargeting:(NSDictionary *) [targetingOptions objectForKey:@"targets"]];
+        NSArray *array = [targetingOptions objectForKey:@"targets"];
+        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+        for (NSDictionary *object in array) {
+            [dic setValue:[object valueForKey:@"key"] forKey:[object valueForKey:@"value"]];
+        }
+        [adRequest setCustomTargeting:dic];
     }
 
     if ([allKeys containsObject:@"categoryExclusions"]) {
