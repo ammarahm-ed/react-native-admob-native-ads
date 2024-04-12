@@ -49,7 +49,7 @@ If you are building for iOS 14 or later, Facebook requires that you explicitly s
 ```js
 const config = {
   testDeviceIds: ["YOUR_TEST_DEVICE_ID"],
-  maxAdContetRating: "MA",
+  maxAdContentRating: "MA",
   tagForChildDirectedTreatment: false,
   tagForUnderAgeConsent: false,
 };
