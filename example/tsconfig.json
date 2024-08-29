@@ -1,8 +1,12 @@
 {
   "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
+    "lib": ["DOM", "ES2015"],
+    "allowJs": true,
+    "downlevelIteration": true,
+    "maxNodeModuleJsDepth": 3,
     "paths": {
-      "react-native-admob-native-ads": ["../"]
+      "react-native-admob-native-ads": ["../index"]
     }
   }
 }

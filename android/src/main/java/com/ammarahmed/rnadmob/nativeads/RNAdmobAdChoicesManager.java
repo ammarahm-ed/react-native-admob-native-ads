@@ -11,6 +11,7 @@ public class RNAdmobAdChoicesManager extends ViewGroupManager<AdChoicesView> {
     private static final String REACT_CLASS = "AdChoicesView";
     private AdChoicesView adChoicesView;
 
+    @NonNull
     @Override
     public String getName() {
         return REACT_CLASS;

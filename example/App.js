@@ -1,19 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Image,
   Platform,
   SafeAreaView,
+  ScrollView,
   StatusBar,
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
-import {AdManager} from 'react-native-admob-native-ads';
-import {requestTrackingPermission} from 'react-native-tracking-transparency';
-import {AdView} from './src/AdView';
-import List from './src/List';
-import {routes} from './src/utils';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+} from "react-native";
+import { AdManager } from "react-native-admob-native-ads";
+import { requestTrackingPermission } from "react-native-tracking-transparency";
+import { AdView } from "./src/AdView";
+import List from "./src/List";
+import { routes } from "./src/utils";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 const App = () => {
   const [currentRoute, setCurrentRoute] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,7 +24,7 @@ const App = () => {
       const trackingStatus = await requestTrackingPermission();
 
       let trackingAuthorized = false;
-      if (trackingStatus === 'authorized' || trackingStatus === 'unavailable') {
+      if (trackingStatus === "authorized" || trackingStatus === "unavailable") {
         trackingAuthorized = true;
       }
 
@@ -40,11 +41,12 @@ const App = () => {
   return (
     <SafeAreaView
       style={{
-        height: '100%',
-        width: '100%',
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-        backgroundColor: 'white',
-      }}>
+        height: "100%",
+        width: "100%",
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        backgroundColor: "white",
+      }}
+    >
       <StatusBar
         translucent
         backgroundColor="transparent"
@@ -52,24 +54,26 @@ const App = () => {
       />
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
+          flexDirection: "row",
+          alignItems: "center",
           height: 50,
           paddingHorizontal: 6,
           marginBottom: 10,
-          width: '100%',
-        }}>
+          width: "100%",
+        }}
+      >
         {currentRoute && (
           <TouchableOpacity
             onPress={() => setCurrentRoute(null)}
             activeOpacity={0.8}
             style={{
               width: 50,
-              alignItems: 'center',
+              alignItems: "center",
               height: 50,
-              justifyContent: 'center',
+              justifyContent: "center",
               borderRadius: 100,
-            }}>
+            }}
+          >
             <Icon name="arrow-left" color="black" size={28} />
           </TouchableOpacity>
         )}
@@ -78,21 +82,23 @@ const App = () => {
       {!loading && !currentRoute && (
         <View
           style={{
-            alignItems: 'center',
-          }}>
+            alignItems: "center",
+          }}
+        >
           <View
             style={{
-              alignItems: 'center',
+              alignItems: "center",
               marginBottom: 50,
-            }}>
+            }}
+          >
             <Image
-              source={require('./images.jpg')}
+              source={require("./images.jpg")}
               style={{
                 width: 120,
                 height: 120,
                 marginBottom: 30,
                 borderRadius: 100,
-                backgroundColor: '#f0f0f0',
+                backgroundColor: "#f0f0f0",
               }}
             />
 
@@ -100,9 +106,10 @@ const App = () => {
               style={{
                 fontSize: 18,
                 letterSpacing: 1,
-                textAlign: 'center',
-              }}>
-              Admob Native Advanced Ads {'\n'} for React Native
+                textAlign: "center",
+              }}
+            >
+              Admob Native Advanced Ads {"\n"} for React Native
             </Text>
           </View>
 
@@ -110,18 +117,20 @@ const App = () => {
             onPress={() => setCurrentRoute(routes[0])}
             activeOpacity={0.8}
             style={{
-              backgroundColor: 'orange',
-              width: '90%',
-              alignItems: 'center',
+              backgroundColor: "orange",
+              width: "90%",
+              alignItems: "center",
               height: 50,
-              justifyContent: 'center',
+              justifyContent: "center",
               borderRadius: 5,
               marginBottom: 5,
-            }}>
+            }}
+          >
             <Text
               style={{
-                color: 'white',
-              }}>
+                color: "white",
+              }}
+            >
               Simple Banner Ad
             </Text>
           </TouchableOpacity>
@@ -130,18 +139,20 @@ const App = () => {
             onPress={() => setCurrentRoute(routes[1])}
             activeOpacity={0.8}
             style={{
-              backgroundColor: 'orange',
-              width: '90%',
-              alignItems: 'center',
+              backgroundColor: "orange",
+              width: "90%",
+              alignItems: "center",
               height: 50,
-              justifyContent: 'center',
+              justifyContent: "center",
               borderRadius: 5,
               marginBottom: 5,
-            }}>
+            }}
+          >
             <Text
               style={{
-                color: 'white',
-              }}>
+                color: "white",
+              }}
+            >
               Ad with Image
             </Text>
           </TouchableOpacity>
@@ -150,18 +161,20 @@ const App = () => {
             onPress={() => setCurrentRoute(routes[2])}
             activeOpacity={0.8}
             style={{
-              backgroundColor: 'orange',
-              width: '90%',
-              alignItems: 'center',
+              backgroundColor: "orange",
+              width: "90%",
+              alignItems: "center",
               height: 50,
-              justifyContent: 'center',
+              justifyContent: "center",
               borderRadius: 5,
               marginBottom: 5,
-            }}>
+            }}
+          >
             <Text
               style={{
-                color: 'white',
-              }}>
+                color: "white",
+              }}
+            >
               Ad with Video
             </Text>
           </TouchableOpacity>
@@ -170,49 +183,58 @@ const App = () => {
             onPress={() => setCurrentRoute(routes[3])}
             activeOpacity={0.8}
             style={{
-              backgroundColor: 'orange',
-              width: '90%',
-              alignItems: 'center',
+              backgroundColor: "orange",
+              width: "90%",
+              alignItems: "center",
               height: 50,
-              justifyContent: 'center',
+              justifyContent: "center",
               borderRadius: 5,
               marginBottom: 5,
-            }}>
+            }}
+          >
             <Text
               style={{
-                color: 'white',
-              }}>
+                color: "white",
+              }}
+            >
               Multiple Ads in a List
             </Text>
           </TouchableOpacity>
         </View>
       )}
 
-      {currentRoute?.type === 'banner' && (
-        <>
-          <AdView type="image" media={false} />
-        </>
-      )}
+      <View
+        style={{
+          paddingHorizontal: 12,
+        }}
+      >
+        {currentRoute?.type === "banner" && (
+          <>
+            <AdView type="image" media={false} />
+          </>
+        )}
+        {currentRoute?.type === "image" && (
+          <View
+            style={{
+              height: 400,
+            }}
+          >
+            <AdView type="image" media={true} />
+          </View>
+        )}
 
-      {currentRoute?.type === 'image' && (
-        <View
-          style={{
-            height: 400,
-          }}>
-          <AdView type="image" media={true} />
-        </View>
-      )}
+        {currentRoute?.type === "video" && (
+          <View
+            style={{
+              height: 400,
+            }}
+          >
+            <AdView type="video" media={true} />
+          </View>
+        )}
 
-      {currentRoute?.type === 'video' && (
-        <View
-          style={{
-            height: 400,
-          }}>
-          <AdView type="video" media={true} />
-        </View>
-      )}
-
-      {currentRoute?.type === 'list' && <List />}
+        {currentRoute?.type === "list" && <List />}
+      </View>
     </SafeAreaView>
   );
 };

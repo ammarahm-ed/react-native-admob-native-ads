@@ -1,10 +1,10 @@
 /**
  * @format
  */
-import {AppRegistry, DeviceEventEmitter} from 'react-native';
-import {AdManager, TestIds} from 'react-native-admob-native-ads';
+import { AppRegistry } from 'react-native';
+import { AdManager, TestIds } from 'react-native-admob-native-ads';
 import App from './App';
-import {name as appName} from './app.json';
+import { name as appName } from './app.json';
 
 AdManager.setRequestConfiguration({
   tagForChildDirectedTreatment: false,
@@ -15,12 +15,7 @@ AdManager.registerRepository({
   name: 'imageAd',
   adUnitId: TestIds.Image,
   numOfAds: 3,
-  nonPersonalizedAdsOnly: false,
-  videoOptions: {
-    mute: false,
-  },
-  expirationPeriod: 3600000, // in milliseconds (optional)
-  mediationEnabled: false,
+  expirationPeriod: 3600000
 }).then(result => {
   console.log('registered: ', result);
 });
@@ -47,7 +42,7 @@ AdManager.registerRepository({
   numOfAds: 3,
   nonPersonalizedAdsOnly: false,
   videoOptions: {
-    mute: false,
+    mute: true,
   },
   expirationPeriod: 3600000, // in milliseconds (optional)
   mediationEnabled: false,
@@ -57,6 +52,10 @@ AdManager.registerRepository({
 
 AdManager.subscribe('imageAd', 'onAdPreloadClicked', () => {
   console.log('click', 'imageAd');
+});
+
+AdManager.subscribe("imageAd", "onAdPreloadImpression", () => {
+  console.log('impression recorded', 'imageAd');
 });
 
 AppRegistry.registerComponent(appName, () => App);

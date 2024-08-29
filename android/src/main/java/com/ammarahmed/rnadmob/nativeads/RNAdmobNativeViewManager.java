@@ -93,7 +93,6 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
 
     }
 
-
     @ReactProp(name = PROP_TARGETING_OPTIONS)
     public void setPropTargetingOptions(final RNAdmobNativeView nativeAdWrapper, final ReadableMap options) {
         nativeAdWrapper.setTargetingOptions(options);
@@ -111,7 +110,6 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     }
 
 
-
     @ReactProp(name = PROP_AD_CHOICES_PLACEMENT)
     public void setPropAdChoicesPlacement(final RNAdmobNativeView nativeAdWrapper, final int location) {
 
@@ -120,14 +118,10 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     }
 
 
-
-
     @ReactProp(name = PROP_MEDIA_ASPECT_RATIO)
     public void setMediaAspectRatio(final RNAdmobNativeView nativeAdWrapper, final int type) {
         nativeAdWrapper.setMediaAspectRatio(type);
     }
-
-
 
 
     @ReactProp(name = PROP_MEDIA_VIEW)
@@ -140,7 +134,7 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     @ReactProp(name = PROP_HEADLINE_VIEW)
     public void setHeadlineView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
-        TextView view = (TextView)nativeAdWrapper.findViewById(id);
+        TextView view = (TextView) nativeAdWrapper.findViewById(id);
         nativeAdWrapper.nativeAdView.setHeadlineView(view);
         nativeAdWrapper.setNativeAd();
     }
@@ -148,7 +142,7 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     @ReactProp(name = PROP_TAGLINE_VIEW)
     public void setPropTaglineView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
-        TextView view = (TextView)nativeAdWrapper.findViewById(id);
+        TextView view = (TextView) nativeAdWrapper.findViewById(id);
         nativeAdWrapper.nativeAdView.setBodyView(view);
         nativeAdWrapper.setNativeAd();
     }
@@ -156,7 +150,7 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
     @ReactProp(name = PROP_ADVERTISER_VIEW)
     public void setPropAdvertiserView(final RNAdmobNativeView nativeAdWrapper, final int id) {
 
-        TextView view = (TextView)nativeAdWrapper.findViewById(id);
+        TextView view = (TextView) nativeAdWrapper.findViewById(id);
         nativeAdWrapper.nativeAdView.setAdvertiserView(view);
         nativeAdWrapper.setNativeAd();
     }
@@ -225,10 +219,8 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
 
     @Override
     public void receiveCommand(RNAdmobNativeView nativeAdWrapper, int commandId, @Nullable ReadableArray args) {
-        switch (commandId) {
-            case COMMAND_LOAD_AD:
-                nativeAdWrapper.loadAd();
-                break;
+        if (commandId == COMMAND_LOAD_AD) {
+            nativeAdWrapper.loadAd();
         }
     }
 
@@ -246,6 +238,11 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
         nativeAdWrapper.setAdRepository(repo);
     }
 
+    @ReactProp(name = "enableSwipeGestureOptions")
+    public void setEnableSwipeGestureOptions(final RNAdmobNativeView nativeAdWrapper, final ReadableMap options) {
+        nativeAdWrapper.setSwipeGestureOptions(options.getInt("swipeGestureDirection"), options.hasKey("tapsAllowed") && options.getBoolean("tapsAllowed"));
+    }
+
     @ReactProp(name = PROP_REFRESH_INTERVAL)
     public void setRefreshInterval(final RNAdmobNativeView nativeAdWrapper, final int interval) {
         nativeAdWrapper.setAdRefreshInterval(interval);
@@ -256,16 +253,16 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
         super.onDropViewInstance(nativeAdWrapper);
         nativeAdWrapper.removeHandler();
 
-        CacheManager.instance.detachAdListener(nativeAdWrapper.getAdRepo(),nativeAdWrapper.adListener);
+        CacheManager.instance.detachAdListener(nativeAdWrapper.getAdRepo(), nativeAdWrapper.adListener);
 
-        if (nativeAdWrapper.nativeAd != null){
-            if (nativeAdWrapper.unifiedNativeAdContainer != null){
+        if (nativeAdWrapper.nativeAd != null) {
+            if (nativeAdWrapper.unifiedNativeAdContainer != null) {
                 nativeAdWrapper.unifiedNativeAdContainer.references -= 1;
-            } else{
+            } else {
                 nativeAdWrapper.nativeAdView.destroy();
             }
         }
-        if (nativeAdWrapper.nativeAdView != null){
+        if (nativeAdWrapper.nativeAdView != null) {
             nativeAdWrapper.nativeAdView.removeAllViews();
             nativeAdWrapper.nativeAdView.destroy();
             nativeAdWrapper.removeAllViews();

@@ -319,7 +319,8 @@ BOOL *nonPersonalizedAds;
             rnMediaView = (RNGADMediaView *) viewRegistry[mediaview];
 
             if (rnMediaView != nil) {
-                [self setMediaView:(GADMediaView *) rnMediaView.subviews.firstObject];
+                [self setMediaView:(GADMediaView *) rnMediaView];
+                
                 if (self.nativeAd != nil) {
                     [self.mediaView setMediaContent:self.nativeAd.mediaContent];
                     [self reloadAdInView:self.nativeAd isMedia:YES];
@@ -518,17 +519,19 @@ BOOL *nonPersonalizedAds;
     nativeAd.delegate = self;
 
      if (rnMediaView != nil) {
-         [self setMediaView:rnMediaView.subviews.firstObject];
+         [self setMediaView: rnMediaView];
          if (nativeAd.mediaContent.videoController != nil) {
              nativeAd.mediaContent.videoController.delegate = rnMediaView.self;
          }
      }
-
+    
      [self setNativeAd:nativeAd];
 
      if (self.mediaView != nil) {
          [self.mediaView setMediaContent:nativeAd.mediaContent];
      }
+    
+     [self setAdChoicesPlacement:adChoicesPlace];
 
      if (nativeAd != NULL) {
          NSMutableDictionary *dic = [NSMutableDictionary dictionary];

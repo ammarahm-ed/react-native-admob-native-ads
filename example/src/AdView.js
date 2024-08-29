@@ -14,13 +14,14 @@ import NativeAdView, {
   StarRatingView,
   StoreView,
   TaglineView,
+  TestIds,
 } from 'react-native-admob-native-ads';
 import {MediaView} from './MediaView';
 import {Events, Logger} from './utils';
 
 export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
   const [aspectRatio, setAspectRatio] = useState(1.5);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   const nativeAdRef = useRef();
@@ -46,7 +47,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
      * If you have recently created AdMob IDs for your ads, it might take
      * a few days until the ads will start showing.
      */
-    Logger('AD', 'FAILED', event.error.message);
+    Logger('AD', 'FAILED', event);
   };
 
   const onAdLoaded = () => {
@@ -100,8 +101,9 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
       mediationOptions={{
         nativeBanner: true,
       }}
-      // adUnitID={type === 'image' ? adUnitIDs.image : adUnitIDs.video} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
-      repository={type === 'image' ? 'imageAd' : 'videoAd'}>
+      adUnitID={type === 'image' ? TestIds.Image : TestIds.Video} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
+      // repository={type === 'image' ? 'imageAd' : 'videoAd'}
+      >
       <View
         style={{
           width: '100%',
@@ -118,7 +120,7 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
             opacity: !loading && !error && loaded ? 0 : 1,
             zIndex: !loading && !error && loaded ? 0 : 10,
           }}>
-          {!loading && <ActivityIndicator size={28} color="#a9a9a9" />}
+          {loading && <ActivityIndicator size={28} color="#a9a9a9" />}
           {error && <Text style={{color: '#a9a9a9'}}>:-(</Text>}
         </View>
 

@@ -3,7 +3,7 @@
 #import <React/RCTLog.h>
 @import GoogleMobileAds;
 
-@interface RNGADMediaView: UIView <GADVideoControllerDelegate>
+@interface RNGADMediaView: GADMediaView <GADVideoControllerDelegate>
 
 @property (nonatomic) BOOL *pause;
 @property (nonatomic) BOOL *muted;

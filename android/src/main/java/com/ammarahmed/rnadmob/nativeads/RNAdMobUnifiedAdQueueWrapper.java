@@ -14,6 +14,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
+import com.google.android.gms.ads.formats.AdManagerAdViewOptions;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class RNAdMobUnifiedAdQueueWrapper {
     public List<RNAdMobUnifiedAdContainer> nativeAds;
     //AdListener attached to attachedAdListeners list,if they are waiting for load ads
     List<AdListener> attachedAdListeners = new ArrayList<>();
-    Context mContext;
+    ReactContext mContext;
     int loadingAdRequestCount = 0;
 
     VideoOptions.Builder videoOptions;
@@ -45,8 +46,9 @@ public class RNAdMobUnifiedAdQueueWrapper {
     private AdManagerAdRequest.Builder adRequest;
     private UnifiedNativeAdLoadedListener unifiedNativeAdLoadedListener;
     private final Handler handler = new Handler();
+    AdLoader.Builder adLoaderBuilder;
 
-    public RNAdMobUnifiedAdQueueWrapper(Context context, ReadableMap config, String repository) {
+    public RNAdMobUnifiedAdQueueWrapper(ReactContext context, ReadableMap config, String repository) {
         mContext = context;
         adUnitId = config.getString("adUnitId");
         name = repository;
@@ -212,29 +214,41 @@ public class RNAdMobUnifiedAdQueueWrapper {
             Utils.setMediaAspectRatio(config.getInt("mediaAspectRatio"), adOptions);
         }
 
+        if (config.hasKey("swipeGestureDirection")) {
+            adOptions.enableCustomClickGestureDirection(config.getInt("swipeGestureDirection"), config.hasKey("tapsAllowed") && config.getBoolean("tapsAllowed"));
+        }
+
         Utils.setVideoOptions(config.getMap("videoOptions"), videoOptions, adOptions);
         Utils.setTargetingOptions(config.getMap("targetingOptions"), adRequest);
 
         unifiedNativeAdLoadedListener = new UnifiedNativeAdLoadedListener(name, nativeAds,
                 totalAds, mContext);
-        AdLoader.Builder builder = new AdLoader.Builder(mContext, adUnitId);
-        builder.forNativeAd(unifiedNativeAdLoadedListener);
-        adLoader = builder.withAdListener(adListener).build();
     }
 
     public void fillAds() {
-        int require2fill = totalAds - nativeAds.size();
-        if (require2fill <= 0 || isLoading()) {
-            return;
-        }
-        Log.i("AdMob repo", "require to load >" + require2fill + "< ads more");
-        loadingAdRequestCount = require2fill;
-        if (mediation) {
-            for (int i = 0; i < require2fill; i++) {
-                adLoader.loadAd(adRequest.build());
+        try {
+            int require2fill = totalAds - nativeAds.size();
+            if (require2fill <= 0 || isLoading()) {
+                return;
             }
-        } else {
-            adLoader.loadAds(adRequest.build(), require2fill);
+
+            adLoaderBuilder = new AdLoader.Builder(mContext, adUnitId);
+            adLoaderBuilder.withNativeAdOptions(adOptions.build());
+            adLoaderBuilder.forNativeAd(unifiedNativeAdLoadedListener);
+            adLoaderBuilder.withAdListener(adListener);
+            adLoader = adLoaderBuilder.build();
+
+            Log.i("AdMob repo", "require to load >" + require2fill + "< ads more");
+            loadingAdRequestCount = require2fill;
+            if (mediation) {
+                for (int i = 0; i < require2fill; i++) {
+                    adLoader.loadAd(adRequest.build());
+                }
+            } else {
+                adLoader.loadAds(adRequest.build(), require2fill);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

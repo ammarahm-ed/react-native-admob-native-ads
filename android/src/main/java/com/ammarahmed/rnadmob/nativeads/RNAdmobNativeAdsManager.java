@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -14,8 +15,10 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.google.android.gms.ads.AdInspectorError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.OnAdInspectorClosedListener;
 import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.AdapterStatus;
 import com.google.android.gms.ads.initialization.InitializationStatus;
@@ -35,6 +38,21 @@ public class RNAdmobNativeAdsManager extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return "RNAdmobNativeAdsManager";
+    }
+
+    @ReactMethod
+    public void startInspector() {
+        MobileAds.openAdInspector(mContext, new OnAdInspectorClosedListener() {
+            @Override
+            public void onAdInspectorClosed(@Nullable AdInspectorError adInspectorError) {
+
+            }
+        });
+    }
+
+    @ReactMethod
+    public void openDebugMenu(String adUnitId) {
+        MobileAds.openDebugMenu(mContext, adUnitId);
     }
 
     @ReactMethod

@@ -1,38 +1,18 @@
 #import "RNGADMediaView.h"
 #import "RNNativeAdMobUtils.h"
 
-@implementation RNGADMediaView : UIView
+@implementation RNGADMediaView : GADMediaView
 
-GADMediaView *cMediaView;
 GADVideoController *vc;
-
-
-- (instancetype)initWithFrame:(CGRect)frame {
-  if ((self = [super initWithFrame:frame])) {
-      cMediaView = [[GADMediaView alloc] init];
-      [self addSubview:cMediaView];
-      cMediaView.translatesAutoresizingMaskIntoConstraints = NO;
-      cMediaView.frame = self.bounds;
-      [NSLayoutConstraint activateConstraints:
-       @[[cMediaView.topAnchor constraintEqualToAnchor:self.topAnchor],
-         [cMediaView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
-         [cMediaView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-         [cMediaView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-       ]];
-  }
-  return self;
-}
-
-
 
 - (void)setPause:(BOOL *)pause {
     if (pause) {
         
-        if (cMediaView.mediaContent != nil && vc != nil) {
+        if (self.mediaContent != nil && vc != nil) {
             [vc pause];
         }
     } else {
-        if (cMediaView.mediaContent != nil && vc != nil) {
+        if (self.mediaContent != nil && vc != nil) {
             [vc play];
         }
     }
@@ -41,7 +21,8 @@ GADVideoController *vc;
 
 
 - (void)setMuted:(BOOL *)muted {
-    if (cMediaView.mediaContent != nil && vc != nil) {
+    
+    if (self.mediaContent != nil && vc != nil) {
         [vc setMute:muted? YES : NO];
     }
 }
@@ -82,10 +63,10 @@ GADVideoController *vc;
 {
     
     if (self.onVideoProgress) {
-        if (cMediaView.mediaContent != nil && cMediaView.mediaContent.hasVideoContent && cMediaView.mediaContent.duration > 0  ) {
+        if (self.mediaContent != nil && self.mediaContent.hasVideoContent && self.mediaContent.duration > 0  ) {
             self.onVideoProgress(@{
-                @"duration":[NSString stringWithFormat: @"%f", cMediaView.mediaContent.duration],
-                @"currentTime":[NSString stringWithFormat: @"%f", cMediaView.mediaContent.currentTime]
+                @"duration":[NSString stringWithFormat: @"%f", self.mediaContent.duration],
+                @"currentTime":[NSString stringWithFormat: @"%f", self.mediaContent.currentTime]
                                  });
         }
     }

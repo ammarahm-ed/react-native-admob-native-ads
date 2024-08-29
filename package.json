@@ -1,6 +1,6 @@
 {
   "name": "react-native-admob-native-ads",
-  "version": "0.6.6",
+  "version": "0.7.0",
   "description": "A simple and robust library for creating & displaying Admob Native Ads in your React Native App using Native Views",
   "author": "Ammar Ahmed <ammarahmed6506@gmail.com>",
   "main": "index.js",
@@ -51,7 +51,7 @@
     "admob-native-advanced-ads"
   ],
   "peerDependencies": {
-    "react-native": ">= 0.60.2"
+    "react-native": "*"
   },
   "private": false,
   "devDependencies": {
@@ -61,14 +61,15 @@
     "@types/jest": "^29.2.5",
     "@types/node": "^18.15.3",
     "@types/react": "^18.0.26",
-    "@types/react-native": "^0.71.3",
+    "@types/react-native": "^0.73.0",
     "@types/react-test-renderer": "^18.0.0",
     "eslint": "^7.31.0",
     "eslint-config-prettier": "^8.3.0",
     "expo": "^47.0.12",
     "expo-module-scripts": "^3.0.7",
     "prettier": "^2.3.2",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "react-native-vector-icons": "^9.2.0"
   },
   "scripts": {
     "build:plugin": "tsc --build plugin",

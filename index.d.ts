@@ -166,6 +166,8 @@ type AdRepositoryConfig = {
   targetingOptions?: TargetingOptions;
   adChoicesPlacement?: "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
   mediaAspectRatio?: "any" | "landscape" | "portrait" | "square" | "unknown";
+  swipeGestureDirection?: "right" | "left" | "up" | "down",
+  tapsAllowed?: boolean
 };
 
 type ImagePropsWithOptionalSource = Omit<ImageProps, "source"> &
@@ -226,7 +228,7 @@ type NativeAdViewProps = {
   /**
    * Placement of AdChoicesView in any of the 4 corners of the ad
    *
-   * import `AdOptions` then pass the value from there. AdOptions.adChoicesPlacement **/
+   *  **/
 
   adChoicesPlacement?: "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
 
@@ -251,6 +253,10 @@ type NativeAdViewProps = {
   videoOptions?: VideoOptions;
   mediationOptions?: MediationOptions;
   targetingOptions?: TargetingOptions;
+  enableSwipeGestureOptions: {
+    tapsAllowed?: boolean;
+  swipeGestureDirection?: "right" | "left" | "up" | "down";
+  }
 
   testDevices?: Array<string>;
   onAdOpened?: () => void;
@@ -261,6 +267,7 @@ type NativeAdViewProps = {
   onAdLoaded?: () => void;
   onNativeAdLoaded?: (event: NativeAd) => void;
   onAdFailedToLoad?: (error: { message: string }) => void;
+  adBadgeProps: NestedTextProps
 };
 
 type SimpleViewProps = {
@@ -410,6 +417,9 @@ declare module "react-native-admob-native-ads" {
         | "onAdPreloadImpression",
       listener
     ) => EmitterSubscription;
+
+    openAdInspector: () => void;
+    openDebugMenu: (adUnitId: string) => void
   };
 
   export const AdOptions: options;

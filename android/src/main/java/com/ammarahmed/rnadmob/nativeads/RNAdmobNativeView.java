@@ -1,6 +1,7 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,12 +26,14 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MediaContent;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
+import com.google.android.gms.ads.nativead.AdChoicesView;
 import com.google.android.gms.ads.nativead.MediaView;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.android.gms.ads.nativead.NativeAdView;
 
 import java.lang.reflect.Method;
+import java.util.Objects;
 import java.util.UUID;
 
 public class RNAdmobNativeView extends LinearLayout {
@@ -162,7 +165,7 @@ public class RNAdmobNativeView extends LinearLayout {
         try {
             mediaView = (RNAdmobMediaView) nativeAdView.findViewById(id);
             if (mediaView != null) {
-                nativeAd.getMediaContent().getVideoController().setVideoLifecycleCallbacks(mediaView.videoLifecycleCallbacks);
+                Objects.requireNonNull(nativeAd.getMediaContent()).getVideoController().setVideoLifecycleCallbacks(mediaView.videoLifecycleCallbacks);
                 nativeAdView.setMediaView((MediaView) nativeAdView.findViewById(id));
                 mediaView.requestLayout();
                 setNativeAd();
@@ -176,9 +179,7 @@ public class RNAdmobNativeView extends LinearLayout {
     private Method getDeclaredMethod(Object obj, String name) {
         try {
             return obj.getClass().getDeclaredMethod(name);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
+        } catch (NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
         return null;
@@ -192,7 +193,7 @@ public class RNAdmobNativeView extends LinearLayout {
             args.putString("tagline", nativeAd.getBody());
             args.putString("advertiser", nativeAd.getAdvertiser());
             args.putString("callToAction", nativeAd.getCallToAction());
-            args.putBoolean("video", nativeAd.getMediaContent().hasVideoContent());
+            args.putBoolean("video", Objects.requireNonNull(nativeAd.getMediaContent()).hasVideoContent());
 
             if (nativeAd.getPrice() != null) {
                 args.putString("price", nativeAd.getPrice());
@@ -228,12 +229,12 @@ public class RNAdmobNativeView extends LinearLayout {
 
             WritableArray images = new WritableNativeArray();
 
-            if (nativeAd.getImages() != null && nativeAd.getImages().size() > 0) {
+            if (!nativeAd.getImages().isEmpty()) {
 
                 for (int i = 0; i < nativeAd.getImages().size(); i++) {
                     WritableMap map = Arguments.createMap();
                     if (nativeAd.getImages().get(i) != null) {
-                        map.putString("url", nativeAd.getImages().get(i).getUri().toString());
+                        map.putString("url", Objects.requireNonNull(nativeAd.getImages().get(i).getUri()).toString());
                         map.putInt("width", 0);
                         map.putInt("height", 0);
                         images.pushMap(map);
@@ -241,11 +242,7 @@ public class RNAdmobNativeView extends LinearLayout {
                 }
             }
 
-            if (images != null) {
-                args.putArray("images", images);
-            } else {
-                args.putArray("images", null);
-            }
+            args.putArray("images", images);
 
             if (nativeAd.getIcon() != null) {
                 if (nativeAd.getIcon().getUri() != null) {
@@ -376,12 +373,14 @@ public class RNAdmobNativeView extends LinearLayout {
 
     public void setRequestNonPersonalizedAdsOnly(boolean npa) {
         Utils.setRequestNonPersonalizedAdsOnly(npa, adRequest);
-
     }
 
     public void setMediaAspectRatio(int type) {
         mediaAspectRatio = type;
         adOptions.setMediaAspectRatio(mediaAspectRatio);
+    }
+    public void setSwipeGestureOptions(int direction, boolean tapsAllowed) {
+        adOptions.enableCustomClickGestureDirection(direction, tapsAllowed);
     }
 
     public void setNativeAd() {
@@ -390,7 +389,7 @@ public class RNAdmobNativeView extends LinearLayout {
 
             if (mediaView != null && nativeAdView.getMediaView() != null) {
                 nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
-                if (nativeAd.getMediaContent().hasVideoContent()) {
+                if (Objects.requireNonNull(nativeAd.getMediaContent()).hasVideoContent()) {
                     mediaView.setVideoController(nativeAd.getMediaContent().getVideoController());
                     mediaView.setMedia(nativeAd.getMediaContent());
                 }

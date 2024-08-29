@@ -1,34 +1,40 @@
-/**
- * Metro configuration for React Native
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 const path = require('path');
-const exclusionList = require('metro-config/src/defaults/exclusionList');
+const { getDefaultConfig } = require('@react-native/metro-config');
+const { getConfig } = require('react-native-builder-bob/metro-config');
+const pkg = require('../package.json');
+const root = path.resolve(__dirname, '..');
 
-const moduleRoot = path.resolve(__dirname, '..');
+const config = getConfig(getDefaultConfig(__dirname), {
+  root,
+  pkg,
+  project: __dirname
+});
 
+/**
+ * Metro configuration
+ * https://facebook.github.io/metro/docs/configuration
+ *
+ * @type {import('metro-config').MetroConfig}
+ */
 module.exports = {
-  watchFolders: [moduleRoot],
+  ...config,
   resolver: {
-    extraNodeModules: {
-      react: path.resolve(__dirname, 'node_modules/react'),
-      'react-native': path.resolve(__dirname, 'node_modules/react-native'),
-    },
-    nodeModulesPaths: [path.resolve(path.join(__dirname, './node_modules'))],
-    blockList: exclusionList([
-      new RegExp(`${moduleRoot}/node_modules/react/.*`),
-      new RegExp(`${moduleRoot}/node_modules/react-native/.*`),
-    ]),
-  },
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: true,
-      },
-    }),
-  },
+    ...config.resolver,
+    resolveRequest: (context, moduleName, platform) => {
+      if (moduleName === 'react') {
+        return {
+          filePath: path.resolve(path.join(__dirname, '../node_modules', 'react', 'index.js')),
+          type: 'sourceFile'
+        };
+      }
+
+      if (moduleName === pkg.name) {
+        return {
+          filePath: path.resolve(path.join(__dirname, '../index.js')),
+          type: 'sourceFile'
+        };
+      }
+      return context.resolveRequest(context, moduleName, platform);
+    }
+  }
 };

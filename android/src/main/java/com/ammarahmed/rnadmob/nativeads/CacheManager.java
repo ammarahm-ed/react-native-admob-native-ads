@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.google.android.gms.ads.AdListener;
@@ -51,7 +52,7 @@ public class CacheManager {
         }
     }
 
-    public void registerRepository(Context context, ReadableMap config, Promise promise) {
+    public void registerRepository(ReactContext context, ReadableMap config, Promise promise) {
         try {
             String name = config.getString("name");
             String adUnitId = config.getString("adUnitId");

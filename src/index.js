@@ -8,6 +8,8 @@ import {
 import { defaultAd, NativeAdContext } from "./context";
 import { AdOptions } from "./utils";
 import Wrapper from "./Wrapper";
+import AdBadge from "./AdBadge";
+import { RNGADNativeView } from "./RNGADNativeView";
 
 const testNativeAd = {
   headline: "Test Ad: Lorem ipsum dolor ",
@@ -152,7 +154,9 @@ export class NativeAdView extends Component {
             AdOptions.adChoicesPlacement[this.props.adChoicesPlacement]
           }
         >
+          <AdBadge {...this.props.adBadgeProps}  />
           <Wrapper
+            
             onLayout={(event) => {
               this.setState({
                 nativeAdView: this.nativeAdRef,
@@ -182,6 +186,5 @@ NativeAdView.defaultProps = {
 
 NativeAdView.simulatorId = "SIMULATOR";
 
-const RNGADNativeView = requireNativeComponent("RNGADNativeView");
 
 export default NativeAdView;
