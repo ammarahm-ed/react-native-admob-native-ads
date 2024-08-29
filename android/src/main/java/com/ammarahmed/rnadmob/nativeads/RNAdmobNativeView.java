@@ -260,6 +260,7 @@ public class RNAdmobNativeView extends LinearLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         loadingAd = false;
+        this.removeAllViews();
     }
 
     public void sendEvent(String name, @Nullable WritableMap event) {
