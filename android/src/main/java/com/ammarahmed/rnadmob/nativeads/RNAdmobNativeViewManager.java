@@ -250,24 +250,21 @@ public class RNAdmobNativeViewManager extends ViewGroupManager<RNAdmobNativeView
 
     @Override
     public void onDropViewInstance(@NonNull RNAdmobNativeView nativeAdWrapper) {
-        super.onDropViewInstance(nativeAdWrapper);
-        nativeAdWrapper.removeHandler();
+            super.onDropViewInstance(nativeAdWrapper);
+            nativeAdWrapper.removeHandler();
 
-        CacheManager.instance.detachAdListener(nativeAdWrapper.getAdRepo(), nativeAdWrapper.adListener);
+            CacheManager.instance.detachAdListener(nativeAdWrapper.getAdRepo(), nativeAdWrapper.adListener);
 
-        if (nativeAdWrapper.nativeAd != null) {
-            if (nativeAdWrapper.unifiedNativeAdContainer != null) {
-                nativeAdWrapper.unifiedNativeAdContainer.references -= 1;
-            } else {
-                nativeAdWrapper.nativeAdView.destroy();
+            if (nativeAdWrapper.nativeAd != null) {
+                if (nativeAdWrapper.unifiedNativeAdContainer != null) {
+                    nativeAdWrapper.unifiedNativeAdContainer.references -= 1;
+                }
             }
-        }
-        if (nativeAdWrapper.nativeAdView != null) {
-            nativeAdWrapper.nativeAdView.removeAllViews();
-            nativeAdWrapper.nativeAdView.destroy();
-            nativeAdWrapper.removeAllViews();
-        }
+
+            if (nativeAdWrapper.nativeAdView != null) {
+                nativeAdWrapper.nativeAdView.removeAllViews();
+                nativeAdWrapper.nativeAdView.destroy();
+                nativeAdWrapper.removeAllViews();
+            }
     }
-
-
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -153,10 +154,10 @@ public class RNAdmobNativeView extends LinearLayout {
     public void addMediaView(int id) {
 
         try {
-            mediaView = (RNAdmobMediaView) nativeAdView.findViewById(id);
+            mediaView = nativeAdView.findViewById(id);
             if (mediaView != null) {
                 Objects.requireNonNull(nativeAd.getMediaContent()).getVideoController().setVideoLifecycleCallbacks(mediaView.videoLifecycleCallbacks);
-                nativeAdView.setMediaView((MediaView) nativeAdView.findViewById(id));
+                nativeAdView.setMediaView(nativeAdView.findViewById(id));
                 mediaView.requestLayout();
                 setNativeAd();
 
@@ -178,7 +179,6 @@ public class RNAdmobNativeView extends LinearLayout {
     private void setNativeAdToJS(NativeAd ad) {
         try {
             nativeAd = ad;
-            setNativeAd();
             WritableMap args = Arguments.createMap();
             args.putString("headline", nativeAd.getHeadline());
             args.putString("tagline", nativeAd.getBody());
@@ -246,8 +246,9 @@ public class RNAdmobNativeView extends LinearLayout {
             }
 
             sendEvent(RNAdmobNativeViewManager.EVENT_NATIVE_AD_LOADED,args);
-
+            setNativeAd();
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -260,7 +261,6 @@ public class RNAdmobNativeView extends LinearLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         loadingAd = false;
-        this.removeAllViews();
     }
 
     public void sendEvent(String name, @Nullable WritableMap event) {
@@ -299,9 +299,6 @@ public class RNAdmobNativeView extends LinearLayout {
                     unifiedNativeAdContainer = CacheManager.instance.getNativeAd(adRepo);
 
                     if (unifiedNativeAdContainer != null) {
-                        if (nativeAd != null) {
-                            nativeAd.destroy();
-                        }
                         nativeAd = unifiedNativeAdContainer.unifiedNativeAd;
                         if (mediaView != null) {
                             nativeAdView.setMediaView(mediaView);
@@ -321,8 +318,15 @@ public class RNAdmobNativeView extends LinearLayout {
         }
     }
 
+    private void resetView(View view) {
+        if (view.getParent() != null) {
+            ((ViewGroup)view.getParent()).removeView(view);
+        }
+    }
+
     public void addNewView(View child, int index) {
         try {
+            resetView(child);
             nativeAdView.addView(child, index);
             requestLayout();
             nativeAdView.requestLayout();
@@ -333,6 +337,7 @@ public class RNAdmobNativeView extends LinearLayout {
 
     @Override
     public void addView(View child) {
+        resetView(child);
         super.addView(child);
         requestLayout();
     }
@@ -376,22 +381,28 @@ public class RNAdmobNativeView extends LinearLayout {
         adOptions.enableCustomClickGestureDirection(direction, tapsAllowed);
     }
 
+    public NativeAd lastNativeAd;
     public void setNativeAd() {
-        if (nativeAdView != null && nativeAd != null) {
-            nativeAdView.setNativeAd(nativeAd);
+        try {
+            if (nativeAdView != null && nativeAd != null && lastNativeAd != nativeAd) {
+                lastNativeAd = nativeAd;
+                nativeAdView.setNativeAd(nativeAd);
 
-            if (mediaView != null && nativeAdView.getMediaView() != null) {
-                nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
-                if (Objects.requireNonNull(nativeAd.getMediaContent()).hasVideoContent()) {
-                    mediaView.setVideoController(nativeAd.getMediaContent().getVideoController());
-                    mediaView.setMedia(nativeAd.getMediaContent());
+                if (nativeAdView.getMediaView() != null) {
+                    nativeAdView.getMediaView().setMediaContent(nativeAd.getMediaContent());
+                    if (Objects.requireNonNull(nativeAd.getMediaContent()).hasVideoContent()) {
+                        mediaView.setVideoController(nativeAd.getMediaContent().getVideoController());
+                        mediaView.setMedia(nativeAd.getMediaContent());
+                    }
                 }
+                handler.postDelayed(() -> {
+                    nativeAdView.getRootView().requestLayout();
+                }, 1000);
             }
-            handler.postDelayed(() -> {
-                nativeAdView.getRootView().requestLayout();
-            }, 1000);
-
+        } catch(Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     public void setVideoOptions(ReadableMap options) {
