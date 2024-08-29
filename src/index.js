@@ -134,7 +134,7 @@ export class NativeAdView extends Component {
           onAdLoaded={this._onAdLoaded}
           onAdFailedToLoad={this._onAdFailedToLoad}
           onAdClicked={this._onAdClicked}
-          onAdLeftApplication={this._onAdLefApplication}
+          onAdLeftApplication={this._onAdLeftApplication}
           onAdOpened={this._onAdOpened}
           onAdClosed={this._onAdClosed}
           onAdImpression={this._onAdImpression}
