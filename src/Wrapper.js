@@ -24,6 +24,7 @@ const Wrapper = (props) => {
       {...props}
       ref={ref}
       onLayout={(event) => {
+        props.onLayout?.(event);
         const height = event.nativeEvent.layout.height;
         setTimeout(() => setHeight(height));
       }}
