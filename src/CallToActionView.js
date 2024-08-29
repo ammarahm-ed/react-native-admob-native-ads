@@ -59,7 +59,7 @@ const CallToActionView = ({
           style={[
             styles.textwrapper,
             {
-              elevation: style.elevation ? style.elevation + 10 : 10,
+              elevation: style?.elevation ? style.elevation + 10 : 10,
             },
           ]}
           pointerEvents="none"
