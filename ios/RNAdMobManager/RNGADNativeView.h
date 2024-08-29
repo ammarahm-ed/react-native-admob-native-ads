@@ -32,6 +32,7 @@ GADNativeAdDelegate>
 @property (nonatomic, copy) NSDictionary *mediationOptions;
 @property (nonatomic, copy) NSDictionary *targetingOptions;
 @property (nonatomic, copy) NSDictionary *videoOptions;
+@property (nonatomic, copy) NSDictionary *enableSwipeGestureOptions;
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge;
 

@@ -1,29 +1,44 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 const AdBadge = ({allCaps,textStyle,style}) => {
   return (
-    <Text
-    style={[
-      styles.text,
-      textStyle,
-    ]}
-  >
-    {allCaps ? 'AD' : 'AD'}
-  </Text>
+    <View
+      style={[
+        styles.container,
+       style,
+      ]}
+    >
+      <Text
+        style={[
+          styles.text,
+          textStyle,
+        ]}
+      >
+        {allCaps ? 'AD' : 'AD'}
+      </Text>
+    </View>
   );
 };
 
 export default AdBadge;
 
 const styles = StyleSheet.create({
+  container: {
+    height: 17,
+    width: 21,
+    borderWidth: 1,
+    borderRadius: 2.5,
+    left: 0,
+    top: 0,
+    justifyContent:'center',
+    alignItems:'center',
+    paddingHorizontal: 1,
+    position:"absolute",
+
+  },
   text: {
-    color: "green",
-    fontSize: 10,
-    fontWeight:"bold",
-    position:"absolute", 
-    left: 1,
-    top: 1,
-    zIndex: 999
+    fontSize: 12,
+    fontWeight:"bold"
   }
 })

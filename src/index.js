@@ -83,17 +83,16 @@ export class NativeAdView extends Component {
     }
   };
 
-  _onAdLefApplication = (event) => {
+  _onAdLeftApplication = (event) => {
     if (this.props.onAdLeftApplication)
       this.props.onAdLeftApplication(event.nativeEvent);
   };
 
   updateAd() {
-    if (this.componentMounted) {
-      this.setState({
-        nativeAd: this.ad,
-      });
-    }
+    if (!this.componentMounted) return;
+    this.setState({
+      nativeAd: this.ad,
+    });
   }
 
   componentDidMount() {
@@ -154,9 +153,7 @@ export class NativeAdView extends Component {
             AdOptions.adChoicesPlacement[this.props.adChoicesPlacement]
           }
         >
-          <AdBadge {...this.props.adBadgeProps}  />
           <Wrapper
-            
             onLayout={(event) => {
               this.setState({
                 nativeAdView: this.nativeAdRef,
@@ -185,6 +182,5 @@ NativeAdView.defaultProps = {
 };
 
 NativeAdView.simulatorId = "SIMULATOR";
-
 
 export default NativeAdView;

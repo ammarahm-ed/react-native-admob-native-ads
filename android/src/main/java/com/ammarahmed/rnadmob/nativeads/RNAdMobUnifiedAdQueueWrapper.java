@@ -81,19 +81,20 @@ public class RNAdMobUnifiedAdQueueWrapper {
                     error.putInt("code", adError.getCode());
                     error.putString("domain", adError.getDomain());
                     event.putMap("error", error);
-                    EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR + ":" + name, event);
+
+                    EventEmitter.sendEvent(mContext, CacheManager.EVENT_AD_PRELOAD_ERROR + ":" + name, event);
                     notifyOnAdsLoadFailed(adError);
                     return;
                 }
 
                 if (retryCount >= totalRetryCount) {
-                    WritableMap event = Arguments.createMap();
+                    WritableMap event = getDefaultEventData();
                     WritableMap error = Arguments.createMap();
                     error.putString("message", "reach maximum retry");
                     error.putInt("code", AdRequest.ERROR_CODE_INTERNAL_ERROR);
                     error.putString("domain", "");
                     event.putMap("error", error);
-                    EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_PRELOAD_ERROR + ":" + name, event);
+                    EventEmitter.sendEvent( mContext, CacheManager.EVENT_AD_PRELOAD_ERROR + ":" + name, event);
                     notifyOnAdsLoadFailed(adError);
                     return;
                 }
@@ -110,35 +111,37 @@ public class RNAdMobUnifiedAdQueueWrapper {
             @Override
             public void onAdImpression() {
                 super.onAdImpression();
-                EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_IMPRESSION + ":" + name, null);
+                EventEmitter.sendEvent(mContext, CacheManager.EVENT_AD_IMPRESSION + ":" + name, getDefaultEventData());
 
             }
 
             @Override
             public void onAdClosed() {
                 super.onAdClosed();
-                EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_CLOSED + ":" + name, null);
+                WritableMap map = Arguments.createMap();
+                EventEmitter.sendEvent(mContext, CacheManager.EVENT_AD_CLOSED + ":" + name, getDefaultEventData());
 
             }
 
             @Override
             public void onAdOpened() {
                 super.onAdOpened();
-                EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_OPEN + ":" + name, null);
+                EventEmitter.sendEvent(mContext, CacheManager.EVENT_AD_OPEN + ":" + name, getDefaultEventData());
 
             }
 
             @Override
             public void onAdClicked() {
                 super.onAdClicked();
-                Log.d("RNADMOB", CacheManager.EVENT_AD_CLICKED + ":" + name);
-                EventEmitter.sendEvent((ReactContext) mContext, CacheManager.EVENT_AD_CLICKED + ":" + name, null);
+                EventEmitter.sendEvent(mContext, CacheManager.EVENT_AD_CLICKED + ":" + name, getDefaultEventData());
 
             }
 
             @Override
             public void onAdLoaded() {
                 super.onAdLoaded();
+
+                EventEmitter.sendEvent(mContext, CacheManager.EVENT_AD_PRELOAD_LOADED + ":" + name, getDefaultEventData());
 
                 retryCount = 0;
                 if (mediation) {
@@ -154,7 +157,13 @@ public class RNAdMobUnifiedAdQueueWrapper {
         };
 
         setConfiguration(config);
+    }
 
+    private WritableMap getDefaultEventData() {
+        WritableMap map = Arguments.createMap();
+        map.putString("adUnitId", adUnitId);
+        map.putString("repo", name);
+        return map;
     }
 
     private void  notifyOnAdsLoadFailed(LoadAdError adError){

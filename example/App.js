@@ -16,7 +16,10 @@ import List from "./src/List";
 import { routes } from "./src/utils";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 const App = () => {
-  const [currentRoute, setCurrentRoute] = useState(null);
+  const [currentRoute, setCurrentRoute] = useState({
+    type: "banner",
+    index: 0
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

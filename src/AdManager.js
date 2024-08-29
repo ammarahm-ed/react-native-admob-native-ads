@@ -53,6 +53,7 @@ async function resetCache() {
 }
 
 function subscribe(repo, eventName, listener) {
+  console.log('subscribed: ', `${eventName}:${repo}`);
   return DeviceEventEmitter.addListener(`${eventName}:${repo}`, listener);
 }
 

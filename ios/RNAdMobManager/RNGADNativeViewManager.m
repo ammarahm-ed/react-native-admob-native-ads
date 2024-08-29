@@ -59,6 +59,7 @@ RCT_EXPORT_VIEW_PROPERTY(callToAction, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(requestNonPersonalizedAdsOnly, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(adChoicesPlacement, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(repository, NSString)
+RCT_EXPORT_VIEW_PROPERTY(enableSwipeGestureOptions, NSDictionary)
 
 RCT_EXPORT_VIEW_PROPERTY(onSizeChange, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onAppEvent, RCTDirectEventBlock)

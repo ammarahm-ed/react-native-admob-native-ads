@@ -166,8 +166,8 @@ type AdRepositoryConfig = {
   targetingOptions?: TargetingOptions;
   adChoicesPlacement?: "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
   mediaAspectRatio?: "any" | "landscape" | "portrait" | "square" | "unknown";
-  swipeGestureDirection?: "right" | "left" | "up" | "down",
-  tapsAllowed?: boolean
+  swipeGestureDirection?: "right" | "left" | "up" | "down";
+  tapsAllowed?: boolean;
 };
 
 type ImagePropsWithOptionalSource = Omit<ImageProps, "source"> &
@@ -255,8 +255,8 @@ type NativeAdViewProps = {
   targetingOptions?: TargetingOptions;
   enableSwipeGestureOptions: {
     tapsAllowed?: boolean;
-  swipeGestureDirection?: "right" | "left" | "up" | "down";
-  }
+    swipeGestureDirection?: "right" | "left" | "up" | "down";
+  };
 
   testDevices?: Array<string>;
   onAdOpened?: () => void;
@@ -267,7 +267,6 @@ type NativeAdViewProps = {
   onAdLoaded?: () => void;
   onNativeAdLoaded?: (event: NativeAd) => void;
   onAdFailedToLoad?: (error: { message: string }) => void;
-  adBadgeProps: NestedTextProps
 };
 
 type SimpleViewProps = {
@@ -415,11 +414,19 @@ declare module "react-native-admob-native-ads" {
         | "onAdPreloadClosed"
         | "onAdPreloadClicked"
         | "onAdPreloadImpression",
-      listener
+      listener: (event: {
+        adUnitId: string;
+        repo: string;
+        error?: {
+          message: string;
+          code: number;
+          domain: string;
+        };
+      }) => void
     ) => EmitterSubscription;
 
     openAdInspector: () => void;
-    openDebugMenu: (adUnitId: string) => void
+    openDebugMenu: (adUnitId: string) => void;
   };
 
   export const AdOptions: options;

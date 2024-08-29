@@ -1,10 +1,9 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
-  DeviceEventEmitter,
   Platform,
   Text,
-  View,
+  View
 } from 'react-native';
 import NativeAdView, {
   AdvertiserView,
@@ -13,11 +12,10 @@ import NativeAdView, {
   IconView,
   StarRatingView,
   StoreView,
-  TaglineView,
-  TestIds,
+  TaglineView
 } from 'react-native-admob-native-ads';
-import {MediaView} from './MediaView';
-import {Events, Logger} from './utils';
+import { MediaView } from './MediaView';
+import { Logger } from './utils';
 
 export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
   const [aspectRatio, setAspectRatio] = useState(1.5);
@@ -101,8 +99,8 @@ export const AdView = React.memo(({index, media, type, loadOnMount = true}) => {
       mediationOptions={{
         nativeBanner: true,
       }}
-      adUnitID={type === 'image' ? TestIds.Image : TestIds.Video} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
-      // repository={type === 'image' ? 'imageAd' : 'videoAd'}
+      // adUnitID={type === 'image' ? TestIds.Image : TestIds.Video} // REPLACE WITH NATIVE_AD_VIDEO_ID for video ads.
+      repository={type === 'image' ? 'imageAd' : 'videoAd'}
       >
       <View
         style={{

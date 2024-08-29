@@ -40,7 +40,7 @@ NSString *adRepo = nil;
 
 GADNativeAdViewAdOptions *adPlacementOptions;
 GADNativeAdMediaAdLoaderOptions *adMediaOptions;
-
+GADNativeAdCustomClickGestureOptions *clickGestureOptions;
 GAMRequest *adRequest;
 GADVideoOptions *adVideoOptions;
 
@@ -76,6 +76,29 @@ BOOL *nonPersonalizedAds;
         [CacheManager.sharedInstance detachAdListener:adRepo listener:self];
     } else {
         // UIView was added to superview
+    }
+}
+
+- (void) setEnableSwipeGestureOptions:(NSDictionary *)enableSwipeGestureOptions {
+        
+    clickGestureOptions = [[GADNativeAdCustomClickGestureOptions alloc] initWithSwipeGestureDirection:UISwipeGestureRecognizerDirectionUp tapsAllowed:false];
+    
+    if ([enableSwipeGestureOptions valueForKey:@"swipeGestureDirection"]) {
+        int direction = ((NSNumber *)[enableSwipeGestureOptions objectForKey:@"swipeGestureDirection"]).intValue;
+        
+        if (direction == 1) {
+            [clickGestureOptions setSwipeGestureDirection:UISwipeGestureRecognizerDirectionRight];
+        } else if (direction == 2) {
+            [clickGestureOptions setSwipeGestureDirection:UISwipeGestureRecognizerDirectionLeft];
+        } else if (direction == 4) {
+            [clickGestureOptions setSwipeGestureDirection:UISwipeGestureRecognizerDirectionUp];
+        } else if (direction == 8) {
+            [clickGestureOptions setSwipeGestureDirection:UISwipeGestureRecognizerDirectionDown];
+        }
+    }
+    
+    if ([enableSwipeGestureOptions valueForKey:@"tapsAllowed"]) {
+        [clickGestureOptions setTapsAllowed:[enableSwipeGestureOptions valueForKey:@"tapsAllowed"]];
     }
 }
 
@@ -479,10 +502,17 @@ BOOL *nonPersonalizedAds;
 - (void) requestAd{
     if (isLoading == TRUE) return;
     isLoading = TRUE;
+    
+    NSMutableArray<GADAdLoaderOptions *>* options = [NSMutableArray arrayWithArray:@[adMediaOptions,adVideoOptions,adPlacementOptions]];
+    
+    if (clickGestureOptions) {
+        [options addObject:clickGestureOptions];
+    }
+    
     self.adLoader = [[GADAdLoader alloc] initWithAdUnitID:adUnitId
                                        rootViewController:self.reactViewController
                                                   adTypes:@[ GADAdLoaderAdTypeNative ]
-                                                  options:@[adMediaOptions,adPlacementOptions,adVideoOptions]];
+                                                  options:options];
 
 
     self.adLoader.delegate = self;

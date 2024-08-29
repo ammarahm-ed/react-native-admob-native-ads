@@ -53,7 +53,7 @@ static EventEmitter *_sharedInstance = nil;
 {
 
     if (hasListeners) { // Only send events if anyone is listening
-      [self sendEventWithName:name body:dict];
+        [self sendEventWithName:name body:dict ? dict : [NSDictionary dictionary]];
     }
 }
 @end

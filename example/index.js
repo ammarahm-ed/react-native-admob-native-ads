@@ -50,12 +50,12 @@ AdManager.registerRepository({
   console.log('registered: ', result);
 });
 
-AdManager.subscribe('imageAd', 'onAdPreloadClicked', () => {
-  console.log('click', 'imageAd');
+AdManager.subscribe('imageAd', 'onAdPreloadClicked', (event) => {
+  console.log('click', 'imageAd', event);
 });
 
-AdManager.subscribe("imageAd", "onAdPreloadImpression", () => {
-  console.log('impression recorded', 'imageAd');
+AdManager.subscribe("imageAd", "onAdPreloadImpression", (event) => {
+  console.log('impression recorded', 'imageAd', event);
 });
 
 AppRegistry.registerComponent(appName, () => App);

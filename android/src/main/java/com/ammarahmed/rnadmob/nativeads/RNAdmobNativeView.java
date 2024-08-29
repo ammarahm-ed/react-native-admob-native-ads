@@ -1,11 +1,9 @@
 package com.ammarahmed.rnadmob.nativeads;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -18,7 +16,6 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
-import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
@@ -26,7 +23,6 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MediaContent;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
-import com.google.android.gms.ads.nativead.AdChoicesView;
 import com.google.android.gms.ads.nativead.MediaView;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
@@ -67,7 +63,6 @@ public class RNAdmobNativeView extends LinearLayout {
     private Handler handler;
 
     AdListener adListener = new AdListener() {
-
         @Override
         public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
             super.onAdFailedToLoad(loadAdError);
@@ -126,11 +121,6 @@ public class RNAdmobNativeView extends LinearLayout {
             if (nativeAd != null) {
                 nativeAd.destroy();
             }
-
-            if (ad != null) {
-                nativeAd = ad;
-                setNativeAd();
-            }
             loadingAd = false;
             setNativeAdToJS(ad);
         }
@@ -185,9 +175,10 @@ public class RNAdmobNativeView extends LinearLayout {
         return null;
     }
 
-    private void setNativeAdToJS(NativeAd nativeAd) {
-
+    private void setNativeAdToJS(NativeAd ad) {
         try {
+            nativeAd = ad;
+            setNativeAd();
             WritableMap args = Arguments.createMap();
             args.putString("headline", nativeAd.getHeadline());
             args.putString("tagline", nativeAd.getBody());
@@ -307,12 +298,13 @@ public class RNAdmobNativeView extends LinearLayout {
                     unifiedNativeAdContainer = CacheManager.instance.getNativeAd(adRepo);
 
                     if (unifiedNativeAdContainer != null) {
+                        if (nativeAd != null) {
+                            nativeAd.destroy();
+                        }
                         nativeAd = unifiedNativeAdContainer.unifiedNativeAd;
-                        nativeAdView.setNativeAd(nativeAd);
                         if (mediaView != null) {
                             nativeAdView.setMediaView(mediaView);
                             mediaView.requestLayout();
-                            setNativeAd();
                         }
                         setNativeAdToJS(nativeAd);
                     }
@@ -394,6 +386,9 @@ public class RNAdmobNativeView extends LinearLayout {
                     mediaView.setMedia(nativeAd.getMediaContent());
                 }
             }
+            handler.postDelayed(() -> {
+                nativeAdView.getRootView().requestLayout();
+            }, 1000);
 
         }
     }

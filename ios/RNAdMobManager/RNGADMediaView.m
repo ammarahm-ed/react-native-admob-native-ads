@@ -59,6 +59,8 @@ GADVideoController *vc;
     }
 }
 
+
+
 - (void)getCurrentProgress
 {
     
