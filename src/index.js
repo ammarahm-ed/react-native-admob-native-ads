@@ -119,7 +119,7 @@ export class NativeAdView extends Component {
     UIManager.dispatchViewManagerCommand(
       findNodeHandle(this.nativeAdRef),
       UIManager.getViewManagerConfig("RNGADNativeView").Commands.loadAd,
-      undefined
+      []
     );
   };
 
